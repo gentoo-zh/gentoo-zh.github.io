@@ -16,4 +16,4 @@ cardViewScreenWidth: false
 
 **說明**：本頁面展示 [gentoo-zh Overlay](https://github.com/microcai/gentoo-zh) 中提交次數超過 10 次的貢獻者，以及網站內容貢獻者。如需修改或刪除您的資訊，請聯絡 [admin@zakk.au](mailto:admin@zakk.au)。
 
-最後更新時間 2026年04月13日 02:54 UTC（每週一自動更新）
+最後更新時間 2026年04月20日 02:55 UTC（每週一自動更新）
