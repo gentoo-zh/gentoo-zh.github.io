@@ -17,6 +17,7 @@ title: "下载"
 - **登录凭据**：用户 {{< copy "live" >}} / 密码 {{< copy "live" >}} / Root {{< copy "live" >}}
 - **硬件要求**：64 位 x86 CPU，需支持 AVX2（约 2013 年后的处理器）；更老的 CPU 无法启动本镜像。
 - **更新频率**：每周自动重新编译并上传，始终是较新的系统快照；下载站只保留最近几个版本，请以站上实际文件名（`gig-os-日期.iso`）为准。
+- **新版通知**：关注 Telegram 频道 <https://t.me/gentoomirror>，每周构建上线时自动播报。
 
 {{% details title="这个 Live ISO 有什么（点开看更多）" %}}
 

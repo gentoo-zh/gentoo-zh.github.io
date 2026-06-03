@@ -17,6 +17,7 @@ title: "下載"
 - **登入憑據**：使用者 {{< copy "live" >}} / 密碼 {{< copy "live" >}} / Root {{< copy "live" >}}
 - **硬體要求**：64 位 x86 CPU，需支援 AVX2（約 2013 年後的處理器）；更老的 CPU 無法啟動本鏡像。
 - **更新頻率**：每週自動重新編譯並上傳，始終是較新的系統快照；下載站只保留最近幾個版本，請以站上實際檔名（`gig-os-日期.iso`）為準。
+- **新版通知**：關注 Telegram 頻道 <https://t.me/gentoomirror>，每週構建上線時自動播報。
 
 {{% details title="這個 Live ISO 有什麼（點開看更多）" %}}
 
