@@ -6,13 +6,25 @@ title: "下載"
 
 ## 中文社群 Live ISO
 
-中文社群定製的 KDE 桌面 Live ISO——中文顯示、中文輸入法（fcitx5）、flclash 網路工具的安裝鏡像，適合新手入門使用。
+中文社群定製的 **KDE Plasma 6 桌面 Live ISO**——開箱即中文、三語言可選（簡 / 繁 / 英）、中文輸入法（fcitx5 + rime）、桌面雙擊即可裝機，適合新手入門。
 
 - **下載站**：<https://mirror.gentoozh.org/>（海外伺服器，1Gbps 不限流量；境內訪問可能偏慢）
-- **備用倉庫**：<https://github.com/Gig-OS/Live-ISO>
+- **備用倉庫**：<https://github.com/Gentoo-zh/Live-ISO>（社群 fork，構建指令碼與定製都在這）
 - **登入憑據**：使用者 {{< copy "live" >}} / 密碼 {{< copy "live" >}} / Root {{< copy "live" >}}
 - **硬體要求**：64 位 x86 CPU，需支援 AVX2（約 2013 年後的處理器）；更老的 CPU 無法啟動本鏡像。
 - **更新頻率**：每週自動重新編譯並上傳，始終是較新的系統快照；下載站只保留最近幾個版本，請以站上實際檔名（`gig-os-日期.iso`）為準。
+
+{{% details title="這個 Live ISO 有什麼（點開看更多）" %}}
+
+- **三語言開機** — GRUB 選單選 簡體 / 正體 / English，桌面、Firefox、輸入法都跟著切。
+- **中文輸入法 fcitx5 + rime** — 預設朙月拼音；**右鍵托盤輸入法圖示 →「方案」** 可切換 注音 / 五筆86 / 倉頡 / 粵拼 等。
+- **開源 / 閉源顯示卡** — 預設 nouveau 即插即用；新卡（RTX 20/30/40/50）想要硬體加速選「閉源 NVIDIA」啟動項，**需先在 BIOS 關閉 Secure Boot**（驅動未簽名，否則載入不了）。點不亮的疑難卡用「安全顯示卡模式」兜底。
+- **一鍵裝機** — 桌面雙擊「安裝系統」圖示，Calamares 圖形安裝器跟隨所選語言；裝好後自動清理 live 殘留（開機自動登入等）。
+- **按機最佳化** — 裝好系統後，編譯引數 `CPU_FLAGS_X86` 按你的 CPU 自動生成。
+
+完整功能與配置說明見 **[鏡像站「使用說明」頁](https://mirror.gentoozh.org/about.html)**。
+
+{{% /details %}}
 
 {{< callout type="info" >}}
 **Apple Silicon Mac（M1 / M2）** 不適用下面的標準鏡像，請看 [在 Apple Silicon Mac 上安裝 Gentoo Linux](/posts/2025-10-02-gentoo-m-series-mac/)。
