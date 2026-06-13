@@ -11,6 +11,7 @@ This page tracks the major updates to the site's content, so readers can follow 
 
 ## June 2026
 
+- Download site moved to the cloud: Live ISO downloads now live on **Cloudflare R2** ([r2.gentoozh.org](https://r2.gentoozh.org/), zero egress, global edge); the landing page [mirror.gentoozh.org](https://mirror.gentoozh.org/) is now a **Cloudflare Worker** that reads R2 at the edge to list the latest image plus all past builds; speed testing points to [Cloudflare's speed test](https://speed.cloudflare.com/); the self-hosted US download / speedtest server was retired
 - Added English (i18n) to the public pages: the about, download, mirror list, contributing and similar public pages can now switch between Simplified Chinese / Traditional Chinese / English, mainly to make life easier for the gentoo-zh overlay's overseas users. To be clear: **not every technical article is available in English** — only the public pages are translated for now. The English was drafted with translation software and reviewed and polished by Claude Fable 5 (ultracode) — the best and most expensive model we could find to date — so mistakes are still possible; [corrections on GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) are welcome
 
 ## May 2026

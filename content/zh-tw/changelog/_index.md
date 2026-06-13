@@ -11,6 +11,7 @@ slug: "changelog"
 
 ## 2026 年 6 月
 
+- 下載站上雲：Live ISO 下載遷到 **Cloudflare R2**（[r2.gentoozh.org](https://r2.gentoozh.org/)，零出口流量、全球邊緣），落地頁 [mirror.gentoozh.org](https://mirror.gentoozh.org/) 改成 **Cloudflare Worker**（邊緣即時讀 R2，列出最新鏡像 + 全部歷史版本）；測速改用 [Cloudflare 官方測速](https://speed.cloudflare.com/)；自建的美國下載 / 測速伺服器隨之下線
 - 公共頁面新增英文（English）國際化：關於、下載、鏡像列表、貢獻指南等公共頁面現在可在簡體 / 繁體 / 英文之間切換，主要是方便用 gentoo-zh overlay 的海外使用者。需要說明：**技術文章不一定都有英文**，目前只做了公共頁面；英文部分借翻譯軟體協助生成、由至今能找到的最好最貴的模型 Claude Fable 5（ultracode）負責 review 和最佳化，難免有錯漏，歡迎在 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 指正
 
 ## 2026 年 5 月

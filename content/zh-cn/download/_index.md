@@ -12,12 +12,16 @@ title: "下载"
 
 中文社区定制的 **KDE Plasma 6 桌面 Live ISO**——开箱即中文、三语言可选（简 / 繁 / 英）、中文输入法（fcitx5 + rime），适合先上手体验中文 Gentoo 桌面。
 
-- **下载站**：<https://mirror.gentoozh.org/>（海外服务器，1Gbps 不限流量；国内访问可能偏慢）
+- **下载站**：<https://mirror.gentoozh.org/>（下载由 Cloudflare R2 提供，全球边缘节点、不限流量）
 - **备用仓库**：<https://github.com/Gentoo-zh/Live-ISO>（社区 fork，构建脚本与定制都在这）
 - **登录凭据**：用户 {{< copy "live" >}} / 密码 {{< copy "live" >}} / Root {{< copy "live" >}}
 - **硬件要求**：64 位 x86 CPU，需支持 AVX2（约 2013 年后的处理器）；更老的 CPU 无法启动本镜像。
 - **更新频率**：每周自动重新编译并上传，始终是较新的系统快照；下载站只保留最近几个版本，请以站上实际文件名（`gig-os-日期.iso`）为准。
 - **新版通知**：关注 Telegram 频道 <https://t.me/gentoomirror>，每周构建上线时自动播报。
+
+{{< callout type="warning" >}}
+**在虚拟机里跑？** 镜像按 `x86-64-v3` 编译、必须有 AVX2。**VirtualBox 多半透传不了 AVX2、镜像起不来**——请改用 **KVM（`-cpu host`）、原生 Hyper-V 或 VMware**；是否真有 AVX2 以 guest 里 `grep -o avx2 /proc/cpuinfo` 为准。
+{{< /callout >}}
 
 {{% details title="这个 Live ISO 有什么（点开看更多）" %}}
 

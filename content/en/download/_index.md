@@ -12,12 +12,16 @@ Before you install Gentoo, get your installation media sorted. The least hassle 
 
 A **KDE Plasma 6 desktop Live ISO** put together by the Chinese community — Chinese-ready out of the box, three languages to pick from (Simplified / Traditional / English), Chinese input methods (fcitx5 + rime). A good way to get a feel for a Chinese Gentoo desktop first.
 
-- **Download site**: <https://mirror.gentoozh.org/> (overseas server, 1 Gbps with no traffic cap; access from within mainland China may be on the slow side)
+- **Download site**: <https://mirror.gentoozh.org/> (served from Cloudflare R2 — global edge, no bandwidth limits)
 - **Backup repo**: <https://github.com/Gentoo-zh/Live-ISO> (community fork — build scripts and customizations all live here)
 - **Login credentials**: user {{< copy "live" >}} / password {{< copy "live" >}} / Root {{< copy "live" >}}
 - **Hardware requirements**: a 64-bit x86 CPU with AVX2 support (roughly post-2013 processors); older CPUs can't boot this image.
 - **Update cadence**: recompiled and uploaded automatically every week, so it's always a fairly recent snapshot of the system; the download site only keeps the last few releases, so go by the actual filename on the site (`gig-os-DATE.iso`).
 - **New-release alerts**: follow the Telegram channel <https://t.me/gentoomirror> for an automatic announcement whenever a weekly build goes live.
+
+{{< callout type="warning" >}}
+**Running in a VM?** The image is built for `x86-64-v3` and needs AVX2. **VirtualBox usually can't pass AVX2 through, so the image won't boot** — use **KVM (`-cpu host`), native Hyper-V, or VMware** instead, and confirm with `grep -o avx2 /proc/cpuinfo` inside the guest.
+{{< /callout >}}
 
 {{% details title="What's in this Live ISO (click to expand)" %}}
 

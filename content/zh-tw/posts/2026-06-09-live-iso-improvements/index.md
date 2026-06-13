@@ -34,7 +34,7 @@ Live ISO 構建所需的包來自 [Gentoo-zh/gig](https://github.com/Gentoo-zh/g
 
 ## 自動構建與釋出
 
-構建流水線 [Zakkaus/gentoozh-liveiso-infra](https://github.com/Zakkaus/gentoozh-liveiso-infra)：Live ISO 每週一自動編譯、上傳下載站、渲染落地頁。流水線會逐位元組核對「下載站上的 = 這次編出來的」，一致才上線；也加了對滾動樹過渡期 USE / 關鍵字變化的自適應處理（見 [Python 3.14 成為預設版本](/posts/2026-06-01-python-314-default/)）。
+構建流水線 [Zakkaus/gentoozh-liveiso-infra](https://github.com/Zakkaus/gentoozh-liveiso-infra)：Live ISO 每週一自動編譯，編好後上傳到 **Cloudflare R2**。流水線會逐位元組核對「R2 上的 = 這次編出來的」、並確認下載頁已反映新鏡像，一致才算上線；也加了對滾動樹過渡期 USE / 關鍵字變化的自適應處理（見 [Python 3.14 成為預設版本](/posts/2026-06-01-python-314-default/)）。
 
 ## 官網
 
@@ -42,11 +42,11 @@ Live ISO 構建所需的包來自 [Gentoo-zh/gig](https://github.com/Gentoo-zh/g
 
 ## 下載站
 
-下載站 [mirror.gentoozh.org](https://mirror.gentoozh.org/)（原始碼 [Zakkaus/gentoozh-mirror](https://github.com/Zakkaus/gentoozh-mirror)）：落地頁和使用說明改版，簡 / 繁 / 英三語（i18n 抽成共享模組），支援淺 / 深色、與測速站互鏈，加了 Telegram 頻道連結和 MIT 許可證，並修了手機上 SHA256 校驗值橫向溢位的問題。
+下載站 [mirror.gentoozh.org](https://mirror.gentoozh.org/)（原始碼 [Zakkaus/gentoozh-mirror](https://github.com/Zakkaus/gentoozh-mirror)）**遷到了 Cloudflare，不再用自建伺服器**：ISO 存 **Cloudflare R2**（`r2.gentoozh.org`，零出口流量、全球邊緣、可快取），落地頁改成 **Cloudflare Worker**——在邊緣即時讀 R2，列出最新鏡像和**全部歷史版本**，永遠反映當前內容。頁面保留簡 / 繁 / 英三語與淺 / 深色。
 
 ## 測速站
 
-測速站 [speed.gentoozh.org](https://speed.gentoozh.org/)（原始碼 [Zakkaus/gentoozh-speed](https://github.com/Zakkaus/gentoozh-speed)）：基於 LibreSpeed 的自定義測速頁，同樣是簡 / 繁 / 英三語。
+測速改用 [Cloudflare 官方測速](https://speed.cloudflare.com/)——下載本來就走 Cloudflare 邊緣，用它測更貼近實際下載速度；原先自建的 speed.gentoozh.org 隨下載站上雲一併下線。
 
 ---
 

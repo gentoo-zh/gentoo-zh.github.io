@@ -34,7 +34,7 @@ The packages the Live ISO builds from come from [Gentoo-zh/gig](https://github.c
 
 ## Build and release
 
-The build pipeline, [Zakkaus/gentoozh-liveiso-infra](https://github.com/Zakkaus/gentoozh-liveiso-infra): the Live ISO is compiled automatically every Monday, uploaded to the download site, and the landing page re-rendered. The pipeline does a byte-for-byte check that "what's on the download site == what was just built", and only publishes when they match; it also copes with the USE / keyword churn of a rolling-tree transition automatically (see the [Python 3.14](/posts/2026-06-01-python-314-default/) post).
+The build pipeline, [Zakkaus/gentoozh-liveiso-infra](https://github.com/Zakkaus/gentoozh-liveiso-infra): the Live ISO is compiled automatically every Monday and uploaded to **Cloudflare R2**. The pipeline does a byte-for-byte check that "what's on R2 == what was just built" and confirms the download page reflects the new image, publishing only when they match; it also copes with the USE / keyword churn of a rolling-tree transition automatically (see the [Python 3.14](/posts/2026-06-01-python-314-default/) post).
 
 ## Website
 
@@ -42,11 +42,11 @@ The website, [www.gentoo.org.cn](https://www.gentoo.org.cn/) (source: [gentoo-zh
 
 ## Download site
 
-The download site, [mirror.gentoozh.org](https://mirror.gentoozh.org/) (source: [Zakkaus/gentoozh-mirror](https://github.com/Zakkaus/gentoozh-mirror)): the landing page and the usage guide were reworked into Simplified / Traditional / English (with the i18n pulled into a shared module), it supports light / dark mode, cross-links with the speedtest site, and gained a Telegram channel link and an MIT license; it also fixed the SHA256 checksum overflowing sideways on mobile.
+The download site, [mirror.gentoozh.org](https://mirror.gentoozh.org/) (source: [Zakkaus/gentoozh-mirror](https://github.com/Zakkaus/gentoozh-mirror)), **moved to Cloudflare — no more self-hosted server**: ISOs live on **Cloudflare R2** (`r2.gentoozh.org`, zero egress, global edge, cacheable), and the landing page is now a **Cloudflare Worker** that reads R2 at the edge to list the latest image plus **all past builds**, always reflecting current contents. The page keeps Simplified / Traditional / English and light / dark mode.
 
 ## Speedtest site
 
-The speedtest site, [speed.gentoozh.org](https://speed.gentoozh.org/) ([Zakkaus/gentoozh-speed](https://github.com/Zakkaus/gentoozh-speed)): a custom LibreSpeed-based speed test page, also in Simplified / Traditional / English.
+For speed testing we now point to [Cloudflare's own speed test](https://speed.cloudflare.com/) — downloads already go through Cloudflare's edge, so it reflects real download speed; the old self-hosted speed.gentoozh.org was retired together with the download server.
 
 ---
 
