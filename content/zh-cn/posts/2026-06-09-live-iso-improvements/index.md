@@ -26,7 +26,7 @@ authors:
 
 ## 安装器（Calamares）
 
-安装器配置 [Gentoo-zh/calamares-settings-gig](https://github.com/Gentoo-zh/calamares-settings-gig)：装机后会清掉 live 专用的残留设置，并按你在 live 里选的显卡方案配置 NVIDIA。这套装机流程在 QEMU 上做过实机安装测试。
+安装器配置 [Gentoo-zh/calamares-settings-gig](https://github.com/Gentoo-zh/calamares-settings-gig)：装机后会清掉 live 专用的残留设置，并按你在 live 里选的显卡方案配置 NVIDIA。分区时根文件系统默认 xfs，也可选 btrfs / ext4 / ZFS——选 ZFS 并勾选加密就是 ZFS 原生加密（aes-256-gcm）、由 ZFSBootMenu 引导（GRUB 读不了带原生加密的 ZFS 池，所以 ZFS 根改用 ZBM）。这套装机流程（含 ZFS 加密安装）在虚拟机上做过实机安装测试。
 
 ## Live ISO 用的 overlay
 

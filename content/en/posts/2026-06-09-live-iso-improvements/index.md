@@ -26,7 +26,7 @@ For actually installing a system, following the [Gentoo Handbook](https://wiki.g
 
 ## The installer (Calamares)
 
-The installer config lives in [Gentoo-zh/calamares-settings-gig](https://github.com/Gentoo-zh/calamares-settings-gig): after an install it clears out the live-only leftover settings and configures NVIDIA according to the GPU option you chose in the live session. The install flow has been tested with a real QEMU install.
+The installer config lives in [Gentoo-zh/calamares-settings-gig](https://github.com/Gentoo-zh/calamares-settings-gig): after an install it clears out the live-only leftover settings and configures NVIDIA according to the GPU option you chose in the live session. On the partitioning step the root filesystem defaults to xfs, with btrfs / ext4 / ZFS also available — pick ZFS and tick encrypt and you get ZFS native encryption (aes-256-gcm), booted by ZFSBootMenu (GRUB can't read a natively-encrypted ZFS pool, so a ZFS root uses ZBM instead). The install flow, including the encrypted-ZFS path, has been tested with real installs in a VM.
 
 ## The overlay the Live ISO uses
 
