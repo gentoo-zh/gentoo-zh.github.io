@@ -8,6 +8,9 @@ enableEmoji = true
 enableRobotsTXT = true
 enableGitInfo = false
 
+# 发布即生效：文章提交即发布，不因构建机（CI）时区比文章日期早而被当成「未来文章」漏掉
+buildFuture = true
+
 # Hextra requires this for its Tailwind asset pipeline output
 [build.buildStats]
   enable = true

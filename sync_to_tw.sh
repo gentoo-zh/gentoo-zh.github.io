@@ -258,6 +258,8 @@ convert_one() {
     -e 's/包列表/套件列表/g' \
     -e 's/包版本/套件版本/g' \
     -e 's/包源/套件源/g' \
+    -e 's/質量/品質/g' \
+    -e 's/隻是/只是/g' -e 's/隻有/只有/g' -e 's/隻要/只要/g' -e 's/隻能/只能/g' -e 's/隻會/只會/g' -e 's/隻認/只認/g' \
     "$TARGET_FILE"
 
   # Step 4: Mirror-source localization for Taiwan (TWAREN).

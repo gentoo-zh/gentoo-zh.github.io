@@ -193,7 +193,7 @@ mount /dev/nvme0n1p4 /mnt/gentoo/boot
 
 ## 5. Stage3 与 chroot
 
-从此处开始可参考 [AMD64 Handbook](https://wiki.gentoo.org/wiki/Handbook:AMD64)，直到内核安装章节。
+从此处开始可参考 [AMD64 Handbook](https://wiki.gentoo.org/wiki/Handbook:AMD64/zh-cn)，直到内核安装章节。
 
 ### 5.1 下载并解压 Stage3
 
@@ -697,7 +697,7 @@ update-m1n1
 - [Gentoo Wiki: Project:Asahi/Guide](https://wiki.gentoo.org/wiki/Project:Asahi/Guide)
 - [Asahi Linux 官方站](https://asahilinux.org/)
 - [Asahi Linux Feature Support](https://asahilinux.org/docs/platform/feature-support/overview/)
-- [Gentoo AMD64 Handbook](https://wiki.gentoo.org/wiki/Handbook:AMD64)
+- [Gentoo AMD64 Handbook](https://wiki.gentoo.org/wiki/Handbook:AMD64/zh-cn)
 - [asahi-gentoosupport](https://github.com/chadmed/asahi-gentoosupport)
 - [Gentoo Asahi Releng](https://github.com/chadmed/gentoo-asahi-releng)
 - [User:Jared/Gentoo On An M1 Mac](https://wiki.gentoo.org/wiki/User:Jared/Gentoo_On_An_M1_Mac)

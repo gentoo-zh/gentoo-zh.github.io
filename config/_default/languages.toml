@@ -5,7 +5,7 @@
   weight = 1
   title = "Gentoo 中文社区"
   [zh-cn.params]
-    description = "Gentoo 中文社区——中文 Gentoo 用户的聚集地。维护 gentoo-zh overlay（中文输入法、字体、本土软件），做开箱即用的社区 Live ISO，搭国内下载镜像；装机用机遇到坑，来这儿一起折腾。"
+    description = "Gentoo 中文社区——中文 Gentoo 用户的聚集地。维护 gentoo-zh overlay（中文输入法、字体等华文支持，及常用网络工具），做开箱即用的社区 Live ISO，汇总下载镜像与各类资源；装机用机遇到坑，来这儿一起折腾。"
 
 [zh-tw]
   label = "傳統中文"
@@ -14,7 +14,7 @@
   weight = 2
   title = "Gentoo 中文社群"
   [zh-tw.params]
-    description = "Gentoo 中文社群——中文 Gentoo 使用者的聚集地。維護 gentoo-zh overlay（中文輸入法、字型、本土軟體），做開箱即用的社群 Live ISO，搭中國內陸下載鏡像；裝機用機遇到坑，來這兒一起折騰。"
+    description = "Gentoo 中文社群——中文 Gentoo 使用者的聚集地。維護 gentoo-zh overlay（中文輸入法、字型等華文支援，及常用網路工具），做開箱即用的社群 Live ISO，彙總下載鏡像與各類資源；裝機用機遇到坑，來這兒一起折騰。"
 
 [en]
   label = "English"
@@ -23,6 +23,6 @@
   weight = 3
   title = "Gentoo Chinese Community"
   [en.params]
-    description = "Gentoo Chinese Community — the home for Chinese-speaking Gentoo users. We maintain the gentoo-zh overlay (Chinese input methods, CJK fonts, and China-focused software), build a ready-to-use community Live ISO, and run download mirrors. The overlay has plenty of users outside China too, so the site is also available in English."
+    description = "Gentoo Chinese Community — where Chinese-speaking Gentoo users hang out. We maintain the gentoo-zh overlay (Chinese input methods, CJK fonts, handy networking tools), build a ready-to-use community Live ISO, and pull together download mirrors and resources. Hit a snag installing or running it? Come tinker with us."
     [en.params.search]
       placeholder = "Search docs..."

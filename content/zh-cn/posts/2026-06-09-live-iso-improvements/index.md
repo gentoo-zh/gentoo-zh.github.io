@@ -22,7 +22,7 @@ authors:
 - **装好的系统是干净的**：上面这些 live 便利（连同默认的 SDDM 免密自动登录）都只在 live 里，安装器装机时会复位 / 清掉，装好的系统回到 KDE 正常默认：登录要密码、sudo 要授权、休眠锁屏照常。
 - **开箱即用的细节**：PipeWire 音频、网络开机自动连、MAKEOPTS 与 CPU 指令集按你的机器自适应。
 
-装系统推荐照 [Gentoo 官方手册](https://wiki.gentoo.org/wiki/Handbook:AMD64) 一步步来更稳妥；live 里也带了图形安装器（Calamares），想快速装也可以用。
+装系统推荐照 [Gentoo 官方手册](https://wiki.gentoo.org/wiki/Handbook:AMD64/zh-cn) 一步步来更稳妥；live 里也带了图形安装器（Calamares），想快速装也可以用。
 
 ## 安装器（Calamares）
 

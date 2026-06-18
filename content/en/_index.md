@@ -1,6 +1,6 @@
 ---
 title: "Gentoo Chinese Community"
-description: "Gentoo Chinese Community — where Chinese-speaking Gentoo users hang out. We maintain the gentoo-zh overlay (Chinese input methods, fonts, local software), build a community Live ISO that works out of the box, and run download mirrors in mainland China. Hit a snag installing or running it? Come tinker with us."
+description: "Gentoo Chinese Community — where Chinese-speaking Gentoo users hang out. We maintain the gentoo-zh overlay (Chinese input methods, CJK fonts, handy networking tools), build a ready-to-use community Live ISO, and pull together download mirrors and resources. Hit a snag installing or running it? Come tinker with us."
 layout: hextra-home
 toc: false
 ---

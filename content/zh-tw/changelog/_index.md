@@ -11,6 +11,7 @@ slug: "changelog"
 
 ## 2026 年 6 月
 
+- 新增轉載文章 **[Gentoo Linux with ZFS](/posts/2026-06-18-gentoo-linux-with-zfs/)**（原作者 [Locez](https://github.com/locez)，經授權按 CC BY-NC-SA 4.0 轉載）：在雙 NVMe 鏡像上安裝 ZFS 根 + ZFS 原生加密的實錄；本站補充了 SLOG 配置勘誤、分割槽要點，以及各安裝步驟對應的官方中文手冊連結
 - Live ISO 圖形安裝器支援 **ZFS 根檔案系統**：可把 ZFS 裝成根，勾選加密即 ZFS 原生加密（aes-256-gcm）、由 ZFSBootMenu 引導（btrfs / ext4 / xfs / ZFS 均可在分割槽頁選）。[下載頁](/download/#live-iso)與[使用說明](https://mirror.gentoozh.org/about.html)已補充說明
 - 下載站上雲：Live ISO 下載遷到 **Cloudflare R2**（[r2.gentoozh.org](https://r2.gentoozh.org/)，零出口流量、全球邊緣），落地頁 [mirror.gentoozh.org](https://mirror.gentoozh.org/) 改成 **Cloudflare Worker**（邊緣即時讀 R2，列出最新鏡像 + 全部歷史版本）；測速改用 [Cloudflare 官方測速](https://speed.cloudflare.com/)；自建的美國下載 / 測速伺服器隨之下線
 - 公共頁面新增英文（English）國際化：關於、下載、鏡像列表、貢獻指南等公共頁面現在可在簡體 / 繁體 / 英文之間切換，主要是方便用 gentoo-zh overlay 的海外使用者。需要說明：**技術文章不一定都有英文**，目前只做了公共頁面；英文部分借翻譯軟體協助生成、由至今能找到的最好最貴的模型 Claude Fable 5（ultracode）負責 review 和最佳化，難免有錯漏，歡迎在 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 指正
