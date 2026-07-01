@@ -1,4 +1,4 @@
-baseURL = "https://www.gentoo.org.cn/"
+baseURL = "https://gentoozh.org/"
 title = "Gentoo 中文社区"
 
 defaultContentLanguage = "zh-cn"
