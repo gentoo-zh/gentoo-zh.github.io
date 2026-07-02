@@ -35,6 +35,16 @@ Gentoo 中文社群官網今天正式遷往 **gentoozh.org**。論壇（forum.ge
 
 域名裡的 zh 來自 ISO 639，是中文這門語言的代碼，認的是語言，而不是國家或某個特定地區。而 cn 是 ISO 3166 的國家代碼，範圍反而更窄。況且 gentoo-zh 就是當年的 gentoo-tw 和 gentoo-china [兩岸社群合併](https://code.google.com/archive/p/gentoo-taiwan/issues/2)來的。archlinuxcn 其實也自稱「Arch Linux 中文社群」，cn 只是歷史留下來的叫法，社群裡也有人提過換成 zh，只是體量太大改不動。我們沒有那樣的歷史包袱，既然要動就做到位。
 
+## 官網託管遷到 Cloudflare
+
+順帶一提，官網已從 GitHub Pages 遷到 Cloudflare Workers（靜態資源託管），用的是 Workers Paid 方案。
+
+- Cloudflare 的靜態資源請求免費、不限量，對社群站來說省事。
+- GitHub Pages 有一套[軟性限制](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits)（倉庫和網站體積、每月頻寬、建置頻率等），網站再大一點就不太夠用了。
+- 速度和 GitHub Pages 差不太多，但 Workers Paid 靈活性更高：自定義快取、響應頭都能自己控制，往後要接邊緣邏輯也方便，整體體驗更好，也更適合社群往後發展。
+
+網站的維護、報錯相關事宜，可到 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 開 issue，或透過郵件聯絡 zakk@gentoozh.org。
+
 ## 感謝
 
 gentoo.org.cn 由一位老師長期持有，在社群沉寂的這十多年裡一直續著。舊域名保留重新導向，不會斷鏈。
