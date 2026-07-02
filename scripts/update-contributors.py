@@ -90,7 +90,7 @@ CURL_TIMEOUT = 30
 def load_config():
     """從配置檔載入設定，提供預設值"""
     default_config = {
-        'repository': 'microcai/gentoo-zh',
+        'repository': 'Gentoo-zh/gentoo-zh',
         'min_commits': 5,
         'blocklist': [],
         'avatar_sizes': {'card': 200, 'single': 240},

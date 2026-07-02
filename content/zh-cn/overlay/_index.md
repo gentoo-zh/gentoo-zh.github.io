@@ -4,6 +4,10 @@ title: "Overlay"
 
 Overlay 是官方 Portage 树之外的软件来源——叠加上去，就能装到官方源里没有的包。gentoo-zh 是其中历史悠久的一个：前身是 2003 年的 gentoo-tw 与随后的 gentoo-china，两岸社区合并而来，源码在 [GitHub](https://github.com/microcai/gentoo-zh)。
 
+{{< callout type="warning" >}}
+overlay 仓库即将迁移到组织仓库 `Gentoo-zh/gentoo-zh`，见[公告与执行方案](/posts/2026-07-02-gentoo-zh-repo-migration/)。迁移完成前本页命令和链接仍用 `microcai/gentoo-zh`，照抄即可；完成后旧地址会自动跳转，本页也会同步更新。
+{{< /callout >}}
+
 到现在 gentoo-zh 收录了 450 多个软件包，大致这么几类：
 
 - **中文 / CJK**：fcitx 输入法和一大堆插件、码表（rime、chinese-addons 等），搜狗 / 萌娘 / zhwiki 拼音词库，中文字体，以及一些软件的 CJK 补丁

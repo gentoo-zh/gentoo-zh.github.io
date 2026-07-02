@@ -28,7 +28,7 @@ blocklist:
 min_commits: 5
 
 # 倉庫配置
-repository: microcai/gentoo-zh
+repository: Gentoo-zh/gentoo-zh
 
 # 頭像尺寸配置
 avatar_sizes:
