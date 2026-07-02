@@ -2,6 +2,7 @@
 title: "社群主域名遷往 gentoozh.org"
 description: "社群主域名遷往 gentoozh.org"
 date: 2026-07-01
+featured: true
 tags: ["announcement"]
 authors:
   - name: Zakk
