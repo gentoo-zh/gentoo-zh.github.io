@@ -8,24 +8,28 @@ Overlay 是官方 Portage 树之外的软件来源——叠加上去，就能装
 overlay 仓库已迁移到组织仓库 [Gentoo-zh/gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh)，旧的 `microcai/gentoo-zh` 个人仓库会 301 到新仓库，建议在方便时更新到新 URL，详见[公告与执行方案](/posts/2026-07-02-gentoo-zh-repo-migration/)。
 {{< /callout >}}
 
-到现在 gentoo-zh 收录了 450 多个软件包，大致这么几类：
+至今为止 gentoo-zh 已收录了 450 多个软件包，可大致分为：
 
 - **中文 / CJK**：fcitx 输入法和一大堆插件、码表（rime、chinese-addons 等），搜狗 / 萌娘 / zhwiki 拼音词库，中文字体，以及一些软件的 CJK 补丁
-- **官方源里还没有的网络、开发工具等**：毕竟是 gentoo 用户，谁手里没几个自己维护的包
+- **网络、开发工具等**：毕竟是 Gentoo 用户，谁手里没几个自己维护的包
 - **打好补丁的桌面 / 性能向内核**：cachyos-sources、xanmod、liquorix 这些
-- **跟进新版本**：官方源暂时没人管的包，这边接着出新版
-- **错误修复**：开发者踩到 bug，解决后第一时间把补丁推回源里
 
-规矩就一条：别弄坏别人的系统。每个 ebuild 进源前都得在它支持的架构上测过。
+还有部分是官方源暂时没人管的包，这边接着出新版。以及一些错误修复，开发者踩到 Bug，解决后第一时间把补丁推回源里。
 
-## 添加 gentoo-zh
+只有一条规则：别弄坏别人的系统。每个 ebuild 在进源之前都得在它支持的架构上测过。
 
-用 `eselect repository` 启用最省事（先装好 `app-eselect/eselect-repository`）：
+## 添加 gentoo-zh Overlay
+
+{{% details title="使用 eselect repository 启用" %}}
+
+需先安装 `app-eselect/eselect-repository`：
 
 ```bash
 eselect repository enable gentoo-zh
 emerge --sync gentoo-zh
 ```
+
+{{% /details %}}
 
 {{% details title="手动配置（不想用 eselect）" %}}
 
@@ -49,16 +53,16 @@ auto-sync = yes
 
 ## 国内镜像加速
 
-直连 GitHub 或官方 distfiles 偏慢时，把 gentoo-zh 换成国内镜像。下面都已实测可用，整理自 [peeweep](/contributors/peeweep/) 的[公告](https://t.me/gentoocn/56)，感谢！
+直连 GitHub 或官方 distfiles 偏慢时，可将 gentoo-zh 换成国内镜像。整理自 [peeweep](/contributors/peeweep/) 的[公告](https://t.me/gentoocn/56)，感谢！
 
 ### git 同步源
 
-把 overlay 的同步源切到国内镜像（gentoo-zh 是 [Gentoo-zh/gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh) 的完整 ebuild 镜像，只含 ebuild、不含源码）。可用地址：
+将 overlay 的同步源切到国内镜像（gentoo-zh 是 [Gentoo-zh/gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh) 的完整 ebuild 镜像，只含 ebuild、不含源码）。可用源：
 
 - 重庆大学：`https://mirrors.cqu.edu.cn/git/gentoo-zh.git`
 - 南京大学：`https://mirror.nju.edu.cn/git/gentoo-zh.git`
 
-第一次添加（先装好 git）：
+首次添加（需先安装 git）：
 
 ```bash
 sudo emerge -aq dev-vcs/git          # 没装 git 先装
