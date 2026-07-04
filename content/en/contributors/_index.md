@@ -13,6 +13,6 @@ cascade:
 
 This is the list of everyone who has contributed to the Gentoo-zh Community.
 
-**Note**: this page lists contributors with 5 or more commits to the [gentoo-zh Overlay](https://github.com/Gentoo-zh/gentoo-zh), as well as website content contributors. To correct or remove your information, please contact [zakk@gentoozh.org](mailto:zakk@gentoozh.org).
+**Note**: this page lists contributors with 5 or more commits to the [gentoo-zh Overlay](https://github.com/gentoo-zh/overlay), as well as website content contributors. To correct or remove your information, please contact [zakk@gentoozh.org](mailto:zakk@gentoozh.org).
 
 Last updated 2026-07-01 02:48 UTC (updated automatically every month)

@@ -25,7 +25,7 @@ Hextra 基于 Tailwind CSS，为文档与博客而生：
 ## 主要变化
 
 - 首页重做：hero + 快捷入口 + 最新文章 + 社区贡献者；
-- 贡献者列表：自动抓取 [gentoo-zh Overlay](https://github.com/Gentoo-zh/gentoo-zh) 中提交 5 次以上者，显示提交次数并按提交量排序，每月自动更新；
+- 贡献者列表：自动抓取 [gentoo-zh Overlay](https://github.com/gentoo-zh/overlay) 中提交 5 次以上者，显示提交次数并按提交量排序，每月自动更新；
 - 文章页署名显示作者头像；
 - 文章改用 `tags` 分类，文章页与列表显示 `#标签`，可点进 `/tags/` 聚合页；
 - 首页「最新文章」提供 RSS 订阅；分享到 Telegram / 社交平台时显示站点品牌预览卡片；

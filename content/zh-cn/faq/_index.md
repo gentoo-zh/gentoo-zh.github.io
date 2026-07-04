@@ -29,7 +29,7 @@ Overlay 是叠加在官方 Portage 树之上的额外软件来源——官方源
 
 - **Telegram 交流群** [@gentoo_zh](https://t.me/gentoo_zh)——日常求助
 - **Telegram 频道** [@gentoocn](https://t.me/gentoocn)——公告
-- **Overlay 的 bug**：到 [Gentoo-zh/gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh/issues) 提 issue
+- **Overlay 的 bug**：到 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues) 提 issue
 - 更多频道（IRC / Matrix 等）见 [关于页面](/about/)
 
 {{% /details %}}

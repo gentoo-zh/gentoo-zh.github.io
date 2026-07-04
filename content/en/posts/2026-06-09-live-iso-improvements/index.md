@@ -30,7 +30,7 @@ The installer config lives in [Gentoo-zh/calamares-settings-gig](https://github.
 
 ## The overlay the Live ISO uses
 
-The packages the Live ISO builds from come from [Gentoo-zh/gig](https://github.com/Gentoo-zh/gig) — a fork of the Gig OS overlay, specific to the Live ISO, and *not* the same thing as the community's main overlay, [gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh). This round updated its Calamares to 3.3.14-r8 (which supports Python 3.14), fixed an `emerge --sync` error, and cleaned out a batch of redundant / broken packages.
+The packages the Live ISO builds from come from [Gentoo-zh/gig](https://github.com/Gentoo-zh/gig) — a fork of the Gig OS overlay, specific to the Live ISO, and *not* the same thing as the community's main overlay, [gentoo-zh](https://github.com/gentoo-zh/overlay). This round updated its Calamares to 3.3.14-r8 (which supports Python 3.14), fixed an `emerge --sync` error, and cleaned out a batch of redundant / broken packages.
 
 ## Build and release
 

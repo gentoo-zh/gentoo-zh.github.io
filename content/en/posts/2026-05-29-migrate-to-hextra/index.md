@@ -25,7 +25,7 @@ Hextra is built on Tailwind CSS and made for docs and blogs:
 ## Main Changes
 
 - Reworked home page: hero + quick links + latest posts + community contributors;
-- Contributor list: pulls everyone with 5+ commits in the [gentoo-zh Overlay](https://github.com/Gentoo-zh/gentoo-zh), shows their commit counts, sorts by commit count, and refreshes itself every month;
+- Contributor list: pulls everyone with 5+ commits in the [gentoo-zh Overlay](https://github.com/gentoo-zh/overlay), shows their commit counts, sorts by commit count, and refreshes itself every month;
 - Article pages show the author's avatar in the byline;
 - Articles are now categorized with `tags`; `#tags` show up on article pages and lists, and you can click through to the `/tags/` aggregation page;
 - The "Latest posts" section on the home page has an RSS feed; share a link to Telegram or a social platform and you get a branded preview card;

@@ -2,10 +2,10 @@
 title: "Overlay"
 ---
 
-Overlay 是官方 Portage 樹之外的軟體來源——疊加上去，就能裝到官方源裡沒有的包。gentoo-zh 是其中歷史悠久的一個：前身是 2003 年的 gentoo-tw 與隨後的 gentoo-china，兩岸社群合併而來，原始碼在 [GitHub](https://github.com/Gentoo-zh/gentoo-zh)。
+Overlay 是官方 Portage 樹之外的軟體來源——疊加上去，就能裝到官方源裡沒有的包。gentoo-zh 是其中歷史悠久的一個：前身是 2003 年的 gentoo-tw 與隨後的 gentoo-china，兩岸社群合併而來，原始碼在 [GitHub](https://github.com/gentoo-zh/overlay)。
 
 {{< callout type="info" >}}
-overlay 倉庫已遷移到組織倉庫 [Gentoo-zh/gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh)，舊的 `microcai/gentoo-zh` 個人倉庫會 301 到新倉庫，建議在方便時更新到新 URL，詳見[公告與執行方案](/posts/2026-07-02-gentoo-zh-repo-migration/)。
+overlay 倉庫已遷移到組織倉庫 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay)，舊的 `microcai/gentoo-zh` 個人倉庫會 301 到新倉庫，建議在方便時更新到新 URL，詳見[公告與執行方案](/posts/2026-07-02-gentoo-zh-repo-migration/)。
 {{< /callout >}}
 
 至今為止 gentoo-zh 已收錄了 450 多個軟體套件，可大致分為：
@@ -39,7 +39,7 @@ emerge --sync gentoo-zh
 [gentoo-zh]
 location = /var/db/repos/gentoo-zh
 sync-type = git
-sync-uri = https://github.com/Gentoo-zh/gentoo-zh.git
+sync-uri = https://github.com/gentoo-zh/overlay.git
 auto-sync = yes
 ```
 
@@ -57,7 +57,7 @@ auto-sync = yes
 
 ### git 同步源
 
-將 overlay 的同步源切到中國內陸鏡像（gentoo-zh 是 [Gentoo-zh/gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh) 的完整 ebuild 鏡像，只含 ebuild、不含原始碼）。可用源：
+將 overlay 的同步源切到中國內陸鏡像（gentoo-zh 是 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay) 的完整 ebuild 鏡像，只含 ebuild、不含原始碼）。可用源：
 
 - 重慶大學：`https://mirrors.cqu.edu.cn/git/gentoo-zh.git`
 - 南京大學：`https://mirror.nju.edu.cn/git/gentoo-zh.git`
@@ -111,4 +111,4 @@ echo "*/*::gentoo-zh ~amd64" >> /etc/portage/package.accept_keywords/gentoo-zh
 
 ## 參與貢獻
 
-歡迎給 gentoo-zh 添磚加瓦：到 [GitHub 倉庫](https://github.com/Gentoo-zh/gentoo-zh) 提 Pull Request，發現問題也歡迎提 issue。
+歡迎給 gentoo-zh 添磚加瓦：到 [GitHub 倉庫](https://github.com/gentoo-zh/overlay) 提 Pull Request，發現問題也歡迎提 issue。

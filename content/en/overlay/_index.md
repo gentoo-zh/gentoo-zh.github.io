@@ -2,10 +2,10 @@
 title: "Overlay"
 ---
 
-An overlay is a source of software outside the official Portage tree—layer it on top and you can install packages that aren't in the official repos. gentoo-zh is one of the long-standing ones: it grew out of gentoo-tw (started in 2003) and the later gentoo-china, when the two communities merged. The source lives on [GitHub](https://github.com/Gentoo-zh/gentoo-zh).
+An overlay is a source of software outside the official Portage tree—layer it on top and you can install packages that aren't in the official repos. gentoo-zh is one of the long-standing ones: it grew out of gentoo-tw (started in 2003) and the later gentoo-china, when the two communities merged. The source lives on [GitHub](https://github.com/gentoo-zh/overlay).
 
 {{< callout type="info" >}}
-The overlay repo has moved to the organization repo [Gentoo-zh/gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh). The old personal repo `microcai/gentoo-zh` now redirects (301) to the new one; update to the new URL when you get a chance. See the [announcement and rollout plan](/posts/2026-07-02-gentoo-zh-repo-migration/) for details.
+The overlay repo has moved to the organization repo [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay). The old personal repo `microcai/gentoo-zh` now redirects (301) to the new one; update to the new URL when you get a chance. See the [announcement and rollout plan](/posts/2026-07-02-gentoo-zh-repo-migration/) for details.
 {{< /callout >}}
 
 By now gentoo-zh carries over 450 packages, roughly in these categories:
@@ -39,7 +39,7 @@ Create `gentoo-zh.conf` under `/etc/portage/repos.conf/`:
 [gentoo-zh]
 location = /var/db/repos/gentoo-zh
 sync-type = git
-sync-uri = https://github.com/Gentoo-zh/gentoo-zh.git
+sync-uri = https://github.com/gentoo-zh/overlay.git
 auto-sync = yes
 ```
 
@@ -57,7 +57,7 @@ If connecting straight to GitHub or the official distfiles is slow, you can swit
 
 ### git sync source
 
-Point the overlay's sync source at a mainland mirror (gentoo-zh is a full ebuild mirror of [Gentoo-zh/gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh): ebuilds only, no source code). Available sources:
+Point the overlay's sync source at a mainland mirror (gentoo-zh is a full ebuild mirror of [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay): ebuilds only, no source code). Available sources:
 
 - Chongqing University: `https://mirrors.cqu.edu.cn/git/gentoo-zh.git`
 - Nanjing University: `https://mirror.nju.edu.cn/git/gentoo-zh.git`
@@ -111,4 +111,4 @@ To see what packages the overlay offers: `eix -RO gentoo-zh`.
 
 ## Contributing
 
-We'd love help building out gentoo-zh: open a pull request on the [GitHub repository](https://github.com/Gentoo-zh/gentoo-zh), and if you find a problem, issues are welcome too.
+We'd love help building out gentoo-zh: open a pull request on the [GitHub repository](https://github.com/gentoo-zh/overlay), and if you find a problem, issues are welcome too.

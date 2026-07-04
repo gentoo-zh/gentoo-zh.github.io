@@ -30,7 +30,7 @@ authors:
 
 ## Live ISO 用的 overlay
 
-Live ISO 建置所需的包來自 [Gentoo-zh/gig](https://github.com/Gentoo-zh/gig)——它是 Gig OS overlay 的 fork、專給 Live ISO 用，跟社群主 overlay [gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh) 不是一個。這次把其中的 Calamares 更新到支援 Python 3.14 的 3.3.14-r8，修復了 `emerge --sync` 的報錯，並清理了一批冗餘 / 失效的包。
+Live ISO 建置所需的包來自 [Gentoo-zh/gig](https://github.com/Gentoo-zh/gig)——它是 Gig OS overlay 的 fork、專給 Live ISO 用，跟社群主 overlay [gentoo-zh](https://github.com/gentoo-zh/overlay) 不是一個。這次把其中的 Calamares 更新到支援 Python 3.14 的 3.3.14-r8，修復了 `emerge --sync` 的報錯，並清理了一批冗餘 / 失效的包。
 
 ## 自動建置與釋出
 

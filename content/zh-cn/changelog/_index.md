@@ -12,7 +12,7 @@ slug: "changelog"
 ## 2026 年 7 月
 
 - **社区主域名迁往 [gentoozh.org](https://gentoozh.org/)**：旧域名（gentoo.org.cn、gentoocn.org）全部 301 永久跳转，书签与已有链接不失效，建议尽快更新；详见[迁移公告](/posts/2026-07-01-domain-migration/)
-- **gentoo-zh overlay 仓库迁到组织仓库 [Gentoo-zh/gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh)**：旧的 `microcai/gentoo-zh` 会 301 到新仓库，已添加的用户请把同步源更新到新 URL，详见[仓库迁移公告与执行方案](/posts/2026-07-02-gentoo-zh-repo-migration/)
+- **gentoo-zh overlay 仓库迁到组织仓库 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay)**：旧的 `microcai/gentoo-zh` 会 301 到新仓库，已添加的用户请把同步源更新到新 URL，详见[仓库迁移公告与执行方案](/posts/2026-07-02-gentoo-zh-repo-migration/)
 - **社区论坛 [forum.gentoozh.org](https://forum.gentoozh.org/) 上线**（Discourse，简繁双语）：适合发帖、提问和长期讨论；首页「加入社区」与[关于页](/about/)已加入口
 - **官网托管迁到 Cloudflare Workers**：从 GitHub Pages 迁到 Workers 静态资源托管（免费不限量、全球边缘节点），见[迁移文的补充说明](/posts/2026-07-01-domain-migration/)
 - [下载页](/download/#live-iso)与 [Overlay 页](/overlay/)文案更新：下载页整理登录凭据、虚拟机 AVX2 提示与镜像站清单；Overlay 页重排软件包分类、把两种添加方式收进折叠块、补上国内 git / distfiles 换源地址

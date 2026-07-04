@@ -29,7 +29,7 @@ When a direct connection to GitHub / the official distfiles is slow, point the o
 
 - **Telegram group** [@gentoo_zh](https://t.me/gentoo_zh) — day-to-day help
 - **Telegram channel** [@gentoocn](https://t.me/gentoocn) — announcements
-- **Overlay bugs**: file an issue at [Gentoo-zh/gentoo-zh](https://github.com/Gentoo-zh/gentoo-zh/issues)
+- **Overlay bugs**: file an issue at [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues)
 - More channels (IRC / Matrix, etc.) on the [About page](/about/)
 
 {{% /details %}}
