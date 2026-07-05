@@ -24,5 +24,3 @@
   title = "Gentoo-zh Community"
   [en.params]
     description = "Gentoo-zh Community — where Chinese-speaking Gentoo users hang out. We maintain the gentoo-zh overlay (Chinese input methods, CJK fonts, handy networking tools), build a ready-to-use community Live ISO, and pull together download mirrors and resources. Hit a snag installing or running it? Come tinker with us."
-    [en.params.search]
-      placeholder = "Search docs..."

@@ -1,7 +1,5 @@
 description = "Gentoo 中文社区——中文 Gentoo 用户的聚集地。维护 gentoo-zh overlay（中文输入法、字体等华文支持，及常用网络工具），做开箱即用的社区 Live ISO，汇总下载镜像与各类资源；装机用机遇到坑，来这儿一起折腾。"
 
-enableSearch = true
-
 # 全站日期格式（覆盖 Hextra 默认的 :date_long 英文长日期；与首页 ISO 一致）
 dateFormat = "2006-01-02"
 
@@ -24,7 +22,6 @@ contactEmail = "zakk@gentoozh.org"
 [search]
   enable = true
   type = "flexsearch"
-  placeholder = "搜索文档..."
   [search.flexsearch]
     index = "content"
     tokenize = "forward"

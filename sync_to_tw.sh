@@ -15,7 +15,10 @@
 
 set -euo pipefail
 
-export PATH="/opt/homebrew/bin:$PATH"
+# 仅在 macOS Homebrew 目录存在时才加（Linux/CI 上跳过）
+if [ -d /opt/homebrew/bin ]; then
+  export PATH="/opt/homebrew/bin:$PATH"
+fi
 
 # 绝对化自身路径：smart 模式会 cd 到仓库根目录，之后仍需能重新调用自己。
 SELF="$(cd "$(dirname "$0")" 2>/dev/null && pwd)/$(basename "$0")"
@@ -163,7 +166,6 @@ convert_one() {
     -e 's/查找/搜尋/g' \
     -e 's/命令/指令/g' \
     -e 's/终端/終端機/g' \
-    -e 's/同步/同步/g' \
     -e 's/固件/韌體/g' \
     -e 's/电源/電源/g' \
     -e 's/电池/電池/g' \
@@ -219,8 +221,8 @@ convert_one() {
     -e 's/显卡/顯示卡/g' \
     -e 's/顯卡/顯示卡/g' \
     -e 's/社区/社群/g' \
-    -e 's/用户/使用者/g' \
     -e 's/用户组/使用者群組/g' \
+    -e 's/用户/使用者/g' \
     -e 's/文件系统/檔案系統/g' \
     -e 's/环境/環境/g' \
     -e 's/设置/設定/g' \

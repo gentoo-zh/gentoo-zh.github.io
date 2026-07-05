@@ -387,7 +387,7 @@ def generate_frontmatter(login, name, links, weight, tag, commits, lang='zh-cn')
     """產生貢獻者頁的 frontmatter + 內容。
 
     用 yaml.safe_dump 序列化，確保不受信任的 GitHub 顯示名稱 / 連結
-    （可能含 " : 換行 --- {{ }} 等）被正確轉義 —— 無法注入額外 frontmatter
+    （可能含 " : 換行 --- {{ }} 等）被正確轉義，無法注入額外 frontmatter
     參數、提前關閉 frontmatter 圍欄、或破壞站點建構。
 
     description 給每頁一句穩定的 meta 描述（避免 Hextra 退而用正文「N 次提交」
