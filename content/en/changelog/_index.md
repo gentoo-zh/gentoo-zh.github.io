@@ -11,6 +11,7 @@ This page tracks the major updates to the site's content, so readers can follow 
 
 ## July 2026
 
+- **Comments on posts and doc pages**: added [giscus](https://giscus.app/) (backed by this repo's GitHub Discussions), so you can sign in with a GitHub account and leave a comment. The comment box follows the site's light/dark theme, blends into the page, and isn't shown on the homepage
 - **The community's main domain moved to [gentoozh.org](https://gentoozh.org/)**: the old domains (gentoo.org.cn, gentoocn.org) all redirect permanently (301), so existing bookmarks and links keep working, but please update them soon. See the [migration announcement](/posts/2026-07-01-domain-migration/) for details
 - **The gentoo-zh overlay repo moved to the organization repo [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay)**: the old `microcai/gentoo-zh` now redirects (301) to the new repo. If you've already added the overlay, update your sync source to the new URL. See the [repo migration announcement and record](/posts/2026-07-02-gentoo-zh-repo-migration/) for details
 - **The community forum [forum.gentoozh.org](https://forum.gentoozh.org/) is live** (Discourse, Simplified and Traditional Chinese): a good place for posts, questions, and long-term discussion. Entry points have been added on the homepage's "Join the community" and the [About page](/about/)

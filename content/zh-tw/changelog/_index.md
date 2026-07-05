@@ -11,6 +11,7 @@ slug: "changelog"
 
 ## 2026 年 7 月
 
+- **文章與各文件頁開放評論**：接入 [giscus](https://giscus.app/)（基於本倉庫的 GitHub Discussions），用 GitHub 帳號登入即可留言；評論區亮暗跟隨站點、配色與頁面一致，首頁不顯示
 - **社群主域名遷往 [gentoozh.org](https://gentoozh.org/)**：舊域名（gentoo.org.cn、gentoocn.org）全部 301 永久跳轉，書籤與已有連結不失效，建議儘快更新；詳見[遷移公告](/posts/2026-07-01-domain-migration/)
 - **gentoo-zh overlay 倉庫遷到組織倉庫 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay)**：舊的 `microcai/gentoo-zh` 會 301 到新倉庫，已新增的使用者請把同步源更新到新 URL，詳見[倉庫遷移公告與執行記錄](/posts/2026-07-02-gentoo-zh-repo-migration/)
 - **社群論壇 [forum.gentoozh.org](https://forum.gentoozh.org/) 上線**（Discourse，簡繁雙語）：適合發帖、提問和長期討論；首頁「加入社群」與[關於頁](/about/)已加入口
