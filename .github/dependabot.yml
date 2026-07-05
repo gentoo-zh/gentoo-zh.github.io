@@ -1,0 +1,7 @@
+version: 2
+updates:
+  # 保持 workflow 里 SHA 钉住的 actions 能收到更新（否则钉死后再也不升级）
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
