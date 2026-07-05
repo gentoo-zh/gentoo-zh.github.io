@@ -66,7 +66,19 @@ contactEmail = "zakk@gentoozh.org"
   displayTags = true
 
 [comments]
-  enable = false
+  # 全站开启评论；首页用 hextra-home 布局、不出评论区，不受影响
+  enable = true
+  type = "giscus"
+  # 评论存进本仓库的 GitHub Discussions，用 Announcements 分类（只有维护者和 giscus 能建帖）
+  # 外观（配色、亮暗、界面语言）由主题的 giscus 覆盖处理，这里只配后端接线
+  [comments.giscus]
+    repo = "Gentoo-zh/gentoo-zh.github.io"
+    repoId = "MDEwOlJlcG9zaXRvcnk3OTEwNDY2"
+    category = "Announcements"
+    categoryId = "DIC_kwDOAHi0Qs4DAMZA"
+    mapping = "pathname"
+    # pathname 映射用严格匹配，避免相似 URL 撞车
+    strict = 1
 
 [gitInfo]
   enable = false
