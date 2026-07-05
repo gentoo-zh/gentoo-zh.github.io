@@ -19,7 +19,9 @@
 
 import argparse
 import json
+import os
 import re
+import shutil
 import subprocess
 import tempfile
 import time
@@ -130,7 +132,7 @@ def run_command(cmd, check=True, timeout=None):
 
 
 def run_with_retry(cmd, *, what, allow_empty=False, timeout=60):
-    """帶指數退避重試的命令執行。回傳 stdout（已 .strip()）
+    """帶指數退避重試的命令執行。回傳原始 stdout（未 strip）
 
     用於 gh api 等可能 rate-limit 或 5xx 的呼叫。
     """
@@ -171,7 +173,6 @@ def atomic_write_text(path: Path, content: str):
         dir=str(path.parent),
     )
     try:
-        import os
         with open(tmp_fd, 'w', encoding='utf-8') as f:
             f.write(content)
             f.flush()
@@ -284,7 +285,6 @@ def download_and_convert_avatar(login, avatar_url, dry_run=False):
         print(f"  [DRY-RUN] 會下載頭像: {avatar_url}")
         return
 
-    import os
     # 用第一個語言目錄當暫存空間
     first_dir = CONTENT_DIRS['zh-cn'] / login
     first_dir.mkdir(parents=True, exist_ok=True)
@@ -329,7 +329,6 @@ def download_and_convert_avatar(login, avatar_url, dry_run=False):
                     target_dir.mkdir(parents=True, exist_ok=True)
                     target = target_dir / f"avatar_{size_name}.webp"
                     # 用 fileinput-safe shutil copy + rename 模式
-                    import shutil
                     final_tmp = target.with_suffix('.webp.tmp')
                     shutil.copyfile(str(tmp_out), str(final_tmp))
                     os.replace(str(final_tmp), str(target))
@@ -488,7 +487,6 @@ def create_contributor_page(login, user_data, commits, dry_run=False):
 def prune_dropped_contributors(kept_logins, dry_run=False):
     """移除已掉出名單的貢獻者頁（特殊標籤的創始人 / 維護者除外）。
     安全護欄：保留集異常偏少（疑似 API 抓取失敗）時跳過，避免誤刪。"""
-    import shutil
     base = CONTENT_DIRS['zh-cn']
     existing = [d for d in base.iterdir() if d.is_dir()]
     if len(kept_logins) < 30 or len(kept_logins) < len(existing) * 0.5:
@@ -565,6 +563,12 @@ def main():
         avatar_url = contrib['avatar_url']
 
         print(f"處理 {login} ({commits} 次提交)...")
+
+        # login 同時用於 URL 與磁碟路徑，先統一校驗合法字元集，避免非法值落到頭像下載/寫盤
+        if not re.fullmatch(r'[A-Za-z0-9-]{1,39}', login or ''):
+            print(f"  [跳過] 非法 login，已略過: {login!r}")
+            skipped_count += 1
+            continue
 
         try:
             if args.commits_only:
