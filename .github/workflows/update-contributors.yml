@@ -68,9 +68,17 @@ jobs:
           git commit -m "chore: 自動更新貢獻者資訊（${changed} 個檔案）"
 
           # 防止有人在 workflow 執行期間 push，rebase 後重試
+          pushed=false
           for i in 1 2 3; do
-            git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
-              git push origin "HEAD:${GITHUB_REF_NAME}" && break
+            if git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
+               git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              pushed=true
+              break
+            fi
             echo "推送失敗（嘗試 $i/3），等待後重試"
             sleep 5
           done
+          if [ "$pushed" != true ]; then
+            echo "三次推送皆失敗，貢獻者更新未上傳" >&2
+            exit 1
+          fi

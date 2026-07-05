@@ -4,7 +4,7 @@
 
 ## 特性
 
-- Hugo 静态网站生成器 + Hextra 主题（通过 [Hugo Modules](https://gohugo.io/hugo-modules/) 引入，见 `go.mod`，无需 Node 工具链）
+- Hugo 静态网站生成器 + Hextra 主题（经本站 gentoozh-theme 补丁包用 [Hugo Modules](https://gohugo.io/hugo-modules/) 引入，见 `go.mod`，无需 Node 工具链）
 - 简体 / 正体中文 / 英文三语（zh-cn 在根路径 `/`，zh-tw 在 `/zh-tw/`，en 在 `/en/`）
 - 站内全文搜索（FlexSearch）、暗色模式、响应式布局
 - 文章与各文档页评论（giscus，存进本仓库的 GitHub Discussions；首页除外）
@@ -60,7 +60,7 @@ hugo --gc --minify
 ├── static/                   # 原样输出的静态文件（CNAME、favicon、图片）
 ├── scripts/                  # 贡献者自动更新脚本（见 scripts/README.md）
 ├── sync_to_tw.sh             # 简体 → 正体中文转换（OpenCC s2twp + 术语修正）
-├── go.mod / go.sum           # Hextra 主题的 Hugo Module 依赖
+├── go.mod / go.sum           # Hugo Module 依赖（直接依赖 gentoozh-theme，它再拉取 Hextra）
 └── .github/workflows/        # CI/CD（hugo.yml 部署 + update-contributors.yml 贡献者更新）
 ```
 
@@ -78,10 +78,10 @@ hugo --gc --minify
 
 ## 更新主题
 
-主题是 Hugo Module，用 `hugo mod` 升级（不再操作 submodule）：
+主题通过 Hugo Module 引入，用 `hugo mod` 升级（不再操作 submodule）。站点直接依赖的是本站补丁包 `gentoozh-theme`（它再把 Hextra 作为间接依赖拉取）：
 
 ```bash
-hugo mod get -u github.com/imfing/hextra
+hugo mod get -u github.com/Gentoo-zh/gentoozh-theme
 hugo mod tidy
 ```
 

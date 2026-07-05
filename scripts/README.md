@@ -4,7 +4,7 @@
 
 ## 自動化更新
 
-本腳本配置為 **每週一 00:00 UTC 自動運行**（通過 GitHub Actions；Hextra 遷移期間已暫停為每年一次，遷移完成後在 workflow 中恢復為 `0 0 * * 1`）：
+本腳本配置為 **每月 1 號 00:00 UTC 自動運行**（通過 GitHub Actions，cron `0 0 1 * *`）：
 - 自動更新所有貢獻者的提交次數和權重
 - 自動更新索引頁面時間戳
 - 自動過濾屏蔽名單中的用戶
@@ -69,7 +69,7 @@ python3 scripts/update-contributors.py --dry-run
 
 - **例行模式** (`--commits-only`)
   - 更新所有已存在頁面的提交次數與權重（`weight = 10000 - commits`）
-  - 更新索引頁面時間戳並添加"每週一自動更新"說明
+  - 更新索引頁面時間戳並添加"每月自動更新"說明
   - 若找到新達標的貢獻者會自動建立 `content/zh-{cn,tw}/contributors/<login>/index.md` 以及 WebP 頭像
   - 自動過濾屏蔽名單中的用戶
   
@@ -80,7 +80,7 @@ python3 scripts/update-contributors.py --dry-run
 
 ## 建議流程
 
-1. **自動化**：每週一自動運行 `--commits-only` 模式
+1. **自動化**：每月 1 號自動運行 `--commits-only` 模式
 2. **新成員**：發現 GitHub 有新達 5 次提交的成員時，跑一次完整模式並手動調整標籤
 3. **局部更新**：若只需要更新頭像或連結，搭配 `--skip-avatars` / `--skip-info`
 
