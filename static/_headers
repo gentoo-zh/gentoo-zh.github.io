@@ -4,6 +4,12 @@
 /js/*
   Cache-Control: public, max-age=31536000, immutable
 
+# giscus 评论主题 CSS：也是指纹资源，可长期缓存；且由 giscus.app 的 iframe 跨域加载，
+# 必须带 CORS 头，否则 Safari / iOS 会拒绝应用自定义主题、评论区看起来是坏的。
+/giscus/*
+  Cache-Control: public, max-age=31536000, immutable
+  Access-Control-Allow-Origin: *
+
 # 全站安全响应头
 /*
   X-Frame-Options: SAMEORIGIN
