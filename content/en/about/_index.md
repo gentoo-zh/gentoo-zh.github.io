@@ -59,7 +59,7 @@ The zh in the name comes from ISO 639, the code for the Chinese language. It ide
 
 The public pages are also available in English, to make things easier for the gentoo-zh overlay's overseas users.
 
-Only the public pages (About, Download, Mirror list, Contributing) are fully in English; most of the technical articles are still Chinese-only, with only a few articles available in English. The English was drafted with translation software and then reviewed and polished by Claude Fable 5, so it may read a little stiff or have the odd slip — spot something? Open an issue or PR on [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io).
+Only the public pages (About, Download, Mirror list, Contributing) are fully in English; only some of the technical articles have an English version. The English was drafted with translation software and then reviewed and polished by Claude Fable 5, so it may read a little stiff or have the odd slip — spot something? Open an issue or PR on [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io).
 
 ## How can I help build the community?
 

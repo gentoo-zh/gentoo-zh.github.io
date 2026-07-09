@@ -3,7 +3,7 @@ title: "常见问题"
 description: "Gentoo 中文社区新手常见问题：从哪开始、Overlay 与官方源的关系、镜像加速、去哪提问、如何贡献。"
 ---
 
-新手最常问的几个。
+新手最常问的几个问题
 
 {{% details closed="true" title="我是新手，该从哪开始？用官方 Gentoo 还是社区 Live ISO？" %}}
 
@@ -27,12 +27,12 @@ Overlay 是叠加在官方 Portage 树之上的额外软件来源，官方源没
 
 {{% details closed="true" title="遇到问题去哪问？" %}}
 
-各种交流渠道（Telegram、Matrix、IRC 等）都列在 [关于页面](/about/)，按自己习惯挑一个。Overlay 的 bug 直接到 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues) 提 issue。
+我们提供多种交流渠道（Telegram、Matrix、IRC 等），都列在 [关于页面](/about/) 里，可以按自己的喜好选择。Overlay 的 Bug 直接到 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues) 提 issue。
 
 {{% /details %}}
 
-{{% details closed="true" title="如何开始贡献？" %}}
+{{% details closed="true" title="如何为社区贡献？" %}}
 
-给 Overlay 提包 / 修 bug、给网站写文章补翻译，流程都在 [贡献指南](/contributing/) 里。
+给 Overlay 提包 / 修 Bug、给网站写文章补翻译，请参考 [贡献指南](/contributing/) 。
 
 {{% /details %}}

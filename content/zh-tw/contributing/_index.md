@@ -6,11 +6,11 @@ description: "如何為 Gentoo-zh Overlay 與 Gentoo 中文社群網站做出貢
 歡迎參與 Gentoo 中文社群！
 貢獻分為：
 
-- **Gentoo-zh Overlay 貢獻**（軟體套件 / ebuild）——社群主線，也是[貢獻者牆](https://gentoozh.org/contributors/)的來源（指令碼每月抓取 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay) 提交 5 次以上者）。詳見下方「為 gentoo-zh Overlay 貢獻」
-- **社群網站貢獻**（文章 / 翻譯 / 修正）——在 [gentoo-zh.github.io](https://github.com/Gentoo-zh/gentoo-zh.github.io) 倉庫，詳見本頁後半「為社群網站貢獻」
+- **Gentoo-zh Overlay 貢獻**（軟體套件 / ebuild）——社群主線，也是[貢獻者牆](https://gentoozh.org/contributors/)的來源（指令碼每月抓取 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay) 提交 5 次以上者）。詳見下方「Gentoo-zh Overlay 貢獻指南」
+- **社群網站貢獻**（文章 / 翻譯 / 修正）——在 [gentoo-zh.github.io](https://github.com/gentoo-zh/gentoo-zh.github.io) 倉庫，詳見本頁後半「社群網站貢獻指南」
 - **官方 Gentoo Wiki 翻譯**（中文譯者）——見[如何參與 Gentoo Wiki 的翻譯工作](https://gentoozh.org/posts/2026-06-30-gentoo-wiki-translation/)
 
-## 為 Gentoo-zh Overlay 貢獻
+## Gentoo-zh Overlay 貢獻指南
 
 gentoo-zh 是一個 `masters = gentoo` 的 Gentoo Overlay（疊加在官方 Portage 樹之上），收錄 450 多個包，原始碼在 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay)。新增或更新 ebuild、修 Bug、跟進新版本，都透過 GitHub Pull Request 提交；發現問題也歡迎提 [issue](https://github.com/gentoo-zh/overlay/issues)。
 

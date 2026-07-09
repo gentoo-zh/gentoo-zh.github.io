@@ -27,12 +27,12 @@ When a direct connection to GitHub / the official distfiles is slow, point the o
 
 {{% details closed="true" title="Where do I go when I run into trouble?" %}}
 
-All the chat channels (Telegram, Matrix, IRC, etc.) are listed on the [About page](/about/); pick whichever you prefer. For overlay bugs, file an issue at [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues).
+We offer several chat channels (Telegram, Matrix, IRC, etc.), all listed on the [About page](/about/) — pick whichever you prefer. For overlay bugs, file an issue at [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues).
 
 {{% /details %}}
 
-{{% details closed="true" title="How do I start contributing?" %}}
+{{% details closed="true" title="How can I contribute to the community?" %}}
 
-Send packages / fix bugs for the overlay, or write articles / translations for the website. It's all in the [contributing guide](/contributing/).
+Send packages / fix bugs for the overlay, or write articles / translations for the website — see the [contributing guide](/contributing/).
 
 {{% /details %}}

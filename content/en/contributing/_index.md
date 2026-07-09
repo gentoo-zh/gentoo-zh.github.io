@@ -5,11 +5,11 @@ description: "How to contribute to the Gentoo-zh Overlay and the Gentoo-zh Commu
 
 Welcome to the Gentoo-zh Community! Contributions come in a few flavours:
 
-- **Contribute to the Gentoo-zh Overlay** (packages / ebuilds) — the main community track, and the source of the [contributor wall](/contributors/) (a script pulls everyone with 5+ commits to [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay) every month). See "Contributing to the Gentoo-zh Overlay" below.
-- **Contribute to the community website** (articles / translations / fixes) — lives in the [gentoo-zh.github.io](https://github.com/Gentoo-zh/gentoo-zh.github.io) repo. See "Contributing to the community website" in the second half of this page.
+- **Contribute to the Gentoo-zh Overlay** (packages / ebuilds) — the main community track, and the source of the [contributor wall](/contributors/) (a script pulls everyone with 5+ commits to [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay) every month). See "Gentoo-zh Overlay Contributing Guide" below.
+- **Contribute to the community website** (articles / translations / fixes) — lives in the [gentoo-zh.github.io](https://github.com/gentoo-zh/gentoo-zh.github.io) repo. See "Community Website Contributing Guide" in the second half of this page.
 - **Translate the official Gentoo Wiki** (Chinese translators) — see [How to help translate the Gentoo Wiki](https://gentoozh.org/posts/2026-06-30-gentoo-wiki-translation/).
 
-## Contributing to the Gentoo-zh Overlay
+## Gentoo-zh Overlay Contributing Guide
 
 gentoo-zh is a `masters = gentoo` Gentoo overlay (stacked on top of the official Portage tree) carrying 450+ packages, with its source at [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay). Adding or updating ebuilds, fixing bugs, keeping up with new upstream releases — it all goes through GitHub Pull Requests. Found a problem? File an [issue](https://github.com/gentoo-zh/overlay/issues) too.
 
@@ -230,7 +230,7 @@ The how-to is **governed by the official docs**; this page is just a pointer:
 
 ---
 
-## Contributing to the community website (articles / translations / docs)
+## Community Website Contributing Guide (articles / translations / docs)
 
 ## Project overview
 

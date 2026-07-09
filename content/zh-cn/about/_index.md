@@ -59,7 +59,7 @@ title: "关于"
 
 为了方便使用 gentoo-zh overlay 的海外用户，社区公共页面也提供英文版本。
 
-但目前只有公共页面（关于、下载、镜像列表、贡献指南）全部做了英文版本，具体的技术文章大多还是中文，只有少数文章提供英文版，英文内容是由翻译软件初译，再经 Claude Fable 5 校对优化，难免会有生硬或错漏，如果发现问题欢迎到 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 指正或提 PR。
+但目前只有公共页面（关于、下载、镜像列表、贡献指南）全部做了英文版本，具体的技术文章只有部分文章提供英文版，英文内容是由翻译软件初译，再经 Claude Fable 5 校对优化，难免会有生硬或错漏，如果发现问题欢迎到 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 指正或提 PR。
 
 ## 参与社区建设，我能做些什么？
 
