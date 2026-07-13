@@ -36,6 +36,12 @@
   parent = "infra"
   weight = 1
 
+[[main]]
+  name = "服務狀態"
+  url = "https://status.gentoozh.org/"
+  parent = "infra"
+  weight = 2
+
 # 更多 ▾（可展開收起）
 [[main]]
   name = "更多"

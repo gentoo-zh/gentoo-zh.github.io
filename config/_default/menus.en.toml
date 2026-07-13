@@ -36,6 +36,12 @@
   parent = "infra"
   weight = 1
 
+[[main]]
+  name = "Status"
+  url = "https://status.gentoozh.org/"
+  parent = "infra"
+  weight = 2
+
 # More ▾ (expand/collapse)
 [[main]]
   name = "More"
