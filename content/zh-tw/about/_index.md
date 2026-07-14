@@ -19,11 +19,11 @@ title: "關於"
 
 加入**主群**後，下面其他群全部免去驗證：
 
-* **主群**：Telegram [@gentoo_zh](https://t.me/gentoo_zh) · Matrix [#gentoo-zh:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-zh:matrix.gentoozh.org) · IRC [#gentoo-zh](ircs://irc.libera.chat:6697/#gentoo-zh)
-* **主頻道（公告）**：Telegram [@gentoocn](https://t.me/gentoocn) · Matrix [#gentoocn:matrix.gentoozh.org](https://matrix.to/#/%23gentoocn:matrix.gentoozh.org)
-* **正體中文頻道（TC）**：Telegram [@gentootw](https://t.me/gentootw) · Matrix [#gentootw:matrix.gentoozh.org](https://matrix.to/#/%23gentootw:matrix.gentoozh.org)
-* **閒聊（OT）**：Telegram [@talk_something](https://t.me/talk_something) · Matrix [#talk_something:matrix.gentoozh.org](https://matrix.to/#/%23talk_something:matrix.gentoozh.org) · IRC [#gentoo-zh-offtopic](ircs://irc.libera.chat:6697/#gentoo-zh-offtopic)
-* **申訴 / 爭議**：Telegram [@gentoo_zh_ops](https://t.me/gentoo_zh_ops) · Matrix [#gentoo_zh_ops:matrix.gentoozh.org](https://matrix.to/#/%23gentoo_zh_ops:matrix.gentoozh.org)
+* **主群**：Telegram [@gentoo_zh](https://telegram.me/gentoo_zh) · Matrix [#gentoo-zh:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-zh:matrix.gentoozh.org) · IRC [#gentoo-zh](ircs://irc.libera.chat:6697/#gentoo-zh)
+* **主頻道（公告）**：Telegram [@gentoocn](https://telegram.me/gentoocn) · Matrix [#gentoocn:matrix.gentoozh.org](https://matrix.to/#/%23gentoocn:matrix.gentoozh.org)
+* **正體中文頻道（TC）**：Telegram [@gentootw](https://telegram.me/gentootw) · Matrix [#gentootw:matrix.gentoozh.org](https://matrix.to/#/%23gentootw:matrix.gentoozh.org)
+* **閒聊（OT）**：Telegram [@talk_something](https://telegram.me/talk_something) · Matrix [#talk_something:matrix.gentoozh.org](https://matrix.to/#/%23talk_something:matrix.gentoozh.org) · IRC [#gentoo-zh-offtopic](ircs://irc.libera.chat:6697/#gentoo-zh-offtopic)
+* **申訴 / 爭議**：Telegram [@gentoo_zh_ops](https://telegram.me/gentoo_zh_ops) · Matrix [#gentoo_zh_ops:matrix.gentoozh.org](https://matrix.to/#/%23gentoo_zh_ops:matrix.gentoozh.org)
 * 學習交流 QQ 群：43047398（老群，可能不活躍）
 * Gentoo 中文社群 QQ 群：160294591
 
@@ -34,8 +34,8 @@ title: "關於"
 
 自動推送 Gentoo Bugzilla 新 bug 與官方新聞，支援 Matrix 即時轉發（可用任意 Matrix 帳號加入）：
 
-* 中文：Telegram [@GentoozhBug](https://t.me/GentoozhBug) · Matrix [#gentoo-zh-bug:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-zh-bug:matrix.gentoozh.org)
-* English：Telegram [@GentooBug](https://t.me/GentooBug) · Matrix [#gentoo-bug:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-bug:matrix.gentoozh.org)
+* 中文：Telegram [@GentoozhBug](https://telegram.me/GentoozhBug) · Matrix [#gentoo-zh-bug:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-zh-bug:matrix.gentoozh.org)
+* English：Telegram [@GentooBug](https://telegram.me/GentooBug) · Matrix [#gentoo-bug:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-bug:matrix.gentoozh.org)
 
 ### 一次加入全部
 
@@ -59,7 +59,7 @@ title: "關於"
 
 為了方便使用 gentoo-zh overlay 的海外使用者，社群公共頁面也提供英文版本。
 
-但目前只有公共頁面（關於、下載、鏡像列表、貢獻指南）全部做了英文版本，具體的技術文章只有部分文章提供英文版，英文內容是由翻譯軟體初譯，再經 Claude Fable 5 校對最佳化，難免會有生硬或錯漏，如果發現問題歡迎到 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 指正或提 PR。
+但目前只有公共頁面（關於、下載、鏡像列表、貢獻指南）全部做了英文版本，具體的技術文章只有部分文章提供英文版，英文內容是由翻譯軟體初譯，再經 Claude Fable 5 校對最佳化，難免會有生硬或錯漏，如果發現問題歡迎到 [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io) 指正或提 PR。
 
 ## 參與社群建設，我能做些什麼？
 
