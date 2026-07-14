@@ -19,11 +19,11 @@ The community's page on the Gentoo Wiki: [Gentoo-zh](https://wiki.gentoo.org/wik
 
 Join the **main group** and every group below skips verification:
 
-* **Main group**: Telegram [@gentoo_zh](https://t.me/gentoo_zh) · Matrix [#gentoo-zh:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-zh:matrix.gentoozh.org) · IRC [#gentoo-zh](ircs://irc.libera.chat:6697/#gentoo-zh)
-* **Main channel (announcements)**: Telegram [@gentoocn](https://t.me/gentoocn) · Matrix [#gentoocn:matrix.gentoozh.org](https://matrix.to/#/%23gentoocn:matrix.gentoozh.org)
-* **Traditional Chinese channel (TC)**: Telegram [@gentootw](https://t.me/gentootw) · Matrix [#gentootw:matrix.gentoozh.org](https://matrix.to/#/%23gentootw:matrix.gentoozh.org)
-* **Off-topic chat**: Telegram [@talk_something](https://t.me/talk_something) · Matrix [#talk_something:matrix.gentoozh.org](https://matrix.to/#/%23talk_something:matrix.gentoozh.org) · IRC [#gentoo-zh-offtopic](ircs://irc.libera.chat:6697/#gentoo-zh-offtopic)
-* **Appeals / disputes**: Telegram [@gentoo_zh_ops](https://t.me/gentoo_zh_ops) · Matrix [#gentoo_zh_ops:matrix.gentoozh.org](https://matrix.to/#/%23gentoo_zh_ops:matrix.gentoozh.org)
+* **Main group**: Telegram [@gentoo_zh](https://telegram.me/gentoo_zh) · Matrix [#gentoo-zh:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-zh:matrix.gentoozh.org) · IRC [#gentoo-zh](ircs://irc.libera.chat:6697/#gentoo-zh)
+* **Main channel (announcements)**: Telegram [@gentoocn](https://telegram.me/gentoocn) · Matrix [#gentoocn:matrix.gentoozh.org](https://matrix.to/#/%23gentoocn:matrix.gentoozh.org)
+* **Traditional Chinese channel (TC)**: Telegram [@gentootw](https://telegram.me/gentootw) · Matrix [#gentootw:matrix.gentoozh.org](https://matrix.to/#/%23gentootw:matrix.gentoozh.org)
+* **Off-topic chat**: Telegram [@talk_something](https://telegram.me/talk_something) · Matrix [#talk_something:matrix.gentoozh.org](https://matrix.to/#/%23talk_something:matrix.gentoozh.org) · IRC [#gentoo-zh-offtopic](ircs://irc.libera.chat:6697/#gentoo-zh-offtopic)
+* **Appeals / disputes**: Telegram [@gentoo_zh_ops](https://telegram.me/gentoo_zh_ops) · Matrix [#gentoo_zh_ops:matrix.gentoozh.org](https://matrix.to/#/%23gentoo_zh_ops:matrix.gentoozh.org)
 * QQ study & chat group: 43047398 (old group, may be inactive)
 * Gentoo-zh Community QQ group: 160294591
 
@@ -34,8 +34,8 @@ Join the **main group** and every group below skips verification:
 
 Auto-pushes new Gentoo Bugzilla bugs and official news, with live Matrix relay (join with any Matrix account):
 
-* Chinese: Telegram [@GentoozhBug](https://t.me/GentoozhBug) · Matrix [#gentoo-zh-bug:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-zh-bug:matrix.gentoozh.org)
-* English: Telegram [@GentooBug](https://t.me/GentooBug) · Matrix [#gentoo-bug:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-bug:matrix.gentoozh.org)
+* Chinese: Telegram [@GentoozhBug](https://telegram.me/GentoozhBug) · Matrix [#gentoo-zh-bug:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-zh-bug:matrix.gentoozh.org)
+* English: Telegram [@GentooBug](https://telegram.me/GentooBug) · Matrix [#gentoo-bug:matrix.gentoozh.org](https://matrix.to/#/%23gentoo-bug:matrix.gentoozh.org)
 
 ### Join everything at once
 
@@ -59,7 +59,7 @@ The zh in the name comes from ISO 639, the code for the Chinese language. It ide
 
 The public pages are also available in English, to make things easier for the gentoo-zh overlay's overseas users.
 
-Only the public pages (About, Download, Mirror list, Contributing) are fully in English; only some of the technical articles have an English version. The English was drafted with translation software and then reviewed and polished by Claude Fable 5, so it may read a little stiff or have the odd slip — spot something? Open an issue or PR on [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io).
+Only the public pages (About, Download, Mirror list, Contributing) are fully in English; only some of the technical articles have an English version. The English was drafted with translation software and then reviewed and polished by Claude Fable 5, so it may read a little stiff or have the odd slip — spot something? Open an issue or PR on [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io).
 
 ## How can I help build the community?
 
