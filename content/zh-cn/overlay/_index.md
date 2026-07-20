@@ -59,7 +59,6 @@ auto-sync = yes
 
 将 overlay 的同步源切到国内镜像（gentoo-zh 是 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay) 的完整 ebuild 镜像，只含 ebuild、不含源码）。可用源：
 
-- 重庆大学：`https://mirrors.cqu.edu.cn/git/gentoo-zh.git`
 - 南京大学：`https://mirror.nju.edu.cn/git/gentoo-zh.git`
 
 首次添加（需先安装 git）：

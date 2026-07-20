@@ -59,7 +59,6 @@ If connecting straight to GitHub or the official distfiles is slow, you can swit
 
 Point the overlay's sync source at a mainland mirror (gentoo-zh is a full ebuild mirror of [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay): ebuilds only, no source code). Available sources:
 
-- Chongqing University: `https://mirrors.cqu.edu.cn/git/gentoo-zh.git`
 - Nanjing University: `https://mirror.nju.edu.cn/git/gentoo-zh.git`
 
 Adding it for the first time (install git first):
