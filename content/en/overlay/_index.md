@@ -77,7 +77,6 @@ If you've already added it, just change the `sync-uri` in `/etc/portage/repos.co
 
 Speeds up downloading package source code. The origin is <https://distfiles.gentoozh.org/>; available mirrors:
 
-- Chongqing University: `https://mirrors.cqu.edu.cn/gentoo-zh/`
 - Nanjing University: `https://mirror.nju.edu.cn/gentoo-zh`
 
 In `GENTOO_MIRRORS` in `/etc/portage/make.conf`, append after the official mirrors:

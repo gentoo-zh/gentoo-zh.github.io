@@ -77,7 +77,6 @@ emerge --sync gentoo-zh
 
 加速軟體套件原始碼下載。源站 <https://distfiles.gentoozh.org/>，可用鏡像：
 
-- 重慶大學：`https://mirrors.cqu.edu.cn/gentoo-zh/`
 - 南京大學：`https://mirror.nju.edu.cn/gentoo-zh`
 
 在 `/etc/portage/make.conf` 的 `GENTOO_MIRRORS` 裡，官方源之後追加：
