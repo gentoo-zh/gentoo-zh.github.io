@@ -29,6 +29,6 @@ Jekyll 依赖 Ruby 环境，构建较慢，主题生态也不如以往活跃。H
 
 - Telegram 群：[@gentoo_zh](https://t.me/gentoo_zh)
 - Telegram 频道：[@gentoocn](https://t.me/gentoocn)
-- 提交 Issue / PR：[GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io)
+- 提交 Issue / PR：[GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io)
 
 感谢 [@biergaizi](https://github.com/biergaizi) 与 [@zhcj](https://github.com/zhcj) 创立并长期维护 Gentoo 中文社区，也感谢 Blowfish 主题的开发者。

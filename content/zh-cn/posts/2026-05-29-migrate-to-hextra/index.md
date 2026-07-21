@@ -47,11 +47,11 @@ Hextra 基于 Tailwind CSS，为文档与博客而生：
 
 ## 补充：公共页面加了英文
 
-迁移之后，又给公共页面（关于、下载、镜像列表、贡献指南这些）补了英文国际化，方便用 gentoo-zh overlay 的海外用户——现在简 / 繁 / 英都能切。要说明的是：**技术文章不一定都有英文**，目前只做了公共页面；英文是借翻译软件协助生成、由至今能找到的最好最贵的模型 Claude Fable 5（ultracode）负责 review 和优化的，难免有错漏，欢迎在 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 指正。
+迁移之后，又给公共页面（关于、下载、镜像列表、贡献指南这些）补了英文国际化，方便用 gentoo-zh overlay 的海外用户——现在简 / 繁 / 英都能切。要说明的是：**技术文章不一定都有英文**，目前只做了公共页面；英文是借翻译软件协助生成、由至今能找到的最好最贵的模型 Claude Fable 5（ultracode）负责 review 和优化的，难免有错漏，欢迎在 [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io) 指正。
 
 ## 反馈
 
 - Telegram 频道：[@gentoocn](https://t.me/gentoocn) · 群组：[@gentoo_zh](https://t.me/gentoo_zh)
-- 提交 Issue / PR：[GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io)
+- 提交 Issue / PR：[GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io)
 
 感谢 Blowfish 与 Hextra 主题的开发者。

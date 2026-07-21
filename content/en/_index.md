@@ -7,7 +7,7 @@ toc: false
 
 {{< home-bento
   badge="Open source · Community-driven"
-  badgeLink="https://github.com/Gentoo-zh"
+  badgeLink="https://github.com/gentoo-zh"
   title="Gentoo-zh Community"
   subtitle="Where Chinese-speaking Gentoo users hang out. Newcomers, veterans, everyone's here — hit a snag, we tinker through it together."
   cta="Get started with the overlay"

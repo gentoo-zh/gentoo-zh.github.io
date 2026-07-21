@@ -81,7 +81,7 @@
 [[main]]
   name = "GitHub"
   weight = 80
-  url = "https://github.com/Gentoo-zh/gentoo-zh.github.io"
+  url = "https://github.com/gentoo-zh/gentoo-zh.github.io"
   [main.params]
     icon = "github"
 

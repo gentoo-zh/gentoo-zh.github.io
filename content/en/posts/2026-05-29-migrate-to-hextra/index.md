@@ -47,11 +47,11 @@ Try it with `lynx https://gentoozh.org/`.
 
 ## Update: English on the public pages
 
-After the migration we also added English to the public pages — about, download, mirror list, contributing and so on — for the gentoo-zh overlay's overseas users, so you can now switch between Simplified / Traditional / English. To be clear, **not every technical article is in English**; only the public pages are translated for now. The English was drafted with translation software and reviewed and polished by Claude Fable 5 (ultracode) — the best and most expensive model we could find to date — so there may still be rough edges; corrections on [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) are welcome.
+After the migration we also added English to the public pages — about, download, mirror list, contributing and so on — for the gentoo-zh overlay's overseas users, so you can now switch between Simplified / Traditional / English. To be clear, **not every technical article is in English**; only the public pages are translated for now. The English was drafted with translation software and reviewed and polished by Claude Fable 5 (ultracode) — the best and most expensive model we could find to date — so there may still be rough edges; corrections on [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io) are welcome.
 
 ## Feedback
 
 - Telegram channel: [@gentoocn](https://t.me/gentoocn) · group: [@gentoo_zh](https://t.me/gentoo_zh)
-- File an Issue / PR: [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io)
+- File an Issue / PR: [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io)
 
 Thanks to the developers of the Blowfish and Hextra themes.

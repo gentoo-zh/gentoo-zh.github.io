@@ -13,7 +13,7 @@ A roundup of what the community has worked on recently, project by project. Each
 
 ## Live ISO
 
-The Chinese community's custom KDE Plasma 6 desktop Live ISO ([Gentoo-zh/Live-ISO](https://github.com/Gentoo-zh/Live-ISO)):
+The Chinese community's custom KDE Plasma 6 desktop Live ISO ([Gentoo-zh/Live-ISO](https://github.com/gentoo-zh/Live-ISO)):
 
 - **Three languages out of the box**: the boot menu offers Simplified / Traditional / English, and the whole live environment follows your choice; the installed system also keeps whatever language you picked in the installer.
 - **Chinese input methods preinstalled**: fcitx5 + rime, ready to type out of the box, with Luna Pinyin, Zhuyin, Wubi86, Cangjie, and Cantonese Pinyin built in.
@@ -26,11 +26,11 @@ For actually installing a system, following the [Gentoo Handbook](https://wiki.g
 
 ## The installer (Calamares)
 
-The installer config lives in [Gentoo-zh/calamares-settings-gig](https://github.com/Gentoo-zh/calamares-settings-gig): after an install it clears out the live-only leftover settings and configures NVIDIA according to the GPU option you chose in the live session. On the partitioning step the root filesystem defaults to btrfs, with xfs / ext4 / ZFS also available — pick ZFS and tick encrypt and you get ZFS native encryption (aes-256-gcm), booted by ZFSBootMenu (GRUB can't read a natively-encrypted ZFS pool, so a ZFS root uses ZBM instead). The install flow, including the encrypted-ZFS path, has been tested with real installs in a VM.
+The installer config lives in [Gentoo-zh/calamares-settings-gig](https://github.com/gentoo-zh/calamares-settings-gig): after an install it clears out the live-only leftover settings and configures NVIDIA according to the GPU option you chose in the live session. On the partitioning step the root filesystem defaults to btrfs, with xfs / ext4 / ZFS also available — pick ZFS and tick encrypt and you get ZFS native encryption (aes-256-gcm), booted by ZFSBootMenu (GRUB can't read a natively-encrypted ZFS pool, so a ZFS root uses ZBM instead). The install flow, including the encrypted-ZFS path, has been tested with real installs in a VM.
 
 ## The overlay the Live ISO uses
 
-The packages the Live ISO builds from come from [Gentoo-zh/gig](https://github.com/Gentoo-zh/gig) — a fork of the Gig OS overlay, specific to the Live ISO, and *not* the same thing as the community's main overlay, [gentoo-zh](https://github.com/gentoo-zh/overlay). This round updated its Calamares to 3.3.14-r8 (which supports Python 3.14), fixed an `emerge --sync` error, and cleaned out a batch of redundant / broken packages.
+The packages the Live ISO builds from come from [Gentoo-zh/gig](https://github.com/gentoo-zh/gig) — a fork of the Gig OS overlay, specific to the Live ISO, and *not* the same thing as the community's main overlay, [gentoo-zh](https://github.com/gentoo-zh/overlay). This round updated its Calamares to 3.3.14-r8 (which supports Python 3.14), fixed an `emerge --sync` error, and cleaned out a batch of redundant / broken packages.
 
 ## Build and release
 
@@ -38,7 +38,7 @@ The build pipeline, [Zakkaus/gentoozh-liveiso-infra](https://github.com/Zakkaus/
 
 ## Website
 
-The website, [gentoozh.org](https://gentoozh.org/) (source: [gentoo-zh.github.io](https://github.com/Gentoo-zh/gentoo-zh.github.io)), migrated from Blowfish to Hextra — lighter, faster, and friendlier to docs and text browsers (details in the [migration post](/posts/2026-05-29-migrate-to-hextra/)). The presentation layer was split out into a standalone Hextra patch package, [gentoozh-theme](https://github.com/Gentoo-zh/gentoozh-theme), which also rounded out SEO, the footer, and accessibility. The download page was wired up to the download site, with notes on the Live ISO's features and hardware requirements, plus a new FAQ page. This round also added **English** to the public pages, so you can switch between Simplified / Traditional / English.
+The website, [gentoozh.org](https://gentoozh.org/) (source: [gentoo-zh.github.io](https://github.com/gentoo-zh/gentoo-zh.github.io)), migrated from Blowfish to Hextra — lighter, faster, and friendlier to docs and text browsers (details in the [migration post](/posts/2026-05-29-migrate-to-hextra/)). The presentation layer was split out into a standalone Hextra patch package, [gentoozh-theme](https://github.com/gentoo-zh/gentoozh-theme), which also rounded out SEO, the footer, and accessibility. The download page was wired up to the download site, with notes on the Live ISO's features and hardware requirements, plus a new FAQ page. This round also added **English** to the public pages, so you can switch between Simplified / Traditional / English.
 
 ## Download site
 
