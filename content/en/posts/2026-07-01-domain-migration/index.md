@@ -44,7 +44,7 @@ By the way, the site has moved from GitHub Pages to Cloudflare Workers (static a
 - GitHub Pages has a set of [soft limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits) (repo and site size, monthly bandwidth, build frequency, and so on), and once the site grows a bit they start to pinch.
 - Speed is about the same as GitHub Pages, but Workers Paid is more flexible: we control caching and response headers ourselves, and adding edge logic later is easy. Overall it works better and fits where the community is heading.
 
-For site maintenance or bug reports, open an issue on [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io), or email zakk@gentoozh.org.
+For site maintenance or bug reports, open an issue on [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io), or email zakk@gentoozh.org.
 
 ## Thanks
 
@@ -64,7 +64,7 @@ Almost no impact. All old addresses will redirect to the new ones:
 - `https://distfiles.gentoocn.org` → `https://distfiles.gentoozh.org`
 - `https://gentoocn.org` → `https://gentoozh.org`
 
-If you spot the old domain still lingering somewhere, feel free to open an issue or send a PR on [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io), or let us know in the Telegram or Matrix groups.
+If you spot the old domain still lingering somewhere, feel free to open an issue or send a PR on [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io), or let us know in the Telegram or Matrix groups.
 
 ---
 
@@ -74,4 +74,4 @@ If you spot the old domain still lingering somewhere, feel free to open an issue
 
 ## Further Reading
 
-- [Community domain and infrastructure discussion](https://github.com/Gentoo-zh/gentoo-zh.github.io/issues/9)
+- [Community domain and infrastructure discussion](https://github.com/gentoo-zh/gentoo-zh.github.io/issues/9)

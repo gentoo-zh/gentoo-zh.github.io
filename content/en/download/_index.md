@@ -13,7 +13,7 @@ Before you install Gentoo, get your installation media sorted. The least hassle 
 A **KDE Plasma 6 desktop Live ISO** put together by the Gentoo-zh Community — Chinese-ready out of the box, three languages to pick from (Simplified / Traditional / English), Chinese input methods (fcitx5 + rime). A good way to get a feel for a Chinese Gentoo desktop first.
 
 - **Download site**: <https://mirror.gentoozh.org/> (served from Cloudflare R2 — global edge, no bandwidth limits)
-- **Repo**: <https://github.com/Gentoo-zh/Live-ISO> (build scripts and customizations)
+- **Repo**: <https://github.com/gentoo-zh/Live-ISO> (build scripts and customizations)
 - **Login credentials**: user {{< copy "live" >}} / password {{< copy "live" >}} / root password {{< copy "live" >}}
 - **Hardware requirements**: a 64-bit x86 CPU with AVX2 support (roughly post-2013 processors; older CPUs can't boot).
 - **Update cadence**: recompiled and uploaded automatically every week, so it's always a fairly recent snapshot of the system; the download site only keeps the last few releases, so go by the actual filename on the site (`gig-os-DATE.iso`).

@@ -31,11 +31,11 @@ slug: "changelog"
 - 新增转载文章 **[Gentoo Linux with ZFS](/posts/2026-06-18-gentoo-linux-with-zfs/)**（原作者 [Locez](https://github.com/locez)，经授权按 CC BY-NC-SA 4.0 转载）：在双 NVMe 镜像上安装 ZFS 根 + ZFS 原生加密的实录；本站补充了 SLOG 配置勘误、分区要点，以及各安装步骤对应的官方中文手册链接
 - Live ISO 图形安装器支持 **ZFS 根文件系统**：可把 ZFS 装成根，勾选加密即 ZFS 原生加密（aes-256-gcm）、由 ZFSBootMenu 引导（btrfs / ext4 / xfs / ZFS 均可在分区页选）。[下载页](/download/#live-iso)与[使用说明](https://mirror.gentoozh.org/about.html)已补充说明
 - 下载站上云：Live ISO 下载迁到 **Cloudflare R2**（[r2.gentoozh.org](https://r2.gentoozh.org/)，零出口流量、全球边缘），落地页 [mirror.gentoozh.org](https://mirror.gentoozh.org/) 改成 **Cloudflare Worker**（边缘即时读 R2，列出最新镜像 + 全部历史版本）；测速改用 [Cloudflare 官方测速](https://speed.cloudflare.com/)；自建的美国下载 / 测速服务器随之下线
-- 公共页面新增英文（English）国际化：关于、下载、镜像列表、贡献指南等公共页面可在简体 / 正體 / 英文之间切换，方便用 gentoo-zh overlay 的海外用户。技术文章不一定都有英文，目前只做了公共页面；英文借翻译软件初译、再经 AI 校对，难免有错漏，欢迎到 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 指正
+- 公共页面新增英文（English）国际化：关于、下载、镜像列表、贡献指南等公共页面可在简体 / 正體 / 英文之间切换，方便用 gentoo-zh overlay 的海外用户。技术文章不一定都有英文，目前只做了公共页面；英文借翻译软件初译、再经 AI 校对，难免有错漏，欢迎到 [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io) 指正
 
 ## 2026 年 5 月
 
-- 项目结构调整：把表现层（主题）抽成独立的 Hextra 补丁包 [gentoozh-theme](https://github.com/Gentoo-zh/gentoozh-theme)，本仓库只留内容与配置，更清爽、也便于跟随上游 Hextra 更新
+- 项目结构调整：把表现层（主题）抽成独立的 Hextra 补丁包 [gentoozh-theme](https://github.com/gentoo-zh/gentoozh-theme)，本仓库只留内容与配置，更清爽、也便于跟随上游 Hextra 更新
 - 首页改版：重新梳理视觉主次（大标题做锚点、主操作更突出），主色统一为 Gentoo 品牌紫，「最新文章」改为优先展示技术内容
 - 贡献指南重写「为 gentoo-zh Overlay 贡献」一节：依官方 Gentoo ebuild 仓库规范梳理完整提交流程（EAPI、`metadata.xml`、thin Manifest、`~arch` 测试、`pkgdev`/`pkgcheck`、PR 与 CI），并补 nvchecker 版本跟进；区分 Overlay 贡献（计入贡献者墙）与网站贡献，页面排版改用原生 callout / 折叠块，顶栏新增「贡献指南」入口
 - 下载站接入 mirror.gentoozh.org，替代已下线的 iso.gig-os.org；下载 / 镜像列表 / Overlay 三页重写，Live ISO 登录凭据支持点击复制

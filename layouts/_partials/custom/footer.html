@@ -2,8 +2,8 @@
        去掉了主题里的「由 Hextra + Hugo 驱动」一行。邮箱取自 params.toml 的 contactEmail。 */ -}}
 <div class="gz-footer">
   <p class="gz-footer-name">© {{ site.Title }}</p>
-  <p class="gz-footer-meta">{{ i18n "footer_license" }} <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">CC BY-SA 4.0</a> / <a href="https://github.com/Gentoo-zh/gentoozh-theme/blob/master/LICENSE" target="_blank" rel="noreferrer">MIT</a> · <a href="https://github.com/Gentoo-zh/gentoozh-theme" target="_blank" rel="noreferrer">{{ i18n "footer_patchpack" }}</a></p>
-  <p class="gz-footer-sub">{{ i18n "footer_contact_main" }} <a href="https://github.com/Gentoo-zh/gentoo-zh.github.io/issues" target="_blank" rel="noreferrer">GitHub Issues</a>{{ with site.Params.contactEmail }} · {{ i18n "footer_contact_backup" }} <a href="mailto:{{ . }}">{{ . }}</a>{{ end }}</p>
+  <p class="gz-footer-meta">{{ i18n "footer_license" }} <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noreferrer">CC BY-SA 4.0</a> / <a href="https://github.com/gentoo-zh/gentoozh-theme/blob/master/LICENSE" target="_blank" rel="noreferrer">MIT</a> · <a href="https://github.com/gentoo-zh/gentoozh-theme" target="_blank" rel="noreferrer">{{ i18n "footer_patchpack" }}</a></p>
+  <p class="gz-footer-sub">{{ i18n "footer_contact_main" }} <a href="https://github.com/gentoo-zh/gentoo-zh.github.io/issues" target="_blank" rel="noreferrer">GitHub Issues</a>{{ with site.Params.contactEmail }} · {{ i18n "footer_contact_backup" }} <a href="mailto:{{ . }}">{{ . }}</a>{{ end }}</p>
 </div>
 {{- /* 复制按钮兜底：Hextra 的代码复制用 navigator.clipboard.writeText，浏览器只在安全上下文
        （HTTPS / localhost）才提供它，纯 HTTP 下是 undefined、一点就抛错。这里在缺失时补一个

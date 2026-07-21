@@ -100,4 +100,4 @@ This round also drops support for `python3_11` and PyPy 3.11 (`pypy3_11`). PyPy 
 
 During the transition, if a package hasn't been ported to 3.14 yet, a `@world` upgrade may report `The following USE changes are necessary to proceed`. This is usually temporary: either pin the Python version for that package as in **②** above, or wait a few days for the packages to catch up, and it'll go through.
 
-Questions are welcome on [Telegram](https://t.me/gentoo_zh) or [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io).
+Questions are welcome on [Telegram](https://t.me/gentoo_zh) or [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io).

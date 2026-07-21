@@ -179,7 +179,7 @@ transfer 完成后仓库落在 `gentoo-zh/gentoo-zh`（GitHub transfer 会保留
 Settings -> General -> Repository name -> overlay
 ```
 
-### 8. 更新仓库内维护入口（[PR #10744](https://github.com/Gentoo-zh/overlay/pull/10744)）
+### 8. 更新仓库内维护入口（[PR #10744](https://github.com/gentoo-zh/overlay/pull/10744)）
 
 改名后在一个 PR 里把仓库内所有指向旧地址的入口统一更新到 `gentoo-zh/overlay`，共 7 个文件：
 
@@ -422,7 +422,7 @@ auto-sync = yes
 
 ## 收尾与确认
 
-overlay 内部元数据、README 与安装说明在 [PR #10744](https://github.com/Gentoo-zh/overlay/pull/10744) 更新（第 8 步）；Gentoo 官方 registry 在 [api-gentoo-org#829](https://github.com/gentoo/api-gentoo-org/pull/829) 合并（第 10 步）。
+overlay 内部元数据、README 与安装说明在 [PR #10744](https://github.com/gentoo-zh/overlay/pull/10744) 更新（第 8 步）；Gentoo 官方 registry 在 [api-gentoo-org#829](https://github.com/gentoo/api-gentoo-org/pull/829) 合并（第 10 步）。
 
 模拟用户实操了一遍：从 Gentoo 官方仓库列表直接 `enable` gentoo-zh，`emerge --sync` 会从新的 overlay 地址拉取（看最后一行）：
 

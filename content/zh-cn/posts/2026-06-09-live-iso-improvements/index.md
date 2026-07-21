@@ -13,7 +13,7 @@ authors:
 
 ## Live ISO
 
-中文社区定制的 KDE Plasma 6 桌面 Live ISO（[Gentoo-zh/Live-ISO](https://github.com/Gentoo-zh/Live-ISO)）：
+中文社区定制的 KDE Plasma 6 桌面 Live ISO（[Gentoo-zh/Live-ISO](https://github.com/gentoo-zh/Live-ISO)）：
 
 - **三语言开箱即用**：引导菜单分简体 / 繁体 / 英文三档，整套 live 环境跟着所选语言走；装好的系统也沿用你在安装器里选的语言。
 - **预置中文输入法**：fcitx5 + rime，开箱即可输入，内置朙月拼音、注音、五笔86、仓颉、粤拼。
@@ -26,11 +26,11 @@ authors:
 
 ## 安装器（Calamares）
 
-安装器配置 [Gentoo-zh/calamares-settings-gig](https://github.com/Gentoo-zh/calamares-settings-gig)：装机后会清掉 live 专用的残留设置，并按你在 live 里选的显卡方案配置 NVIDIA。分区时根文件系统默认 btrfs，也可选 xfs / ext4 / ZFS——选 ZFS 并勾选加密就是 ZFS 原生加密（aes-256-gcm）、由 ZFSBootMenu 引导（GRUB 读不了带原生加密的 ZFS 池，所以 ZFS 根改用 ZBM）。这套装机流程（含 ZFS 加密安装）在虚拟机上做过实机安装测试。
+安装器配置 [Gentoo-zh/calamares-settings-gig](https://github.com/gentoo-zh/calamares-settings-gig)：装机后会清掉 live 专用的残留设置，并按你在 live 里选的显卡方案配置 NVIDIA。分区时根文件系统默认 btrfs，也可选 xfs / ext4 / ZFS——选 ZFS 并勾选加密就是 ZFS 原生加密（aes-256-gcm）、由 ZFSBootMenu 引导（GRUB 读不了带原生加密的 ZFS 池，所以 ZFS 根改用 ZBM）。这套装机流程（含 ZFS 加密安装）在虚拟机上做过实机安装测试。
 
 ## Live ISO 用的 overlay
 
-Live ISO 构建所需的包来自 [Gentoo-zh/gig](https://github.com/Gentoo-zh/gig)——它是 Gig OS overlay 的 fork、专给 Live ISO 用，跟社区主 overlay [gentoo-zh](https://github.com/gentoo-zh/overlay) 不是一个。这次把其中的 Calamares 更新到支持 Python 3.14 的 3.3.14-r8，修复了 `emerge --sync` 的报错，并清理了一批冗余 / 失效的包。
+Live ISO 构建所需的包来自 [Gentoo-zh/gig](https://github.com/gentoo-zh/gig)——它是 Gig OS overlay 的 fork、专给 Live ISO 用，跟社区主 overlay [gentoo-zh](https://github.com/gentoo-zh/overlay) 不是一个。这次把其中的 Calamares 更新到支持 Python 3.14 的 3.3.14-r8，修复了 `emerge --sync` 的报错，并清理了一批冗余 / 失效的包。
 
 ## 自动构建与发布
 
@@ -38,7 +38,7 @@ Live ISO 构建所需的包来自 [Gentoo-zh/gig](https://github.com/Gentoo-zh/g
 
 ## 官网
 
-官网 [gentoozh.org](https://gentoozh.org/)（源码 [gentoo-zh.github.io](https://github.com/Gentoo-zh/gentoo-zh.github.io)）从 Blowfish 迁移到了 Hextra——更轻、更快、对文档和文本浏览器更友好（细节见[迁移那篇](/posts/2026-05-29-migrate-to-hextra/)）。表现层抽成了独立的 Hextra 补丁包 [gentoozh-theme](https://github.com/Gentoo-zh/gentoozh-theme)，补全了 SEO、页脚与无障碍。下载页也接入了下载站、补了 Live ISO 的功能说明和硬件要求，并新增了 FAQ 页。这次还给公共页面加了**英文国际化**，简 / 繁 / 英可切。
+官网 [gentoozh.org](https://gentoozh.org/)（源码 [gentoo-zh.github.io](https://github.com/gentoo-zh/gentoo-zh.github.io)）从 Blowfish 迁移到了 Hextra——更轻、更快、对文档和文本浏览器更友好（细节见[迁移那篇](/posts/2026-05-29-migrate-to-hextra/)）。表现层抽成了独立的 Hextra 补丁包 [gentoozh-theme](https://github.com/gentoo-zh/gentoozh-theme)，补全了 SEO、页脚与无障碍。下载页也接入了下载站、补了 Live ISO 的功能说明和硬件要求，并新增了 FAQ 页。这次还给公共页面加了**英文国际化**，简 / 繁 / 英可切。
 
 ## 下载站
 

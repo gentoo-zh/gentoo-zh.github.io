@@ -44,7 +44,7 @@ Gentoo 中文社区官网今天正式迁往 **gentoozh.org**。论坛（forum.ge
 - GitHub Pages 有一套[软性限制](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits)（仓库和站点体积、每月带宽、构建频率等），站点再大一点就不太够用了。
 - 速度和 GitHub Pages 差不太多，但 Workers Paid 灵活性更高：自定义缓存、响应头都能自己控制，往后要接边缘逻辑也方便，整体体验更好，也更适合社区往后发展。
 
-网站的维护、报错相关事宜，可到 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 开 issue，或通过邮件联系 zakk@gentoozh.org。
+网站的维护、报错相关事宜，可到 [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io) 开 issue，或通过邮件联系 zakk@gentoozh.org。
 
 ## 感谢
 
@@ -64,7 +64,7 @@ gentoo.org.cn 由一位老师长期持有，在社区沉寂的这十多年里一
 - `https://distfiles.gentoocn.org` → `https://distfiles.gentoozh.org`
 - `https://gentoocn.org` → `https://gentoozh.org`
 
-如果发现哪里还留着旧域名没更新，欢迎到 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 开 issue 或直接 PR，也可以在 Telegram、Matrix 交流群中告诉我们。
+如果发现哪里还留着旧域名没更新，欢迎到 [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io) 开 issue 或直接 PR，也可以在 Telegram、Matrix 交流群中告诉我们。
 
 ---
 
@@ -74,4 +74,4 @@ gentoo.org.cn 由一位老师长期持有，在社区沉寂的这十多年里一
 
 ## 扩展阅读
 
-- [社区域名与基础设施讨论](https://github.com/Gentoo-zh/gentoo-zh.github.io/issues/9)
+- [社区域名与基础设施讨论](https://github.com/gentoo-zh/gentoo-zh.github.io/issues/9)

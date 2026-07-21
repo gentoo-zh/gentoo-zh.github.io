@@ -38,7 +38,7 @@ contactEmail = "zakk@gentoozh.org"
 
 [editURL]
   enable = true
-  base = "https://github.com/Gentoo-zh/gentoo-zh.github.io/edit/master/content"
+  base = "https://github.com/gentoo-zh/gentoo-zh.github.io/edit/master/content"
 
 [displayUpdatedDate]
   enable = false

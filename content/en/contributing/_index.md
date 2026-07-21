@@ -234,7 +234,7 @@ The how-to is **governed by the official docs**; this page is just a pointer:
 
 ## Project overview
 
-This site is built with the [Hugo](https://gohugo.io/) static site generator, built by GitHub Actions and deployed to Cloudflare Workers (static asset hosting). The presentation layer (the theme) is [Hextra](https://imfing.github.io/hextra/) plus our own patch module [gentoozh-theme](https://github.com/Gentoo-zh/gentoozh-theme) — the latter is pulled in via [Hugo Modules](https://gohugo.io/hugo-modules/) and layers its overrides on top of Hextra, giving a dependency chain of **site → gentoozh-theme → Hextra**. So this repo holds only content and config; the template/style source lives in the patch module.
+This site is built with the [Hugo](https://gohugo.io/) static site generator, built by GitHub Actions and deployed to Cloudflare Workers (static asset hosting). The presentation layer (the theme) is [Hextra](https://imfing.github.io/hextra/) plus our own patch module [gentoozh-theme](https://github.com/gentoo-zh/gentoozh-theme) — the latter is pulled in via [Hugo Modules](https://gohugo.io/hugo-modules/) and layers its overrides on top of Hextra, giving a dependency chain of **site → gentoozh-theme → Hextra**. So this repo holds only content and config; the template/style source lives in the patch module.
 
 **Project repositories**: content/config at <https://github.com/gentoo-zh/gentoo-zh.github.io>; theme patch module at <https://github.com/gentoo-zh/gentoozh-theme>
 
@@ -272,12 +272,12 @@ The main config lives in `config/_default/`:
 
 ### Theme and assets
 
-The presentation layer has been split out into a standalone patch-module, **[gentoozh-theme](https://github.com/Gentoo-zh/gentoozh-theme)** (layered on top of Hextra, still tracking upstream updates), so this repo no longer holds template/style source:
+The presentation layer has been split out into a standalone patch-module, **[gentoozh-theme](https://github.com/gentoo-zh/gentoozh-theme)** (layered on top of Hextra, still tracking upstream updates), so this repo no longer holds template/style source:
 
 - Templates (`layouts/`, including the homepage `home-bento`, the contributors page, etc.), site styles (`assets/css/custom.css`, the Gentoo-brand purple, etc.), and UI strings (`i18n/`) all live in gentoozh-theme
 - The site pulls it in via `[[module.imports]]` in `config/_default/hugo.toml`, and pins the version in `go.mod`
 - `static/` (`CNAME`, favicon, logo, OG images, etc.) still lives in this repo
-- **Changing templates / styles → go to the [gentoozh-theme](https://github.com/Gentoo-zh/gentoozh-theme) repo; changing content → stay in this repo**
+- **Changing templates / styles → go to the [gentoozh-theme](https://github.com/gentoo-zh/gentoozh-theme) repo; changing content → stay in this repo**
 
 ## Setting up your environment
 

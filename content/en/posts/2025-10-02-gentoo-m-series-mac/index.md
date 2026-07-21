@@ -706,7 +706,7 @@ Community support:
 
 - Telegram group: [@gentoo_zh](https://t.me/gentoo_zh)
 - Telegram channel: [@gentoocn](https://t.me/gentoocn)
-- [GitHub](https://github.com/Gentoo-zh)
+- [GitHub](https://github.com/gentoo-zh)
 - [Gentoo Forums](https://forums.gentoo.org/)
 - IRC `#gentoo` / `#asahi` @ [Libera.Chat](https://libera.chat/)
 - [Asahi Linux Discord](https://discord.gg/asahi-linux)

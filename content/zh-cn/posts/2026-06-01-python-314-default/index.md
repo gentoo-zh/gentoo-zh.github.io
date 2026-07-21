@@ -102,4 +102,4 @@ emerge --depclean
 
 过渡期里，如果某个包还没适配 3.14，`@world` 升级时可能会报 `The following USE changes are necessary to proceed`。这通常是暂时的：按上面 **②** 的写法，给对应的包指定 Python 版本绕过去，或者等几天让包跟上，就能继续。
 
-有问题可以到 [Telegram 群](https://t.me/gentoo_zh) 或 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 反馈。
+有问题可以到 [Telegram 群](https://t.me/gentoo_zh) 或 [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io) 反馈。

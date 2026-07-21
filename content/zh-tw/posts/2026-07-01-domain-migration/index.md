@@ -44,7 +44,7 @@ Gentoo 中文社群官網今天正式遷往 **gentoozh.org**。論壇（forum.ge
 - GitHub Pages 有一套[軟性限制](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits)（倉庫和網站體積、每月頻寬、建置頻率等），網站再大一點就不太夠用了。
 - 速度和 GitHub Pages 差不太多，但 Workers Paid 靈活性更高：自定義快取、響應頭都能自己控制，往後要接邊緣邏輯也方便，整體體驗更好，也更適合社群往後發展。
 
-網站的維護、報錯相關事宜，可到 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 開 issue，或透過郵件聯絡 zakk@gentoozh.org。
+網站的維護、報錯相關事宜，可到 [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io) 開 issue，或透過郵件聯絡 zakk@gentoozh.org。
 
 ## 感謝
 
@@ -64,7 +64,7 @@ gentoo.org.cn 由一位老師長期持有，在社群沉寂的這十多年裡一
 - `https://distfiles.gentoocn.org` → `https://distfiles.gentoozh.org`
 - `https://gentoocn.org` → `https://gentoozh.org`
 
-如果發現哪裡還留著舊域名沒更新，歡迎到 [GitHub](https://github.com/Gentoo-zh/gentoo-zh.github.io) 開 issue 或直接 PR，也可以在 Telegram、Matrix 交流群中告訴我們。
+如果發現哪裡還留著舊域名沒更新，歡迎到 [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io) 開 issue 或直接 PR，也可以在 Telegram、Matrix 交流群中告訴我們。
 
 ---
 
@@ -74,4 +74,4 @@ gentoo.org.cn 由一位老師長期持有，在社群沉寂的這十多年裡一
 
 ## 擴展閱讀
 
-- [社群域名與基礎設施討論](https://github.com/Gentoo-zh/gentoo-zh.github.io/issues/9)
+- [社群域名與基礎設施討論](https://github.com/gentoo-zh/gentoo-zh.github.io/issues/9)
