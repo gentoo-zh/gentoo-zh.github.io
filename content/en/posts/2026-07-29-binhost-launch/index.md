@@ -2,7 +2,6 @@
 title: "The gentoo-zh Binary Package Service Is Live"
 description: "194 packages from the gentoo-zh overlay now ship as prebuilt binary packages, signed and served from distfiles.gentoozh.org, with a Nanjing University mirror. How to set it up, how signature verification works, and which packages are left out."
 date: 2026-07-29
-featured: true
 tags: ["announcement", "binhost", "overlay"]
 authors:
   - name: Zakk
