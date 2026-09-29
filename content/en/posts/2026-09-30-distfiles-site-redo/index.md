@@ -2,6 +2,7 @@
 title: "distfiles.gentoozh.org rebuilt, binhost moved to OSUOSL"
 description: "The overlay, distfiles, binhost and Live ISO guides now live on one site. The binhost now builds on an OSUOSL server, and OSUOSL adds a US mirror. Existing configurations need no changes."
 date: 2026-09-30
+featured: true
 tags: ["announcement", "binhost"]
 authors:
   - name: Zakk

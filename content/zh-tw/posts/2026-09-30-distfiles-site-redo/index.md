@@ -2,6 +2,7 @@
 title: "distfiles.gentoozh.org 重做，binhost 遷到 OSUOSL"
 description: "overlay、distfiles、binhost 與 Live ISO 的說明合併到一個網站；binhost 改由 OSUOSL 的伺服器建置，並新增美國鏡像。現有設定不需要修改。"
 date: 2026-09-30
+featured: true
 tags: ["announcement", "binhost"]
 authors:
   - name: Zakk
