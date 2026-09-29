@@ -1,6 +1,6 @@
 ---
-title: "distfiles.gentoozh.org rebuilt, binhost moved to OSUOSL"
-description: "The overlay, distfiles, binhost and Live ISO guides now live on one site. The binhost now builds on an OSUOSL server, and OSUOSL adds a US mirror. Existing configurations need no changes."
+title: "The gentoo-zh download site, rebuilt"
+description: "Overlay, distfiles, binhost and Live ISO guides in one place; the binhost moved to OSUOSL, and existing setups need no changes."
 date: 2026-09-30
 featured: true
 tags: ["announcement", "binhost"]
@@ -10,7 +10,7 @@ authors:
     link: https://github.com/zakkaus
 ---
 
-[distfiles.gentoozh.org](https://distfiles.gentoozh.org/?lang=en) has been rebuilt. Adding the overlay, setting up distfiles and the binhost, downloading a Live ISO and picking a mirror now all happen on that one site, and the Overlay and download pages here link straight to it.
+The [gentoo-zh download site](https://distfiles.gentoozh.org/?lang=en) (distfiles.gentoozh.org) has been rebuilt. Adding the overlay, setting up distfiles and the binhost, downloading a Live ISO and picking a mirror now all happen on that one site, and the Overlay and download pages here link straight to it.
 
 ## The binhost moved to OSUOSL
 
