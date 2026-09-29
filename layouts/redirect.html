@@ -1,0 +1,21 @@
+{{- $to := .Params.redirectTo -}}
+<!doctype html>
+<html lang="{{ site.Language.Locale }}">
+<head>
+<meta charset="utf-8">
+<title>{{ .Title }}</title>
+<meta name="robots" content="noindex">
+<link rel="canonical" href="{{ $to }}">
+<script>
+(function () {
+  var anchors = {{ .Params.anchors | default dict }};
+  var hash = decodeURIComponent(location.hash.slice(1));
+  location.replace({{ $to }} + (anchors[hash] ? "#" + anchors[hash] : ""));
+})();
+</script>
+<noscript><meta http-equiv="refresh" content="0; url={{ $to }}"></noscript>
+</head>
+<body>
+<p><a href="{{ $to }}">{{ $to }}</a></p>
+</body>
+</html>

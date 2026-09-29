@@ -1,7 +1,7 @@
 # 頂欄：主條目平鋪，次級條目收進「更多 ▾」原生下拉（可展開收起）
 [[main]]
   name = "Overlay"
-  pageRef = "/overlay/"
+  url = "https://distfiles.gentoozh.org/overlay?lang=zh-tw"
   weight = 10
 
 [[main]]
@@ -31,28 +31,34 @@
   weight = 55
 
 [[main]]
-  name = "distfiles 與 binpkg"
-  url = "https://distfiles.gentoozh.org/"
+  name = "distfiles"
+  url = "https://distfiles.gentoozh.org/distfiles-setup?lang=zh-tw"
   parent = "infra"
   weight = 1
+
+[[main]]
+  name = "binpkg"
+  url = "https://distfiles.gentoozh.org/binpkg-setup?lang=zh-tw"
+  parent = "infra"
+  weight = 2
 
 [[main]]
   name = "開銷"
   pageRef = "/costs/"
   parent = "infra"
-  weight = 4
+  weight = 5
 
 [[main]]
   name = "Pastebin"
   pageRef = "/paste/"
   parent = "infra"
-  weight = 2
+  weight = 3
 
 [[main]]
   name = "服務狀態"
   url = "https://status.gentoozh.org/"
   parent = "infra"
-  weight = 3
+  weight = 4
 
 # 更多 ▾（可展開收起）
 [[main]]
