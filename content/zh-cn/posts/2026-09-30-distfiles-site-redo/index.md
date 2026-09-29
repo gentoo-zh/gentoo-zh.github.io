@@ -1,6 +1,6 @@
 ---
-title: "distfiles.gentoozh.org 重做，binhost 迁到 OSUOSL"
-description: "overlay、distfiles、binhost 与 Live ISO 的说明合并到一个站点；binhost 改由 OSUOSL 的服务器构建，并新增美国镜像。现有配置不需要修改。"
+title: "gentoo-zh 下载站重做"
+description: "overlay、distfiles、binhost 与 Live ISO 集中到一个站点；binhost 迁到 OSUOSL，现有配置不用改。"
 date: 2026-09-30
 featured: true
 tags: ["announcement", "binhost"]
@@ -10,7 +10,7 @@ authors:
     link: https://github.com/zakkaus
 ---
 
-[distfiles.gentoozh.org](https://distfiles.gentoozh.org/?lang=zh-cn) 已经重做。添加 overlay、配置 distfiles 与 binhost、下载 Live ISO、选择镜像，现在都在这一个站点完成，本站的 Overlay 页与下载页也直接链接过去。
+[gentoo-zh 下载站](https://distfiles.gentoozh.org/?lang=zh-cn)（distfiles.gentoozh.org）已经重做。添加 overlay、配置 distfiles 与 binhost、下载 Live ISO、选择镜像，现在都在这一个站点完成，本站的 Overlay 页与下载页也直接链接过去。
 
 ## binhost 迁到 OSUOSL
 
