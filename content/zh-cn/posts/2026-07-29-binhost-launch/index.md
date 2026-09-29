@@ -2,7 +2,6 @@
 title: "gentoo-zh 二进制包服务上线"
 description: "gentoo-zh overlay 的 194 个包现在有预编译的二进制包，签名后由 distfiles.gentoozh.org 与南京大学镜像分发。本文说明如何配置、验签怎么工作，以及哪些包不在其中。"
 date: 2026-07-29
-featured: true
 tags: ["announcement", "binhost", "overlay"]
 authors:
   - name: Zakk
