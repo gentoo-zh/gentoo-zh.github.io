@@ -13,11 +13,11 @@ Installing Gentoo requires installation media. The Gentoo-zh Community maintains
 Both images are rebuilt weekly. Downloads, checksums and every mirror directory live on the download site:
 
 {{< cards cols="2" >}}
-  {{< card link="https://iso.gentoozh.org/en/#panel-desktop" title="Gig-OS desktop image" icon="desktop-computer" subtitle="A KDE Plasma 6 desktop with the Chinese environment and input methods already set up. Run it live or install it to disk with the graphical installer. Needs a CPU with AVX2." >}}
-  {{< card link="https://iso.gentoozh.org/en/#panel-minimal" title="CJK minimal image" icon="terminal" subtitle="A third-party amd64 minimal installation medium, built by Catalyst from the official Release Engineering specs. The kernel carries the cjktty patch, so the console displays CJK text, and ZFS is supported." >}}
+  {{< card link="https://distfiles.gentoozh.org/gigos/?lang=en" title="Gig-OS desktop image" icon="desktop-computer" subtitle="A KDE Plasma 6 desktop with the Chinese environment and input methods already set up. Run it live or install it to disk with the graphical installer. Needs a CPU with AVX2." >}}
+  {{< card link="https://distfiles.gentoozh.org/iso?lang=en" title="CJK minimal image" icon="terminal" subtitle="A third-party amd64 minimal installation medium, built by Catalyst from the official Release Engineering specs. The kernel carries the cjktty patch, so the console displays CJK text, and ZFS is supported." >}}
 {{< /cards >}}
 
-{{< hextra/hero-button text="Go to the download site" link="https://iso.gentoozh.org/en/" style="margin-top:1.25rem;margin-bottom:.5rem" >}}
+{{< hextra/hero-button text="Go to the download site" link="https://distfiles.gentoozh.org/?lang=en" style="margin-top:1.25rem;margin-bottom:.5rem" >}}
 
 - **Gig-OS login credentials**: user {{< copy "live" >}} / password {{< copy "live" >}} / root password {{< copy "live" >}}
 - **Repositories**: [Gig-OS/Live-ISO](https://github.com/Gig-OS/Live-ISO) · [gentoo-zh/gentoo-cjk-livecd](https://github.com/gentoo-zh/gentoo-cjk-livecd)

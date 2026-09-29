@@ -1,7 +1,7 @@
 # Top bar: primary items inline, secondary items collapsed under "More ▾".
 [[main]]
   name = "Overlay"
-  pageRef = "/overlay/"
+  url = "https://distfiles.gentoozh.org/overlay?lang=en"
   weight = 10
 
 [[main]]
@@ -31,28 +31,34 @@
   weight = 55
 
 [[main]]
-  name = "distfiles & binpkg"
-  url = "https://distfiles.gentoozh.org/"
+  name = "distfiles"
+  url = "https://distfiles.gentoozh.org/distfiles-setup?lang=en"
   parent = "infra"
   weight = 1
+
+[[main]]
+  name = "binpkg"
+  url = "https://distfiles.gentoozh.org/binpkg-setup?lang=en"
+  parent = "infra"
+  weight = 2
 
 [[main]]
   name = "Costs"
   pageRef = "/costs/"
   parent = "infra"
-  weight = 4
+  weight = 5
 
 [[main]]
   name = "Pastebin"
   pageRef = "/paste/"
   parent = "infra"
-  weight = 2
+  weight = 3
 
 [[main]]
   name = "Status"
   url = "https://status.gentoozh.org/"
   parent = "infra"
-  weight = 3
+  weight = 4
 
 # More ▾ (expand/collapse)
 [[main]]

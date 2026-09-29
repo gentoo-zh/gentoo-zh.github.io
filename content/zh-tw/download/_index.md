@@ -13,11 +13,11 @@ title: "下載"
 兩個鏡像都是每週自動建置，下載、校驗和與各鏡像目錄都在下載站：
 
 {{< cards cols="2" >}}
-  {{< card link="https://iso.gentoozh.org/zh-tw/#panel-desktop" title="Gig-OS 桌面鏡像" icon="desktop-computer" subtitle="KDE Plasma 6 桌面，預置中文環境與輸入法，可直接試用，也可用圖形安裝器安裝到硬碟。需要支援 AVX2 的處理器。" >}}
-  {{< card link="https://iso.gentoozh.org/zh-tw/#panel-minimal" title="CJK 最小安裝鏡像" icon="terminal" subtitle="第三方 amd64 最小安裝媒體，用 Catalyst 按官方 Release Engineering 的 spec 建置。核心帶 cjktty 修補，控制台能顯示中日韓文字，並支援 ZFS。" >}}
+  {{< card link="https://distfiles.gentoozh.org/gigos/?lang=zh-tw" title="Gig-OS 桌面鏡像" icon="desktop-computer" subtitle="KDE Plasma 6 桌面，預置中文環境與輸入法，可直接試用，也可用圖形安裝器安裝到硬碟。需要支援 AVX2 的處理器。" >}}
+  {{< card link="https://distfiles.gentoozh.org/iso?lang=zh-tw" title="CJK 最小安裝鏡像" icon="terminal" subtitle="第三方 amd64 最小安裝媒體，用 Catalyst 按官方 Release Engineering 的 spec 建置。核心帶 cjktty 修補，控制台能顯示中日韓文字，並支援 ZFS。" >}}
 {{< /cards >}}
 
-{{< hextra/hero-button text="前往下載站" link="https://iso.gentoozh.org/zh-tw/" style="margin-top:1.25rem;margin-bottom:.5rem" >}}
+{{< hextra/hero-button text="前往下載站" link="https://distfiles.gentoozh.org/?lang=zh-tw" style="margin-top:1.25rem;margin-bottom:.5rem" >}}
 
 - **Gig-OS 登入憑據**：使用者 {{< copy "live" >}} / 密碼 {{< copy "live" >}} / root 密碼 {{< copy "live" >}}
 - **專案倉庫**：[Gig-OS/Live-ISO](https://github.com/Gig-OS/Live-ISO) · [gentoo-zh/gentoo-cjk-livecd](https://github.com/gentoo-zh/gentoo-cjk-livecd)

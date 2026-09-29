@@ -12,6 +12,7 @@
 #   sync_to_tw.sh -h | --help       显示本帮助
 #
 # contributors/ 始终排除：那是 scripts/update-contributors.py 直接生成简繁两版的，不走本脚本。
+# overlay/ 始终排除：它只是跳转页，各语言的 ?lang= 与锚点表不同，转换会写错。
 
 set -euo pipefail
 
@@ -56,16 +57,16 @@ derive_target() {
   esac
 }
 
-# 列出全部 zh-cn 的 .md（排除 contributors/）。
+# 列出全部 zh-cn 的 .md（排除 contributors/ 与 overlay/）。
 list_all_sources() {
-  find content/zh-cn -type f -name '*.md' -not -path '*/contributors/*' | sort
+  find content/zh-cn -type f -name '*.md' -not -path '*/contributors/*' -not -path '*/overlay/*' | sort
 }
 
-# 列出相对 git HEAD 改动过（含未跟踪）的 zh-cn 的 .md（排除 contributors/）。
+# 列出相对 git HEAD 改动过（含未跟踪）的 zh-cn 的 .md（排除 contributors/ 与 overlay/）。
 list_changed_sources() {
   { git diff --name-only HEAD -- content/zh-cn 2>/dev/null || true
     git ls-files --others --exclude-standard -- content/zh-cn 2>/dev/null || true
-  } | sort -u | grep -E '\.md$' | grep -v '/contributors/' || true
+  } | sort -u | grep -E '\.md$' | grep -v -e '/contributors/' -e '/overlay/' || true
 }
 
 # ── 转换内核（与原脚本逐字一致，只是包进函数）─────────────────────────────────
@@ -377,7 +378,7 @@ case "${1-}" in
       convert_one "$src" "$(derive_target "$src")" >/dev/null
       echo "synced: $src"; n=$((n + 1))
     done < <(list_all_sources)
-    echo "✓ 同步 $n 个文件（content/zh-cn → zh-tw，已排除 contributors/）"
+    echo "✓ 同步 $n 个文件（content/zh-cn → zh-tw，已排除 contributors/ 与 overlay/）"
     exit 0
     ;;
   "")
@@ -393,7 +394,7 @@ case "${1-}" in
       convert_one "$src" "$(derive_target "$src")" >/dev/null
       echo "synced: $src"; n=$((n + 1))
     done <<< "$files"
-    echo "✓ 同步 $n 个改动过的文件（已排除 contributors/）"
+    echo "✓ 同步 $n 个改动过的文件（已排除 contributors/ 与 overlay/）"
     exit 0
     ;;
   -*)
