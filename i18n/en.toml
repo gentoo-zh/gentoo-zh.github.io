@@ -121,6 +121,15 @@ other = "Matrix and bridges"
 [gz_cost_build]
 other = "Build"
 
+[gz_cost_build_osuosl]
+other = "Build (OSUOSL)"
+
+[gz_cost_ended]
+other = "Retired"
+
+[gz_cost_sponsored]
+other = "Sponsored by OSUOSL"
+
 [gz_cost_node]
 other = "High-availability node"
 

@@ -4,6 +4,8 @@
 # period    monthly 每月 / yearly 每年 / once 一次性
 # start     开始计费的日期，用来算累计支出
 # usd       折算成美元的月均值，用于合计；一次性支出不计入月均
+# end       停用日期；写了就只累计到这一天，也不计入月均
+# sponsored 由赞助方免费提供，价格一栏写赞助方而不是免费额度
 #
 # 汇率按 2026 年 7 月：EUR 1 = USD 1.1524
 # 汇率取自 distfiles 那笔年付的实际扣款：100 EUR = 115.24 USD = 777 CNY = 3713.80 TWD = 900 HKD
@@ -54,7 +56,19 @@ items:
     approx: true
     start: 2026-06-01
     usd_month: 500
-    note: "机器自有，500 USD 是每月的托管流量与电费，按用量估算"
+    end: 2026-09-29
+    note: "机器自有，500 USD 是每月的托管流量与电费，按用量估算；binhost 迁到 OSUOSL 后停用"
+  - key: build_osuosl
+    spec: "俄勒冈州立大学开源实验室（OSUOSL）提供，同一机构另提供美国镜像"
+    spec_tw: "奧勒岡州立大學開源實驗室（OSUOSL）提供，同一機構另提供美國鏡像"
+    spec_en: "Provided by the Oregon State University Open Source Lab (OSUOSL), which also hosts the US mirror"
+    amount: 0
+    currency: USD
+    period: monthly
+    sponsored: true
+    start: 2026-09-27
+    usd_month: 0
+    note: "赞助，不产生费用"
   - key: mail
     spec: "Hostinger 邮件发送服务，供论坛发信"
     spec_tw: "Hostinger 郵件傳送服務，供論壇發信"

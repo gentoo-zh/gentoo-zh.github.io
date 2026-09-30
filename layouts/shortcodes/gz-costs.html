@@ -8,7 +8,9 @@
      构建自动往前走。已付一列写出周期数，读者能自己核对累计是怎么来的：年付是一次付
      掉整年，不按天摊。
 
-     合计折成美元，因为各项原始币种不同；汇率写在数据文件的 rates 里。 */ -}}
+     合计折成美元，因为各项原始币种不同；汇率写在数据文件的 rates 里。
+
+     写了 end 的项目已停用：累计只算到停用日，也不计入每月合计。 */ -}}
 {{- $table := .Get "table" | default "specs" -}}
 {{- $data := hugo.Data.gz_costs -}}
 {{- $r := $data.rates -}}
@@ -35,20 +37,23 @@
   <tbody>
   {{- range $data.items }}
     {{- $start := time.AsTime .start -}}
-    {{- $days := div (now.Sub $start).Hours 24.0 -}}
+    {{- $ended := isset . "end" -}}
+    {{- $until := cond $ended (time.AsTime .end) now -}}
+    {{- /* 停用日当天不再开始新的一期，所以已停用的项目少算一天 */ -}}
+    {{- $days := sub (div ($until.Sub $start).Hours 24.0) (cond $ended 1.0 0.0) -}}
     {{- $usd := cond (eq .currency "EUR") (mul .amount $r.eur_usd) .amount -}}
     {{- $n := cond (eq .period "monthly") (add (math.Floor (div $days 30.0)) 1) (add (math.Floor (div $days 365.0)) 1) -}}
     {{- $sub := mul $usd $n -}}
-    {{- $monthly = add $monthly .usd_month -}}
+    {{- if not $ended }}{{ $monthly = add $monthly .usd_month }}{{ end -}}
     {{- $accum = add $accum $sub -}}
-    {{- $free := eq .amount 0.0 -}}
-    {{- $price := cond $free (i18n "gz_cost_free") (printf "%s%v %s / %s" (cond (default false .approx) (i18n "gz_cost_approx") "") .amount .currency (cond (eq .period "monthly") (i18n "gz_cost_per_month") (i18n "gz_cost_per_year"))) -}}
+    {{- $free := eq (float .amount) 0.0 -}}
+    {{- $price := cond $free (cond (default false .sponsored) (i18n "gz_cost_sponsored") (i18n "gz_cost_free")) (printf "%s%v %s / %s" (cond (default false .approx) (i18n "gz_cost_approx") "") .amount .currency (cond (eq .period "monthly") (i18n "gz_cost_per_month") (i18n "gz_cost_per_year"))) -}}
     <tr>
       <td>{{ i18n (printf "gz_cost_%s" .key) }}</td>
       {{- if eq $table "specs" }}
       <td>{{ if and (eq $lang "en") .spec_en }}{{ .spec_en }}{{ else if and (eq $lang "zh-tw") .spec_tw }}{{ .spec_tw }}{{ else }}{{ .spec }}{{ end }}</td>
       <td>{{ $price }}</td>
-      <td>{{ .start }}</td>
+      <td>{{ .start }}{{ if $ended }}<br>{{ i18n "gz_cost_ended" }} {{ .end }}{{ end }}</td>
       {{- else }}
       <td>{{ $price }}</td>
       <td>{{ if $free }}—{{ else }}{{ $n }} {{ cond (eq .period "monthly") (i18n "gz_cost_months") (i18n "gz_cost_years") }}{{ end }}</td>

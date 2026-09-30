@@ -121,6 +121,15 @@ other = "Matrix 与桥接"
 [gz_cost_build]
 other = "构建"
 
+[gz_cost_build_osuosl]
+other = "构建（OSUOSL）"
+
+[gz_cost_ended]
+other = "已停用"
+
+[gz_cost_sponsored]
+other = "OSUOSL 赞助"
+
 [gz_cost_node]
 other = "高可用节点"
 
