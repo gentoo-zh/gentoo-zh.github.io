@@ -116,13 +116,14 @@ items:
 
   - key: node
     spec: "Vultr 小型节点"
-    spec_tw: "Vultr 節點，映象高可用與探測"
+    spec_tw: "Vultr 小型節點"
     spec_en: "Vultr small instance"
     amount: 5
     currency: USD
     period: monthly
     start: 2026-06-01
     usd_month: 5
+    end: 2026-09-30
     note: ""
   - key: grafana
     spec: "Oracle Cloud 永久免费额度"

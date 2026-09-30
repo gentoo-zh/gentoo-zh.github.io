@@ -24,7 +24,7 @@ description: "Gentoo 中文社群各臺伺服器的配置、價格與累計支�
 - **建置伺服器**：每晚建置 overlay 的[二進位包](/posts/2026-07-29-binhost-launch/)。2026-09-27 起改由 OSUOSL 贊助的伺服器承擔，不產生費用。此前自有的 80 執行緒伺服器於 2026-09-29 停用，表中保留它停用前的支出。
 - **論壇伺服器**：執行 [forum.gentoozh.org](https://forum.gentoozh.org/)。
 - **Matrix 與橋接伺服器**：執行 Matrix 服務端，以及 Telegram、IRC、Matrix 之間的訊息轉發。
-- **高可用節點**：異地探測鏡像與各網站，與主力機不在同一機房，避免同時失效。
+- **高可用節點**：異地探測鏡像與各網站，與主力機不在同一機房，避免同時失效。2026-09-30 停用。
 - **域名**：[gentoozh.org](/posts/2026-07-01-domain-migration/) 與 gentootw.org，都在 Porkbun 註冊。
 - **Cloudflare Workers**：託管官網與鏡像落地頁，付費方案提供的是請求配額與 CPU 時間。
 - **郵件傳送**：論壇的註冊驗證與通知郵件由 Hostinger 的發信服務投遞，不自建 SMTP，因為自建 IP 難以透過各家郵件服務商的投遞策略。
