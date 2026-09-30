@@ -39,10 +39,11 @@
     {{- $start := time.AsTime .start -}}
     {{- $ended := isset . "end" -}}
     {{- $until := cond $ended (time.AsTime .end) now -}}
-    {{- /* 停用日当天不再开始新的一期，所以已停用的项目少算一天 */ -}}
-    {{- $days := sub (div ($until.Sub $start).Hours 24.0) (cond $ended 1.0 0.0) -}}
+    {{- /* 按日历月数期：到 $until 为止开始过的期数。30 天一期会把 06-01 到 09-30 算成 5 个月 */ -}}
+    {{- $months := add (mul (sub $until.Year $start.Year) 12) (sub (int $until.Month) (int $start.Month)) -}}
+    {{- if lt $until.Day $start.Day }}{{ $months = sub $months 1 }}{{ end -}}
     {{- $usd := cond (eq .currency "EUR") (mul .amount $r.eur_usd) .amount -}}
-    {{- $n := cond (eq .period "monthly") (add (math.Floor (div $days 30.0)) 1) (add (math.Floor (div $days 365.0)) 1) -}}
+    {{- $n := cond (eq .period "monthly") (add $months 1) (add (div $months 12) 1) -}}
     {{- $sub := mul $usd $n -}}
     {{- if not $ended }}{{ $monthly = add $monthly .usd_month }}{{ end -}}
     {{- $accum = add $accum $sub -}}
