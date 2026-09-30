@@ -3,7 +3,7 @@ title: "基础设施开销"
 description: "Gentoo 中文社区各台服务器的配置、价格与累计支出，数字随站点构建更新。"
 ---
 
-下面的服务器与服务目前全部由 [Zakk](/contributors/zakkaus/) 个人承担，没有商业赞助，也没有社区经费。另有几项由其他成员承担，列在文末。
+下面的服务器与服务中，构建服务器由 [OSUOSL](https://osuosl.org/) 赞助，其余由 [Zakk](/contributors/zakkaus/) 个人承担，没有社区经费。另有几项由其他成员承担，列在文末。
 
 ## 设备
 
@@ -21,7 +21,7 @@ description: "Gentoo 中文社区各台服务器的配置、价格与累计支�
 ## 各项用途
 
 - **下载服务器**：[distfiles.gentoozh.org](https://distfiles.gentoozh.org/) 的源站，提供 overlay 的 distfiles 与二进制包，同时作为各高校镜像的 rsync 同步源。
-- **构建服务器**：每晚构建 overlay 的[二进制包](/posts/2026-07-29-binhost-launch/)。因为 Electron 应用与浏览器这类包编译耗时长，所以用 80 线程保证一轮构建内完成。
+- **构建服务器**：每晚构建 overlay 的[二进制包](/posts/2026-07-29-binhost-launch/)。2026-09-27 起改由 OSUOSL 赞助的服务器承担，不产生费用。此前自有的 80 线程服务器于 2026-09-29 停用，表中保留它停用前的支出。
 - **论坛服务器**：运行 [forum.gentoozh.org](https://forum.gentoozh.org/)。
 - **Matrix 与桥接服务器**：运行 Matrix 服务端，以及 Telegram、IRC、Matrix 之间的消息转发。
 - **高可用节点**：异地探测镜像与各站点，与主力机不在同一机房，避免同时失效。
@@ -36,9 +36,11 @@ description: "Gentoo 中文社区各台服务器的配置、价格与累计支�
 
 - **gentoocn.org**：[Clover](/contributors/simplewrite/) 续费。
 - **gentoo.org.cn**：一位不愿具名的老社区成员续费。
-- **早前的构建机**：由[梁永祥](/contributors/liangyongxiang/)提供，2022-08-09 至 2026-04-30 在用，月付 37.30 EUR，45 个月合计 1678.50 EUR，折合约 1934.30 USD。overlay 的二进制包构建现由上表的构建服务器承担。
+- **早前的构建机**：由[梁永祥](/contributors/liangyongxiang/)提供，2022-08-09 至 2026-04-30 在用，月付 37.30 EUR，45 个月合计 1678.50 EUR，折合约 1934.30 USD。overlay 的二进制包构建现由 OSUOSL 赞助的构建服务器承担。
 - **早前的下载站**：服务器由 [peeweep](/contributors/peeweep/) 提供，现已关闭，Live ISO 与 distfiles 迁至上表的下载服务器。
 
 ## 参与方式
 
-社区不接受捐款。需要的是 ebuild、缺陷修复与文档，流程见[贡献指南](/contributing/)。
+社区不接受捐款。binhost 构建机与美国镜像由 OSUOSL 免费提供，如需资助，请[捐给 OSUOSL](https://osuosl.org/donate/)。
+
+提交 ebuild、修复缺陷与改进文档的流程见[贡献指南](/contributing/)。

@@ -3,7 +3,7 @@ title: "Infrastructure costs"
 description: "The specification, price and running total for each server the Gentoo Chinese Community runs; the numbers update with every site build."
 ---
 
-Every server and service below is currently paid for by [Zakk](/contributors/zakkaus/) personally: no commercial sponsorship, no community fund. Two more domains are paid for by other members and are listed at the end.
+Among the servers and services below, the build server is sponsored by [OSUOSL](https://osuosl.org/); [Zakk](/contributors/zakkaus/) pays for the rest personally, and there is no community fund. Two more domains are paid for by other members and are listed at the end.
 
 ## Machines
 
@@ -21,7 +21,7 @@ Every server and service below is currently paid for by [Zakk](/contributors/zak
 ## What each item pays for
 
 - **Download server**: the origin behind [distfiles.gentoozh.org](https://distfiles.gentoozh.org/). It serves the overlay's distfiles and binary packages, and is the rsync source the university mirrors pull from.
-- **Build server**: builds the overlay's [binary packages](/posts/2026-07-29-binhost-launch/) nightly. Electron apps and browsers take a long time to compile, so the 80 threads are there to finish a round in one night.
+- **Build server**: builds the overlay's [binary packages](/posts/2026-07-29-binhost-launch/) nightly. Since 2026-09-27 a server sponsored by OSUOSL does this at no cost. The self-owned 80-thread server was retired on 2026-09-29, and the tables keep what it cost until then.
 - **Forum server**: runs [forum.gentoozh.org](https://forum.gentoozh.org/).
 - **Matrix and bridge server**: runs the Matrix homeserver and forwards messages between Telegram, IRC and Matrix.
 - **High-availability node**: probes the mirrors and the sites from another facility, so it does not fail together with the main machines.
@@ -36,9 +36,11 @@ The items below are not in the tables above; the people named pay for them:
 
 - **gentoocn.org**: renewed by [Clover](/contributors/simplewrite/).
 - **gentoo.org.cn**: renewed by a long-time community member who prefers not to be named.
-- **The earlier build machine**: provided by [Liang Yongxiang](/contributors/liangyongxiang/) from 2022-08-09 to 2026-04-30, at 37.30 EUR a month — 45 months, 1678.50 EUR in total, about 1934.30 USD. Binary package builds now run on the build server listed above.
+- **The earlier build machine**: provided by [Liang Yongxiang](/contributors/liangyongxiang/) from 2022-08-09 to 2026-04-30, at 37.30 EUR a month — 45 months, 1678.50 EUR in total, about 1934.30 USD. Binary package builds now run on the OSUOSL-sponsored build server.
 - **The earlier download site**: the server was provided by [peeweep](/contributors/peeweep/). It has been shut down, and the Live ISO and distfiles moved to the download server listed above.
 
 ## How to help
 
-The community does not accept donations. What it needs is ebuilds, bug fixes and documentation; the [contributing guide](/contributing/) covers the workflow.
+The community does not accept donations. OSUOSL provides the binhost builder and the US mirror for free; to give money, [donate to OSUOSL](https://osuosl.org/donate/).
+
+The [contributing guide](/contributing/) covers submitting ebuilds, fixing bugs and improving documentation.
