@@ -24,7 +24,7 @@ Among the servers and services below, the build server is sponsored by [OSUOSL](
 - **Build server**: builds the overlay's [binary packages](/posts/2026-07-29-binhost-launch/) nightly. Since 2026-09-27 a server sponsored by OSUOSL does this at no cost. The self-owned 80-thread server was retired on 2026-09-29, and the tables keep what it cost until then.
 - **Forum server**: runs [forum.gentoozh.org](https://forum.gentoozh.org/).
 - **Matrix and bridge server**: runs the Matrix homeserver and forwards messages between Telegram, IRC and Matrix.
-- **High-availability node**: probes the mirrors and the sites from another facility, so it does not fail together with the main machines.
+- **High-availability node**: probes the mirrors and the sites from another facility, so it does not fail together with the main machines. Retired on 2026-09-30.
 - **Domains**: [gentoozh.org](/posts/2026-07-01-domain-migration/) and gentootw.org, both registered at Porkbun.
 - **Cloudflare Workers**: hosts the site and the mirror landing pages; the paid plan buys request quota and CPU time.
 - **Email sending**: the forum sends its sign-up and notification mail through Hostinger rather than a self-hosted SMTP server, because mail from a self-hosted IP rarely reaches the big inboxes.
