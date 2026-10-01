@@ -3,7 +3,7 @@ title: "Huang Rui"
 description: Huang Rui — Gentoo 中文社群 gentoo-zh 貢獻者
 tags: ['Overlay 貢獻者']
 externalUrl: "https://github.com/vowstar"
-weight: 9705
+weight: 9686
 ---
 
-295 次提交
+314 次提交

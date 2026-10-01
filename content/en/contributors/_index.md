@@ -15,4 +15,4 @@ This is the list of everyone who has contributed to the Gentoo-zh Community.
 
 **Note**: this page lists contributors with 5 or more commits to the [gentoo-zh Overlay](https://github.com/gentoo-zh/overlay), as well as website content contributors. To correct or remove your information, please contact [zakk@gentoozh.org](mailto:zakk@gentoozh.org).
 
-Last updated 2026-09-01 02:57 UTC (updated automatically every month)
+Last updated 2026-10-01 03:29 UTC (updated automatically every month)
