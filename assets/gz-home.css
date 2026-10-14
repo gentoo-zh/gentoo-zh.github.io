@@ -1,0 +1,15 @@
+/* 首页“致谢”一栏。与上方 bento 的间距取 bento 自身的 gap */
+.gz-home-sponsors { margin-top: 0.875rem; }
+@media (min-width: 768px) { .gz-home-sponsors { margin-top: 1rem; } }
+
+.gz-sponsors { display: grid; grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); gap: 1rem; margin: 0; padding: 0; list-style: none; }
+.gz-sponsor-wide { grid-column: span 2; }
+.gz-sponsor a { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; height: 100%; padding: 0.9rem 0.75rem; border-radius: 0.75rem; color: inherit; text-decoration: none; transition: background-color 0.15s ease; }
+.gz-sponsor a:hover { background: color-mix(in srgb, var(--primary) 8%, transparent); }
+.gz-sponsor-logo { display: flex; align-items: center; justify-content: center; height: 3.5rem; }
+.gz-sponsor-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+.gz-sponsor-name { font-size: 0.8125rem; line-height: 1.35; text-align: center; color: var(--text-soft); }
+
+.gz-sponsor .gz-only-dark { display: none; }
+.dark .gz-sponsor .gz-only-light { display: none; }
+.dark .gz-sponsor .gz-only-dark { display: block; }

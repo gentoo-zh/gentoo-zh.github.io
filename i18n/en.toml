@@ -186,3 +186,7 @@ other = 'Per month now'
 other = 'Items in use only'
 [gz_cost_stat_asof]
 other = 'As of {{ .Date }}. Counts only what Zakk pays; updated with every site build.'
+[gz_home_sponsors]
+other = "Acknowledgments"
+[gz_home_sponsors_more]
+other = "Details"

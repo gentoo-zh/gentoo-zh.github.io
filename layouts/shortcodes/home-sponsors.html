@@ -1,0 +1,28 @@
+{{- /* 首页“致谢”一栏，接在 home-bento 之后。沿用 bento 的卡片与标题样式，自己再包一层
+     .bento，这样不必改主题里的 home-bento。数据在 data/gz_sponsors.yaml。 */ -}}
+{{- $lang := .Page.Language.Lang -}}
+<div class="bento not-prose gz-home-sponsors">
+  <section class="bento-tile bento-full" aria-labelledby="bento-sponsors">
+    <div class="bento-head">
+      <h2 id="bento-sponsors" class="bento-head-title">{{ i18n "gz_home_sponsors" }}</h2>
+      <a class="bento-head-more" href="{{ relLangURL "thanks/" }}">{{ i18n "gz_home_sponsors_more" }} <span class="bento-head-more-arrow">→</span></a>
+    </div>
+    <ul class="gz-sponsors">
+      {{- range hugo.Data.gz_sponsors }}
+      {{- $name := cond (eq $lang "en") .name_en (cond (eq $lang "zh-tw") .name_tw .name) }}
+      <li class="gz-sponsor{{ if .wide }} gz-sponsor-wide{{ end }}">
+        <a href="{{ .href }}" target="_blank" rel="noreferrer">
+          <span class="gz-sponsor-logo">
+            <img{{ with .img_dark }} class="gz-only-light"{{ end }} src="{{ .img }}" alt="" loading="lazy">
+            {{- with .img_dark }}<img class="gz-only-dark" src="{{ . }}" alt="" loading="lazy">{{ end }}
+          </span>
+          <span class="gz-sponsor-name">{{ $name }}</span>
+        </a>
+      </li>
+      {{- end }}
+    </ul>
+  </section>
+</div>
+{{- with resources.Get "gz-home.css" -}}
+<link rel="stylesheet" href="{{ (. | minify | fingerprint).RelPermalink }}">
+{{- end -}}
