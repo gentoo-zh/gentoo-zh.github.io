@@ -34,3 +34,12 @@
 /* Hextra 的卡片把内容包在 mt-auto 里，内容贴卡片底部。同一行卡片等高、
    简介行数不同时，标题就不在同一水平线上，所以清掉这条外边距改为顶对齐。 */
 .hextra-card > .hx\:mt-auto { margin-top: 0; }
+
+/* 支出页页首的数字卡片 */
+.gz-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); gap: 0.75rem; margin: 1.25rem 0 0.5rem; }
+.gz-stat { display: flex; flex-direction: column; gap: 0.25rem; padding: 1rem 1.125rem; border: 1px solid var(--border-soft); border-radius: 0.75rem; background: var(--card-bg); }
+.gz-stat-label { font-size: 0.875rem; color: var(--text-soft); }
+.gz-stat-value { font-size: 1.75rem; font-weight: 600; line-height: 1.2; color: var(--text-strong); font-variant-numeric: tabular-nums; }
+.gz-stat-value small { margin-left: 0.3rem; font-size: 0.875rem; font-weight: 500; color: var(--text-soft); }
+.gz-stat-sub { font-size: 0.8125rem; color: var(--text-soft); font-variant-numeric: tabular-nums; }
+.gz-stats-note { margin-top: 0; font-size: 0.8125rem; color: var(--text-soft); }

@@ -17,7 +17,7 @@ description: "為 gentoo-zh 提供建置機與鏡像的機構。"
   img_h: "5rem"
   title: "奧勒岡州立大學開放原始碼實驗室"
   sub: "美國"
-  desc: "提供 binary package 建置機、gentoo-zh 鏡像、論壇郵件轉寄與 ARM 測試機。"
+  desc: "提供 binary package 建置機、gentoo-zh 鏡像、論壇 SMTP 與 ARM 測試機。"
   meta: "osuosl.org"
 {{< /gz-tiles >}}
 

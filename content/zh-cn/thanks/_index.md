@@ -17,7 +17,7 @@ description: "为 gentoo-zh 提供构建机与镜像的机构。"
   img_h: "5rem"
   title: "俄勒冈州立大学开源实验室"
   sub: "美国"
-  desc: "提供 binary package 构建机、gentoo-zh 镜像、论坛邮件转发与 ARM 测试机。"
+  desc: "提供 binary package 构建机、gentoo-zh 镜像、论坛 SMTP 与 ARM 测试机。"
   meta: "osuosl.org"
 {{< /gz-tiles >}}
 
