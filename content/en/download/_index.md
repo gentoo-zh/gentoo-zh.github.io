@@ -2,26 +2,22 @@
 title: "Download"
 ---
 
-Installing Gentoo requires installation media. The Gentoo-zh Community maintains two amd64 images, listed below; for the official media, pick the nearest mirror from the list further down.
+Installing Gentoo requires installation media. The Gentoo-zh Community maintains one amd64 installation image, listed below; for the official media, pick the nearest mirror from the list further down.
 
 {{< callout type="info" >}}
 **Apple Silicon Macs (M1 / M2)** can't use the standard amd64 images listed on this page — see [Installing Gentoo Linux on an Apple Silicon Mac](/posts/2025-10-02-gentoo-m-series-mac/).
 {{< /callout >}}
 
-## Gentoo-zh Community images {#live-iso}
+## CJK minimal image {#live-iso}
 
-Both images are rebuilt weekly. Downloads, checksums and every mirror directory live on the download site:
+A third-party amd64 minimal installation medium, built by Catalyst from the official Release Engineering specs. The kernel carries the cjktty patch, so the console displays CJK text, and ZFS is supported. The image is rebuilt weekly; downloads, checksums and every mirror directory live on the download site.
 
-{{< cards cols="2" >}}
-  {{< card link="https://distfiles.gentoozh.org/gigos/?lang=en" title="Gig-OS desktop image" icon="desktop-computer" subtitle="A KDE Plasma 6 desktop with the Chinese environment and input methods already set up. Run it live or install it to disk with the graphical installer. Needs a CPU with AVX2." >}}
-  {{< card link="https://distfiles.gentoozh.org/iso?lang=en" title="CJK minimal image" icon="terminal" subtitle="A third-party amd64 minimal installation medium, built by Catalyst from the official Release Engineering specs. The kernel carries the cjktty patch, so the console displays CJK text, and ZFS is supported." >}}
-{{< /cards >}}
+{{< hextra/hero-button text="Download the CJK minimal image" link="https://distfiles.gentoozh.org/iso?lang=en" style="margin-top:1.25rem;margin-bottom:.5rem" >}}
+{{< hextra/hero-button text="Source repository" link="https://github.com/gentoo-zh/gentoo-cjk-livecd" style="margin-top:1.25rem;margin-bottom:.5rem;margin-left:.5rem;background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor" >}}
 
-{{< hextra/hero-button text="Go to the download site" link="https://distfiles.gentoozh.org/?lang=en" style="margin-top:1.25rem;margin-bottom:.5rem" >}}
-
-- **Gig-OS login credentials**: user {{< copy "live" >}} / password {{< copy "live" >}} / root password {{< copy "live" >}}
-- **Repositories**: [Gig-OS/Live-ISO](https://github.com/Gig-OS/Live-ISO) · [gentoo-zh/gentoo-cjk-livecd](https://github.com/gentoo-zh/gentoo-cjk-livecd)
-- **New-release alerts**: the Telegram channel [@gentoomirror](https://t.me/gentoomirror) announces every weekly build
+{{< callout type="info" >}}
+Maintenance of the Gig-OS desktop image is paused because build machine resources are limited.
+{{< /callout >}}
 
 ## Mirrors
 

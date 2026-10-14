@@ -2,26 +2,22 @@
 title: "下载"
 ---
 
-安装 Gentoo 前需要准备安装介质。中文社区维护两个 amd64 镜像，见下一节；使用官方介质请从下面的镜像站就近选择。
+安装 Gentoo 前需要准备安装介质。中文社区维护一个 amd64 安装镜像，见下一节；使用官方介质请从下面的镜像站就近选择。
 
 {{< callout type="info" >}}
 **Apple Silicon Mac（M1 / M2）** 不适用本页列出的标准 amd64 镜像，请看 [在 Apple Silicon Mac 上安装 Gentoo Linux](/posts/2025-10-02-gentoo-m-series-mac/)。
 {{< /callout >}}
 
-## 中文社区镜像 {#live-iso}
+## CJK 最小安装镜像 {#live-iso}
 
-两个镜像都是每周自动构建，下载、校验和与各镜像目录都在下载站：
+第三方 amd64 最小安装介质，用 Catalyst 按官方 Release Engineering 的 spec 构建。内核带 cjktty 补丁，控制台能显示中日韩文字，并支持 ZFS。镜像每周自动构建，下载、校验和与各镜像目录都在下载站。
 
-{{< cards cols="2" >}}
-  {{< card link="https://distfiles.gentoozh.org/gigos/?lang=zh-cn" title="Gig-OS 桌面镜像" icon="desktop-computer" subtitle="KDE Plasma 6 桌面，预置中文环境与输入法，可直接试用，也可用图形安装器安装到硬盘。需要支持 AVX2 的处理器。" >}}
-  {{< card link="https://distfiles.gentoozh.org/iso?lang=zh-cn" title="CJK 最小安装镜像" icon="terminal" subtitle="第三方 amd64 最小安装介质，用 Catalyst 按官方 Release Engineering 的 spec 构建。内核带 cjktty 补丁，控制台能显示中日韩文字，并支持 ZFS。" >}}
-{{< /cards >}}
+{{< hextra/hero-button text="下载 CJK 最小安装镜像" link="https://distfiles.gentoozh.org/iso?lang=zh-cn" style="margin-top:1.25rem;margin-bottom:.5rem" >}}
+{{< hextra/hero-button text="项目仓库" link="https://github.com/gentoo-zh/gentoo-cjk-livecd" style="margin-top:1.25rem;margin-bottom:.5rem;margin-left:.5rem;background:transparent;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor" >}}
 
-{{< hextra/hero-button text="前往下载站" link="https://distfiles.gentoozh.org/?lang=zh-cn" style="margin-top:1.25rem;margin-bottom:.5rem" >}}
-
-- **Gig-OS 登录凭据**：用户 {{< copy "live" >}} / 密码 {{< copy "live" >}} / root 密码 {{< copy "live" >}}
-- **项目仓库**：[Gig-OS/Live-ISO](https://github.com/Gig-OS/Live-ISO) · [gentoo-zh/gentoo-cjk-livecd](https://github.com/gentoo-zh/gentoo-cjk-livecd)
-- **新版通知**：Telegram 频道 [@gentoomirror](https://t.me/gentoomirror)，每周构建上线时自动播报
+{{< callout type="info" >}}
+因构建机器资源不足，Gig-OS 桌面镜像暂停维护。
+{{< /callout >}}
 
 ## 镜像站 {#镜像源}
 
