@@ -1,9 +1,9 @@
 ---
 title: "致谢"
-description: "为 gentoo-zh 提供构建机与镜像的机构。"
+description: "为 gentoo-zh 提供构建机、镜像与服务的机构。"
 ---
 
-感谢下列机构为 gentoo-zh 提供构建机与镜像。
+感谢下列机构为 gentoo-zh 提供构建机、镜像与服务。
 
 ## 构建机
 
@@ -64,7 +64,24 @@ description: "为 gentoo-zh 提供构建机与镜像的机构。"
 
 各镜像的 gentoo-zh 地址与用法见下载站的[镜像列表](https://distfiles.gentoozh.org/mirrors?lang=zh-cn)。
 
+## 服务
+
+{{< gz-tiles >}}
+- href: "https://1password.com/zh-cn/for-non-profits"
+  img: "/img/thanks/1password.svg"
+  img_dark: "/img/thanks/1password-dark.svg"
+  w: 24
+  h: 24
+  bg: "theme"
+  img_h: "4rem"
+  alt: "1Password"
+  title: "1Password"
+  sub: "加拿大"
+  desc: "通过非营利组织计划免费提供密码管理。"
+  meta: "1password.com"
+{{< /gz-tiles >}}
+
 ## 来源与许可
 
-- 镜像标志取自各镜像的网站，仅缩放尺寸并保留原色；OSUOSL 标志取自其[标志页面](https://osuosl.org/about/logos/)，按其规则不改颜色与排列。各标志的来源及许可见下载站的 [NOTICE](https://distfiles.gentoozh.org/assets/NOTICE.txt)。
+- 镜像标志取自各镜像的网站，仅缩放尺寸并保留原色；OSUOSL 标志取自其[标志页面](https://osuosl.org/about/logos/)，按其规则不改颜色与排列。1Password 图标取自 [Simple Icons](https://simpleicons.org/)，其余标志的来源及许可见下载站的 [NOTICE](https://distfiles.gentoozh.org/assets/NOTICE.txt)。
 - [gentoo-zh 的标志](/logo/)改编自 Gentoo 标志，适用 [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/)。

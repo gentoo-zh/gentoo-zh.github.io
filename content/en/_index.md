@@ -15,3 +15,5 @@ toc: false
   cta2="Community Live ISO"
   cta2Link="/download/#live-iso"
 >}}
+
+{{< home-sponsors >}}

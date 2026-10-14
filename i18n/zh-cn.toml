@@ -186,3 +186,7 @@ other = '目前每月'
 other = '只计在用项目'
 [gz_cost_stat_asof]
 other = '截至 {{ .Date }}，只计 Zakk 承担的部分，随站点构建更新。'
+[gz_home_sponsors]
+other = "致谢"
+[gz_home_sponsors_more]
+other = "详情"
