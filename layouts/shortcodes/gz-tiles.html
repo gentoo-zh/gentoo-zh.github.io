@@ -1,0 +1,35 @@
+{{- /* 卡片网格：内容写成 YAML 列表放在短代码内部，文字留在各语言的页面里。
+
+     {{< gz-tiles >}}
+     - href: /brand/x.svg       链接；download: true 时点击直接下载
+       img: /brand/x.svg        图片；img_dark 为深色主题的替换图
+       w: 240                   图片固有尺寸，防止加载时跳动
+       h: 124
+       bg: checker              图片衬底：white（默认）/ checker / lavender / theme
+       img_h: 4rem              图片高度，默认占满衬底
+       title: …                 标题；sub、desc、meta 依次排在下面，均可省略
+     {{< /gz-tiles >}}
+
+     wide="true" 时卡片更宽，给带长描述的致谢卡片用。 */ -}}
+{{- $items := .Inner | transform.Unmarshal -}}
+<ul class="gz-tiles{{ if eq (.Get "wide") "true" }} gz-tiles-wide{{ end }}">
+{{- range $items }}
+  <li><a class="gz-tile" href="{{ .href }}"{{ if .download }} download{{ end }}{{ if hasPrefix .href "http" }} target="_blank" rel="noreferrer"{{ end }}>
+    <span class="gz-tile-media" data-bg="{{ .bg | default "white" }}"{{ with .img_h }} style="--gz-img-h: {{ . | safeCSS }}"{{ end }}>
+      <img{{ with .img_dark }} class="gz-only-light"{{ end }} src="{{ .img }}"{{ with .w }} width="{{ . }}"{{ end }}{{ with .h }} height="{{ . }}"{{ end }} alt="{{ .alt | default "" }}" loading="lazy">
+      {{- if .img_dark }}
+      <img class="gz-only-dark" src="{{ .img_dark }}"{{ with .w }} width="{{ . }}"{{ end }}{{ with .h }} height="{{ . }}"{{ end }} alt="" loading="lazy">
+      {{- end }}
+    </span>
+    <span class="gz-tile-body">
+      {{- with .title }}<span class="gz-tile-title">{{ . }}</span>{{ end }}
+      {{- with .sub }}<span class="gz-tile-sub">{{ . }}</span>{{ end }}
+      {{- with .desc }}<span class="gz-tile-desc">{{ . }}</span>{{ end }}
+      {{- with .meta }}<span class="gz-tile-meta">{{ . }}</span>{{ end }}
+    </span>
+  </a></li>
+{{- end }}
+</ul>
+{{- with resources.Get "gz-tiles.css" -}}
+<link rel="stylesheet" href="{{ (. | minify | fingerprint).RelPermalink }}">
+{{- end -}}
