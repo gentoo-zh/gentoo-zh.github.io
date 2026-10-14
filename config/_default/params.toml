@@ -16,7 +16,7 @@ contactEmail = "zakk@gentoozh.org"
   [navbar.logo]
     path = "img/logo-horizontal.svg"
     dark = "img/logo-horizontal-dark.svg"
-    width = 111
+    width = 116
     height = 40
 
 [search]
