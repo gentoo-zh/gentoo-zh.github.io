@@ -1,0 +1,70 @@
+---
+title: "致謝"
+description: "為 gentoo-zh 提供建置機與鏡像的機構。"
+---
+
+感謝下列機構為 gentoo-zh 提供建置機與鏡像。
+
+## 建置機
+
+{{< gz-tiles wide="true" >}}
+- href: "https://osuosl.org/"
+  img: "/img/thanks/osuosl-logo-light.png"
+  img_dark: "/img/thanks/osuosl-logo-dark.png"
+  w: 240
+  h: 124
+  bg: "theme"
+  img_h: "5rem"
+  title: "奧勒岡州立大學開放原始碼實驗室"
+  sub: "美國"
+  desc: "提供 binary package 建置機、gentoo-zh 鏡像、論壇郵件轉寄與 ARM 測試機。"
+  meta: "osuosl.org"
+{{< /gz-tiles >}}
+
+## 鏡像
+
+{{< gz-tiles >}}
+- href: "https://mirrors.cernet.edu.cn/"
+  img: "/img/thanks/cernet.svg"
+  w: 64
+  h: 64
+  bg: "white"
+  img_h: "4rem"
+  title: "教育網聯合鏡像站"
+  sub: "中國大陸"
+  meta: "mirrors.cernet.edu.cn"
+- href: "https://mirror.nju.edu.cn/"
+  img: "/img/thanks/nju.webp"
+  w: 64
+  h: 64
+  bg: "white"
+  img_h: "4rem"
+  title: "南京大學"
+  sub: "中國大陸"
+  meta: "mirror.nju.edu.cn"
+- href: "https://mirror.nyist.edu.cn/"
+  img: "/img/thanks/nyist.webp"
+  w: 65
+  h: 64
+  bg: "white"
+  img_h: "4rem"
+  title: "南陽理工學院"
+  sub: "中國大陸"
+  meta: "mirror.nyist.edu.cn"
+- href: "https://mirrors.ha.edu.cn/"
+  img: "/img/thanks/hernet.svg"
+  w: 124
+  h: 64
+  bg: "white"
+  img_h: "4rem"
+  title: "河南教育網"
+  sub: "中國大陸"
+  meta: "mirrors.ha.edu.cn"
+{{< /gz-tiles >}}
+
+各鏡像的 gentoo-zh 位址與用法見下載站的[鏡像列表](https://distfiles.gentoozh.org/mirrors?lang=zh-tw)。
+
+## 來源與授權
+
+- 鏡像標誌取自各鏡像的網站，僅縮放尺寸、保留原色；OSUOSL 標誌取自其[標誌頁面](https://osuosl.org/about/logos/)，依其規則不改顏色與排列。各標誌的來源及授權見下載站的 [NOTICE](https://distfiles.gentoozh.org/assets/NOTICE.txt)。
+- [gentoo-zh 的標誌](/logo/)改編自 Gentoo 標誌，適用 [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/)。

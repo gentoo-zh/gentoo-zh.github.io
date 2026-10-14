@@ -91,6 +91,18 @@
   weight = 4
 
 [[main]]
+  name = "致谢"
+  pageRef = "/thanks/"
+  parent = "more"
+  weight = 5
+
+[[main]]
+  name = "标志"
+  pageRef = "/logo/"
+  parent = "more"
+  weight = 6
+
+[[main]]
   name = "Search"
   weight = 70
   [main.params]
