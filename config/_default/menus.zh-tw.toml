@@ -1,105 +1,119 @@
-# 頂欄：主條目平鋪，次級條目收進「更多 ▾」原生下拉（可展開收起）
+# 頂欄按用途分四組：使用、文章、社群、關於。站外連結在名字後加 ↗，讀者點之前就知道會離開本站。
+
 [[main]]
-  name = "Overlay"
-  url = "https://distfiles.gentoozh.org/overlay?lang=zh-tw"
+  name = "使用"
+  identifier = "use"
   weight = 10
+
+[[main]]
+  name = "Overlay ↗"
+  url = "https://distfiles.gentoozh.org/overlay?lang=zh-tw"
+  parent = "use"
+  weight = 1
+
+[[main]]
+  name = "distfiles 配置 ↗"
+  url = "https://distfiles.gentoozh.org/distfiles-setup?lang=zh-tw"
+  parent = "use"
+  weight = 2
+
+[[main]]
+  name = "binpkg 配置 ↗"
+  url = "https://distfiles.gentoozh.org/binpkg-setup?lang=zh-tw"
+  parent = "use"
+  weight = 3
 
 [[main]]
   name = "下載"
   pageRef = "/download/"
-  weight = 20
+  parent = "use"
+  weight = 4
 
 [[main]]
   name = "鏡像列表"
   pageRef = "/mirrorlist/"
-  weight = 30
-
-[[main]]
-  name = "文章"
-  pageRef = "/posts/"
-  weight = 40
-
-[[main]]
-  name = "關於"
-  pageRef = "/about/"
-  weight = 60
-
-# 基礎設施 ▾（社群自建服務）
-[[main]]
-  name = "基礎設施"
-  identifier = "infra"
-  weight = 55
-
-[[main]]
-  name = "distfiles"
-  url = "https://distfiles.gentoozh.org/distfiles-setup?lang=zh-tw"
-  parent = "infra"
-  weight = 1
-
-[[main]]
-  name = "binpkg"
-  url = "https://distfiles.gentoozh.org/binpkg-setup?lang=zh-tw"
-  parent = "infra"
-  weight = 2
-
-[[main]]
-  name = "開銷"
-  pageRef = "/costs/"
-  parent = "infra"
+  parent = "use"
   weight = 5
-
-[[main]]
-  name = "Pastebin"
-  pageRef = "/paste/"
-  parent = "infra"
-  weight = 3
-
-[[main]]
-  name = "服務狀態"
-  url = "https://grafana.gentoozh.org/public-dashboards/d5754b79824d4d8dbd8c70e13e54c11e"
-  parent = "infra"
-  weight = 4
-
-# 更多 ▾（可展開收起）
-[[main]]
-  name = "更多"
-  identifier = "more"
-  weight = 65
-
-[[main]]
-  name = "貢獻指南"
-  pageRef = "/contributing/"
-  parent = "more"
-  weight = 1
 
 [[main]]
   name = "常見問題"
   pageRef = "/faq/"
-  parent = "more"
-  weight = 2
+  parent = "use"
+  weight = 6
+
+[[main]]
+  name = "文章"
+  pageRef = "/posts/"
+  weight = 20
+
+[[main]]
+  name = "社群"
+  identifier = "community"
+  weight = 30
+
+[[main]]
+  name = "貢獻指南"
+  pageRef = "/contributing/"
+  parent = "community"
+  weight = 1
 
 [[main]]
   name = "貢獻者"
   pageRef = "/contributors/"
-  parent = "more"
+  parent = "community"
+  weight = 2
+
+[[main]]
+  name = "論壇 ↗"
+  url = "https://forum.gentoozh.org/"
+  parent = "community"
   weight = 3
 
 [[main]]
-  name = "更新記錄"
-  pageRef = "/changelog/"
-  parent = "more"
+  name = "Pastebin"
+  pageRef = "/paste/"
+  parent = "community"
   weight = 4
+
+[[main]]
+  name = "關於"
+  identifier = "about"
+  weight = 40
+
+[[main]]
+  name = "社群簡介"
+  pageRef = "/about/"
+  parent = "about"
+  weight = 1
+
+[[main]]
+  name = "開銷"
+  pageRef = "/costs/"
+  parent = "about"
+  weight = 2
 
 [[main]]
   name = "致謝"
   pageRef = "/thanks/"
-  parent = "more"
-  weight = 5
+  parent = "about"
+  weight = 3
 
 [[main]]
   name = "標誌"
   pageRef = "/logo/"
-  parent = "more"
+  parent = "about"
+  weight = 4
+
+[[main]]
+  name = "服務狀態 ↗"
+  url = "https://grafana.gentoozh.org/public-dashboards/d5754b79824d4d8dbd8c70e13e54c11e"
+  parent = "about"
+  weight = 5
+
+[[main]]
+  name = "更新記錄"
+  pageRef = "/changelog/"
+  parent = "about"
   weight = 6
 
 [[main]]
@@ -111,7 +125,7 @@
 [[main]]
   name = "GitHub"
   weight = 80
-  url = "https://github.com/gentoo-zh/gentoo-zh.github.io"
+  url = "https://github.com/gentoo-zh"
   [main.params]
     icon = "github"
 

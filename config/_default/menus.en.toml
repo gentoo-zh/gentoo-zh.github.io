@@ -1,105 +1,119 @@
-# Top bar: primary items inline, secondary items collapsed under "More ▾".
+# The top bar has four groups by purpose: Use, Posts, Community, About. Off-site links end in ↗ so readers know before clicking that they leave the site.
+
 [[main]]
-  name = "Overlay"
-  url = "https://distfiles.gentoozh.org/overlay?lang=en"
+  name = "Use"
+  identifier = "use"
   weight = 10
+
+[[main]]
+  name = "Overlay ↗"
+  url = "https://distfiles.gentoozh.org/overlay?lang=en"
+  parent = "use"
+  weight = 1
+
+[[main]]
+  name = "distfiles setup ↗"
+  url = "https://distfiles.gentoozh.org/distfiles-setup?lang=en"
+  parent = "use"
+  weight = 2
+
+[[main]]
+  name = "binpkg setup ↗"
+  url = "https://distfiles.gentoozh.org/binpkg-setup?lang=en"
+  parent = "use"
+  weight = 3
 
 [[main]]
   name = "Download"
   pageRef = "/download/"
-  weight = 20
+  parent = "use"
+  weight = 4
 
 [[main]]
   name = "Mirrors"
   pageRef = "/mirrorlist/"
-  weight = 30
-
-[[main]]
-  name = "Posts"
-  pageRef = "/posts/"
-  weight = 40
-
-[[main]]
-  name = "About"
-  pageRef = "/about/"
-  weight = 60
-
-# Infrastructure ▾ (community-run services)
-[[main]]
-  name = "Infrastructure"
-  identifier = "infra"
-  weight = 55
-
-[[main]]
-  name = "distfiles"
-  url = "https://distfiles.gentoozh.org/distfiles-setup?lang=en"
-  parent = "infra"
-  weight = 1
-
-[[main]]
-  name = "binpkg"
-  url = "https://distfiles.gentoozh.org/binpkg-setup?lang=en"
-  parent = "infra"
-  weight = 2
-
-[[main]]
-  name = "Costs"
-  pageRef = "/costs/"
-  parent = "infra"
+  parent = "use"
   weight = 5
-
-[[main]]
-  name = "Pastebin"
-  pageRef = "/paste/"
-  parent = "infra"
-  weight = 3
-
-[[main]]
-  name = "Status"
-  url = "https://grafana.gentoozh.org/public-dashboards/d5754b79824d4d8dbd8c70e13e54c11e"
-  parent = "infra"
-  weight = 4
-
-# More ▾ (expand/collapse)
-[[main]]
-  name = "More"
-  identifier = "more"
-  weight = 65
-
-[[main]]
-  name = "Contributing"
-  pageRef = "/contributing/"
-  parent = "more"
-  weight = 1
 
 [[main]]
   name = "FAQ"
   pageRef = "/faq/"
-  parent = "more"
-  weight = 2
+  parent = "use"
+  weight = 6
+
+[[main]]
+  name = "Posts"
+  pageRef = "/posts/"
+  weight = 20
+
+[[main]]
+  name = "Community"
+  identifier = "community"
+  weight = 30
+
+[[main]]
+  name = "Contributing"
+  pageRef = "/contributing/"
+  parent = "community"
+  weight = 1
 
 [[main]]
   name = "Contributors"
   pageRef = "/contributors/"
-  parent = "more"
+  parent = "community"
+  weight = 2
+
+[[main]]
+  name = "Forum ↗"
+  url = "https://forum.gentoozh.org/"
+  parent = "community"
   weight = 3
 
 [[main]]
-  name = "Changelog"
-  pageRef = "/changelog/"
-  parent = "more"
+  name = "Pastebin"
+  pageRef = "/paste/"
+  parent = "community"
   weight = 4
+
+[[main]]
+  name = "About"
+  identifier = "about"
+  weight = 40
+
+[[main]]
+  name = "About us"
+  pageRef = "/about/"
+  parent = "about"
+  weight = 1
+
+[[main]]
+  name = "Costs"
+  pageRef = "/costs/"
+  parent = "about"
+  weight = 2
 
 [[main]]
   name = "Acknowledgments"
   pageRef = "/thanks/"
-  parent = "more"
-  weight = 5
+  parent = "about"
+  weight = 3
 
 [[main]]
   name = "Logo"
   pageRef = "/logo/"
-  parent = "more"
+  parent = "about"
+  weight = 4
+
+[[main]]
+  name = "Status ↗"
+  url = "https://grafana.gentoozh.org/public-dashboards/d5754b79824d4d8dbd8c70e13e54c11e"
+  parent = "about"
+  weight = 5
+
+[[main]]
+  name = "Changelog"
+  pageRef = "/changelog/"
+  parent = "about"
   weight = 6
 
 [[main]]
@@ -111,7 +125,7 @@
 [[main]]
   name = "GitHub"
   weight = 80
-  url = "https://github.com/gentoo-zh/gentoo-zh.github.io"
+  url = "https://github.com/gentoo-zh"
   [main.params]
     icon = "github"
 
