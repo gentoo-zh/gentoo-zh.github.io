@@ -14,10 +14,10 @@ contactEmail = "zakk@gentoozh.org"
   displayLogo = true
   width = "wide"
   [navbar.logo]
-    path = "img/logo.webp"
-    dark = "img/logo.webp"
-    width = 44
-    height = 39
+    path = "img/logo-horizontal.svg"
+    dark = "img/logo-horizontal-dark.svg"
+    width = 111
+    height = 40
 
 [search]
   enable = true

@@ -81,4 +81,4 @@ title: "关于"
 
 ## 版权声明
 
-Logo 来自：[https://wiki.gentoo.org/wiki/Project:Artwork/Artwork#Genchu](https://wiki.gentoo.org/wiki/Project:Artwork/Artwork#Genchu)
+gentoo-zh 标志改编自 Gentoo 标志，以 [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/) 发布。Gentoo 标志的矢量版本版权归 Gentoo Foundation 与 Lennart Andre Rolland 所有。各版本文件与字形出处见[标志页](/logo/)。
