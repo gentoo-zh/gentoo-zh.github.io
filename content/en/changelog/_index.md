@@ -28,6 +28,11 @@ This page tracks the major updates to the site's content, so readers can follow 
 
 - New post **[What we have done recently, and what is still open](/posts/2026-08-26-community-update-and-todo/)**: what the past few months brought for the site, the chat platforms, the overlay and the documentation, and what the contribution process still lacks
 - A site-wide review fixed dead links, broken anchors, invalid HTML and drift in the Traditional Chinese wording
+- The theme moved to v0.3.23: adjusted colors, consistent styling for the homepage badge and entry buttons, better article typography, and accent-colored card icons
+- The mirror list in the [FAQ](/faq/) was corrected and its wording made less colloquial
+- All contributor avatars were downloaded again, with transparent backgrounds composited onto white
+- [Mirror list page](/mirrorlist/): CERNET added as a Git sync source for the official Gentoo repository
+- The [infrastructure costs page](/costs/) now records the build machine [Liang Yongxiang](/contributors/liangyongxiang/) provided earlier
 
 - The [mirror list page](/mirrorlist/) has been rewritten: the overlay's git sync source, distfiles and binary packages, plus Gentoo's official rsync, distfiles and binhost, each come with a copy-paste configuration block. Every block can switch between mirrors and the origin, and the selected address is written into the commands as you switch. Prefix users get their own settings
 - The binary package section on the [Overlay page](/overlay/) can switch between the stable and unstable channels: each channel lists its own `binrepos.conf` and keyword settings, and the blocks support mirror switching as well as both the manual and one-command setup paths

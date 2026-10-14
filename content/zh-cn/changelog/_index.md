@@ -28,6 +28,11 @@ slug: "changelog"
 
 - 新增文章 **[成果总结和最近状况的更新和一些待办](/posts/2026-08-26-community-update-and-todo/)**：最近几个月网站、交流平台、overlay 与文档的进展，以及贡献流程上还缺的指引
 - 全站审查：修正死链、失效锚点、非法 HTML 与繁体用词漂移
+- 主题升到 v0.3.23：调整配色，统一首页徽章与入口按钮的样式，改进文章排版，卡片图标改用强调色
+- [常见问题](/faq/)的镜像清单改准，文案去口语化
+- 贡献者头像全部重新下载，透明底统一合成到白底
+- [镜像列表页](/mirrorlist/)：Gentoo 官方仓库的 Git 同步源补上 CERNET
+- [基础设施开销页](/costs/)补记[梁永祥](/contributors/liangyongxiang/)此前提供的构建机
 
 - [镜像列表页](/mirrorlist/)重写：overlay 的 git 同步源、distfiles、二进制包，以及 Gentoo 官方的 rsync、distfiles 与 binhost，各自给出可直接复制的配置块；块内可切换镜像与源站，选中的地址会同时写进命令，另补上 Prefix 用户的配置
 - [Overlay 页](/overlay/)的二进制包一节可在 stable 与 unstable 两个频道之间切换：两者的 `binrepos.conf` 与接受关键字写法分开列出，配置块同样支持换源，以及手动编辑配置文件与一条命令快速配置两种方式
