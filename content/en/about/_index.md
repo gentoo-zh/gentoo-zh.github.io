@@ -81,4 +81,4 @@ Only the public pages (About, Download, Mirror list, Contributing) are fully in 
 
 ## Copyright notice
 
-Logo from: [https://wiki.gentoo.org/wiki/Project:Artwork/Artwork#Genchu](https://wiki.gentoo.org/wiki/Project:Artwork/Artwork#Genchu)
+The gentoo-zh logo is adapted from the Gentoo logo and released under [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/). The vector versions of the Gentoo logo are copyright Gentoo Foundation and Lennart Andre Rolland. The [logo page](/logo/) has every variant and the sources of the letterforms.

@@ -81,4 +81,4 @@ title: "關於"
 
 ## 版權聲明
 
-Logo 來自：[https://wiki.gentoo.org/wiki/Project:Artwork/Artwork#Genchu](https://wiki.gentoo.org/wiki/Project:Artwork/Artwork#Genchu)
+gentoo-zh 標誌改編自 Gentoo 標誌，以 [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/) 發布。Gentoo 標誌的向量版本版權歸 Gentoo Foundation 與 Lennart Andre Rolland 所有。各版本檔案與字形出處見[標誌頁](/logo/)。
