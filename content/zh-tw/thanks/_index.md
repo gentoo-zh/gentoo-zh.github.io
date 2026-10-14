@@ -28,7 +28,7 @@ description: "為 gentoo-zh 提供建置機與鏡像的機構。"
   img: "/img/thanks/cernet.svg"
   w: 64
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "教育網聯合鏡像站"
   sub: "中國大陸"
@@ -37,7 +37,7 @@ description: "為 gentoo-zh 提供建置機與鏡像的機構。"
   img: "/img/thanks/nju.webp"
   w: 64
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "南京大學"
   sub: "中國大陸"
@@ -46,7 +46,7 @@ description: "為 gentoo-zh 提供建置機與鏡像的機構。"
   img: "/img/thanks/nyist.webp"
   w: 65
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "南陽理工學院"
   sub: "中國大陸"
@@ -55,7 +55,7 @@ description: "為 gentoo-zh 提供建置機與鏡像的機構。"
   img: "/img/thanks/hernet.svg"
   w: 124
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "河南教育網"
   sub: "中國大陸"

@@ -28,7 +28,7 @@ Thanks to the organizations below for hosting the gentoo-zh build server and mir
   img: "/img/thanks/cernet.svg"
   w: 64
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "CERNET"
   sub: "mainland China"
@@ -37,7 +37,7 @@ Thanks to the organizations below for hosting the gentoo-zh build server and mir
   img: "/img/thanks/nju.webp"
   w: 64
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "Nanjing University"
   sub: "mainland China"
@@ -46,7 +46,7 @@ Thanks to the organizations below for hosting the gentoo-zh build server and mir
   img: "/img/thanks/nyist.webp"
   w: 65
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "NYIST"
   sub: "mainland China"
@@ -55,7 +55,7 @@ Thanks to the organizations below for hosting the gentoo-zh build server and mir
   img: "/img/thanks/hernet.svg"
   w: 124
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "HERNET"
   sub: "mainland China"

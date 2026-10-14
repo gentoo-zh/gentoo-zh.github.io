@@ -28,7 +28,7 @@ description: "为 gentoo-zh 提供构建机与镜像的机构。"
   img: "/img/thanks/cernet.svg"
   w: 64
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "教育网联合镜像站"
   sub: "中国大陆"
@@ -37,7 +37,7 @@ description: "为 gentoo-zh 提供构建机与镜像的机构。"
   img: "/img/thanks/nju.webp"
   w: 64
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "南京大学"
   sub: "中国大陆"
@@ -46,7 +46,7 @@ description: "为 gentoo-zh 提供构建机与镜像的机构。"
   img: "/img/thanks/nyist.webp"
   w: 65
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "南阳理工学院"
   sub: "中国大陆"
@@ -55,7 +55,7 @@ description: "为 gentoo-zh 提供构建机与镜像的机构。"
   img: "/img/thanks/hernet.svg"
   w: 124
   h: 64
-  bg: "white"
+  bg: "theme"
   img_h: "4rem"
   title: "河南教育网"
   sub: "中国大陆"
