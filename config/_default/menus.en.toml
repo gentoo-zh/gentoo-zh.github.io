@@ -56,7 +56,7 @@
 
 [[main]]
   name = "Status"
-  url = "https://status.gentoozh.org/"
+  url = "https://grafana.gentoozh.org/public-dashboards/d5754b79824d4d8dbd8c70e13e54c11e"
   parent = "infra"
   weight = 4
 
