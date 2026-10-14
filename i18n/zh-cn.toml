@@ -162,3 +162,27 @@ other = "域名"
 
 [gz_cost_domain_tw]
 other = "域名（tw）"
+[gz_cost_in_service]
+other = "使用期间"
+[gz_cost_subtotal]
+other = "小计"
+[gz_cost_mailbox]
+other = "邮箱服务"
+[gz_cost_forum_ipv4]
+other = "论坛 IPv4"
+[gz_cost_forum_ipv6]
+other = "论坛 IPv6"
+[gz_cost_mirror_osuosl]
+other = "美国镜像（OSUOSL）"
+[gz_cost_mail_osuosl]
+other = "论坛 SMTP（OSUOSL）"
+[gz_cost_arm_osuosl]
+other = "ARM 测试机（OSUOSL）"
+[gz_cost_stat_total]
+other = '累计支出'
+[gz_cost_stat_monthly]
+other = '目前每月'
+[gz_cost_stat_monthly_sub]
+other = '只计在用项目'
+[gz_cost_stat_asof]
+other = '截至 {{ .Date }}，只计 Zakk 承担的部分，随站点构建更新。'

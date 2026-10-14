@@ -17,7 +17,7 @@ Thanks to the organizations below for hosting the gentoo-zh build server and mir
   img_h: "5rem"
   title: "Oregon State University Open Source Lab"
   sub: "United States"
-  desc: "Provides the binary package build server, a gentoo-zh mirror, mail forwarding for the forum and an ARM test machine."
+  desc: "Provides the binary package build server, a gentoo-zh mirror, SMTP for the forum and an ARM test machine."
   meta: "osuosl.org"
 {{< /gz-tiles >}}
 

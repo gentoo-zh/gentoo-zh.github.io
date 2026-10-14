@@ -36,6 +36,28 @@ items:
     start: 2026-07-10
     usd_month: 16.5
     note: ""
+  - key: forum_ipv4
+    spec: "预留 IPv4，0.0045 USD / 小时"
+    spec_tw: "預留 IPv4，0.0045 USD / 小時"
+    spec_en: "Reserved IPv4, 0.0045 USD / hour"
+    amount: 3.285
+    currency: USD
+    period: monthly
+    approx: true
+    start: 2026-07-10
+    usd_month: 3.285
+    note: "按小时计费，按每月 730 小时折算"
+  - key: forum_ipv6
+    spec: "预留 IPv6，0.0015 USD / 小时"
+    spec_tw: "預留 IPv6，0.0015 USD / 小時"
+    spec_en: "Reserved IPv6, 0.0015 USD / hour"
+    amount: 1.095
+    currency: USD
+    period: monthly
+    approx: true
+    start: 2026-07-10
+    usd_month: 1.095
+    note: "按小时计费，按每月 730 小时折算"
   - key: matrix
     spec: "EPYC-Milan-v3 4C8G / 40G"
     spec_tw: "EPYC-Milan-v3 4C8G / 40G"
@@ -59,14 +81,47 @@ items:
     end: 2026-09-29
     note: "机器自有，500 USD 是每月的托管流量与电费，按用量估算；binhost 迁到 OSUOSL 后停用"
   - key: build_osuosl
-    spec: "俄勒冈州立大学开源实验室（OSUOSL）提供，同一机构另提供美国镜像"
-    spec_tw: "奧勒岡州立大學開源實驗室（OSUOSL）提供，同一機構另提供美國鏡像"
-    spec_en: "Provided by the Oregon State University Open Source Lab (OSUOSL), which also hosts the US mirror"
+    spec: "俄勒冈州立大学开源实验室（OSUOSL）提供"
+    spec_tw: "奧勒岡州立大學開源實驗室（OSUOSL）提供"
+    spec_en: "Provided by the Oregon State University Open Source Lab (OSUOSL)"
     amount: 0
     currency: USD
     period: monthly
     sponsored: true
     start: 2026-09-27
+    usd_month: 0
+    note: "赞助，不产生费用"
+  - key: mirror_osuosl
+    spec: "俄勒冈州立大学开源实验室（OSUOSL）提供的 gentoo-zh 美国镜像"
+    spec_tw: "奧勒岡州立大學開源實驗室（OSUOSL）提供的 gentoo-zh 美國鏡像"
+    spec_en: "The gentoo-zh US mirror, provided by OSUOSL"
+    amount: 0
+    currency: USD
+    period: monthly
+    sponsored: true
+    start: 2026-09-27
+    usd_month: 0
+    note: "赞助，不产生费用"
+  - key: mail_osuosl
+    spec: "OSUOSL 的 SMTP 服务，论坛用来发送注册验证与通知邮件"
+    spec_tw: "OSUOSL 的 SMTP 服務，論壇用來傳送註冊驗證與通知郵件"
+    spec_en: "OSUOSL's SMTP service, which the forum uses to send sign-up and notification mail"
+    amount: 0
+    currency: USD
+    period: monthly
+    sponsored: true
+    start: 2026-10-14
+    usd_month: 0
+    note: "赞助，不产生费用"
+  - key: arm_osuosl
+    spec: "OSUOSL 提供的 ARM 测试机"
+    spec_tw: "OSUOSL 提供的 ARM 測試機"
+    spec_en: "An ARM test machine provided by OSUOSL"
+    amount: 0
+    currency: USD
+    period: monthly
+    sponsored: true
+    start: 2026-10-14
     usd_month: 0
     note: "赞助，不产生费用"
   - key: mail
@@ -78,7 +133,18 @@ items:
     period: yearly
     start: 2026-07-10
     usd_month: 1.67
-    note: "论坛的注册验证与通知邮件"
+    end: 2026-10-14
+    note: "论坛的注册验证与通知邮件；改由 OSUOSL 转发后停用"
+  - key: mailbox
+    spec: "Purelymail 邮箱托管，供社区成员收发邮件"
+    spec_tw: "Purelymail 信箱託管，供社群成員收發郵件"
+    spec_en: "Purelymail mailbox hosting for community members"
+    amount: 10
+    currency: USD
+    period: yearly
+    start: 2026-10-14
+    usd_month: 0.83
+    note: ""
 
   - key: domain
     spec: "gentoozh.org，Porkbun，2026-11-29 到期"

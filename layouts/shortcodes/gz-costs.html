@@ -1,8 +1,10 @@
 {{- /* 开销表：从 data/gz_costs.yaml 渲染，改数字只改那一处。
 
-     两张表分开：
-       {{< gz-costs >}}                设备清单，只讲有哪些机器、什么配置、多少钱
-       {{< gz-costs table="ledger" >}} 算账，只讲已付几期、累计多少、折合各币种
+     三张表分开：
+       {{< gz-costs >}}                 设备清单，只讲有哪些机器、什么配置、多少钱
+       {{< gz-costs table="ledger" >}}  算账，只讲已付几期、累计多少、折合各币种
+       {{< gz-costs table="retired" >}} 已停用的项目，配置、使用期间与停用前的累计
+       {{< gz-costs table="summary" >}} 页首数字卡片：在用与已停用合起来的累计，以及当前月费
 
      累计按构建时间算：每月项按已开始的月数计，年付项按已付的年数计，所以表会随每次
      构建自动往前走。已付一列写出周期数，读者能自己核对累计是怎么来的：年付是一次付
@@ -10,13 +12,39 @@
 
      合计折成美元，因为各项原始币种不同；汇率写在数据文件的 rates 里。
 
-     写了 end 的项目已停用：累计只算到停用日，也不计入每月合计。 */ -}}
+     写了 end 的项目已停用：只进 retired 表，累计只算到停用日；前两张表只列在用的项目。 */ -}}
 {{- $table := .Get "table" | default "specs" -}}
+{{- $retired := eq $table "retired" -}}
 {{- $data := hugo.Data.gz_costs -}}
 {{- $r := $data.rates -}}
 {{- $lang := .Page.Language.Lang -}}
 {{- $monthly := 0.0 -}}
 {{- $accum := 0.0 -}}
+{{- if eq $table "summary" -}}
+{{- range $data.items -}}
+  {{- $start := time.AsTime .start -}}
+  {{- $until := cond (isset . "end") (time.AsTime .end) now -}}
+  {{- $months := add (mul (sub $until.Year $start.Year) 12) (sub (int $until.Month) (int $start.Month)) -}}
+  {{- if lt $until.Day $start.Day }}{{ $months = sub $months 1 }}{{ end -}}
+  {{- $usd := cond (eq .currency "EUR") (mul .amount $r.eur_usd) .amount -}}
+  {{- $n := cond (eq .period "monthly") (add $months 1) (add (div $months 12) 1) -}}
+  {{- $accum = add $accum (mul $usd $n) -}}
+  {{- if not (isset . "end") }}{{ $monthly = add $monthly .usd_month }}{{ end -}}
+{{- end -}}
+<div class="gz-stats">
+  <div class="gz-stat">
+    <span class="gz-stat-label">{{ i18n "gz_cost_stat_total" }}</span>
+    <span class="gz-stat-value">{{ lang.FormatNumber 2 $accum }}<small>USD</small></span>
+    <span class="gz-stat-sub">{{ lang.FormatNumber 0 (mul $accum $r.usd_cny) }} CNY · {{ lang.FormatNumber 0 (mul $accum $r.usd_twd) }} TWD · {{ lang.FormatNumber 0 (mul $accum $r.usd_hkd) }} HKD</span>
+  </div>
+  <div class="gz-stat">
+    <span class="gz-stat-label">{{ i18n "gz_cost_stat_monthly" }}</span>
+    <span class="gz-stat-value">{{ lang.FormatNumber 2 $monthly }}<small>USD</small></span>
+    <span class="gz-stat-sub">{{ i18n "gz_cost_stat_monthly_sub" }}</span>
+  </div>
+</div>
+<p class="gz-stats-note">{{ i18n "gz_cost_stat_asof" (dict "Date" (now.Format "2006-01-02")) }}</p>
+{{- else -}}
 <div class="gz-table-scroll">
 <table>
   <thead>
@@ -26,6 +54,12 @@
       <th>{{ i18n "gz_cost_spec" }}</th>
       <th>{{ i18n "gz_cost_price" }}</th>
       <th>{{ i18n "gz_cost_since" }}</th>
+      {{- else if $retired }}
+      <th>{{ i18n "gz_cost_spec" }}</th>
+      <th>{{ i18n "gz_cost_price" }}</th>
+      <th>{{ i18n "gz_cost_in_service" }}</th>
+      <th>{{ i18n "gz_cost_paid" }}</th>
+      <th>{{ i18n "gz_cost_accum" }}</th>
       {{- else }}
       <th>{{ i18n "gz_cost_price" }}</th>
       <th>{{ i18n "gz_cost_paid" }}</th>
@@ -36,6 +70,7 @@
   </thead>
   <tbody>
   {{- range $data.items }}
+    {{- if eq (isset . "end") $retired }}
     {{- $start := time.AsTime .start -}}
     {{- $ended := isset . "end" -}}
     {{- $until := cond $ended (time.AsTime .end) now -}}
@@ -54,7 +89,13 @@
       {{- if eq $table "specs" }}
       <td>{{ if and (eq $lang "en") .spec_en }}{{ .spec_en }}{{ else if and (eq $lang "zh-tw") .spec_tw }}{{ .spec_tw }}{{ else }}{{ .spec }}{{ end }}</td>
       <td>{{ $price }}</td>
-      <td>{{ .start }}{{ if $ended }}<br>{{ i18n "gz_cost_ended" }} {{ .end }}{{ end }}</td>
+      <td>{{ .start }}</td>
+      {{- else if $retired }}
+      <td>{{ if and (eq $lang "en") .spec_en }}{{ .spec_en }}{{ else if and (eq $lang "zh-tw") .spec_tw }}{{ .spec_tw }}{{ else }}{{ .spec }}{{ end }}</td>
+      <td>{{ $price }}</td>
+      <td>{{ .start }} – {{ .end }}</td>
+      <td>{{ if $free }}—{{ else }}{{ $n }} {{ cond (eq .period "monthly") (i18n "gz_cost_months") (i18n "gz_cost_years") }}{{ end }}</td>
+      <td>{{ if $free }}—{{ else }}{{ if .approx }}{{ i18n "gz_cost_approx" }}{{ end }}{{ lang.FormatNumber 2 $sub }} USD{{ end }}</td>
       {{- else }}
       <td>{{ $price }}</td>
       <td>{{ if $free }}—{{ else }}{{ $n }} {{ cond (eq .period "monthly") (i18n "gz_cost_months") (i18n "gz_cost_years") }}{{ end }}</td>
@@ -62,6 +103,7 @@
       <td>{{ if $free }}—{{ else }}{{ lang.FormatNumber 0 (mul $sub $r.usd_cny) }} CNY / {{ lang.FormatNumber 0 (mul $sub $r.usd_twd) }} TWD / {{ lang.FormatNumber 0 (mul $sub $r.usd_hkd) }} HKD{{ end }}</td>
       {{- end }}
     </tr>
+    {{- end }}
   {{- end }}
   </tbody>
   {{- if eq $table "ledger" }}
@@ -74,7 +116,16 @@
       <th>{{ lang.FormatNumber 0 (mul $accum $r.usd_cny) }} CNY / {{ lang.FormatNumber 0 (mul $accum $r.usd_twd) }} TWD / {{ lang.FormatNumber 0 (mul $accum $r.usd_hkd) }} HKD</th>
     </tr>
   </tfoot>
+  {{- else if $retired }}
+  <tfoot>
+    <tr>
+      <th>{{ i18n "gz_cost_subtotal" }}</th>
+      <th colspan="4">—</th>
+      <th>{{ i18n "gz_cost_approx" }}{{ lang.FormatNumber 2 $accum }} USD</th>
+    </tr>
+  </tfoot>
   {{- end }}
 </table>
 </div>
+{{- end }}
 {{- partial "gz-config-assets.html" . -}}
