@@ -16,5 +16,7 @@ github.com/Gentoo-zh/gentoozh-theme v0.3.22 h1:EIvGdu/S7XcBlTam793UuKBeUFSWKg096
 github.com/Gentoo-zh/gentoozh-theme v0.3.22/go.mod h1:o/R2klszEbaJH+qCftvCK9HWPm2hezgIBh4pELM4aCo=
 github.com/Gentoo-zh/gentoozh-theme v0.3.23 h1:/C6rW71IcvtD2yGDe3nDAVMnnEzfTwrzQF1y9Dmo6uM=
 github.com/Gentoo-zh/gentoozh-theme v0.3.23/go.mod h1:o/R2klszEbaJH+qCftvCK9HWPm2hezgIBh4pELM4aCo=
+github.com/Gentoo-zh/gentoozh-theme v0.3.24 h1:8KqAWf6EkyhgD3UROspEHvNNT7pmqxAVivdyGU7JbJU=
+github.com/Gentoo-zh/gentoozh-theme v0.3.24/go.mod h1:o/R2klszEbaJH+qCftvCK9HWPm2hezgIBh4pELM4aCo=
 github.com/imfing/hextra v0.12.3 h1:DZHY2rUWYteyzjlHi9r4n7Bb5e2Q+6LXe4C1Dqn0ZjM=
 github.com/imfing/hextra v0.12.3/go.mod h1:vi+yhpq8YPp/aghvJlNKVnJKcPJ/VyAEcfC1BSV9ARo=
