@@ -29,7 +29,7 @@ description: "為 gentoo-zh 提供建置機、鏡像與服務的機構。"
   w: 64
   h: 64
   bg: "theme"
-  img_h: "4rem"
+  img_h: "3.4rem"
   title: "教育網聯合鏡像站"
   sub: "中國大陸"
   meta: "mirrors.cernet.edu.cn"

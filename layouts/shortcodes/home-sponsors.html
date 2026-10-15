@@ -12,7 +12,7 @@
       {{- $name := cond (eq $lang "en") .name_en (cond (eq $lang "zh-tw") .name_tw .name) }}
       <li class="gz-sponsor{{ if .wide }} gz-sponsor-wide{{ end }}">
         <a href="{{ .href }}" target="_blank" rel="noreferrer">
-          <span class="gz-sponsor-logo">
+          <span class="gz-sponsor-logo"{{ with .scale }} style="--gz-logo-scale: {{ . }}"{{ end }}>
             <img{{ with .img_dark }} class="gz-only-light"{{ end }} src="{{ .img }}" alt="" loading="lazy">
             {{- with .img_dark }}<img class="gz-only-dark" src="{{ . }}" alt="" loading="lazy">{{ end }}
           </span>

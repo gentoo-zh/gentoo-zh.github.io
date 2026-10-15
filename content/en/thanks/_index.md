@@ -29,7 +29,7 @@ Thanks to the organizations below for hosting the gentoo-zh build server and mir
   w: 64
   h: 64
   bg: "theme"
-  img_h: "4rem"
+  img_h: "3.4rem"
   title: "CERNET"
   sub: "mainland China"
   meta: "mirrors.cernet.edu.cn"

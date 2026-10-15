@@ -7,7 +7,7 @@
 .gz-sponsor a { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; height: 100%; padding: 0.9rem 0.75rem; border-radius: 0.75rem; color: inherit; text-decoration: none; transition: background-color 0.15s ease; }
 .gz-sponsor a:hover { background: color-mix(in srgb, var(--primary) 8%, transparent); }
 .gz-sponsor-logo { display: flex; align-items: center; justify-content: center; height: 3.5rem; }
-.gz-sponsor-logo img { height: 100%; width: auto; max-width: 100%; object-fit: contain; }
+.gz-sponsor-logo img { height: calc(100% * var(--gz-logo-scale, 1)); width: auto; max-width: 100%; object-fit: contain; }
 .gz-sponsor-name { font-size: 0.8125rem; line-height: 1.35; text-align: center; color: var(--text-soft); }
 
 .gz-sponsor .gz-only-dark { display: none; }

@@ -1,4 +1,5 @@
-# 首页“致谢”一栏。顺序、名称与链接和致谢页（content/*/thanks/）保持一致，改一处要同步另一处。
+# 首页“致谢”一栏。scale 为显示高度的比例（默认 1），用来让各标志看起来一样大。
+# 顺序、名称与链接和致谢页（content/*/thanks/）保持一致，改一处要同步另一处。
 - href: "https://osuosl.org/"
   img: "/img/thanks/osuosl-logo-light.png"
   img_dark: "/img/thanks/osuosl-logo-dark.png"
@@ -8,6 +9,7 @@
   name_en: "Oregon State University Open Source Lab"
 - href: "https://mirrors.cernet.edu.cn/"
   img: "/img/thanks/cernet.svg"
+  scale: 0.85  # 图案铺满画布，同高时显得比其他标志大
   name: "教育网联合镜像站"
   name_tw: "教育網聯合鏡像站"
   name_en: "CERNET"
