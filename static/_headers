@@ -3,6 +3,18 @@
   Cache-Control: public, max-age=31536000, immutable
 /js/*
   Cache-Control: public, max-age=31536000, immutable
+# 根目录下的指纹资源：站点自己的 gz-*.min.<哈希>.css/js 与 Hextra 的 <语言>.search.min.<哈希>.js。
+# 占位符只匹配不含 / 的一段，且整条规则首尾锚定，所以只命中这几种文件名，碰不到 HTML。
+/gz-:name.min.:hash.css
+  Cache-Control: public, max-age=31536000, immutable
+/gz-:name.min.:hash.js
+  Cache-Control: public, max-age=31536000, immutable
+/:lang.search.min.:hash.js
+  Cache-Control: public, max-age=31536000, immutable
+# Hugo 处理过的图片（如贡献者头像 <名>_hu_<哈希>.webp）：哈希随原图内容与处理参数变化。
+# 规则以 .webp 结尾，贡献者页面本身（/contributors/<名>/）不会命中。
+/*_hu_:hash.webp
+  Cache-Control: public, max-age=31536000, immutable
 
 # 全站安全响应头
 /*
