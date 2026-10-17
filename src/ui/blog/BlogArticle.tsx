@@ -1,5 +1,6 @@
 // Adapted from the Astryx docsite (components/blog/BlogArticle.tsx, MIT, Meta Platforms, Inc.).
 import * as stylex from '@stylexjs/stylex';
+import {AspectRatio} from '@astryxdesign/core/AspectRatio';
 import {Breadcrumbs, BreadcrumbItem} from '@astryxdesign/core/Breadcrumbs';
 import {Button} from '@astryxdesign/core/Button';
 import {Divider} from '@astryxdesign/core/Divider';
@@ -18,8 +19,9 @@ import {layout} from '../../theme/layout.stylex';
 import {sectionHref, sectionOf} from '../chrome/sections';
 import {LinkCard} from '../LinkCard';
 import {AuthorByline} from './AuthorByline';
+import {PostCover} from './PostCover';
 import css from '../../markdown/MarkdownBody.module.css';
-import {BUTTON, CHIP, GRID, ICON, SPACE} from '../../theme/scale';
+import {BUTTON, CHIP, GRID, ICON, SPACE, TEMPLATE} from '../../theme/scale';
 
 const styles = stylex.create({
   section: {
@@ -27,6 +29,13 @@ const styles = stylex.create({
   },
   tagRow: {
     flexWrap: 'wrap',
+  },
+  cover: {
+    width: '100%',
+    borderRadius: 'var(--radius-container)',
+    overflow: 'hidden',
+    // Covers are transparent; the frame takes the card colour the home cards use.
+    backgroundColor: 'var(--color-home-card)',
   },
 });
 
@@ -63,6 +72,12 @@ export function BlogArticle({locale, post, body, pages, newer = null, older = nu
           </VStack>
           <Divider />
         </VStack>
+
+        {post.cover ? (
+          <AspectRatio ratio={TEMPLATE.coverRatio} fit="contain" xstyle={styles.cover}>
+            <PostCover image={post.cover} dark={post.coverDark} decoding="async" />
+          </AspectRatio>
+        ) : null}
 
         <VStack className={css.body}>
           <PostMarkdown locale={locale} pages={pages}>

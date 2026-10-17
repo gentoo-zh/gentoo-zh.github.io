@@ -14,19 +14,28 @@ interface Labels {
   up: string;
   lag: string;
   down: string;
+  unknown: string;
 }
 
+async function mirrorsByHost(): Promise<Map<string, StatusMirror>> {
+  try {
+    const response = await fetch(STATUS_API, {mode: 'cors', signal: AbortSignal.timeout(15_000)});
+    if (!response.ok) return new Map();
+    const data = (await response.json()) as {mirrors?: {list?: StatusMirror[]}};
+    return new Map((data.mirrors?.list ?? []).map(mirror => [mirror.host, mirror]));
+  } catch {
+    return new Map();
+  }
+}
+
+/** Replace every placeholder: a state when the API reports the host, the unknown dash otherwise. */
 export async function fillHealth(island: HTMLElement): Promise<void> {
   const labels = JSON.parse(island.dataset.gzLabels ?? '{}') as Labels;
-  const response = await fetch(STATUS_API, {mode: 'cors'});
-  if (!response.ok) return;
-  const data = (await response.json()) as {mirrors?: {list?: StatusMirror[]}};
-  const byHost = new Map((data.mirrors?.list ?? []).map(mirror => [mirror.host, mirror]));
+  const byHost = await mirrorsByHost();
   for (const cell of island.querySelectorAll<HTMLElement>('[data-gz-mirror-host]')) {
     const mirror = byHost.get(cell.dataset.gzMirrorHost ?? '');
-    if (mirror == null) continue;
-    const lag = Math.max(0, ...(mirror.trees ?? []).map(tree => tree.lagSec ?? 0));
-    const label = !mirror.up ? labels.down : lag > LAG_LIMIT_SEC ? labels.lag : labels.up;
-    if (typeof label === 'string' && label !== '') cell.textContent = label;
+    const lag = Math.max(0, ...(mirror?.trees ?? []).map(tree => tree.lagSec ?? 0));
+    const label = mirror == null ? labels.unknown : !mirror.up ? labels.down : lag > LAG_LIMIT_SEC ? labels.lag : labels.up;
+    cell.textContent = label ?? '';
   }
 }

@@ -16,7 +16,7 @@ import {PageHeader} from '../PageHeader';
 import type {Locale} from '../../i18n/locales';
 import {useMessage} from '../../i18n/useMessage';
 import {outlineItems} from '../../markdown/outline';
-import {PostMarkdown} from '../../markdown/PostMarkdown';
+import {PostMarkdown, type PostMarkdownProps} from '../../markdown/PostMarkdown';
 import {layout, media} from '../../theme/layout.stylex';
 import {BUTTON, GRID, ICON, SPACE, TEMPLATE} from '../../theme/scale';
 import css from '../../markdown/MarkdownBody.module.css';
@@ -100,6 +100,8 @@ export interface SectionPageProps {
   headerNavigation?: ReactNode;
   /** Table-page data region; Markdown keeps the docsite prose measure. */
   isDataPage?: boolean;
+  /** Wide data tables with sticky headers: no outline, so the tables get its width and nothing else sticks under the navbar. */
+  isTablePage?: boolean;
   /** Status dashboard supplies its own template header and full-width data frame. */
   isFullWidthDataPage?: boolean;
   /** Markdown body, front matter removed. */
@@ -112,6 +114,8 @@ export interface SectionPageProps {
   children?: ReactNode;
   /** Post paths that exist in this locale, for links into posts. */
   pages: ReadonlySet<string>;
+  /** Passed to the body's Markdown; see PostMarkdown. */
+  renderInlineCode?: PostMarkdownProps['renderInlineCode'];
 }
 
 /** A slot's content and the outline entries it adds, such as one per Stepper step. */
@@ -137,11 +141,11 @@ function bodyParts(title: string, body: string, slots: Readonly<Record<string, R
   });
 }
 
-export function SectionPage({locale, section, title, description, headerNavigation, body, slots = {}, outline: extra = [], isDataPage = false, isFullWidthDataPage = false, pages, children}: SectionPageProps) {
+export function SectionPage({locale, section, title, description, headerNavigation, body, slots = {}, outline: extra = [], isDataPage = false, isTablePage = false, isFullWidthDataPage = false, pages, renderInlineCode, children}: SectionPageProps) {
   const t = useMessage();
   const parts = body == null ? [] : bodyParts(title, body, slots);
   const outline = [...parts.flatMap(part => (part.kind === 'markdown' ? outlineItems(part.source) : part.outline)), ...extra];
-  const hasOutline = outline.length > 0;
+  const hasOutline = outline.length > 0 && !isTablePage;
   const className = isFullWidthDataPage ? undefined : css.body;
   const article = (
     <Section maxWidth={isFullWidthDataPage ? undefined : isDataPage ? layout.contentMaxWidth : layout.proseMaxWidth} padding={isFullWidthDataPage ? TEMPLATE.zero : SPACE.page} xstyle={isFullWidthDataPage ? [styles.dashboard, pageStart.start] : hasOutline ? styles.sectionInRow : styles.section}>
@@ -164,13 +168,14 @@ export function SectionPage({locale, section, title, description, headerNavigati
         ) : null}
         <VStack gap={SPACE.section} className={className}>
           {parts.length === 0 ? null : (
-            <VStack gap={SPACE.inline}>
+            // Slots sit in the article flow, so they keep the Markdown block gap (16px) to the prose around them.
+            <VStack gap={SPACE.block}>
           {parts.map((part, index) =>
             part.kind === 'slot' ? (
               <VStack key={index}>{part.node}</VStack>
             ) : part.source.trim() === '' ? null : (
               <VStack key={index} xstyle={styles.prose}>
-                <MarkdownBlock locale={locale} pages={pages}>{part.source}</MarkdownBlock>
+                <MarkdownBlock locale={locale} pages={pages} renderInlineCode={renderInlineCode}>{part.source}</MarkdownBlock>
               </VStack>
             ),
           )}
@@ -242,13 +247,13 @@ function PageFooter({locale, section}: {locale: Locale; section: SectionId}) {
 }
 
 /** Render page fragments with the same Markdown contracts as posts. */
-export function MarkdownBlock({locale, pages, children}: {locale: Locale; pages: ReadonlySet<string>; children: string}) {
+export function MarkdownBlock({locale, pages, renderInlineCode, children}: {locale: Locale; pages: ReadonlySet<string>; renderInlineCode?: PostMarkdownProps['renderInlineCode']; children: string}) {
   return (
     <VStack>
       {children.split(/^<!-- anchor:([^\s<>]+) -->$/m).map((part, index) => (
         <Fragment key={index}>
           {index % 2 === 1 ? <VStack id={part} aria-hidden="true" xstyle={styles.anchor} /> : part.trim() === '' ? null : (
-            <PostMarkdown locale={locale} pages={pages}>{part}</PostMarkdown>
+            <PostMarkdown locale={locale} pages={pages} renderInlineCode={renderInlineCode}>{part}</PostMarkdown>
           )}
         </Fragment>
       ))}

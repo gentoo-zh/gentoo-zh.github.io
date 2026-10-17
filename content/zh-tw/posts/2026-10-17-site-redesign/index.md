@@ -2,6 +2,10 @@
 title: "gentoo-zh 網站改版"
 description: "主站從 Hugo 遷到 Astro 與 Astryx，下載站說明與服務狀態併入主站；GigOS 暫停提供；OSUOSL 提供 ARM 測試機。"
 date: 2026-10-17
+cover: "cover.webp"
+coverAlt: "由貢獻者頭像拼成的 gentoo-zh 標誌"
+pinned: true
+tag: "公告"
 tags: ["announcement", "website"]
 authors:
   - name: Zakk

@@ -2,6 +2,9 @@
 title: "The binhost moves to OSUOSL"
 description: "The binhost build machine moved to OSUOSL, which also added a US mirror."
 date: 2026-09-30
+cover: "cover.webp"
+coverDark: "cover-dark.webp"
+coverAlt: "gentoo-zh and OSUOSL logos"
 featured: true
 tags: ["announcement", "binhost"]
 authors:

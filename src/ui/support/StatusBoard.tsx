@@ -3,6 +3,7 @@ import type {StatusDotProps} from '@astryxdesign/core/StatusDot';
 import {Button} from '@astryxdesign/core/Button';
 import {Divider} from '@astryxdesign/core/Divider';
 import {Fragment} from 'react';
+import {Skeleton} from '@astryxdesign/core/Skeleton';
 import {StatusDot} from '@astryxdesign/core/StatusDot';
 import {InternationalizationProvider} from '@astryxdesign/core/i18n';
 import {HStack, VStack} from '@astryxdesign/core/Layout';
@@ -10,7 +11,7 @@ import {Heading, Text} from '@astryxdesign/core/Text';
 import type {MessageKey} from '../../i18n/locales';
 import {useMessage} from '../../i18n/useMessage';
 import {SITE} from '../../site';
-import {BUTTON, SPACE} from '../../theme/scale';
+import {BUTTON, GRID, SPACE} from '../../theme/scale';
 
 /** The live status endpoint; it sends `access-control-allow-origin: *`. */
 export const STATUS_API = 'https://status.gentoozh.org/api/status';
@@ -103,7 +104,7 @@ export function useServiceName() {
   return (site: StatusSite) => (isKnown(site.key) ? t(`gz.status.service.${site.key}` as MessageKey) : site.name);
 }
 
-function ServiceRow({site, languageTag}: {site: StatusSite; languageTag: string}) {
+function ServiceRow({site, languageTag, loading}: {site: StatusSite; languageTag: string; loading: boolean}) {
   const t = useMessage();
   const name = useServiceName();
   const level = statusLevel(site);
@@ -113,12 +114,12 @@ function ServiceRow({site, languageTag}: {site: StatusSite; languageTag: string}
       <HStack gap={SPACE.tight} vAlign="center">
         <StatusDot variant={statusVariant(level)} label={t(`gz.status.level.${level}`)} />
         <Heading level={3}>{name(site)}</Heading>
-        <Text type="supporting" color="secondary">{t(`gz.status.level.${level}`)}</Text>
+        {loading ? <Skeleton width={GRID.statusCell} height={12} radius={1} /> : <Text type="supporting" color="secondary">{t(`gz.status.level.${level}`)}</Text>}
       </HStack>
-      <HStack gap={SPACE.block} wrap="wrap">
+      {loading ? <Skeleton width={GRID.controlSkeleton} height={12} radius={1} index={1} /> : <HStack gap={SPACE.block} wrap="wrap">
         {pct == null ? null : <Text type="supporting" color="secondary" hasTabularNumbers>{t('gz.status.uptime', {pct})}</Text>}
         {!site.up || site.ms == null ? null : <Text type="supporting" color="secondary" hasTabularNumbers>{t('gz.status.latency', {ms: site.ms})}</Text>}
-      </HStack>
+      </HStack>}
     </HStack>
   );
 }
@@ -144,7 +145,7 @@ export function StatusBoard({data, languageTag, compact = true, failed = false}:
         {sites.map((site, index) => (
           <Fragment key={site.key}>
             {index === 0 ? null : <Divider />}
-            <ServiceRow site={site} languageTag={languageTag} />
+            <ServiceRow site={site} languageTag={languageTag} loading={data == null && !failed} />
           </Fragment>
         ))}
       </VStack>

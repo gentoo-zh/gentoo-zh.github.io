@@ -32,5 +32,5 @@ Gentoo 曾經先後有過兩次活躍的中文社群，但在 2010 年左右已�
 
 第二階段需要完成的工作：
 
-* gentoo-zh 源的鏡像
+* gentoo-zh overlay 的鏡像
 * Portage 樹的 SquashFS 歸檔

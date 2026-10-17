@@ -2,6 +2,9 @@
 title: "binhost 迁到 OSUOSL"
 description: "binhost 构建机迁到 OSUOSL，并新增美国镜像。"
 date: 2026-09-30
+cover: "cover.webp"
+coverDark: "cover-dark.webp"
+coverAlt: "gentoo-zh 标志与 OSUOSL 标志"
 featured: true
 tags: ["announcement", "binhost"]
 authors:

@@ -9,6 +9,7 @@ import {List, ListItem} from '@astryxdesign/core/List';
 import {MetadataList, MetadataListItem} from '@astryxdesign/core/MetadataList';
 import {Table, pixel, proportional} from '@astryxdesign/core/Table';
 import type {TableColumn, TablePlugin} from '@astryxdesign/core/Table';
+import {Skeleton} from '@astryxdesign/core/Skeleton';
 import {Text} from '@astryxdesign/core/Text';
 import type {Mirrors} from '../../data/schemas';
 import type {Locale} from '../../i18n/locales';
@@ -19,12 +20,15 @@ import {media} from '../../theme/layout.stylex';
 import {BUTTON, CODE, GRID, SPACE, STACK} from '../../theme/scale';
 import {ArrowRight} from '../chrome/icons';
 import {codeTokenizer} from '../../markdown/codeTokenizer';
+import {articleTable} from '../data/stickyHeader';
 
 const METADATA_LABEL = {position: 'top'} as const;
 
 const styles = stylex.create({
   wide: {display: {default: 'none', [media.tablet]: 'block'}},
   narrow: {display: {default: 'flex', [media.tablet]: 'none'}},
+  // The placeholder MirrorHealth.astro copies into each health cell once its script runs.
+  pending: {display: 'none'},
 });
 
 interface MirrorRow extends Record<string, unknown> {
@@ -64,10 +68,11 @@ const WIDE_ONLY: TablePlugin<MirrorRow> = {
   transformScrollWrapper: props => ({...props, xstyle: [...props.xstyle, styles.wide]}),
 };
 
+/** The unknown dash until scripting swaps in the pending placeholder; mirrorHealth.ts then writes the state. */
 function Health({host}: {host?: string}) {
   const t = useMessage();
   return (
-    <Text color="secondary" data-gz-mirror-host={host ?? ''}>
+    <Text as="div" color="secondary" data-gz-mirror-host={host ?? ''}>
       {t('gz.mirror.health.unknown')}
     </Text>
   );
@@ -129,6 +134,7 @@ export function MirrorTable({locale, mirrors}: {locale: Locale; mirrors: Mirrors
         up: t('gz.mirror.health.up'),
         lag: t('gz.mirror.health.lag'),
         down: t('gz.mirror.health.down'),
+        unknown: t('gz.mirror.health.unknown'),
       })}
     >
       <HStack gap={SPACE.inline} vAlign="center" wrap="wrap">
@@ -148,7 +154,10 @@ export function MirrorTable({locale, mirrors}: {locale: Locale; mirrors: Mirrors
           icon={<ArrowRight />}
         />
       </HStack>
-      <Table<MirrorRow> data={rows} columns={columns} idKey="id" density="balanced" dividers="rows" hasHover plugins={{wideOnly: WIDE_ONLY}} />
+      <VStack xstyle={styles.pending} data-gz-health-pending>
+        <Skeleton width={GRID.skeletonText} height={12} radius={1} />
+      </VStack>
+      <Table<MirrorRow> data={rows} columns={columns} idKey="id" density="balanced" dividers="rows" hasHover plugins={{wideOnly: WIDE_ONLY, inArticle: articleTable<MirrorRow>()}} />
       <VStack xstyle={styles.narrow}>
         <List hasDividers edgeCompensation="inline">
           {rows.map(item => (

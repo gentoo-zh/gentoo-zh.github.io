@@ -1,4 +1,4 @@
-// Editorial rows use the library template's content hierarchy without synthetic covers.
+// Editorial rows use the library template's content hierarchy; a cover shows whole, in its 1200:630 frame.
 import * as stylex from '@stylexjs/stylex';
 import {spacingVars, radiusVars, typeScaleVars} from '@astryxdesign/core/theme/tokens.stylex';
 import {AspectRatio} from '@astryxdesign/core/AspectRatio';
@@ -13,6 +13,7 @@ import type {Locale} from '../../i18n/locales';
 import {routes} from '../../i18n/routes';
 import {media} from '../../theme/layout.stylex';
 import {CHIP, SPACE, TEMPLATE} from '../../theme/scale';
+import {PostCover} from './PostCover';
 
 const styles = stylex.create({
   row: {
@@ -38,8 +39,9 @@ const styles = stylex.create({
     borderRadius: radiusVars['--radius-container'],
     overflow: 'hidden',
     marginBlockStart: spacingVars['--spacing-1'],
+    // Covers are transparent; the frame takes the card colour the home cards use.
+    backgroundColor: 'var(--color-home-card)',
   },
-  image: {width: '100%', height: '100%', objectFit: 'cover'},
 });
 
 export function BlogCard({locale, post}: {locale: Locale; post: PostSummary}) {
@@ -60,8 +62,8 @@ export function BlogCard({locale, post}: {locale: Locale; post: PostSummary}) {
         </VStack>
       }
       endContent={post.image ? (
-        <AspectRatio ratio={TEMPLATE.libraryImageRatio} xstyle={styles.cover}>
-          <img src={post.image.src} alt={post.image.alt} data-blog-cover={post.image.src} width={TEMPLATE.libraryImageWidth} height={TEMPLATE.libraryImageHeight} loading="lazy" decoding="async" {...stylex.props(styles.image)} />
+        <AspectRatio ratio={TEMPLATE.coverRatio} fit="contain" xstyle={styles.cover}>
+          <PostCover image={post.image} dark={post.coverDark} thumbnail width={TEMPLATE.coverThumbWidth} height={TEMPLATE.coverThumbHeight} loading="lazy" decoding="async" />
         </AspectRatio>
       ) : undefined}
     />

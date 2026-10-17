@@ -17,6 +17,7 @@ import {outlineItems} from '../../markdown/outline';
 import {BUTTON, COSTS, ICON, SPACE, TEMPLATE} from '../../theme/scale';
 import {SectionPage, type SectionPageProps} from '../section/SectionPage';
 import {History, Server, Wallet, type SvgProps} from '../chrome/icons';
+import {articleTable} from '../data/stickyHeader';
 
 type Props = Omit<SectionPageProps, 'slots' | 'children'> & {body: string; report: CostReport; summary: ReactNode};
 type Row = CostRow & Record<string, unknown>;
@@ -83,10 +84,10 @@ function CostGroup({id, icon: Glyph, title, count, summary, children}: {id: stri
 function CostTable({rows, columns, compactColumns, label}: {rows: Row[]; columns: TableColumn<Row>[]; compactColumns: TableColumn<Row>[]; label: string}) {
   return <>
     <VStack xstyle={styles.wide}>
-      <Table data={rows} columns={columns} idKey="key" density="compact" dividers="rows" textOverflow="wrap" verticalAlign="top" aria-label={label} />
+      <Table data={rows} columns={columns} idKey="key" density="compact" dividers="rows" textOverflow="wrap" verticalAlign="top" aria-label={label} plugins={{inArticle: articleTable<Row>()}} />
     </VStack>
     <VStack xstyle={styles.compact} data-pagefind-ignore>
-      <Table data={rows} columns={compactColumns} idKey="key" density="compact" dividers="rows" textOverflow="wrap" verticalAlign="top" aria-label={label} />
+      <Table data={rows} columns={compactColumns} idKey="key" density="compact" dividers="rows" textOverflow="wrap" verticalAlign="top" aria-label={label} plugins={{inArticle: articleTable<Row>()}} />
     </VStack>
   </>;
 }

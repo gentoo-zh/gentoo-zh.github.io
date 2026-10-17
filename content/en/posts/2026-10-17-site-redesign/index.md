@@ -2,6 +2,10 @@
 title: "gentoo-zh website redesign"
 description: "The main site moves from Hugo to Astro and Astryx and absorbs the download site's guides and the service status page; GigOS is paused; OSUOSL provides an ARM test machine."
 date: 2026-10-17
+cover: "cover.webp"
+coverAlt: "The gentoo-zh logo made of contributors' avatars"
+pinned: true
+tag: "Announcement"
 tags: ["announcement", "website"]
 authors:
   - name: Zakk

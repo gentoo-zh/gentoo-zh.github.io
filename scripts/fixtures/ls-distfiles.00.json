@@ -1,0 +1,11 @@
+[
+{ "name":"Lekton-nf-3.5.1.tar.xz", "type":"file", "mtime":"Fri, 21 Aug 2026 08:18:06 GMT", "size":2194136 },
+{ "name":"archspec-0.2.6-json.tar.gz", "type":"file", "mtime":"Wed, 01 Jul 2026 20:05:09 GMT", "size":25319 },
+{ "name":"bore-0.6.0-crates.tar.xz", "type":"file", "mtime":"Mon, 09 Jun 2025 20:36:20 GMT", "size":11192644 },
+{ "name":"cachyos-kernel-patches-333b9269015584d1b31f75af9e23d838d7b3d0fe-7.2-muqss.patch", "type":"file", "mtime":"Fri, 16 Oct 2026 19:17:09 GMT", "size":680886 },
+{ "name":"hwcodec-778df1f99597722473b29443bac22ae6c23946fe.gh.tar.gz", "type":"file", "mtime":"Thu, 25 Jun 2026 00:35:18 GMT", "size":103054 },
+{ "name":"mio-1.2.0.crate", "type":"file", "mtime":"Sun, 28 Jun 2026 16:37:40 GMT", "size":106403 },
+{ "name":"patch-7.2.8-xanmod1.xz", "type":"file", "mtime":"Sat, 26 Sep 2026 00:48:32 GMT", "size":1553448 },
+{ "name":"rathole-0.5.0-crates.tar.xz", "type":"file", "mtime":"Tue, 23 Dec 2025 09:42:27 GMT", "size":20181840 },
+{ "name":"termusic-0.13.2-crates.tar.xz", "type":"file", "mtime":"Sun, 12 Jul 2026 08:41:42 GMT", "size":67587996 }
+]

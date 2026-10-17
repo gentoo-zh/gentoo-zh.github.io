@@ -27,6 +27,16 @@ const posts = defineCollection({
       featured: z.boolean().optional(),
       image: postImage.optional(),
       cover: postImage.optional(),
+      /** The cover's form for the dark theme, a path in the bundle; covers that read on both themes leave it out. */
+      coverDark: z.string().optional(),
+      /** Alt text for a string `cover`; an object cover carries its own. */
+      coverAlt: z.string().optional(),
+      /** A short label such as an announcement marker, shown on the home page's lead card. */
+      tag: z.string().optional(),
+      /** Lead the home page's latest posts regardless of date. */
+      pinned: z.boolean().optional(),
+      /** CSS object-position for the cover on the home lead card, which fills its frame. */
+      coverPosition: z.string().optional(),
       summary: z.string().optional(),
     })
     .strict(),

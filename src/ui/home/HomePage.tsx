@@ -5,12 +5,16 @@ import {AspectRatio} from '@astryxdesign/core/AspectRatio';
 import {Avatar} from '@astryxdesign/core/Avatar';
 import {AvatarGroup, AvatarGroupOverflow} from '@astryxdesign/core/AvatarGroup';
 import {Button} from '@astryxdesign/core/Button';
+import {Card} from '@astryxdesign/core/Card';
 import {ClickableCard} from '@astryxdesign/core/ClickableCard';
 import {Grid} from '@astryxdesign/core/Grid';
 import {Icon} from '@astryxdesign/core/Icon';
 import {HStack, VStack} from '@astryxdesign/core/Layout';
 import {Link} from '@astryxdesign/core/Link';
 import {List, ListItem} from '@astryxdesign/core/List';
+import {Section} from '@astryxdesign/core/Section';
+import {Skeleton} from '@astryxdesign/core/Skeleton';
+import {StatusDot} from '@astryxdesign/core/StatusDot';
 import {Heading, Text} from '@astryxdesign/core/Text';
 import {Timestamp} from '@astryxdesign/core/Timestamp';
 import type {PostSummary} from '../../content/posts';
@@ -21,12 +25,18 @@ import {useMessage} from '../../i18n/useMessage';
 import {SITE} from '../../site';
 import {homeTheme} from '../../theme/home.stylex';
 import {homeMedia} from '../../theme/layout.stylex';
-import {AVATAR, BUTTON, ICON, SPACE, TEMPLATE} from '../../theme/scale';
+import {AVATAR, BUTTON, GRID, ICON, SPACE, TEMPLATE} from '../../theme/scale';
 import {ArrowRight, HeartHandshake, Hash} from '../chrome/icons';
 import {DiscourseLogo, TelegramLogo, MatrixLogo} from '../chrome/channelLogos';
+import {IconTile} from '../chrome/IconTile';
 import {EntryIcon} from '../section/entryIcons';
+import {LandingCard} from '../section/LandingBlocks';
+import {PostCover} from '../blog/PostCover';
 import {entryLink, sectionHref, sectionOf, type SectionId, type SectionPageId} from '../chrome/sections';
+import {STATUS_API, type StatusLevel} from '../support/StatusBoard';
 import {homeStyles as s} from './home.styles';
+import {HOME_LIVE_ATTRIBUTE} from './homeLive';
+import {HOME_STATUS_ATTRIBUTE} from './homeStatus';
 
 export interface HomeContributor {name: string; avatar: string; href: string}
 export interface HomePageProps {
@@ -53,29 +63,43 @@ const CHANNELS = [
   {id: 'forum', logo: DiscourseLogo},
   {id: 'contribute', logo: HeartHandshake},
 ] as const;
+/** StatusDot variants per status level; a healthy state stays quiet (dot + supporting text, not a solid badge). The live script reveals one. */
+const STATUS_DOT = {up: 'success', down: 'error', unknown: 'neutral'} as const satisfies Record<StatusLevel, string>;
 
+/** Server markup holds a skeleton; HomeStatus.astro swaps in the indicator for what the status API reports. */
+function StatusIndicator() {
+  const t = useMessage();
+  return <HStack as="span" vAlign="center" {...{[HOME_STATUS_ATTRIBUTE]: ''}} data-api={STATUS_API}>
+    <HStack as="span" data-loading xstyle={s.toggle}><Skeleton width={GRID.statusCell / 2} height={16} radius="rounded" /></HStack>
+    {(Object.keys(STATUS_DOT) as StatusLevel[]).map(level => <HStack as="span" key={level} data-level={level} hidden gap={SPACE.tight} vAlign="center" xstyle={s.toggle}><StatusDot variant={STATUS_DOT[level]} label={t(`gz.status.level.${level}`)} /><Text type="supporting" color="secondary">{t(`gz.status.level.${level}`)}</Text></HStack>)}
+  </HStack>;
+}
+
+/** Content - Card Grid (library): the cover on top, then title and date. */
 function PostCard({post, locale}: {post: PostSummary; locale: Locale}) {
-  return <ClickableCard href={routes.post(locale, post.slug)} label={post.title} padding={SPACE.page} xstyle={s.card}>
-    <VStack gap={SPACE.tight} xstyle={s.fill}>
-      {post.image && <AspectRatio ratio={TEMPLATE.libraryImageRatio} xstyle={s.cover}><img src={post.image.src} alt={post.image.alt} loading="lazy" decoding="async" {...stylex.props(s.image)} /></AspectRatio>}
-      <Heading level={3}>{post.title}</Heading>
-      <Text color="secondary" xstyle={s.excerpt}>{post.description}</Text>
-      <Text type="supporting" color="secondary" xstyle={s.postDate}><Timestamp value={post.date} format="date" /></Text>
-    </VStack>
+  return <ClickableCard href={routes.post(locale, post.slug)} label={post.title} padding={TEMPLATE.zero} xstyle={s.card}>
+    {post.image && <AspectRatio ratio={TEMPLATE.coverRatio} fit="cover" xstyle={s.cover}><PostCover image={post.image} dark={post.coverDark} loading="lazy" decoding="async" /></AspectRatio>}
+    <Section variant="transparent" padding={SPACE.block}>
+      <VStack gap={SPACE.hairline}>
+        <Heading level={3} maxLines={2}>{post.title}</Heading>
+        <Text type="supporting" color="secondary"><Timestamp value={post.date} format="date" /></Text>
+      </VStack>
+    </Section>
   </ClickableCard>;
 }
 
 export function HomePage({locale, posts, contributors, contributorCount, commits, days, sponsors}: HomePageProps) {
   const t = useMessage();
   const number = new Intl.NumberFormat(LANGUAGE_TAG[locale]);
-  const entry = (section: SectionId, id: SectionPageId) => entryLink(locale, sectionOf(section).pages.find(page => page.id === id)!).href;
+  const page = (section: SectionId, id: SectionPageId) => sectionOf(section).pages.find(item => item.id === id)!;
+  const entry = (section: SectionId, id: SectionPageId) => entryLink(locale, page(section, id)).href;
   const tagline = t('gz.home.tagline');
   const at = tagline.indexOf(BRAND);
   const headline = <>{at < 0 ? tagline : tagline.slice(0, at)}{at >= 0 && <Text type="inherit" weight="semibold" xstyle={s.brandLine}>{BRAND}</Text>}{at >= 0 && tagline.slice(at + BRAND.length)}</>;
   const metrics = [
     {value: contributorCount, label: t('gz.homeE.people'), href: routes.page(locale, 'contributors')},
-    {value: commits, label: t('gz.homeE.commits'), href: 'https://github.com/gentoo-zh/overlay/commits/master'},
-    {value: days, label: t('gz.homeE.days'), href: routes.post(locale, '2013-02-05-gentoo-zh-community-has-been-founded')},
+    {value: commits, label: t('gz.homeE.commits'), href: 'https://github.com/gentoo-zh/overlay/commits/master', live: 'commits'},
+    {value: days, label: t('gz.homeE.days'), href: routes.post(locale, '2013-02-05-gentoo-zh-community-has-been-founded'), live: 'days'},
   ];
   const links = {
     telegramChannel: {label: t('gz.homeF.telegramChannel'), handle: '@gentoocn', href: SITE.telegramChannel},
@@ -90,28 +114,25 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
     <Button label={t('gz.homeF.liveIso')} variant="secondary" size={BUTTON.cta} href={sectionHref(locale, sectionOf('download'))} xstyle={s.button} />
   </Grid>;
   const avatarGroup = <AvatarGroup size={AVATAR.card}>
-    {contributors.slice(0, AVATARS).map(person => <Avatar key={person.href} src={person.avatar} name={person.name} />)}
-    <AvatarGroupOverflow count={Math.max(0, contributorCount - AVATARS)} />
+    {contributors.slice(0, AVATARS).map(person => <Avatar key={person.href} src={person.avatar} name={person.name} xstyle={s.avatar} />)}
+    <AvatarGroupOverflow count={Math.max(0, contributorCount - AVATARS)} xstyle={[s.avatar, s.overflowCount]} />
   </AvatarGroup>;
-  // Each group runs from the most used entry down.
-  const groups = [
-    {id: 'setup', items: [['docs', 'overlay'], ['docs', 'binpkg'], ['docs', 'distfilesSetup'], ['docs', 'gentooRepoSetup'], ['docs', 'gentooDistfilesSetup'], ['docs', 'gentooBinpkgSetup']]},
-    {id: 'services', items: [['download', 'liveIso'], ['download', 'packages'], ['download', 'mirrorlist'], ['support', 'paste'], ['support', 'status'], ['download', 'officialMedia']]},
-  ] as const;
-  const featureGroups = groups.map(group => ({
-    id: group.id, title: t(`gz.homeF.group.${group.id}`),
-    items: group.items.map(([section, id]) => ({id, title: t(`gz.nav.${id}`), description: t(`gz.section.sub.${id}`), href: entry(section, id)})),
-  }));
+  const entryOf = (section: SectionId, id: SectionPageId) => ({id, title: t(`gz.nav.${id}`), description: t(`gz.section.sub.${id}`), icon: <EntryIcon id={id} />, link: entryLink(locale, page(section, id))});
+  // Three ranks: the gentoo-zh sources as landing cards (Overlay twice as wide), the official sources as one
+  // list card, then downloads and services as compact tiles. Each group runs from the most used entry down.
+  const sources = (['overlay', 'binpkg', 'distfilesSetup'] as const).map(id => entryOf('docs', id));
+  const official = (['gentooRepoSetup', 'gentooDistfilesSetup', 'gentooBinpkgSetup'] as const).map(id => entryOf('docs', id));
+  const services = ([['download', 'packages'], ['download', 'mirrorlist'], ['download', 'liveIso'], ['download', 'officialMedia'], ['support', 'paste'], ['support', 'status']] as const).map(([section, id]) => entryOf(section, id));
   return <VStack gap={TEMPLATE.zero} data-home xstyle={[homeTheme.scope, s.scope]}>
     <VStack data-home-hero xstyle={s.hero}>
       <Grid xstyle={s.heroColumns}>
         <VStack gap={SPACE.page} xstyle={s.heroText}>
-          <Heading level={1} type="display-1" textWrap="balance" id="home-title" xstyle={s.headline}>{headline}</Heading>
+          <Heading level={1} type="display-1" weight="normal" textWrap="balance" id="home-title" xstyle={s.headline}>{headline}</Heading>
           <Text type="large" weight="normal" color="secondary">{t('gz.homeF.intro')}</Text>
           {buttons}
           <HStack gap={SPACE.group} xstyle={s.metrics}>
             {metrics.map(metric => <Link key={metric.href} href={metric.href} color="inherit" aria-label={`${metric.label}: ${number.format(metric.value)}`}>
-              <VStack gap={TEMPLATE.zero}>
+              <VStack gap={TEMPLATE.zero} {...('live' in metric ? {[HOME_LIVE_ATTRIBUTE]: metric.live} : {})}>
                 <Text type="display-3" weight="semibold">{number.format(metric.value)}</Text>
                 <Text type="supporting" color="secondary">{metric.label}</Text>
               </VStack>
@@ -132,49 +153,72 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
       </Grid>
       <Link href={routes.page(locale, 'contributors')} aria-label={t('gz.homeF.contributors')} display="block" xstyle={s.contributors}>
         <AvatarGroup size={AVATAR.card}>
-          {contributors.slice(0, AVATARS).map(person => <Avatar key={person.href} src={person.avatar} name={person.name} tooltip={false} />)}
-          <AvatarGroupOverflow count={Math.max(0, contributorCount - Math.min(AVATARS, contributors.length))} />
+          {contributors.slice(0, AVATARS).map(person => <Avatar key={person.href} src={person.avatar} name={person.name} tooltip={false} xstyle={s.avatar} />)}
+          <AvatarGroupOverflow count={Math.max(0, contributorCount - Math.min(AVATARS, contributors.length))} xstyle={[s.avatar, s.overflowCount]} />
         </AvatarGroup>
       </Link>
     </VStack>
     <VStack xstyle={s.sheet}>
       <VStack as="section" gap={SPACE.group} aria-labelledby="home-features" xstyle={s.section}>
-        <Heading id="home-features" level={2} type="display-2" xstyle={s.sectionTitle}>{t('gz.homeF.features')}</Heading>
-        <Grid gap={SPACE.group} xstyle={s.features}>
-          {featureGroups.map(group => <VStack key={group.id} gap={SPACE.tight} xstyle={s.group}>
-            <Heading level={3} xstyle={s.groupTitle}>{group.title}</Heading>
-            <List hasDividers>
-              {group.items.map(item => <ListItem key={item.id} href={item.href} label={item.title} description={item.description} startContent={<VStack xstyle={s.brandInk}><EntryIcon id={item.id} /></VStack>} endContent={<VStack xstyle={s.brandInk}><Icon icon={ArrowRight} size={ICON.inline} color="inherit" /></VStack>} />)}
-            </List>
-          </VStack>)}
+        <Heading id="home-features" level={2} type="display-2">{t('gz.homeF.features')}</Heading>
+        <VStack role="group" gap={SPACE.block} aria-labelledby="home-sources">
+          <Text type="label" id="home-sources" xstyle={s.brandInk}>{t('gz.homeF.group.sources')}</Text>
+          <Grid gap={SPACE.block} xstyle={s.sources}>
+            {sources.map((entry, index) => <LandingCard key={entry.id} entry={entry} accessibilityLevel={3} isRow xstyle={[s.card, index === 0 && s.lead]} />)}
+          </Grid>
+        </VStack>
+        <Grid gap={SPACE.block} xstyle={s.features}>
+          <VStack role="group" gap={SPACE.block} aria-labelledby="home-official">
+            <Text type="label" id="home-official" xstyle={s.brandInk}>{t('gz.homeF.group.official')}</Text>
+            <Card padding={SPACE.tight} xstyle={[s.card, s.listCard]}>
+              <List xstyle={s.fillList}>
+                {official.map(entry => <ListItem key={entry.id} xstyle={s.row} href={entry.link.href} label={entry.title} description={entry.description} startContent={<IconTile>{entry.icon}</IconTile>} />)}
+              </List>
+            </Card>
+          </VStack>
+          <VStack role="group" gap={SPACE.block} aria-labelledby="home-services" xstyle={s.servicesGroup}>
+            <Text type="label" id="home-services" xstyle={s.brandInk}>{t('gz.homeF.group.services')}</Text>
+            <Grid gap={SPACE.block} xstyle={s.tiles}>
+              {services.map(entry => <ClickableCard key={entry.id} href={entry.link.href} target={entry.link.isExternal ? '_blank' : undefined} label={entry.link.isExternal ? `${entry.title} · ${t('gz.section.external')}` : entry.title} padding={SPACE.inline} xstyle={s.card}>
+                <HStack gap={SPACE.tight} vAlign="center">
+                  <IconTile>{entry.icon}</IconTile>
+                  <HStack as="span" gap={SPACE.tight} vAlign="center" xstyle={s.tileTitle}>
+                    <Text weight="semibold" xstyle={s.tileTitleText}>{entry.title}</Text>
+                    {entry.id === 'status' && <StatusIndicator />}
+                  </HStack>
+                  <Icon icon={entry.link.isExternal ? 'externalLink' : ArrowRight} size={ICON.inline} color="secondary" />
+                </HStack>
+              </ClickableCard>)}
+            </Grid>
+          </VStack>
         </Grid>
       </VStack>
       <VStack as="section" aria-labelledby="home-join" xstyle={[s.section, s.about]}>
         <VStack gap={SPACE.block} xstyle={s.aboutHeading}>
-          <Heading level={2} id="home-join" type="display-2" xstyle={s.sectionTitle}>{t('gz.homeF.join')}</Heading>
+          <Heading level={2} id="home-join" type="display-2">{t('gz.homeF.join')}</Heading>
           <Link href={routes.page(locale, 'contributors')} color="inherit"><Text type="display-1" weight="semibold" xstyle={s.brandInk}>{number.format(contributorCount)}</Text>{' '}{t('gz.homeE.people')}</Link>
           <Link href={routes.page(locale, 'contributors')} aria-label={t('gz.homeF.contributors')}>{avatarGroup}</Link>
         </VStack>
-        <VStack gap={SPACE.tight} xstyle={s.group}>
-          <HStack gap={SPACE.inline} hAlign="between" vAlign="center">
-            <Heading level={3} xstyle={s.groupTitle}>{t('gz.nav.channels')}</Heading>
-            <Button label={t('gz.homeF.allChannels')} href={entry('community', 'channels')} variant="ghost" size={BUTTON.toolbar} endContent={<Icon icon={ArrowRight} size={ICON.inline} />} />
+        <VStack role="group" gap={SPACE.tight} aria-labelledby="home-channels" xstyle={s.group}>
+          <HStack gap={SPACE.inline} hAlign="between" xstyle={s.groupHeader}>
+            <Text type="label" id="home-channels" xstyle={[s.brandInk, s.groupLabelInset]}>{t('gz.nav.channels')}</Text>
+            <Button label={t('gz.homeF.allChannels')} href={entry('community', 'channels')} variant="ghost" size={BUTTON.inline} endContent={<Icon icon={ArrowRight} size={ICON.inline} />} xstyle={s.groupAction} />
           </HStack>
           <List hasDividers xstyle={s.channels}>
-            {CHANNELS.map(({id, logo: Logo}, index) => <ListItem key={id} xstyle={CHANNELS.length % 2 === 0 && index === CHANNELS.length - 2 && s.lastRowStart} href={links[id].href} label={links[id].label} description={links[id].handle || undefined} startContent={<VStack xstyle={s.brandInk}><Logo size={ICON.channelPx} /></VStack>} endContent={<VStack xstyle={s.brandInk}><Icon icon={ArrowRight} size={ICON.inline} color="inherit" /></VStack>} />)}
+            {CHANNELS.map(({id, logo: Logo}, index) => <ListItem key={id} xstyle={[s.row, CHANNELS.length % 2 === 0 && index === CHANNELS.length - 2 && s.lastRowStart]} href={links[id].href} label={links[id].label} description={links[id].handle || undefined} startContent={<IconTile><Logo size={ICON.toolbarPx} /></IconTile>} />)}
           </List>
         </VStack>
       </VStack>
       <VStack as="section" gap={SPACE.group} aria-labelledby="home-posts" xstyle={s.section}>
         <HStack gap={SPACE.inline} hAlign="between" vAlign="center" wrap="wrap">
-          <Heading id="home-posts" level={2} type="display-2" xstyle={s.sectionTitle}>{t('gz.home.latestPosts')}</Heading>
+          <Heading id="home-posts" level={2} type="display-2">{t('gz.home.latestPosts')}</Heading>
           <Button label={t('gz.home.allPosts')} href={routes.posts(locale)} variant="ghost" size={BUTTON.toolbar} endContent={<Icon icon={ArrowRight} size={ICON.inline} />} />
         </HStack>
         <Grid gap={SPACE.group} xstyle={s.posts}>{posts.map(post => <PostCard key={post.slug} post={post} locale={locale} />)}</Grid>
       </VStack>
       <VStack as="section" gap={SPACE.group} aria-labelledby="home-thanks" xstyle={s.section}>
         <HStack gap={SPACE.inline} hAlign="between" vAlign="center" wrap="wrap">
-          <Heading id="home-thanks" level={2} type="display-2" xstyle={s.sectionTitle}>{t('gz.homeE.thanks')}</Heading>
+          <Heading id="home-thanks" level={2} type="display-2">{t('gz.homeE.thanks')}</Heading>
           <Button label={t('gz.home.sponsorsMore')} href={entry('about', 'thanks')} variant="ghost" size={BUTTON.toolbar} endContent={<Icon icon={ArrowRight} />} />
         </HStack>
         <Grid gap={SPACE.page} xstyle={s.logos}>

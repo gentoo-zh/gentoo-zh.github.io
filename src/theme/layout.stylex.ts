@@ -36,6 +36,8 @@ export const media = stylex.defineConsts({
   /** Where the docsite's "On this page" rail gives way (DocPageLayout TOC_BREAKPOINT). */
   toc: '@media (max-width: 1024px)',
   desktop: '@media (min-width: 1024px)',
+  /** Wide enough for four landing cards in a row without cutting an English title. */
+  wide: '@media (min-width: 1280px)',
 });
 
 export const container = stylex.defineConsts({
@@ -51,7 +53,6 @@ export const homeMedia = stylex.create({
 export const homeLayout = stylex.defineConsts({
   band: 'calc(100svh - var(--appshell-header-height))',
   headline: '3.25rem',
-  sectionHeading: '2.1875rem',
   mark: '32rem',
   /** Hero columns: fixed text width so every locale lands in the same place. */
   heroGrid: 'minmax(0, 34rem) 32rem',

@@ -4,12 +4,12 @@ import {Icon} from '@astryxdesign/core/Icon';
 import {HStack, VStack} from '@astryxdesign/core/Layout';
 import {Link} from '@astryxdesign/core/Link';
 import {List, ListItem} from '@astryxdesign/core/List';
-import {Table, proportional, type TableColumn, type TablePlugin} from '@astryxdesign/core/Table';
+import {Table, pixel, proportional, type TableColumn, type TablePlugin} from '@astryxdesign/core/Table';
 import {Text} from '@astryxdesign/core/Text';
 import type {Locale, MessageKey} from '../../i18n/locales';
 import {useMessage} from '../../i18n/useMessage';
 import {media} from '../../theme/layout.stylex';
-import {GRID, ICON, SPACE, TEMPLATE} from '../../theme/scale';
+import {ICON, SPACE, TEMPLATE} from '../../theme/scale';
 import {SectionPage, type SectionPageProps} from '../section/SectionPage';
 import {CHANNELS, type Channel, type ChannelPlatform} from './channels';
 
@@ -22,9 +22,10 @@ const styles = stylex.create({
     // A slot is not a padded Section; its first/last child must not consume the section gap.
     marginBlock: 0,
   },
-  // Phones get the stacked list instead, so Matrix and IRC never hide in a sideways scroll.
-  wide: {display: {default: 'block', [media.mobile]: 'none'}, marginBlock: 0},
-  narrow: {display: {default: 'none', [media.mobile]: 'block'}, marginBlock: 0},
+  // Below 1024px the four columns cannot fit beside the sidebar, so the stacked list replaces the
+  // table there and Matrix and IRC never hide in a sideways scroll.
+  wide: {display: {default: 'none', [media.desktop]: 'block'}, marginBlock: 0},
+  narrow: {display: {default: 'block', [media.desktop]: 'none'}, marginBlock: 0},
 });
 
 const STATIC_SCROLL: TablePlugin<Channel> = {
@@ -55,7 +56,7 @@ function ChannelTable({channels, locale}: {channels: Channel[]; locale: Locale})
     {
       key: 'channel',
       header: t('gz.channels.col.channel'),
-      width: proportional(1, {minWidth: GRID.category}),
+      width: proportional(1, {minWidth: TEMPLATE.channelNameWidth}),
       renderCell: channel => (
         <VStack gap={SPACE.hairline}>
           <Text weight="medium">{t(`gz.channels.${channel.id}.name` as MessageKey)}</Text>
@@ -66,7 +67,7 @@ function ChannelTable({channels, locale}: {channels: Channel[]; locale: Locale})
     ...PLATFORMS.map(platform => ({
       key: platform,
       header: t(`gz.channels.col.${platform}` as MessageKey),
-      width: proportional(1, {minWidth: TEMPLATE.channelPlatformWidth}),
+      width: pixel(TEMPLATE.channelPlatformWidth[platform]),
       renderCell: (channel: Channel) => {
         const join = channel.join.find(target => target.platform === platform);
         return join ? <ChannelLink join={join} locale={locale} handleOnly /> : <Text color="secondary">—</Text>;

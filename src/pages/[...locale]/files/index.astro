@@ -1,0 +1,39 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {LANGUAGE_TAG, providerMessages} from '../../../i18n/locales';
+import {routes} from '../../../i18n/routes';
+import {SITE} from '../../../site';
+import {FilesIsland} from '../../../ui/download/FilesIsland';
+import FilesScript from '../../../ui/download/FilesScript.astro';
+import {FILES_INDEXED, FILES_MESSAGE_KEYS} from '../../../ui/download/filesData';
+import {SectionPage} from '../../../ui/section/SectionPage';
+
+export const getStaticPaths = () => pagePaths('files');
+
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+const languageTag = LANGUAGE_TAG[locale];
+const messages = Object.fromEntries(
+  Object.entries(providerMessages(locale)[languageTag] ?? {}).filter(([key]) => FILES_MESSAGE_KEYS.test(key)),
+);
+// Development builds point at a fixture server; see scripts/fixtures/ls-*.json.
+const origin: string = import.meta.env.PUBLIC_DISTFILES_ORIGIN || SITE.distfiles;
+const base = routes.page(locale, 'files');
+
+---
+<SectionLayout
+  locale={locale}
+  title={page.data.title}
+  description={page.data.description}
+  path={base}
+  alternates={alternates}
+  noindex={!FILES_INDEXED}
+  section="download"
+  current="files"
+  page={createElement(SectionPage, {locale, section: 'download', title: page.data.title, description: page.data.description, pages, isDataPage: true, isTablePage: true, body: `<!-- slot:table -->\n\n${page.body ?? ''}`, slots: {table: createElement(FilesIsland, {props: {languageTag, messages, origin, base}})}})}
+>
+  <FilesScript />
+</SectionLayout>

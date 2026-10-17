@@ -2,6 +2,8 @@
 title: "開發者信箱與論壇寄信服務"
 description: "gentoozh.org 為開發者提供 @gentoozh.org 信箱；OSUOSL 為論壇提供 SMTP 寄信服務。"
 date: 2026-10-17
+cover: "cover.webp"
+coverAlt: "由貢獻者頭像拼成的 gentoo-zh 標誌"
 tags: ["announcement", "community"]
 authors:
   - name: Zakk
@@ -10,6 +12,8 @@ authors:
 ---
 
 gentoozh.org 現在為 gentoo-zh 的開發者提供 `@gentoozh.org` 信箱。需要的話，寄信到 [zakk@gentoozh.org](mailto:zakk@gentoozh.org)，或在 [Telegram 交流群組](https://t.me/gentoo_zh)聯絡。
+
+開發者信箱使用 [Purelymail](https://purelymail.com/)，由 Zakk 自費購買。本站不推薦購買。
 
 ## 論壇寄信服務
 

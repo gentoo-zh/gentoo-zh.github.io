@@ -69,26 +69,40 @@ export interface PostSummary {
   tags: string[];
   authors: Post['data']['authors'];
   image?: {src: string; alt: string};
+  /** The front-matter cover only; the post page shows it above the body, which already holds any lead image. */
+  cover?: {src: string; alt: string};
+  /** The front-matter cover's dark-theme form, shown in place of `image` and `cover` under the dark theme. */
+  coverDark?: {src: string; alt: string};
+  tag?: string;
+  pinned: boolean;
+  coverPosition?: string;
+}
+
+function declaredImage(post: Post, declared: Post['data']['cover']): PostSummary['image'] {
+  const image = typeof declared === 'string' ? {src: declared, alt: post.data.coverAlt ?? post.data.title} : declared;
+  return image && siteImage(post, image);
 }
 
 /** Front matter wins; otherwise use the first rendered Markdown image, never an author avatar. */
 function leadImage(post: Post): PostSummary['image'] {
-  const declared = post.data.cover ?? post.data.image;
-  let image = typeof declared === 'string' ? {src: declared, alt: post.data.title} : declared;
-  if (!image) {
-    visitMarkdownNodes(parseMarkdownAst(post.body ?? ''), 'image', node => {
-      image ??= {src: node.url, alt: node.alt};
-    });
-  }
-  if (!image) return undefined;
+  const declared = declaredImage(post, post.data.cover ?? post.data.image);
+  if (declared) return declared;
+  const images: Array<{src: string; alt?: string}> = [];
+  visitMarkdownNodes(parseMarkdownAst(post.body ?? ''), 'image', node => {
+    images.push({src: node.url, alt: node.alt ?? undefined});
+  });
+  return images[0] && siteImage(post, images[0]);
+}
+
+function siteImage(post: Post, image: {src: string; alt?: string}): PostSummary['image'] {
   const url = new URL(image.src, new URL(routes.post(post.data.locale, post.data.slug), SITE.origin));
   if (!['http:', 'https:'].includes(url.protocol)) return undefined;
   return {src: url.origin === SITE.origin ? `${url.pathname}${url.search}${url.hash}` : url.href, alt: image.alt ?? post.data.title};
 }
 
 export function summarize(post: Post): PostSummary {
-  const {slug, title, description, date, tags, authors} = post.data;
-  return {slug, title, description, date: date.toISOString().slice(0, 10), tags, authors, image: leadImage(post)};
+  const {slug, title, description, date, tags, authors, tag, pinned = false, coverPosition} = post.data;
+  return {slug, title, description, date: date.toISOString().slice(0, 10), tags, authors, image: leadImage(post), cover: declaredImage(post, post.data.cover), coverDark: post.data.cover ? declaredImage(post, post.data.coverDark) : undefined, tag, pinned, coverPosition};
 }
 
 /**

@@ -2,7 +2,7 @@ import {existsSync, readFileSync, renameSync, rmdirSync, writeFileSync} from 'no
 import {dirname} from 'node:path';
 import {decodeEntities, fileFor, listFiles, refreshTarget} from './lib/html.mjs';
 import {imageMetadata} from 'astro/assets/utils';
-import {ERROR_PAGES, SITEMAP_REDIRECTS} from './lib/url-manifest.mjs';
+import {ERROR_PAGES, FILES_REWRITES, SITEMAP_REDIRECTS} from './lib/url-manifest.mjs';
 import {buildCoverThumbnails} from './lib/cover-thumbnails.mjs';
 import {buildAvatarThumbnails} from './lib/avatar-thumbnails.mjs';
 import {htmlElements, redirectAnchors} from './lib/html-elements.mjs';
@@ -65,5 +65,7 @@ for (const file of listFiles(DIST).filter(file => file.endsWith('.html')).sort()
   urls.push(`  <url><loc>${xml(canonical)}</loc>${alternates.map(e => `<xhtml:link rel="alternate" hreflang="${xml(e.attrs.get('hreflang'))}" href="${xml(e.attrs.get('href'))}"/>`).join('')}</url>`);
 }
 writeFileSync(`${DIST}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join('\n')}\n</urlset>\n`);
-writeFileSync(`${DIST}/_redirects`, `${redirects.join('\n')}\n`);
+// Rewrites are dynamic rules, so they follow every static redirect.
+const rewrites = Object.entries(FILES_REWRITES).map(([from, to]) => `${from} ${to} 200`);
+writeFileSync(`${DIST}/_redirects`, `${[...redirects, ...rewrites].join('\n')}\n`);
 console.log(`build:seo: ${urls.length} sitemap URLs, ${redirects.length} permanent redirects`);

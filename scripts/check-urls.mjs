@@ -2,7 +2,7 @@
 import {existsSync, readdirSync, readFileSync} from 'node:fs';
 import {parseFrontmatter} from 'astro/markdown';
 import {decodeEntities, fileFor, ids, listFiles, parseFeed, readPage, refreshTarget, report} from './lib/html.mjs';
-import {CURRENT_PAGES, SITEMAP_REDIRECTS, EXTRA_REDIRECTS, FRAGMENT_REDIRECTS, PAGE_SLUGS, PROMOTED_REDIRECTS, slugPaths} from './lib/url-manifest.mjs';
+import {CURRENT_PAGES, FILES_REWRITES, SITEMAP_REDIRECTS, EXTRA_REDIRECTS, FRAGMENT_REDIRECTS, PAGE_SLUGS, PROMOTED_REDIRECTS, slugPaths} from './lib/url-manifest.mjs';
 import {redirectAnchors} from './lib/html-elements.mjs';
 
 const DIST = 'dist';
@@ -16,7 +16,8 @@ let dynamicRedirects = 0;
 for (const rule of redirectRules) {
   if (!rule.trim() || rule.trimStart().startsWith('#')) continue;
   const [source, target, code, extra] = rule.split(/\s+/);
-  if (!source.startsWith('/') || !target || !['301', '302', '303', '307', '308'].includes(code) || extra || rule.length > 1000) failures.push(`invalid Workers redirect: ${rule}`);
+  const rewrite = code === '200' && FILES_REWRITES[source] === target;
+  if (!source.startsWith('/') || !target || !(rewrite || ['301', '302', '303', '307', '308'].includes(code)) || extra || rule.length > 1000) failures.push(`invalid Workers redirect: ${rule}`);
   if (/[*:]/.test(source)) dynamicRedirects++;
   else {
     staticRedirects++;
@@ -24,6 +25,9 @@ for (const rule of redirectRules) {
   }
 }
 if (staticRedirects > 2000 || dynamicRedirects > 100) failures.push(`Workers redirect limits exceeded: ${staticRedirects} static, ${dynamicRedirects} dynamic`);
+for (const [from, to] of Object.entries(FILES_REWRITES)) {
+  if (redirectRules.filter(row => row.split(/\s+/)[0] === from).join() !== `${from} ${to} 200`) failures.push(`${from}: expected exactly one rewrite to ${to}`);
+}
 console.log(`check:urls: ${staticRedirects} static redirects, ${dynamicRedirects} dynamic redirects`);
 for (const [from, to] of Object.entries(SITEMAP_REDIRECTS)) {
   if (redirectRules.filter(row => row.split(/\s+/)[0] === from).join() !== `${from} ${to} 301`) failures.push(`${from}: expected exactly one permanent redirect to ${to}`);

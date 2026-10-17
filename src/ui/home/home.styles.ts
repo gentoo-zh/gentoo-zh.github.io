@@ -24,28 +24,53 @@ export const homeStyles = stylex.create({
   contributors: {display: {default: 'flex', [media.desktop]: 'none'}, position: 'relative', justifyContent: 'center', width: '100%', maxWidth: layout.contentMaxWidth, marginInline: 'auto', paddingBlock: space['--spacing-2']},
   metrics: {width: '100%', paddingBlockStart: space['--spacing-4'], justifyContent: {default: 'center', [media.desktop]: 'flex-start'}},
   brandLine: {display: 'block', color: 'var(--color-brand)'},
-  headline: {fontWeight: 'var(--font-weight-normal)', fontSize: {default: 'var(--font-size-3xl)', [media.tablet]: 'var(--font-size-4xl)', [media.desktop]: m.headline}, lineHeight: 1.25},
+  headline: {fontSize: {default: 'var(--font-size-3xl)', [media.tablet]: 'var(--font-size-4xl)', [media.desktop]: m.headline}, lineHeight: 1.25},
   buttons: {width: '100%', maxWidth: layout.heroButtonsMaxWidth, marginInline: {default: 'auto', [media.desktop]: 0}},
   button: {borderRadius: 'var(--radius-full)'},
   sheet: {paddingBlockStart: space['--spacing-12'], paddingBlockEnd: {default: space['--spacing-12'], [media.desktop]: m.sectionGap}, paddingInline: space['--spacing-6'], gap: {default: space['--spacing-12'], [media.desktop]: m.sectionGap}},
   brandInk: {color: 'var(--color-brand)'},
   section: {width: '100%', maxWidth: layout.contentMaxWidth, marginInline: 'auto', minWidth: 0},
-  sectionTitle: {fontSize: m.sectionHeading, lineHeight: 1.2, fontWeight: 'var(--font-weight-semibold)'},
   card: {height: '100%', width: '100%', backgroundColor: CARD, borderWidth: 0},
-  features: {gridTemplateColumns: {default: 'minmax(0, 1fr)', [media.desktop]: 'repeat(2, minmax(0, 1fr))'}, columnGap: space['--spacing-12'], alignItems: 'start'},
+  // Post covers are transparent; their frame takes the card colour.
+  cover: {backgroundColor: CARD},
+  // The gentoo-zh sources: three equal columns on wide screens; below that the Overlay card takes its own row
+  // (a third of 1024px cut English titles).
+  sources: {gridTemplateColumns: {default: 'minmax(0, 1fr)', [media.tablet]: 'repeat(2, minmax(0, 1fr))', [media.wide]: 'repeat(3, minmax(0, 1fr))'}, alignItems: 'stretch'},
+  lead: {gridColumn: {default: 'auto', [media.tablet]: 'span 2', [media.wide]: 'auto'}},
+  // Official sources beside the service tiles, stacked on phones. Every services grid uses the same gap, so on
+  // wide screens the official list fills the first column and the tiles the other two, on the gentoo-zh row's
+  // column lines; both groups end on one bottom edge.
+  features: {gridTemplateColumns: {default: 'minmax(0, 1fr)', [media.desktop]: 'repeat(2, minmax(0, 1fr))', [media.wide]: 'repeat(3, minmax(0, 1fr))'}, alignItems: 'stretch'},
+  servicesGroup: {gridColumn: {default: 'auto', [media.wide]: 'span 2'}},
+  // The three official rows take the tile rows' height and gap, so each row's centre lines up with a row of
+  // service tiles; dividers would sit off-centre in the gap, so this list has none.
+  listCard: {height: 'auto', flexGrow: 1, display: 'flex', flexDirection: 'column', paddingBlock: 0},
+  fillList: {flexGrow: 1, display: 'grid', gridAutoRows: '1fr', rowGap: space['--spacing-4'], alignItems: 'stretch'},
+  tiles: {gridTemplateColumns: {default: 'minmax(0, 1fr)', [media.tablet]: 'repeat(2, minmax(0, 1fr))'}, gridAutoRows: '1fr', flexGrow: 1},
+  tileTitle: {flex: 1, minWidth: 0},
+  tileTitleText: {minWidth: 0},
+  // The status badge's script-toggled slots keep their display until the `hidden` attribute applies.
+  toggle: {display: {default: 'inline-flex', ':is([hidden])': 'none'}},
   group: {padding: space['--spacing-6'], borderRadius: 'var(--radius-container)', backgroundColor: 'var(--color-home-card)'},
-  groupTitle: {color: 'var(--color-brand)', fontSize: 'var(--text-supporting-size)', fontWeight: 'var(--font-weight-semibold)', paddingInline: space['--spacing-3']},
-  postDate: {marginBlockStart: 'auto', paddingBlockStart: space['--spacing-2']},
-  fill: {height: '100%', width: '100%', minWidth: 0},
+  // The group label and a small ghost action share one baseline.
+  groupHeader: {alignItems: 'baseline'},
+  // Aligns the label with the list rows' inset.
+  groupLabelInset: {paddingInline: space['--spacing-3']},
+  // Transparent avatars sit on an opaque neutral disc; the ring takes the page colour so overlaps cut clean, and a
+  // hairline just inside the ring (an outline paints over the image) keeps white-backed avatars from melting into the page.
+  // The +N count stays a circle the size of the avatars: no inline padding, the supporting text size so +201 fits.
+  overflowCount: {aspectRatio: '1', paddingInline: 0, minWidth: 0, fontSize: 'var(--text-supporting-size)'},
+  avatar: {borderColor: 'var(--color-background-body)', backgroundColor: 'var(--color-background-body)', backgroundImage: 'linear-gradient(var(--color-neutral), var(--color-neutral))', color: 'var(--color-text-secondary)', outlineWidth: 1, outlineStyle: 'solid', outlineColor: 'var(--color-border)', outlineOffset: -3},
+  // List clips inline overflow, so a row's focus ring sits inside the row or loses its sides.
+  row: {outlineOffset: -2},
+  // A group's own action stays as light as its title: supporting size, secondary ink.
+  groupAction: {fontSize: 'var(--text-supporting-size)', color: 'var(--color-text-secondary)'},
   about: {display: 'grid', gap: space['--spacing-8'], alignItems: 'center', gridTemplateColumns: {default: 'minmax(0, 1fr)', [media.desktop]: 'minmax(0, 1fr) minmax(0, 2fr)'}},
-  channels: {display: 'grid', gridTemplateColumns: {default: 'minmax(0, 1fr)', [media.desktop]: 'repeat(2, minmax(0, 1fr))'}, columnGap: space['--spacing-6']},
+  channels: {display: 'grid', gridTemplateColumns: {default: 'minmax(0, 1fr)', [media.desktop]: 'repeat(2, minmax(0, 1fr))'}, gridAutoRows: '1fr', columnGap: space['--spacing-6']},
   // Two columns: the first item of the last row needs no divider either.
   lastRowStart: {borderBottomWidth: {default: null, [media.desktop]: 0}},
   aboutHeading: {textAlign: {default: 'center', [media.desktop]: 'start'}, alignItems: {default: 'center', [media.desktop]: 'flex-start'}},
   posts: {gridTemplateColumns: {default: 'minmax(0, 1fr)', [media.desktop]: 'repeat(3, minmax(0, 1fr))'}, alignItems: 'stretch'},
-  cover: {overflow: 'hidden', borderRadius: 'var(--radius-container)', backgroundColor: 'var(--color-background-body)'},
-  image: {display: 'block', width: '100%', height: '100%', objectFit: 'cover'},
-  excerpt: {display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden'},
   logos: {gridTemplateColumns: {default: 'repeat(3, minmax(0, 1fr))', [media.tablet]: 'repeat(3, minmax(0, 1fr))', [media.desktop]: 'repeat(6, minmax(0, 1fr))'}},
   logoScale: (scale: number) => ({transform: `scale(${scale})`}),
   logoBox: {width: '100%', justifyContent: 'center', height: {default: 'calc(var(--size-element-lg) * 1.6)', [media.tablet]: 'calc(var(--size-element-lg) * 2.5)'}, padding: space['--spacing-4'], boxSizing: 'border-box'},

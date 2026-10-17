@@ -1,0 +1,7 @@
+[
+{ "name":"binpkgs", "type":"directory", "mtime":"Mon, 10 Aug 2026 16:56:06 GMT" },
+{ "name":"distfiles", "type":"directory", "mtime":"Tue, 28 Jul 2026 15:08:19 GMT" },
+{ "name":"gentoo-cjk-kernel", "type":"directory", "mtime":"Sun, 09 Aug 2026 03:44:59 GMT" },
+{ "name":"gentoo-cjk-livecd", "type":"directory", "mtime":"Tue, 13 Oct 2026 04:43:47 GMT" },
+{ "name":"unstable", "type":"directory", "mtime":"Wed, 05 Aug 2026 16:12:02 GMT" }
+]
