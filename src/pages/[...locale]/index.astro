@@ -1,0 +1,14 @@
+---
+import {createElement} from 'react';
+import Base from '../../layouts/Base.astro';
+import {getPage, pageAlternates} from '../../content/pages';
+import {localePaths, routes} from '../../i18n/routes';
+import {homeData} from '../../ui/home/homeData';
+import {HomePage} from '../../ui/home/HomePage';
+
+export const getStaticPaths = localePaths;
+const {locale} = Astro.props;
+const page = await getPage(locale, '');
+const alternates = await pageAlternates('');
+---
+<Base locale={locale} description={page?.data.description} path={routes.home(locale)} alternates={alternates} page={createElement(HomePage, await homeData(locale))} />

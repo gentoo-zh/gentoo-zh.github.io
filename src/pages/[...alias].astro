@@ -1,0 +1,16 @@
+---
+import Redirect from '../layouts/Redirect.astro';
+import {redirects} from '../content/posts';
+import type {Locale} from '../i18n/locales';
+import {SITE} from '../site';
+
+export async function getStaticPaths() {
+  return (await redirects()).map(({from, to, locale}) => ({
+    params: {alias: from.replace(/^\/|\/$/g, '')},
+    props: {target: new URL(to, SITE.origin).href, locale},
+  }));
+}
+
+const {target, locale} = Astro.props as {target: string; locale: Locale};
+---
+<Redirect target={target} locale={locale} />

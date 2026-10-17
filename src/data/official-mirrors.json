@@ -1,0 +1,432 @@
+{
+  "columns": {
+    "name": {
+      "zh-cn": "镜像",
+      "zh-tw": "鏡像",
+      "en": "Mirror"
+    },
+    "region": {
+      "zh-cn": "地区",
+      "zh-tw": "地區",
+      "en": "Region"
+    },
+    "dist": {
+      "zh-cn": "Distfiles 地址",
+      "zh-tw": "Distfiles 地址",
+      "en": "distfiles URL"
+    },
+    "git": {
+      "zh-cn": "Git",
+      "zh-tw": "Git",
+      "en": "git"
+    },
+    "rsync": {
+      "zh-cn": "rsync",
+      "zh-tw": "rsync",
+      "en": "rsync"
+    }
+  },
+  "items": [
+    {
+      "id": "tuna",
+      "name": {
+        "zh-cn": "清华 TUNA",
+        "zh-tw": "清華 TUNA",
+        "en": "Tsinghua TUNA"
+      },
+      "region": {
+        "zh-cn": "华北·北京",
+        "zh-tw": "華北·北京",
+        "en": "North China · Beijing"
+      },
+      "dist": {
+        "source": "tuna"
+      },
+      "git": "tuna",
+      "rsync": "tuna"
+    },
+    {
+      "id": "bfsu",
+      "name": {
+        "zh-cn": "北外 BFSU",
+        "zh-tw": "北外 BFSU",
+        "en": "BFSU"
+      },
+      "region": {
+        "zh-cn": "华北·北京",
+        "zh-tw": "華北·北京",
+        "en": "North China · Beijing"
+      },
+      "dist": {
+        "source": "bfsu"
+      },
+      "git": "bfsu",
+      "rsync": "bfsu"
+    },
+    {
+      "id": "ustc",
+      "name": {
+        "zh-cn": "中科大 USTC",
+        "zh-tw": "中科大 USTC",
+        "en": "USTC"
+      },
+      "region": {
+        "zh-cn": "华东·合肥",
+        "zh-tw": "華東·合肥",
+        "en": "East China · Hefei"
+      },
+      "dist": {
+        "source": "ustc"
+      },
+      "git": "ustc",
+      "rsync": "ustc"
+    },
+    {
+      "id": "zju",
+      "name": {
+        "zh-cn": "浙大 ZJU",
+        "zh-tw": "浙大 ZJU",
+        "en": "ZJU"
+      },
+      "region": {
+        "zh-cn": "华东·杭州",
+        "zh-tw": "華東·杭州",
+        "en": "East China · Hangzhou"
+      },
+      "dist": {
+        "source": "zju"
+      },
+      "git": "zju"
+    },
+    {
+      "id": "nju",
+      "name": {
+        "zh-cn": "南大 NJU",
+        "zh-tw": "南大 NJU",
+        "en": "NJU"
+      },
+      "region": {
+        "zh-cn": "华东·南京",
+        "zh-tw": "華東·南京",
+        "en": "East China · Nanjing"
+      },
+      "dist": {
+        "source": "nju"
+      },
+      "git": "nju"
+    },
+    {
+      "id": "sdu",
+      "name": {
+        "zh-cn": "山大 SDU",
+        "zh-tw": "山大 SDU",
+        "en": "SDU"
+      },
+      "region": {
+        "zh-cn": "华东·青岛",
+        "zh-tw": "華東·青島",
+        "en": "East China · Qingdao"
+      },
+      "dist": {
+        "source": "sdu"
+      },
+      "git": "sdu"
+    },
+    {
+      "id": "hust",
+      "name": {
+        "zh-cn": "华科 HUST",
+        "zh-tw": "華科 HUST",
+        "en": "HUST"
+      },
+      "region": {
+        "zh-cn": "华中·武汉",
+        "zh-tw": "華中·武漢",
+        "en": "Central China · Wuhan"
+      },
+      "dist": {
+        "source": "hust"
+      },
+      "git": "hust"
+    },
+    {
+      "id": "sustech",
+      "name": {
+        "zh-cn": "南科大 SUSTech",
+        "zh-tw": "南科大 SUSTech",
+        "en": "SUSTech"
+      },
+      "region": {
+        "zh-cn": "华南·深圳",
+        "zh-tw": "華南·深圳",
+        "en": "South China · Shenzhen"
+      },
+      "dist": {
+        "uri": "https://mirrors.sustech.edu.cn/gentoo",
+        "mediaOrder": 0
+      }
+    },
+    {
+      "id": "hit",
+      "name": {
+        "zh-cn": "哈工大 HIT",
+        "zh-tw": "哈工大 HIT",
+        "en": "HIT"
+      },
+      "region": {
+        "zh-cn": "东北·哈尔滨",
+        "zh-tw": "東北·哈爾濱",
+        "en": "Northeast · Harbin"
+      },
+      "dist": {
+        "uri": "https://mirrors.hit.edu.cn/gentoo",
+        "mediaOrder": 1
+      }
+    },
+    {
+      "id": "lzu",
+      "name": {
+        "zh-cn": "兰大 LZU",
+        "zh-tw": "蘭大 LZU",
+        "en": "LZU"
+      },
+      "region": {
+        "zh-cn": "西北·兰州",
+        "zh-tw": "西北·蘭州",
+        "en": "Northwest · Lanzhou"
+      },
+      "dist": {
+        "uri": "https://mirror.lzu.edu.cn/gentoo",
+        "mediaOrder": 2
+      }
+    },
+    {
+      "id": "aliyun",
+      "name": {
+        "zh-cn": "阿里云",
+        "zh-tw": "阿里雲",
+        "en": "Alibaba Cloud"
+      },
+      "region": {
+        "zh-cn": "全国·CDN",
+        "zh-tw": "全國·CDN",
+        "en": "Nationwide · CDN"
+      },
+      "dist": {
+        "uri": "https://mirrors.aliyun.com/gentoo",
+        "mediaOrder": 3
+      }
+    },
+    {
+      "id": "netease",
+      "name": {
+        "zh-cn": "网易 163",
+        "zh-tw": "網易 163",
+        "en": "NetEase 163"
+      },
+      "region": {
+        "zh-cn": "全国·CDN",
+        "zh-tw": "全國·CDN",
+        "en": "Nationwide · CDN"
+      },
+      "dist": {
+        "uri": "https://mirrors.163.com/gentoo",
+        "mediaOrder": 4
+      }
+    },
+    {
+      "id": "cernet",
+      "name": {
+        "zh-cn": "CERNET",
+        "zh-tw": "CERNET",
+        "en": "CERNET"
+      },
+      "region": {
+        "zh-cn": "全国·就近",
+        "zh-tw": "全國·就近",
+        "en": "Nationwide · geo-routed"
+      },
+      "dist": {
+        "source": "cernet"
+      },
+      "git": "cernet"
+    },
+    {
+      "id": "cickuhk",
+      "name": {
+        "zh-cn": "CICKU",
+        "zh-tw": "CICKU",
+        "en": "CICKU"
+      },
+      "region": {
+        "zh-cn": "香港",
+        "zh-tw": "香港",
+        "en": "Hong Kong"
+      },
+      "dist": {
+        "uri": "https://hk.mirrors.cicku.me/gentoo",
+        "mediaOrder": 5
+      }
+    },
+    {
+      "id": "planetunixhk",
+      "name": {
+        "zh-cn": "PlanetUnix",
+        "zh-tw": "PlanetUnix",
+        "en": "PlanetUnix"
+      },
+      "region": {
+        "zh-cn": "香港",
+        "zh-tw": "香港",
+        "en": "Hong Kong"
+      },
+      "dist": {
+        "uri": "https://hippocamp.cn.ext.planetunix.net/pub/gentoo",
+        "mediaOrder": 8
+      },
+      "rsync": "planetunix"
+    },
+    {
+      "id": "xtom",
+      "name": {
+        "zh-cn": "xTom",
+        "zh-tw": "xTom",
+        "en": "xTom"
+      },
+      "region": {
+        "zh-cn": "香港",
+        "zh-tw": "香港",
+        "en": "Hong Kong"
+      },
+      "dist": {
+        "uri": "https://mirror.xtom.com.hk/gentoo",
+        "mediaOrder": 10
+      }
+    },
+    {
+      "id": "rackspace",
+      "name": {
+        "zh-cn": "Rackspace",
+        "zh-tw": "Rackspace",
+        "en": "Rackspace"
+      },
+      "region": {
+        "zh-cn": "香港",
+        "zh-tw": "香港",
+        "en": "Hong Kong"
+      },
+      "dist": {
+        "uri": "https://mirror.rackspace.com/gentoo",
+        "mediaOrder": 11
+      }
+    },
+    {
+      "id": "aditsu",
+      "name": {
+        "zh-cn": "aditsu",
+        "zh-tw": "aditsu",
+        "en": "aditsu"
+      },
+      "region": {
+        "zh-cn": "香港",
+        "zh-tw": "香港",
+        "en": "Hong Kong"
+      },
+      "dist": {
+        "uri": "http://gentoo.aditsu.net:8000",
+        "mediaOrder": 12
+      },
+      "note": {
+        "zh-cn": "（HTTP）",
+        "zh-tw": "（HTTP）",
+        "en": " (HTTP)"
+      }
+    },
+    {
+      "id": "nchc",
+      "name": {
+        "zh-cn": "NCHC",
+        "zh-tw": "NCHC",
+        "en": "NCHC"
+      },
+      "region": {
+        "zh-cn": "台湾",
+        "zh-tw": "臺灣",
+        "en": "Taiwan"
+      },
+      "dist": {
+        "uri": "http://ftp.twaren.net/Linux/Gentoo",
+        "mediaOrder": 13
+      },
+      "rsync": "nchc"
+    },
+    {
+      "id": "cickutw",
+      "name": {
+        "zh-cn": "CICKU",
+        "zh-tw": "CICKU",
+        "en": "CICKU"
+      },
+      "region": {
+        "zh-cn": "台湾",
+        "zh-tw": "臺灣",
+        "en": "Taiwan"
+      },
+      "dist": {
+        "uri": "https://tw.mirrors.cicku.me/gentoo",
+        "mediaOrder": 6
+      }
+    },
+    {
+      "id": "freedif",
+      "name": {
+        "zh-cn": "Freedif",
+        "zh-tw": "Freedif",
+        "en": "Freedif"
+      },
+      "region": {
+        "zh-cn": "新加坡",
+        "zh-tw": "新加坡",
+        "en": "Singapore"
+      },
+      "dist": {
+        "uri": "https://mirror.freedif.org/gentoo",
+        "mediaOrder": 14
+      }
+    },
+    {
+      "id": "cickusg",
+      "name": {
+        "zh-cn": "CICKU",
+        "zh-tw": "CICKU",
+        "en": "CICKU"
+      },
+      "region": {
+        "zh-cn": "新加坡",
+        "zh-tw": "新加坡",
+        "en": "Singapore"
+      },
+      "dist": {
+        "uri": "https://sg.mirrors.cicku.me/gentoo",
+        "mediaOrder": 7
+      }
+    },
+    {
+      "id": "planetunixsg",
+      "name": {
+        "zh-cn": "PlanetUnix",
+        "zh-tw": "PlanetUnix",
+        "en": "PlanetUnix"
+      },
+      "region": {
+        "zh-cn": "新加坡",
+        "zh-tw": "新加坡",
+        "en": "Singapore"
+      },
+      "dist": {
+        "uri": "https://enceladus.sg.ext.planetunix.net/pub/gentoo",
+        "mediaOrder": 9
+      }
+    }
+  ]
+}

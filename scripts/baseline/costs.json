@@ -1,0 +1,737 @@
+{
+  "masterSha": "03c0a6eefb983aeb36cece77a56da8e206d24fc6",
+  "pages": {
+    "zh-cn": {
+      "asOf": "2026-10-16",
+      "stats": [
+        [
+          "2,352.22USD",
+          "15,859 CNY · 75,805 TWD · 18,371 HKD"
+        ],
+        [
+          "50.15USD",
+          "只计在用项目"
+        ]
+      ],
+      "specs": {
+        "rows": [
+          [
+            "下载",
+            "EPYC-Genoa 4C8G / 256G NVMe / 2.5 Gbps 不限流量",
+            "100 EUR / 年",
+            "2026-06-01"
+          ],
+          [
+            "论坛",
+            "EPYC-Milan-v3 4C8G / 40G",
+            "16.5 USD / 月",
+            "2026-07-10"
+          ],
+          [
+            "论坛 IPv4",
+            "预留 IPv4，0.0045 USD / 小时",
+            "约 3.285 USD / 月",
+            "2026-07-10"
+          ],
+          [
+            "论坛 IPv6",
+            "预留 IPv6，0.0015 USD / 小时",
+            "约 1.095 USD / 月",
+            "2026-07-10"
+          ],
+          [
+            "Matrix 与桥接",
+            "EPYC-Milan-v3 4C8G / 40G",
+            "12.5 USD / 月",
+            "2026-06-10"
+          ],
+          [
+            "构建（OSUOSL）",
+            "俄勒冈州立大学开源实验室（OSUOSL）提供",
+            "OSUOSL 赞助",
+            "2026-09-27"
+          ],
+          [
+            "美国镜像（OSUOSL）",
+            "俄勒冈州立大学开源实验室（OSUOSL）提供的 gentoo-zh 美国镜像",
+            "OSUOSL 赞助",
+            "2026-09-27"
+          ],
+          [
+            "论坛 SMTP（OSUOSL）",
+            "OSUOSL 的 SMTP 服务，论坛用来发送注册验证与通知邮件",
+            "OSUOSL 赞助",
+            "2026-10-14"
+          ],
+          [
+            "ARM 测试机（OSUOSL）",
+            "OSUOSL 提供的 ARM 测试机",
+            "OSUOSL 赞助",
+            "2026-10-14"
+          ],
+          [
+            "邮箱服务",
+            "Purelymail 邮箱托管，供社区成员收发邮件",
+            "10 USD / 年",
+            "2026-10-14"
+          ],
+          [
+            "域名",
+            "gentoozh.org，Porkbun，2026-11-29 到期",
+            "7.98 USD / 年",
+            "2025-11-29"
+          ],
+          [
+            "域名（tw）",
+            "gentootw.org，Porkbun，2027-07-02 到期",
+            "约 7.98 USD / 年",
+            "2026-07-02"
+          ],
+          [
+            "Cloudflare Workers",
+            "Cloudflare Workers 付费方案，托管官网与镜像落地页",
+            "5 USD / 月",
+            "2026-06-01"
+          ],
+          [
+            "监控与告警",
+            "Oracle Cloud 永久免费额度",
+            "免费额度",
+            "2026-06-01"
+          ]
+        ],
+        "foot": null
+      },
+      "ledger": {
+        "rows": [
+          [
+            "下载",
+            "100 EUR / 年",
+            "1 年",
+            "115.24 USD",
+            "777 CNY / 3,714 TWD / 900 HKD"
+          ],
+          [
+            "论坛",
+            "16.5 USD / 月",
+            "4 个月",
+            "66.00 USD",
+            "445 CNY / 2,127 TWD / 515 HKD"
+          ],
+          [
+            "论坛 IPv4",
+            "约 3.285 USD / 月",
+            "4 个月",
+            "约 13.14 USD",
+            "89 CNY / 423 TWD / 103 HKD"
+          ],
+          [
+            "论坛 IPv6",
+            "约 1.095 USD / 月",
+            "4 个月",
+            "约 4.38 USD",
+            "30 CNY / 141 TWD / 34 HKD"
+          ],
+          [
+            "Matrix 与桥接",
+            "12.5 USD / 月",
+            "5 个月",
+            "62.50 USD",
+            "421 CNY / 2,014 TWD / 488 HKD"
+          ],
+          [
+            "构建（OSUOSL）",
+            "OSUOSL 赞助",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "美国镜像（OSUOSL）",
+            "OSUOSL 赞助",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "论坛 SMTP（OSUOSL）",
+            "OSUOSL 赞助",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "ARM 测试机（OSUOSL）",
+            "OSUOSL 赞助",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "邮箱服务",
+            "10 USD / 年",
+            "1 年",
+            "10.00 USD",
+            "67 CNY / 322 TWD / 78 HKD"
+          ],
+          [
+            "域名",
+            "7.98 USD / 年",
+            "1 年",
+            "7.98 USD",
+            "54 CNY / 257 TWD / 62 HKD"
+          ],
+          [
+            "域名（tw）",
+            "约 7.98 USD / 年",
+            "1 年",
+            "约 7.98 USD",
+            "54 CNY / 257 TWD / 62 HKD"
+          ],
+          [
+            "Cloudflare Workers",
+            "5 USD / 月",
+            "5 个月",
+            "25.00 USD",
+            "169 CNY / 806 TWD / 195 HKD"
+          ],
+          [
+            "监控与告警",
+            "免费额度",
+            "—",
+            "—",
+            "—"
+          ]
+        ],
+        "foot": [
+          "合计",
+          "约 50.15 USD / 月",
+          "—",
+          "约 312.22 USD",
+          "2,105 CNY / 10,062 TWD / 2,438 HKD"
+        ]
+      },
+      "retired": {
+        "rows": [
+          [
+            "构建",
+            "Xeon Gold 6138 双路 40C80T / 128G / 1T NVMe / 10 Gbps 不限流量",
+            "约 500 USD / 月",
+            "2026-06-01 – 2026-09-29",
+            "4 个月",
+            "约 2,000.00 USD"
+          ],
+          [
+            "邮件发送",
+            "Hostinger 邮件发送服务，供论坛发信",
+            "20 USD / 年",
+            "2026-07-10 – 2026-10-14",
+            "1 年",
+            "20.00 USD"
+          ],
+          [
+            "高可用节点",
+            "Vultr 小型节点",
+            "5 USD / 月",
+            "2026-06-01 – 2026-09-30",
+            "4 个月",
+            "20.00 USD"
+          ]
+        ],
+        "foot": [
+          "小计",
+          "—",
+          "约 2,040.00 USD"
+        ]
+      }
+    },
+    "zh-tw": {
+      "asOf": "2026-10-16",
+      "stats": [
+        [
+          "2,352.22USD",
+          "15,859 CNY · 75,805 TWD · 18,371 HKD"
+        ],
+        [
+          "50.15USD",
+          "只計在用項目"
+        ]
+      ],
+      "specs": {
+        "rows": [
+          [
+            "下載",
+            "EPYC-Genoa 4C8G / 256G NVMe / 2.5 Gbps 不限流量",
+            "100 EUR / 年",
+            "2026-06-01"
+          ],
+          [
+            "論壇",
+            "EPYC-Milan-v3 4C8G / 40G",
+            "16.5 USD / 月",
+            "2026-07-10"
+          ],
+          [
+            "論壇 IPv4",
+            "預留 IPv4，0.0045 USD / 小時",
+            "約 3.285 USD / 月",
+            "2026-07-10"
+          ],
+          [
+            "論壇 IPv6",
+            "預留 IPv6，0.0015 USD / 小時",
+            "約 1.095 USD / 月",
+            "2026-07-10"
+          ],
+          [
+            "Matrix 與橋接",
+            "EPYC-Milan-v3 4C8G / 40G",
+            "12.5 USD / 月",
+            "2026-06-10"
+          ],
+          [
+            "建置（OSUOSL）",
+            "奧勒岡州立大學開源實驗室（OSUOSL）提供",
+            "OSUOSL 贊助",
+            "2026-09-27"
+          ],
+          [
+            "美國鏡像（OSUOSL）",
+            "奧勒岡州立大學開源實驗室（OSUOSL）提供的 gentoo-zh 美國鏡像",
+            "OSUOSL 贊助",
+            "2026-09-27"
+          ],
+          [
+            "論壇 SMTP（OSUOSL）",
+            "OSUOSL 的 SMTP 服務，論壇用來傳送註冊驗證與通知郵件",
+            "OSUOSL 贊助",
+            "2026-10-14"
+          ],
+          [
+            "ARM 測試機（OSUOSL）",
+            "OSUOSL 提供的 ARM 測試機",
+            "OSUOSL 贊助",
+            "2026-10-14"
+          ],
+          [
+            "信箱服務",
+            "Purelymail 信箱託管，供社群成員收發郵件",
+            "10 USD / 年",
+            "2026-10-14"
+          ],
+          [
+            "域名",
+            "gentoozh.org，Porkbun，2026-11-29 到期",
+            "7.98 USD / 年",
+            "2025-11-29"
+          ],
+          [
+            "域名（tw）",
+            "gentootw.org，Porkbun，2027-07-02 到期",
+            "約 7.98 USD / 年",
+            "2026-07-02"
+          ],
+          [
+            "Cloudflare Workers",
+            "Cloudflare Workers 付費方案，託管官網與鏡像落地頁",
+            "5 USD / 月",
+            "2026-06-01"
+          ],
+          [
+            "監控與告警",
+            "Oracle Cloud 永久免費額度",
+            "免費額度",
+            "2026-06-01"
+          ]
+        ],
+        "foot": null
+      },
+      "ledger": {
+        "rows": [
+          [
+            "下載",
+            "100 EUR / 年",
+            "1 年",
+            "115.24 USD",
+            "777 CNY / 3,714 TWD / 900 HKD"
+          ],
+          [
+            "論壇",
+            "16.5 USD / 月",
+            "4 個月",
+            "66.00 USD",
+            "445 CNY / 2,127 TWD / 515 HKD"
+          ],
+          [
+            "論壇 IPv4",
+            "約 3.285 USD / 月",
+            "4 個月",
+            "約 13.14 USD",
+            "89 CNY / 423 TWD / 103 HKD"
+          ],
+          [
+            "論壇 IPv6",
+            "約 1.095 USD / 月",
+            "4 個月",
+            "約 4.38 USD",
+            "30 CNY / 141 TWD / 34 HKD"
+          ],
+          [
+            "Matrix 與橋接",
+            "12.5 USD / 月",
+            "5 個月",
+            "62.50 USD",
+            "421 CNY / 2,014 TWD / 488 HKD"
+          ],
+          [
+            "建置（OSUOSL）",
+            "OSUOSL 贊助",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "美國鏡像（OSUOSL）",
+            "OSUOSL 贊助",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "論壇 SMTP（OSUOSL）",
+            "OSUOSL 贊助",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "ARM 測試機（OSUOSL）",
+            "OSUOSL 贊助",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "信箱服務",
+            "10 USD / 年",
+            "1 年",
+            "10.00 USD",
+            "67 CNY / 322 TWD / 78 HKD"
+          ],
+          [
+            "域名",
+            "7.98 USD / 年",
+            "1 年",
+            "7.98 USD",
+            "54 CNY / 257 TWD / 62 HKD"
+          ],
+          [
+            "域名（tw）",
+            "約 7.98 USD / 年",
+            "1 年",
+            "約 7.98 USD",
+            "54 CNY / 257 TWD / 62 HKD"
+          ],
+          [
+            "Cloudflare Workers",
+            "5 USD / 月",
+            "5 個月",
+            "25.00 USD",
+            "169 CNY / 806 TWD / 195 HKD"
+          ],
+          [
+            "監控與告警",
+            "免費額度",
+            "—",
+            "—",
+            "—"
+          ]
+        ],
+        "foot": [
+          "合計",
+          "約 50.15 USD / 月",
+          "—",
+          "約 312.22 USD",
+          "2,105 CNY / 10,062 TWD / 2,438 HKD"
+        ]
+      },
+      "retired": {
+        "rows": [
+          [
+            "建置",
+            "Xeon Gold 6138 雙路 40C80T / 128G / 1T NVMe / 10 Gbps 不限流量",
+            "約 500 USD / 月",
+            "2026-06-01 – 2026-09-29",
+            "4 個月",
+            "約 2,000.00 USD"
+          ],
+          [
+            "郵件傳送",
+            "Hostinger 郵件傳送服務，供論壇發信",
+            "20 USD / 年",
+            "2026-07-10 – 2026-10-14",
+            "1 年",
+            "20.00 USD"
+          ],
+          [
+            "高可用節點",
+            "Vultr 小型節點",
+            "5 USD / 月",
+            "2026-06-01 – 2026-09-30",
+            "4 個月",
+            "20.00 USD"
+          ]
+        ],
+        "foot": [
+          "小計",
+          "—",
+          "約 2,040.00 USD"
+        ]
+      }
+    },
+    "en": {
+      "asOf": "2026-10-16",
+      "stats": [
+        [
+          "2,352.22USD",
+          "15,859 CNY · 75,805 TWD · 18,371 HKD"
+        ],
+        [
+          "50.15USD",
+          "Items in use only"
+        ]
+      ],
+      "specs": {
+        "rows": [
+          [
+            "Download",
+            "EPYC-Genoa 4C8G / 256G NVMe / 2.5 Gbps unmetered",
+            "100 EUR / year",
+            "2026-06-01"
+          ],
+          [
+            "Forum",
+            "EPYC-Milan-v3 4C8G / 40G",
+            "16.5 USD / month",
+            "2026-07-10"
+          ],
+          [
+            "Forum IPv4",
+            "Reserved IPv4, 0.0045 USD / hour",
+            "~3.285 USD / month",
+            "2026-07-10"
+          ],
+          [
+            "Forum IPv6",
+            "Reserved IPv6, 0.0015 USD / hour",
+            "~1.095 USD / month",
+            "2026-07-10"
+          ],
+          [
+            "Matrix and bridges",
+            "EPYC-Milan-v3 4C8G / 40G",
+            "12.5 USD / month",
+            "2026-06-10"
+          ],
+          [
+            "Build (OSUOSL)",
+            "Provided by the Oregon State University Open Source Lab (OSUOSL)",
+            "Sponsored by OSUOSL",
+            "2026-09-27"
+          ],
+          [
+            "US mirror (OSUOSL)",
+            "The gentoo-zh US mirror, provided by OSUOSL",
+            "Sponsored by OSUOSL",
+            "2026-09-27"
+          ],
+          [
+            "Forum SMTP (OSUOSL)",
+            "OSUOSL's SMTP service, which the forum uses to send sign-up and notification mail",
+            "Sponsored by OSUOSL",
+            "2026-10-14"
+          ],
+          [
+            "ARM test machine (OSUOSL)",
+            "An ARM test machine provided by OSUOSL",
+            "Sponsored by OSUOSL",
+            "2026-10-14"
+          ],
+          [
+            "Mailboxes",
+            "Purelymail mailbox hosting for community members",
+            "10 USD / year",
+            "2026-10-14"
+          ],
+          [
+            "Domain",
+            "gentoozh.org at Porkbun, expires 2026-11-29",
+            "7.98 USD / year",
+            "2025-11-29"
+          ],
+          [
+            "Domain (tw)",
+            "gentootw.org at Porkbun, expires 2027-07-02",
+            "~7.98 USD / year",
+            "2026-07-02"
+          ],
+          [
+            "Cloudflare Workers",
+            "Cloudflare Workers paid plan, hosts the site and the mirror landing pages",
+            "5 USD / month",
+            "2026-06-01"
+          ],
+          [
+            "Monitoring",
+            "Oracle Cloud always-free tier",
+            "Free tier",
+            "2026-06-01"
+          ]
+        ],
+        "foot": null
+      },
+      "ledger": {
+        "rows": [
+          [
+            "Download",
+            "100 EUR / year",
+            "1 year(s)",
+            "115.24 USD",
+            "777 CNY / 3,714 TWD / 900 HKD"
+          ],
+          [
+            "Forum",
+            "16.5 USD / month",
+            "4 month(s)",
+            "66.00 USD",
+            "445 CNY / 2,127 TWD / 515 HKD"
+          ],
+          [
+            "Forum IPv4",
+            "~3.285 USD / month",
+            "4 month(s)",
+            "~13.14 USD",
+            "89 CNY / 423 TWD / 103 HKD"
+          ],
+          [
+            "Forum IPv6",
+            "~1.095 USD / month",
+            "4 month(s)",
+            "~4.38 USD",
+            "30 CNY / 141 TWD / 34 HKD"
+          ],
+          [
+            "Matrix and bridges",
+            "12.5 USD / month",
+            "5 month(s)",
+            "62.50 USD",
+            "421 CNY / 2,014 TWD / 488 HKD"
+          ],
+          [
+            "Build (OSUOSL)",
+            "Sponsored by OSUOSL",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "US mirror (OSUOSL)",
+            "Sponsored by OSUOSL",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "Forum SMTP (OSUOSL)",
+            "Sponsored by OSUOSL",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "ARM test machine (OSUOSL)",
+            "Sponsored by OSUOSL",
+            "—",
+            "—",
+            "—"
+          ],
+          [
+            "Mailboxes",
+            "10 USD / year",
+            "1 year(s)",
+            "10.00 USD",
+            "67 CNY / 322 TWD / 78 HKD"
+          ],
+          [
+            "Domain",
+            "7.98 USD / year",
+            "1 year(s)",
+            "7.98 USD",
+            "54 CNY / 257 TWD / 62 HKD"
+          ],
+          [
+            "Domain (tw)",
+            "~7.98 USD / year",
+            "1 year(s)",
+            "~7.98 USD",
+            "54 CNY / 257 TWD / 62 HKD"
+          ],
+          [
+            "Cloudflare Workers",
+            "5 USD / month",
+            "5 month(s)",
+            "25.00 USD",
+            "169 CNY / 806 TWD / 195 HKD"
+          ],
+          [
+            "Monitoring",
+            "Free tier",
+            "—",
+            "—",
+            "—"
+          ]
+        ],
+        "foot": [
+          "Total",
+          "~50.15 USD / month",
+          "—",
+          "~312.22 USD",
+          "2,105 CNY / 10,062 TWD / 2,438 HKD"
+        ]
+      },
+      "retired": {
+        "rows": [
+          [
+            "Build",
+            "Xeon Gold 6138 ×2, 40C80T / 128G / 1T NVMe / 10 Gbps unmetered",
+            "~500 USD / month",
+            "2026-06-01 – 2026-09-29",
+            "4 month(s)",
+            "~2,000.00 USD"
+          ],
+          [
+            "Email sending",
+            "Hostinger email sending, used by the forum",
+            "20 USD / year",
+            "2026-07-10 – 2026-10-14",
+            "1 year(s)",
+            "20.00 USD"
+          ],
+          [
+            "High-availability node",
+            "Vultr small instance",
+            "5 USD / month",
+            "2026-06-01 – 2026-09-30",
+            "4 month(s)",
+            "20.00 USD"
+          ]
+        ],
+        "foot": [
+          "Subtotal",
+          "—",
+          "~2,040.00 USD"
+        ]
+      }
+    }
+  }
+}

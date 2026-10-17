@@ -1,0 +1,14 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {getPosts, groupByTag, localeAlternates} from '../../../content/posts';
+import {CATALOGS} from '../../../i18n/locales';
+import {localePaths, routes} from '../../../i18n/routes';
+import {TagsPage} from '../../../ui/TagsPage';
+
+export const getStaticPaths = localePaths;
+const {locale} = Astro.props;
+const tags = [...groupByTag(await getPosts(locale))].map(([tag, posts]) => ({tag, count: posts.length}));
+const alternates = localeAlternates(routes.tags);
+---
+<SectionLayout locale={locale} title={CATALOGS[locale]['gz.tags.title']} description={CATALOGS[locale]['gz.seo.tags.description']} path={routes.tags(locale)} alternates={alternates} section="community" current="tags" page={createElement(TagsPage, {locale, tags})} />

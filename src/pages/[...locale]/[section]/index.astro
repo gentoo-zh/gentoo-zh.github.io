@@ -1,0 +1,37 @@
+---
+// Registered landings may add Markdown introductions; page lists come from sections.ts.
+import {createElement} from 'react';
+import {z} from 'astro/zod';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {getPage} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {CATALOGS, LOCALES} from '../../../i18n/locales';
+import {localeParam, routes} from '../../../i18n/routes';
+import {SECTIONS, type Section} from '../../../ui/chrome/sections';
+import {SectionLanding} from '../../../ui/section/SectionLanding';
+
+export function getStaticPaths() {
+  return LOCALES.flatMap(locale => SECTIONS.filter(section => section.landingPage == null).map(section => ({params: {locale: localeParam(locale), section: section.slug}, props: {locale, section}})));
+}
+
+const {locale, section} = Astro.props as {locale: (typeof LOCALES)[number]; section: Section};
+const intro = await getPage(locale, section.slug);
+const landing = z.object({
+  id: z.string().optional(),
+  summaries: z.record(z.string(), z.string()).optional(),
+  steps: z.record(z.string(), z.string()).optional(),
+}).strict().parse(intro?.data.landing);
+const pages = await postPaths(locale);
+const alternates = Object.fromEntries(LOCALES.map(target => [target, routes.page(target, section.slug)]));
+const catalog = CATALOGS[locale];
+---
+<SectionLayout
+  locale={locale}
+  title={catalog[`gz.nav.${section.id}`]}
+  description={intro?.data.description ?? catalog[`gz.section.lead.${section.id}`]}
+  path={routes.page(locale, section.slug)}
+  alternates={alternates}
+  section={section.id}
+  current="landing"
+  page={createElement(SectionLanding, {locale, section: section.id, body: intro?.body, landing, pages})}
+/>

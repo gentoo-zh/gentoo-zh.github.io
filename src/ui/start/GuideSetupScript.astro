@@ -1,0 +1,22 @@
+---
+// Before paint, show the pane containing the URL fragment, or the manual pane by default.
+// Without JavaScript both panes remain visible; GuideSetup handles later tab and hash changes.
+---
+<script is:inline data-owner="src/ui/start/GuideSetupScript.astro">
+  (() => {
+    const panes = [...document.querySelectorAll('[data-gz-pane]')];
+    if (panes.length < 2) return;
+    let id = location.hash.slice(1);
+    try {
+      id = decodeURIComponent(id);
+    } catch {
+      id = '';
+    }
+    const target = id === '' ? null : document.getElementById(id);
+    const pane = target?.closest('[data-gz-pane]')?.dataset.gzPane ?? 'manual';
+    panes.forEach(element => { element.hidden = element.dataset.gzPane !== pane; });
+  })();
+</script>
+<script>
+  import './guide-setup-client';
+</script>

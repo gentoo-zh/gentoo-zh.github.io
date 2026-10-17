@@ -1,0 +1,33 @@
+---
+// Hugo's tag pages for the contributor roles (/tags/overlay-贡献者/ …) listed only contributors.
+// They redirect to the role's group on the contributors page; tags that posts use stay with
+// tags/[tag]/index.astro.
+import {getCollection} from 'astro:content';
+import Redirect from '../../../layouts/Redirect.astro';
+import {contributorGroup, contributorRoutes} from '../../../content/contributors';
+import {getPosts, groupByTag} from '../../../content/posts';
+import {LOCALES, type Locale} from '../../../i18n/locales';
+import {localeParam, tagSlug} from '../../../i18n/routes';
+import {SITE} from '../../../site';
+
+export async function getStaticPaths() {
+  const contributors = await getCollection('contributors');
+  return (
+    await Promise.all(
+      LOCALES.map(async locale => {
+        const postTags = new Set([...groupByTag(await getPosts(locale)).keys()].map(tagSlug));
+        const roles = new Map<string, string>();
+        for (const tag of contributors.filter(c => c.data.locale === locale).flatMap(c => c.data.tags)) {
+          if (!postTags.has(tagSlug(tag))) roles.set(tagSlug(tag), `group-${contributorGroup([tag])}`);
+        }
+        return [...roles].map(([role, anchor]) => ({
+          params: {locale: localeParam(locale), role},
+          props: {locale, target: new URL(`${contributorRoutes.list(locale)}#${anchor}`, SITE.origin).href},
+        }));
+      }),
+    )
+  ).flat();
+}
+const {locale, target} = Astro.props as {locale: Locale; target: string};
+---
+<Redirect target={target} locale={locale} />

@@ -1,0 +1,27 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {IslandMount} from '../../../ui/chrome/IslandMount';
+import {renderStatic} from '../../../ui/renderStatic';
+import {COSTS_SUMMARY_ID_PREFIX, CostsSummary, type CostsSummaryProps} from '../../../ui/about/CostsSummary';
+import CostsSummaryScript from '../../../ui/about/CostsSummaryScript.astro';
+import {LANGUAGE_TAG, providerMessages} from '../../../i18n/locales';
+import {CostsPage} from '../../../ui/about/CostsPage';
+import {costReport} from '../../../data/costs';
+import {loadData} from '../../../data/entries';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {routes} from '../../../i18n/routes';
+
+export const getStaticPaths = () => pagePaths('costs');
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+const report = costReport(await loadData('costs'));
+const languageTag = LANGUAGE_TAG[locale];
+const messages = Object.fromEntries(Object.entries(providerMessages(locale)[languageTag]).filter(([key]) => /^gz\.cost\.(stat\.|help\.|usd$|converted$)|^@astryx\.(button|popover|tooltip|layer)\./.test(key)));
+const summaryProps: CostsSummaryProps = {languageTag, messages, total: report.totals.all, monthlyUsd: report.monthlyUsd, asOf: report.asOf};
+const html = await renderStatic(createElement(CostsSummary, summaryProps), {identifierPrefix: COSTS_SUMMARY_ID_PREFIX});
+const summary = createElement(IslandMount, {html, props: summaryProps, island: 'costs'});
+const props = {locale, section: 'about' as const, title: page.data.title, description: page.data.description, body: page.body ?? '', pages, report, summary};
+---
+<SectionLayout locale={locale} title={page.data.title} description={page.data.description} path={routes.page(locale, 'costs')} alternates={alternates} section="about" current="costs" page={createElement(CostsPage, props)}><CostsSummaryScript /></SectionLayout>

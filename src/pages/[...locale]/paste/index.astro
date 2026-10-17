@@ -1,0 +1,25 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {routes} from '../../../i18n/routes';
+import {PastePage} from '../../../ui/support/SupportPages';
+
+export function getStaticPaths() {
+  return pagePaths('paste');
+}
+
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+---
+<SectionLayout
+  locale={locale}
+  title={page.data.title}
+  description={page.data.description}
+  path={routes.page(locale, 'paste')}
+  alternates={alternates}
+  section="support"
+  current="paste"
+  page={createElement(PastePage, {locale, title: page.data.title, description: page.data.description, body: page.body, pages})}
+/>

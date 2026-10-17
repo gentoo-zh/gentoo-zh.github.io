@@ -1,0 +1,24 @@
+/* Span rules adapted from @astryxdesign/core 0.7.0 CodeBlock/highlightStyles.js
+   (MIT, Copyright (c) Meta Platforms, Inc. and affiliates). Static pages do not run its insertion effect. */
+.astryx-code-block .astryx-token-keyword { color: var(--color-syntax-keyword); }
+.astryx-code-block .astryx-token-string { color: var(--color-syntax-string); }
+.astryx-code-block .astryx-token-comment { color: var(--color-syntax-comment); }
+.astryx-code-block .astryx-token-number { color: var(--color-syntax-number); }
+.astryx-code-block .astryx-token-function { color: var(--color-syntax-function); }
+.astryx-code-block .astryx-token-type { color: var(--color-syntax-type); }
+.astryx-code-block .astryx-token-tag { color: var(--color-syntax-tag); }
+.astryx-code-block .astryx-token-attribute { color: var(--color-syntax-attribute); }
+.astryx-code-block .astryx-token-property { color: var(--color-syntax-property); }
+.astryx-code-block .astryx-token-operator { color: var(--color-syntax-operator); }
+.astryx-code-block .astryx-token-constant { color: var(--color-syntax-constant); }
+.astryx-code-block .astryx-token-punctuation { color: var(--color-syntax-punctuation); }
+.astryx-code-block .astryx-token-variable { color: var(--color-syntax-variable); }
+
+.astryx-code-block .astryx-token-prompt-root,
+.astryx-code-block .astryx-token-deleted { color: var(--color-syntax-prompt-root); }
+.astryx-code-block .astryx-token-prompt-user,
+.astryx-code-block .astryx-token-inserted { color: var(--color-syntax-prompt-user); }
+.astryx-code-block :is(.astryx-token-prompt-root, .astryx-token-prompt-user) {
+  user-select: none;
+  -webkit-user-select: none;
+}

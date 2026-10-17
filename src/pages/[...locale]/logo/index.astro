@@ -1,0 +1,15 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {LogoPage} from '../../../ui/about/LogoPage';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {routes} from '../../../i18n/routes';
+
+export const getStaticPaths = () => pagePaths('logo');
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+
+const props = {locale, section: 'about' as const, title: page.data.title, description: page.data.description, body: page.body ?? '', pages};
+---
+<SectionLayout locale={locale} title={page.data.title} description={page.data.description} path={routes.page(locale, 'logo')} alternates={alternates} section="about" current="logo" page={createElement(LogoPage, props)}></SectionLayout>

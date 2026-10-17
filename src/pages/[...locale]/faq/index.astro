@@ -1,0 +1,28 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {routes} from '../../../i18n/routes';
+import LegacyAnchors from '../../../ui/LegacyAnchors.astro';
+import {FaqPage} from '../../../ui/support/SupportPages';
+
+export function getStaticPaths() {
+  return pagePaths('faq');
+}
+
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+---
+<SectionLayout
+  locale={locale}
+  title={page.data.title}
+  description={page.data.description}
+  path={routes.page(locale, 'faq')}
+  alternates={alternates}
+  section="support"
+  current="faq"
+  page={createElement(FaqPage, {locale, title: page.data.title, description: page.data.description, body: page.body, questions: page.data.questions as Array<{title: string; href: string}>, anchors: (page.data.anchors ?? {}) as Record<string, string>, pages})}
+>
+  <LegacyAnchors locale={locale} anchors={(page.data.anchors ?? {}) as Record<string, string>} />
+</SectionLayout>

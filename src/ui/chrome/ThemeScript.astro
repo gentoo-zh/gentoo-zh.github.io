@@ -1,0 +1,12 @@
+---
+// Restore data-theme before paint; without a saved choice, reset.css follows the OS.
+import {THEME_STORAGE_KEY} from './themeMode';
+
+const key = THEME_STORAGE_KEY;
+---
+<script is:inline data-owner="src/ui/chrome/ThemeScript.astro" define:vars={{key}}>
+  try {
+    var choice = localStorage.getItem(key);
+    if (choice === 'light' || choice === 'dark') document.documentElement.setAttribute('data-theme', choice);
+  } catch (error) {}
+</script>

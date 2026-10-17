@@ -1,0 +1,37 @@
+---
+import {CATALOGS, type Locale} from '../i18n/locales';
+
+// Static CodeBlocks have no React copy handler; delegate through Astryx's public theming classes.
+const catalog = CATALOGS[Astro.props.locale as Locale];
+const copied = catalog['gz.code.copied'];
+const failed = catalog['gz.code.copyFailed'];
+---
+<script is:inline data-owner="src/ui/CopyCode.astro" define:vars={{copied, failed}}>
+  document.addEventListener('click', async event => {
+    const button = event.target instanceof Element ? event.target.closest('.astryx-code-block-copy-button') : null;
+    const code = button?.closest('.astryx-code-block')?.querySelector('code');
+    if (code == null) return;
+    const status = button.querySelector('[role="status"]');
+    let message = copied;
+    try {
+      const copy = code.cloneNode(true);
+      copy.querySelectorAll('[class*="astryx-token-prompt-"]').forEach(prompt => prompt.remove());
+      const text = Array.from(copy.querySelectorAll('[data-line]'), line => line.textContent.replace(/^\u200b$/, '')).join('\n');
+      if (navigator.clipboard) await navigator.clipboard.writeText(text);
+      else {
+        // No Clipboard API outside a secure context (plain-HTTP previews): answer the copy command.
+        const fill = copyEvent => {
+          copyEvent.clipboardData.setData('text/plain', text);
+          copyEvent.preventDefault();
+        };
+        document.addEventListener('copy', fill);
+        const ok = document.execCommand('copy');
+        document.removeEventListener('copy', fill);
+        if (!ok) throw new Error('copy');
+      }
+    } catch {
+      message = failed;
+    }
+    if (status != null) status.textContent = message;
+  });
+</script>

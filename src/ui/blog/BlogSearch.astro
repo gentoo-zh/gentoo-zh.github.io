@@ -1,0 +1,44 @@
+---
+// Static collection filtering: retains every post when JavaScript is unavailable.
+---
+<script is:inline data-owner="src/ui/blog/BlogSearch.astro">
+  (() => {
+    const root = document.querySelector('[data-post-collection]');
+    if (!root) return;
+    const controls = root.querySelector('[data-collection-search]');
+    const input = controls?.querySelector('input');
+    if (!input) return;
+    const items = [...root.querySelectorAll('[data-post-search]')];
+    const empty = root.querySelector('[data-collection-empty]');
+    const clear = controls.querySelector('button');
+    const reset = root.querySelector('[data-collection-reset]');
+    input.value = '';
+    input.defaultValue = '';
+    const filter = () => {
+      clear.style.display = input.value === '' ? 'none' : '';
+      reset.hidden = input.value === '';
+      reset.style.display = input.value === '' ? 'none' : '';
+      const query = input.value.trim().toLocaleLowerCase(document.documentElement.lang);
+      let matches = 0;
+      for (const item of items) {
+        item.hidden = !item.dataset.postSearch.toLocaleLowerCase(document.documentElement.lang).includes(query);
+        if (!item.hidden) matches++;
+      }
+      empty.hidden = matches !== 0;
+    };
+    filter();
+    controls.hidden = false;
+    input.addEventListener('input', filter);
+    const clearSearch = () => {
+      input.value = '';
+      filter();
+      input.focus();
+    };
+    clear.addEventListener('click', clearSearch);
+    reset.addEventListener('click', clearSearch);
+    input.addEventListener('keydown', event => {
+      if (event.key === 'Escape') clearSearch();
+    });
+    window.addEventListener('pageshow', filter);
+  })();
+</script>

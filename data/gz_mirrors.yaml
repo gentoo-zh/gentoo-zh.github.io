@@ -1,0 +1,116 @@
+# gentoo-zh 自家的源。换源器（gz-mirror）与代码块（gz-cmd）都读这里，加镜像只改这一处。
+#
+# gentoo-zh 与 Gentoo 主树分开写；Gentoo 主树再按 Git、rsync、Distfiles、binhost
+# 分组，因为不同协议的地址和可用节点不同。
+#
+# label   i18n 里的键，界面语言不同时显示对应的名字
+# default 该镜像适合给哪些语言当默认（空格分隔），按 <html lang> 挑
+# origin  源站。GENTOO_MIRRORS 是按顺序尝试的列表，列表槽位把它兜在最后，
+#         选中的镜像取不到还能回退
+git:
+  - uri: https://github.com/gentoo-zh/overlay.git
+    label: gz_src_upstream
+    default: zh-tw en
+    origin: true
+  - uri: https://mirrors.cernet.edu.cn/gentoo-zh.git
+    label: gz_src_cernet
+    default: zh-cn
+  - uri: https://mirror.nju.edu.cn/git/gentoo-zh.git
+    label: gz_src_nju
+  - uri: https://mirror.nyist.edu.cn/git/gentoo-zh.git
+    label: gz_src_nyist
+  - uri: https://mirrors.ha.edu.cn/git/gentoo-zh.git
+    label: gz_src_hernet
+dist:
+  - uri: https://distfiles.gentoozh.org
+    label: gz_src_origin
+    default: zh-tw
+    origin: true
+  - uri: https://mirrors.cernet.edu.cn/gentoo-zh
+    label: gz_src_cernet
+    default: zh-cn
+  - uri: https://mirror.nju.edu.cn/gentoo-zh
+    label: gz_src_nju
+  - uri: https://mirror.nyist.edu.cn/gentoo-zh
+    label: gz_src_nyist
+  - uri: https://mirrors.ha.edu.cn/gentoo-zh
+    label: gz_src_hernet
+  - uri: https://ftp2.osuosl.org/pub/gentoo-zh
+    label: gz_src_osuosl
+    default: en
+
+gentoo_git:
+  - uri: https://github.com/gentoo-mirror/gentoo.git
+    label: gz_src_gentoo_upstream
+    default: zh-tw en
+    origin: true
+  - uri: https://mirrors.cernet.edu.cn/gentoo-portage.git
+    label: gz_src_cernet
+    default: zh-cn
+  - uri: https://mirrors.tuna.tsinghua.edu.cn/git/gentoo-portage.git
+    label: gz_src_tuna
+  - uri: https://mirrors.ustc.edu.cn/gentoo.git
+    label: gz_src_ustc
+  - uri: https://mirrors.zju.edu.cn/git/gentoo-portage.git
+    label: gz_src_zju
+  - uri: https://mirrors.nju.edu.cn/git/gentoo-portage.git
+    label: gz_src_nju
+  - uri: https://mirrors.bfsu.edu.cn/git/gentoo-portage.git
+    label: gz_src_bfsu
+  - uri: https://mirrors.sdu.edu.cn/git/gentoo-portage.git
+    label: gz_src_sdu
+  - uri: https://mirrors.hust.edu.cn/git/gentoo-portage.git
+    label: gz_src_hust
+
+gentoo_rsync:
+  - uri: rsync://mirrors.tuna.tsinghua.edu.cn/gentoo-portage
+    label: gz_src_tuna
+    default: zh-cn
+  - uri: rsync://rsync.mirrors.ustc.edu.cn/gentoo-portage
+    label: gz_src_ustc
+  - uri: rsync://mirrors.bfsu.edu.cn/gentoo-portage
+    label: gz_src_bfsu
+  - uri: rsync://ftp.twaren.net/gentoo-portage
+    label: gz_src_nchc
+    default: zh-tw
+  - uri: rsync://hippocamp.cn.ext.planetunix.net/gentoo-portage
+    label: gz_src_planetunix
+    default: en
+
+gentoo_dist:
+  - uri: https://distfiles.gentoo.org
+    label: gz_src_origin
+    default: zh-tw en
+    origin: true
+  - uri: https://mirrors.cernet.edu.cn/gentoo
+    label: gz_src_cernet
+    default: zh-cn
+  - uri: https://mirrors.tuna.tsinghua.edu.cn/gentoo
+    label: gz_src_tuna
+  - uri: https://mirrors.bfsu.edu.cn/gentoo
+    label: gz_src_bfsu
+  - uri: https://mirrors.ustc.edu.cn/gentoo
+    label: gz_src_ustc
+  - uri: https://mirrors.zju.edu.cn/gentoo
+    label: gz_src_zju
+  - uri: https://mirrors.nju.edu.cn/gentoo
+    label: gz_src_nju
+  - uri: https://mirrors.sdu.edu.cn/gentoo
+    label: gz_src_sdu
+  - uri: https://mirrors.hust.edu.cn/gentoo
+    label: gz_src_hust
+
+gentoo_bin:
+  - uri: https://distfiles.gentoo.org
+    label: gz_src_origin
+    default: zh-tw en
+    origin: true
+  - uri: https://mirrors.cernet.edu.cn/gentoo
+    label: gz_src_cernet
+    default: zh-cn
+  - uri: https://mirrors.tuna.tsinghua.edu.cn/gentoo
+    label: gz_src_tuna
+  - uri: https://mirrors.bfsu.edu.cn/gentoo
+    label: gz_src_bfsu
+  - uri: https://mirrors.ustc.edu.cn/gentoo
+    label: gz_src_ustc

@@ -1,0 +1,16 @@
+---
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {guideLayout} from '../../../layouts/GuideLayout';
+import {guidePaths, type GuideRouteProps} from '../../../content/pages';
+import LegacyAnchors from '../../../ui/LegacyAnchors.astro';
+import GuideSetupScript from '../../../ui/start/GuideSetupScript.astro';
+
+export const getStaticPaths = () => guidePaths('overlay');
+
+const props = Astro.props as GuideRouteProps<'overlay'>;
+const layout = await guideLayout(props, {current: 'overlay', kind: 'overlay'});
+---
+<SectionLayout {...layout}>
+  <LegacyAnchors locale={props.locale} anchors={props.page.data.anchors ?? {}} />
+  <GuideSetupScript />
+</SectionLayout>

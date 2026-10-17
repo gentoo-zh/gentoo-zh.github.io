@@ -1,0 +1,30 @@
+---
+import {existsSync} from 'node:fs';
+import {createElement, type ReactElement} from 'react';
+import {sectionOf, type SectionId, type SectionPageId} from '../ui/chrome/sections';
+import {SectionPageContext} from '../ui/section/sectionContext';
+import {renderSectionSideNav} from '../ui/section/renderSideNav';
+import SectionNavScript from '../ui/section/SectionNavScript.astro';
+import type {SiteHeadProps} from '../ui/SiteHead';
+import Base from './Base.astro';
+import OutlineSpy from '../ui/section/OutlineSpy.astro';
+
+type Props = SiteHeadProps & {
+  section: SectionId;
+  /** The sidebar entry to select: this page's id in sections.ts, or 'landing'. */
+  current: SectionPageId | 'landing';
+  page: ReactElement;
+};
+const {section, current, page, ...head} = Astro.props;
+const sideNav = await renderSectionSideNav({locale: head.locale, section, current});
+const entry = sectionOf(section).pages.find(item => item.id === current);
+const slug = current === 'landing' ? sectionOf(section).slug : entry?.kind === 'page' ? entry.slug : undefined;
+const source = slug == null ? null : `content/${head.locale}/${slug}/_index.md`;
+const editHref = source != null && existsSync(source) ? `https://github.com/gentoo-zh/gentoo-zh.github.io/edit/master/${source}` : null;
+const framed = createElement(SectionPageContext.Provider, {value: {current, editHref}}, page);
+---
+<Base {...head} section={section} sideNav={sideNav} page={framed}>
+  <slot />
+  <OutlineSpy />
+  <SectionNavScript />
+</Base>

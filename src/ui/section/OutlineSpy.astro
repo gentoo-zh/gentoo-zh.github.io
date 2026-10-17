@@ -1,0 +1,61 @@
+---
+// After the Astryx docsite's docOutline (MIT, Meta Platforms, Inc.).
+// Learn active/inactive classes from static Outline links so the spy follows the theme.
+---
+<script is:inline data-owner="src/ui/section/OutlineSpy.astro">
+  (() => {
+    if (!('IntersectionObserver' in window)) return;
+    document.querySelectorAll('[data-gz-outline]').forEach(rail => {
+    const links = [...rail.querySelectorAll('a[href^="#"]')];
+    if (rail.tagName === 'DETAILS') {
+      rail.addEventListener('click', event => {
+        if (event.target.closest('a[href^="#"]')) {
+          rail.open = false;
+          rail.querySelector('summary').focus({preventScroll: true});
+        }
+      });
+    }
+    const on = links.find(link => link.getAttribute('aria-current') === 'location');
+    if (on == null || links.length < 2) return;
+    const classes = link => new Set(link.classList);
+    const diff = (a, b) => [...a].filter(name => !b.has(name));
+    const onSet = classes(on);
+    const off = links.filter(link => link !== on).map(classes).sort((a, b) => diff(onSet, a).length + diff(a, onSet).length - diff(onSet, b).length - diff(b, onSet).length)[0];
+    const active = diff(onSet, off);
+    const plain = diff(off, onSet);
+    const ids = links.map(link => decodeURIComponent(link.hash.slice(1)));
+    const set = id => {
+      links.forEach((link, index) => {
+        const current = ids[index] === id;
+        link.classList.remove(...(current ? plain : active));
+        link.classList.add(...(current ? active : plain));
+        if (current) link.setAttribute('aria-current', 'location');
+        else link.removeAttribute('aria-current');
+        if (current) link.setAttribute('data-active', 'active');
+        else link.removeAttribute('data-active');
+      });
+    };
+    const targets = ids.map(id => document.getElementById(id));
+    const update = () => {
+      let current = ids[0];
+      if (scrollY > 0) targets.forEach((target, index) => {
+        if (target != null && target.getBoundingClientRect().top < innerHeight / 3) current = ids[index];
+      });
+      set(current);
+    };
+    let observer, timer;
+    const observe = () => {
+      if (rail.tagName === 'DETAILS') document.documentElement.style.scrollPaddingTop = rail.offsetHeight ? 'calc(var(--size-element-md) + var(--spacing-6) + var(--border-width))' : '0rem';
+      observer?.disconnect();
+      observer = new IntersectionObserver(update, {rootMargin: [0, 0, -innerHeight * 2 / 3, 0].map(value => `${value}px`).join(' ')});
+      for (const target of targets) if (target != null) observer.observe(target);
+      update();
+    };
+    observe();
+    addEventListener('resize', () => {
+      clearTimeout(timer);
+      timer = setTimeout(observe, 100);
+    });
+    });
+  })();
+</script>

@@ -1,0 +1,27 @@
+---
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {contributorCard, contributorRoutes, getContributorGroups, getContributorsIndex} from '../../../content/contributors';
+import {LOCALES} from '../../../i18n/locales';
+import {localePaths} from '../../../i18n/routes';
+import {renderContributors} from '../../../ui/contributors/renderIsland';
+import ContributorsScript from '../../../ui/contributors/ContributorsScript.astro';
+
+export const getStaticPaths = localePaths;
+const {locale} = Astro.props as {locale: (typeof LOCALES)[number]};
+const index = await getContributorsIndex(locale);
+const groups = (await getContributorGroups(locale)).map(({group, contributors}) => ({group, people: contributors.map(c => contributorCard(c, 'card'))}));
+const alternates = Object.fromEntries(LOCALES.map(target => [target, contributorRoutes.list(target)]));
+const page = await renderContributors(locale, {kind: 'library', page: {title: index.data.title, body: index.body ?? '', groups}});
+---
+<SectionLayout
+  locale={locale}
+  title={index.data.title}
+  description={index.data.description}
+  path={contributorRoutes.list(locale)}
+  alternates={alternates}
+  section="community"
+  current="contributors"
+  page={page}
+>
+  <ContributorsScript />
+</SectionLayout>

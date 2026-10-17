@@ -1,0 +1,34 @@
+---
+import {createElement} from 'react';
+import {CATALOGS, LANGUAGE_TAG, type Locale} from '../i18n/locales';
+import {RedirectPage} from '../ui/RedirectPage';
+import {renderStatic} from '../ui/renderStatic';
+import {SITE} from '../site';
+
+// Importing Base.astro's stylesheets here drops StyleX rules from pages without blog cards.
+type Props = {target: string; locale: Locale; anchors?: Record<string, string>};
+const {target, locale, anchors} = Astro.props;
+const body = await renderStatic(createElement(RedirectPage, {locale, target}));
+---
+<!doctype html>
+<html lang={LANGUAGE_TAG[locale]}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{CATALOGS[locale]['gz.redirect.title']}</title>
+    <link rel="canonical" href={target} />
+    <meta name="robots" content="noindex" />
+    {anchors && <script is:inline data-owner="src/layouts/Redirect.astro" data-redirect-anchors={JSON.stringify(anchors)} data-target={target}>
+      const {redirectAnchors, target} = document.currentScript.dataset;
+      const anchors = JSON.parse(redirectAnchors);
+      let id = location.hash.slice(1);
+      try { id = decodeURIComponent(id); } catch {}
+      location.replace(Object.hasOwn(anchors, id) ? anchors[id] : target);
+    </script>}
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="icon" href={SITE.logo} type="image/svg+xml" />
+  </head>
+  <body>
+    <Fragment set:html={body} />
+  </body>
+</html>

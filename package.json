@@ -1,0 +1,54 @@
+{
+  "name": "gentoozh-site",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "packageManager": "pnpm@11.15.1",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/build-seo.mjs && pagefind --site dist",
+    "preview": "astro preview",
+    "theme": "astryx theme build src/theme/gentoo.ts --out src/theme/built/gentoo.css",
+    "typecheck": "astro sync && tsc --noEmit",
+    "check:theme": "astryx theme build src/theme/gentoo.ts --out src/theme/built/gentoo.css --check",
+    "check:content-parity": "node scripts/check-content-parity.mjs",
+    "check:code": "node --experimental-strip-types scripts/check-code.mjs",
+    "check:data": "node --experimental-strip-types scripts/check-data.mjs",
+    "check:contributors": "node scripts/check-contributors.mjs",
+    "check:ui": "eslint . && node scripts/check-ui.mjs",
+    "check:i18n": "node scripts/check-i18n.mjs",
+    "check:no-convert": "node scripts/check-no-convert.mjs",
+    "check:urls": "node scripts/check-urls.mjs",
+    "check:budget": "node scripts/check-budget.mjs",
+    "check:search": "node scripts/check-search.mjs",
+    "check:headers": "node scripts/check-headers.mjs",
+    "check": "pnpm typecheck && pnpm check:theme && pnpm check:code && pnpm check:data && pnpm check:contributors && pnpm check:ui && pnpm check:no-convert && pnpm build && pnpm check:content-parity && pnpm check:i18n && pnpm check:urls && pnpm check:budget && pnpm check:search && pnpm check:headers && pnpm check:seo",
+    "check:seo": "node scripts/check-seo.mjs"
+  },
+  "dependencies": {
+    "@astryxdesign/core": "0.7.0",
+    "@fontsource/figtree": "5.3.0",
+    "@stylexjs/stylex": "0.19.1",
+    "astro": "7.3.8",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "recharts": "3.10.1"
+  },
+  "devDependencies": {
+    "@astrojs/compiler-rs": "0.5.2",
+    "@astryxdesign/cli": "0.7.0",
+    "@stylexjs/unplugin": "0.19.1",
+    "@types/node": "22.20.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "es-module-lexer": "3.0.3",
+    "eslint": "10.12.0",
+    "pagefind": "1.5.2",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.71.2",
+    "unplugin": "2.3.11"
+  }
+}

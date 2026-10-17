@@ -1,0 +1,6 @@
+---
+import StatusCompactScript from './StatusCompactScript.astro';
+import StatusDashboardScript from './StatusDashboardScript.astro';
+const Script = Astro.url.pathname.endsWith('/status/') ? StatusDashboardScript : StatusCompactScript;
+---
+<Script />
