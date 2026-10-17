@@ -1,0 +1,60 @@
+---
+import '@astryxdesign/core/reset.css';
+import '@astryxdesign/core/astryx.css';
+import '../theme/built/gentoo.css';
+import '../markdown/CodeHighlight.css';
+// Self-host Latin fonts because Google Fonts is blocked in mainland China; use system CJK fonts.
+import '@fontsource/figtree/latin-400.css';
+import '@fontsource/figtree/latin-600.css';
+import figtree400 from '@fontsource/figtree/files/figtree-latin-400-normal.woff2?url';
+import figtree600 from '@fontsource/figtree/files/figtree-latin-600-normal.woff2?url';
+import {createElement, type ReactElement} from 'react';
+import {LANGUAGE_TAG, navMessages} from '../i18n/locales';
+import {routes} from '../i18n/routes';
+import {NAV_ISLAND_ID_PREFIX, NavIslandRoot, type NavIslandProps} from '../ui/chrome/NavIsland';
+import NavScript from '../ui/chrome/NavScript.astro';
+import CopyCode from '../ui/CopyCode.astro';
+import type {SectionId} from '../ui/chrome/sections';
+import HeaderOffset from '../ui/chrome/HeaderOffset.astro';
+import ThemeScript from '../ui/chrome/ThemeScript.astro';
+import {SiteHead, type SiteHeadProps} from '../ui/SiteHead';
+import {SiteShell} from '../ui/SiteShell';
+import {renderStatic} from '../ui/renderStatic';
+
+type Props = SiteHeadProps & {
+  /** The page body, rendered to static HTML. */
+  page: ReactElement;
+  /** The category selected in the top navigation. */
+  section?: SectionId;
+  /** The category sidebar; SectionLayout.astro passes it. */
+  sideNav?: ReactElement;
+};
+const {page, section, sideNav, ...head} = Astro.props;
+const {locale, alternates} = head;
+const isHome = head.path === routes.home(locale) || undefined;
+const nav: NavIslandProps = {locale, section, alternates, isHome, languageTag: LANGUAGE_TAG[locale], messages: navMessages(locale)};
+const [headHtml, navHtml] = await Promise.all([
+  renderStatic(createElement(SiteHead, {...head, section})),
+  renderStatic(createElement(NavIslandRoot, nav), {identifierPrefix: NAV_ISLAND_ID_PREFIX}),
+]);
+const pageHtml = await renderStatic(createElement(SiteShell, {locale, nav: {html: navHtml, props: nav}, sideNav}, page));
+---
+<!doctype html>
+<html lang={LANGUAGE_TAG[locale]} data-astryx-theme="gentoo">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="preload" href={figtree400} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={figtree600} as="font" type="font/woff2" crossorigin />
+    <ThemeScript />
+    <Fragment set:html={headHtml} />
+  </head>
+  <body>
+    <Fragment set:html={pageHtml} />
+    <HeaderOffset />
+    <NavScript />
+    <!-- The copy-button delegate: any route may render a CodeBlock (landing pages, FAQ, posts). -->
+    <CopyCode locale={locale} />
+    <slot />
+  </body>
+</html>

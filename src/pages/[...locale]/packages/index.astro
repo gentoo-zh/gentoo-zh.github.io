@@ -1,0 +1,34 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {LANGUAGE_TAG, providerMessages} from '../../../i18n/locales';
+import {routes} from '../../../i18n/routes';
+import {PackagesIsland} from '../../../ui/download/PackagesIsland';
+import PackagesScript from '../../../ui/download/PackagesScript.astro';
+import {PACKAGES_MESSAGE_KEYS} from '../../../ui/download/packagesData';
+import {SectionPage} from '../../../ui/section/SectionPage';
+
+export const getStaticPaths = () => pagePaths('packages');
+
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+const languageTag = LANGUAGE_TAG[locale];
+const messages = Object.fromEntries(
+  Object.entries(providerMessages(locale)[languageTag] ?? {}).filter(([key]) => PACKAGES_MESSAGE_KEYS.test(key)),
+);
+
+---
+<SectionLayout
+  locale={locale}
+  title={page.data.title}
+  description={page.data.description}
+  path={routes.page(locale, 'packages')}
+  alternates={alternates}
+  section="download"
+  current="packages"
+  page={createElement(SectionPage, {locale, section: 'download', title: page.data.title, description: page.data.description, pages, isDataPage: true, body: `<!-- slot:table -->\n\n${page.body ?? ''}`, slots: {table: createElement(PackagesIsland, {props: {languageTag, messages}})}})}
+>
+  <PackagesScript />
+</SectionLayout>

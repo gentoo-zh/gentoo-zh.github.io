@@ -1,0 +1,11 @@
+---
+import {createElement} from 'react';
+import Base from '../../layouts/Base.astro';
+import {CATALOGS, type Locale} from '../../i18n/locales';
+import {localePaths, localePrefix} from '../../i18n/routes';
+import {NotFoundPage} from '../../ui/NotFoundPage';
+
+export const getStaticPaths = localePaths;
+const {locale} = Astro.props as {locale: Locale};
+---
+<Base locale={locale} title={CATALOGS[locale]['gz.notFound.title']} description={CATALOGS[locale]['gz.notFound.description']} noindex path={`${localePrefix(locale)}/404.html`} alternates={{}} page={createElement(NotFoundPage, {locale})} />

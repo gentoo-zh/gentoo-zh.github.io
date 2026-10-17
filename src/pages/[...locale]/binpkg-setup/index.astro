@@ -1,0 +1,16 @@
+---
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {guideLayout} from '../../../layouts/GuideLayout';
+import {guidePaths, type GuideRouteProps} from '../../../content/pages';
+import LegacyAnchors from '../../../ui/LegacyAnchors.astro';
+import GuideSetupScript from '../../../ui/start/GuideSetupScript.astro';
+
+export const getStaticPaths = () => guidePaths('binpkg-setup');
+
+const props = Astro.props as GuideRouteProps;
+const layout = await guideLayout(props, {current: 'binpkg', kind: 'binpkg'});
+---
+<SectionLayout {...layout}>
+  <LegacyAnchors locale={props.locale} anchors={props.page.data.anchors ?? {}} />
+  <GuideSetupScript />
+</SectionLayout>

@@ -1,0 +1,47 @@
+---
+// Insert the mirror table at the Markdown body's gz-mirror-table marker.
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {loadData} from '../../../data/entries';
+import {routes} from '../../../i18n/routes';
+import LegacyAnchors from '../../../ui/LegacyAnchors.astro';
+import MirrorHealth from '../../../ui/download/MirrorHealth.astro';
+import {MirrorTable} from '../../../ui/download/MirrorTable';
+import {LegacyAnchorLinks} from '../../../ui/section/LegacyAnchorLinks';
+import {SectionPage} from '../../../ui/section/SectionPage';
+
+export const getStaticPaths = () => pagePaths('mirrorlist');
+
+const MARKER = '<!-- gz-mirror-table -->';
+
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+const mirrors = await loadData('mirrors');
+const body = page.body ?? '';
+const anchors = Object.fromEntries(Object.entries((page.data.anchors ?? {}) as Record<string, string>).map(([id, target]) => {
+  const [path, fragment] = target.split('#');
+  return [id, `${routes.page(locale, path!.slice(1, -1))}#${fragment}`];
+}));
+if (!body.includes(MARKER)) throw new Error(`content/${locale}/mirrorlist/_index.md lacks ${MARKER}`);
+
+---
+<SectionLayout
+  locale={locale}
+  title={page.data.title}
+  description={page.data.description}
+  path={routes.page(locale, 'mirrorlist')}
+  alternates={alternates}
+  section="download"
+  current="mirrorlist"
+  page={createElement(
+    SectionPage,
+    {locale, section: 'download', title: page.data.title, description: page.data.description, pages,
+      isDataPage: true, body: body.replace(MARKER, '<!-- slot:mirrors -->').replace(/<!-- anchor:[^ ]+ -->/g, ''),
+      slots: {mirrors: createElement(MirrorTable, {locale, mirrors}), legacy: createElement(LegacyAnchorLinks, {locale, anchors})}},
+  )}
+>
+  <LegacyAnchors anchors={anchors} />
+  <MirrorHealth />
+</SectionLayout>

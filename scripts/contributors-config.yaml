@@ -1,0 +1,29 @@
+blocklist:
+  - Claude
+  - charm
+  # 已刪除的 GitHub 帳號
+  - dearfl
+  # 應本人請求移除
+  - serephus
+  # 應本人請求移除，保持匿名
+  - aieu
+  # 依維護者決定移除
+  - vitaly-zdanevich
+
+# 統計的 GitHub 組織：其下所有公開、非 fork、未封存的倉庫，提交至少 1 次即列入
+org: gentoo-zh
+
+# 不統計的倉庫（倉庫名，不含組織）
+exclude_repos:
+  # 匯入了 Gentoo 官方 releng 的歷史，提交者幾乎都是 Gentoo 上游開發者
+  - gentoo-cjk-livecd
+
+# 自動化帳號，不計入貢獻者；login 以 [bot] 結尾或 GitHub 標為 Bot 的帳號另外自動排除
+bots:
+  - github-actions
+  - dependabot
+  - gentoo-zh-bot
+
+avatar_sizes:
+  card: 200    # 列表頁卡片頭像
+  single: 240  # 個人頁頭像

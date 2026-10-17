@@ -1,0 +1,19 @@
+---
+import {createElement} from 'react';
+import BlogSearch from '../../../ui/blog/BlogSearch.astro';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {getPosts, getSection, groupByTag, localeAlternates, summarize} from '../../../content/posts';
+import {localePaths, routes} from '../../../i18n/routes';
+import {BlogIndex} from '../../../ui/blog/BlogIndex';
+
+export const getStaticPaths = localePaths;
+const {locale} = Astro.props;
+const section = await getSection(locale);
+const entries = await getPosts(locale);
+const posts = entries.map(summarize);
+const tags = [...groupByTag(entries).keys()];
+const alternates = localeAlternates(routes.posts);
+---
+<SectionLayout locale={locale} title={section.title} description={section.description} path={routes.posts(locale)} alternates={alternates} section="community" current="posts" page={createElement(BlogIndex, {locale, title: section.title, description: section.description, posts, tags})} >
+  <BlogSearch />
+</SectionLayout>

@@ -1,0 +1,19 @@
+---
+/**
+ * Adapted from Astryx DocsShell's initialHeaderHeightScript (MIT, Meta Platforms, Inc.).
+ * Static AppShell cannot measure its header; publish offsets for sticky sidebars and anchors before paint.
+ */
+---
+<script is:inline data-owner="src/ui/chrome/HeaderOffset.astro">
+  (function () {
+    var header = document.querySelector('.astryx-app-shell-header');
+    if (header == null) return;
+    var publish = function () {
+      var height = header.getBoundingClientRect().height + 'px';
+      document.documentElement.style.setProperty('--_app-shell-header-height', height);
+      document.documentElement.style.setProperty('--appshell-header-height', height);
+    };
+    publish();
+    if (typeof ResizeObserver === 'function') new ResizeObserver(publish).observe(header);
+  })();
+</script>

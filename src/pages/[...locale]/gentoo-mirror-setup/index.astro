@@ -1,0 +1,11 @@
+---
+import Redirect from '../../../layouts/Redirect.astro';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {routes} from '../../../i18n/routes';
+import {localizedAnchors} from '../../../ui/section/LegacyAnchorLinks';
+
+export const getStaticPaths = () => pagePaths('gentoo-mirror-setup');
+const {locale, page} = Astro.props as PageRouteProps;
+const anchors = localizedAnchors(locale, (page.data.anchors ?? {}) as Record<string, string>);
+---
+<Redirect locale={locale} target={routes.page(locale, 'gentoo-repo-setup')} anchors={anchors} />

@@ -1,0 +1,175 @@
+{
+  "version": 1,
+  "pages": {
+    "/en/contributing/": [
+      "project-overview",
+      "project-structure",
+      "how-content-is-organized",
+      "configuration-files",
+      "multilingual-support",
+      "theme-and-assets",
+      "setting-up-your-environment",
+      "how-to-contribute-to-the-website",
+      "1-submit-a-new-article",
+      "2-simplified-to-traditional-conversion",
+      "3-article-attribution-and-avatars",
+      "4-improving-existing-content--technical-improvements",
+      "markdown-formatting",
+      "chinese-typography",
+      "faq",
+      "how-do-i-update-the-theme",
+      "how-do-i-add-a-new-section-page",
+      "what-if-the-simplified-and-traditional-content-gets-out-of-sync"
+    ],
+    "/en/about/": [
+      "welcome-to-the-gentoo-zh-community",
+      "bug--news-feed",
+      "join-everything-at-once",
+      "what-this-site-is-for",
+      "about-the-sites-languages",
+      "why-zh",
+      "english",
+      "how-can-i-help-build-the-community",
+      "what-do-i-get-out-of-it",
+      "copyright-notice"
+    ],
+    "/en/changelog/": [
+      "october-2026",
+      "september-2026",
+      "august-2026",
+      "july-2026",
+      "june-2026",
+      "may-2026",
+      "about-these-updates"
+    ],
+    "/en/download/": [
+      "next-steps"
+    ],
+    "/en/thanks/": [
+      "credits-and-licenses"
+    ],
+    "/contributing/": [
+      "项目概况",
+      "项目结构",
+      "内容组织",
+      "配置文件",
+      "多语言支持",
+      "主题与资源",
+      "环境准备",
+      "如何为网站贡献",
+      "1-提交新文章",
+      "2-简繁转换",
+      "3-文章署名与头像",
+      "4-改进现有内容--技术改进",
+      "markdown-格式",
+      "中文排版",
+      "常见问题",
+      "如何更新主题",
+      "如何添加新的栏目页面",
+      "简繁内容不一致怎么办"
+    ],
+    "/about/": [
+      "欢迎来到-gentoo-中文",
+      "bug--新闻播报",
+      "一次加入全部",
+      "本社区网站目标",
+      "关于网站语言",
+      "为什么叫-zh",
+      "英文",
+      "参与社区建设我能做些什么",
+      "我能得到什么",
+      "版权声明"
+    ],
+    "/changelog/": [
+      "2026-年-10-月",
+      "2026-年-9-月",
+      "2026-年-8-月",
+      "2026-年-7-月",
+      "2026-年-6-月",
+      "2026-年-5-月",
+      "更新说明"
+    ],
+    "/download/": [
+      "下一步"
+    ],
+    "/thanks/": [
+      "来源与许可"
+    ],
+    "/zh-tw/contributing/": [
+      "專案概況",
+      "專案結構",
+      "內容組織",
+      "配置檔案",
+      "多語言支援",
+      "主題與資源",
+      "環境準備",
+      "如何為網站貢獻",
+      "1-提交新文章",
+      "2-簡繁轉換",
+      "3-文章署名與頭像",
+      "4-改進現有內容--技術改進",
+      "markdown-格式",
+      "中文排版",
+      "常見問題",
+      "如何更新主題",
+      "如何新增新的欄目頁面",
+      "簡繁內容不一致怎麼辦"
+    ],
+    "/zh-tw/about/": [
+      "歡迎來到-gentoo-中文",
+      "bug--新聞播報",
+      "一次加入全部",
+      "本社群網站目標",
+      "關於網站語言",
+      "為什麼叫-zh",
+      "英文",
+      "參與社群建設我能做些什麼",
+      "我能得到什麼",
+      "版權聲明"
+    ],
+    "/zh-tw/changelog/": [
+      "2026-年-10-月",
+      "2026-年-9-月",
+      "2026-年-8-月",
+      "2026-年-7-月",
+      "2026-年-6-月",
+      "2026-年-5-月",
+      "更新說明"
+    ],
+    "/zh-tw/download/": [
+      "下一步"
+    ],
+    "/zh-tw/thanks/": [
+      "來源與授權"
+    ]
+  },
+  "deferred": {
+    "/en/": {
+      "ids": [
+        "bento-community",
+        "bento-articles-h",
+        "bento-contribs",
+        "bento-sponsors"
+      ],
+      "reason": "Homepage redesign owns these sections; excluded from this branch by the owner."
+    },
+    "/": {
+      "ids": [
+        "bento-community",
+        "bento-articles-h",
+        "bento-contribs",
+        "bento-sponsors"
+      ],
+      "reason": "Homepage redesign owns these sections; excluded from this branch by the owner."
+    },
+    "/zh-tw/": {
+      "ids": [
+        "bento-community",
+        "bento-articles-h",
+        "bento-contribs",
+        "bento-sponsors"
+      ],
+      "reason": "Homepage redesign owns these sections; excluded from this branch by the owner."
+    }
+  }
+}

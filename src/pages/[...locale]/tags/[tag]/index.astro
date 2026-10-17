@@ -1,0 +1,32 @@
+---
+import {createElement} from 'react';
+import BlogSearch from '../../../../ui/blog/BlogSearch.astro';
+import SectionLayout from '../../../../layouts/SectionLayout.astro';
+import {getPosts, groupByTag, summarize, type Post} from '../../../../content/posts';
+import {CATALOGS, LOCALES, type Locale} from '../../../../i18n/locales';
+import {localeParam, routes, tagSlug} from '../../../../i18n/routes';
+import {TagPosts} from '../../../../ui/TagsPage';
+
+export async function getStaticPaths() {
+  const groups = await Promise.all(LOCALES.map(async locale => [locale, groupByTag(await getPosts(locale))] as const));
+  const alternatesOf = (slug: string) =>
+    Object.fromEntries(
+      groups
+        .filter(([, tags]) => [...tags.keys()].some(tag => tagSlug(tag) === slug))
+        .map(([locale]) => [locale, routes.tag(locale, slug)]),
+    );
+  return groups.flatMap(([locale, tags]) =>
+    [...tags].map(([tag, posts]) => ({
+      params: {locale: localeParam(locale), tag: tagSlug(tag)},
+      props: {locale, tag, posts, alternates: alternatesOf(tagSlug(tag))},
+    })),
+  );
+}
+
+type Props = {locale: Locale; tag: string; posts: Post[]; alternates: Partial<Record<Locale, string>>};
+const {locale, tag, posts, alternates} = Astro.props as Props;
+const path = routes.tag(locale, tag);
+---
+<SectionLayout locale={locale} title={CATALOGS[locale]['gz.seo.tag.title'].replace('{tag}', tag)} description={CATALOGS[locale]['gz.seo.tag.description'].replace('{tag}', tag)} path={path} alternates={alternates} section="community" current="tags" page={createElement(TagPosts, {locale, tag, posts: posts.map(summarize)})} >
+  <BlogSearch />
+</SectionLayout>

@@ -1,0 +1,88 @@
+name: Update Contributors
+
+on:
+  schedule:
+    - cron: '0 0 1 * *'
+  workflow_dispatch:
+
+concurrency:
+  group: update-contributors
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  # Pushes made with GITHUB_TOKEN do not start other workflows, so the deploy is dispatched explicitly.
+  actions: write
+
+jobs:
+  update-contributors:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.11'
+
+      - name: Install Python dependencies
+        run: pip install 'pyyaml==6.0.2'
+
+      - name: Install webp tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends webp
+
+      - name: Run update script
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python3 scripts/update-contributors.py --commits-only
+
+      - name: Check for changes
+        id: check_changes
+        run: |
+          # Untracked files are new contributors.
+          if [ -z "$(git status --porcelain content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/)" ]; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+            echo "No contributor changes"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "Changes:"
+            git status --short content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/ | head -50
+          fi
+
+      - name: Commit and push changes
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          git add content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/
+
+          changed=$(git diff --cached --name-only | wc -l | tr -d ' ')
+          git commit -m "contributors: Update from GitHub (${changed} files)"
+
+          # Rebase and retry if the branch moved meanwhile.
+          pushed=false
+          for i in 1 2 3; do
+            if git pull --rebase --autostash origin "${GITHUB_REF_NAME}" && \
+               git push origin "HEAD:${GITHUB_REF_NAME}"; then
+              pushed=true
+              break
+            fi
+            echo "Push failed (attempt $i/3), retrying"
+            sleep 5
+          done
+          if [ "$pushed" != true ]; then
+            echo "Push failed three times; contributor update not uploaded" >&2
+            exit 1
+          fi
+
+      - name: Deploy the update
+        if: steps.check_changes.outputs.has_changes == 'true' && github.ref_name == 'master'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: gh workflow run deploy.yml --ref master

@@ -1,0 +1,29 @@
+---
+// Resolve legacy fragment ids to the renamed headings recorded in front matter.
+import type {Locale} from '../i18n/locales';
+import {localizeHref} from '../i18n/routes';
+
+const {anchors: source, locale} = Astro.props as {anchors: Record<string, string>; locale?: Locale};
+const anchors = Object.fromEntries(Object.entries(source).map(([id, target]) => [
+  id, locale == null ? target : localizeHref(locale, target, () => true),
+]));
+---
+<script is:inline data-owner="src/ui/LegacyAnchors.astro" define:vars={{anchors}}>
+  (() => {
+    const follow = () => {
+      let id;
+      try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+      const target = anchors[id];
+      if (target == null) return;
+      if (target.startsWith('/')) {
+        location.replace(target);
+        return;
+      }
+      history.replaceState(null, '', `#${target}`);
+      document.getElementById(target)?.scrollIntoView();
+    };
+    follow();
+    window.addEventListener('hashchange', follow);
+    window.addEventListener('pageshow', follow);
+  })();
+</script>

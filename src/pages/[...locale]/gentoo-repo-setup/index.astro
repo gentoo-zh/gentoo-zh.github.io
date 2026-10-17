@@ -1,0 +1,14 @@
+---
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {guideLayout} from '../../../layouts/GuideLayout';
+import {guidePaths, type GuideRouteProps} from '../../../content/pages';
+import GuideSetupScript from '../../../ui/start/GuideSetupScript.astro';
+
+export const getStaticPaths = () => guidePaths('gentoo-repo-setup');
+
+const props = Astro.props as GuideRouteProps;
+const layout = await guideLayout(props, {current: 'gentooRepoSetup', kind: 'official'});
+---
+<SectionLayout {...layout}>
+  <GuideSetupScript />
+</SectionLayout>

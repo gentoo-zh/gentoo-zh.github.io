@@ -1,0 +1,48 @@
+name: Deploy site to Cloudflare Workers
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+  # Daily rebuild: the home page's days-running count and overlay commit count are build-time values.
+  schedule:
+    - cron: '30 2 * * *'
+
+concurrency:
+  group: deploy-worker
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0; version from packageManager
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Refresh overlay statistics
+        if: github.event_name != 'push'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/update-overlay-stats.mjs
+      - name: Check and build
+        run: CI=true pnpm check
+      - name: Deploy to Cloudflare Workers
+        if: github.ref == 'refs/heads/master'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx --yes wrangler@4.107.0 deploy

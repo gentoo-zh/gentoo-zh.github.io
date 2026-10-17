@@ -1,0 +1,11 @@
+---
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {guideLayout} from '../../../layouts/GuideLayout';
+import {guidePaths, type GuideRouteProps} from '../../../content/pages';
+
+export const getStaticPaths = () => guidePaths('binpkg-signing');
+
+const props = Astro.props as GuideRouteProps;
+const layout = await guideLayout(props, {current: 'binpkgSigning'});
+---
+<SectionLayout {...layout} />

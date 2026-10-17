@@ -1,0 +1,3 @@
+allowBuilds:
+  '@astryxdesign/cli': false
+  '@astryxdesign/core': false

@@ -1,0 +1,5 @@
+<script>
+  const load = () => void import('./status-dashboard-client').then(module => module.mountDashboard());
+  if ('requestIdleCallback' in window) window.requestIdleCallback(load, {timeout: 3000});
+  else setTimeout(load, 1);
+</script>

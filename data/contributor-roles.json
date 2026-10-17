@@ -1,0 +1,79 @@
+{
+  "groupOrder": [
+    "founders",
+    "siteMaintainers",
+    "liveosDevelopers",
+    "siteContent",
+    "overlayMaintainers",
+    "overlayContributors"
+  ],
+  "fallback": {
+    "group": "overlayContributors",
+    "labels": {
+      "zh-cn": "Overlay 贡献者",
+      "zh-tw": "Overlay 貢獻者",
+      "en": "Overlay contributor"
+    }
+  },
+  "roles": [
+    {
+      "id": "overlay_maint",
+      "group": "overlayMaintainers",
+      "labels": {
+        "zh-cn": "现任主要维护者",
+        "zh-tw": "現任主要維護者",
+        "en": "Current maintainer"
+      },
+      "aliases": []
+    },
+    {
+      "id": "founder",
+      "group": "founders",
+      "labels": {
+        "zh-cn": "社群创始人",
+        "zh-tw": "社群創始人",
+        "en": "Community founder"
+      },
+      "aliases": [
+        {
+          "label": "社区创始人",
+          "locale": "zh-cn"
+        },
+        {
+          "label": "社區創始人",
+          "locale": "zh-tw"
+        }
+      ]
+    },
+    {
+      "id": "site_content",
+      "group": "siteContent",
+      "labels": {
+        "zh-cn": "网站内容贡献者",
+        "zh-tw": "網站內容貢獻者",
+        "en": "Site content contributor"
+      },
+      "aliases": []
+    },
+    {
+      "id": "site_maint",
+      "group": "siteMaintainers",
+      "labels": {
+        "zh-cn": "网站维护者",
+        "zh-tw": "網站維護者",
+        "en": "Site maintainer"
+      },
+      "aliases": []
+    },
+    {
+      "id": "liveos_dev",
+      "group": "liveosDevelopers",
+      "labels": {
+        "zh-cn": "LiveOS 开发者",
+        "zh-tw": "LiveOS 開發者",
+        "en": "LiveOS developer"
+      },
+      "aliases": []
+    }
+  ]
+}

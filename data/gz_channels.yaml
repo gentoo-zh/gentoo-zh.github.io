@@ -1,0 +1,8 @@
+bin:
+  - name: stable
+    suffix: /binpkgs/x86-64
+    label: gz_channel_stable
+    default: true
+  - name: unstable
+    suffix: /unstable/binpkgs/x86-64
+    label: gz_channel_unstable

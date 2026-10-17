@@ -1,0 +1,11 @@
+---
+// Load health data at idle time; retain the static dash when the request fails.
+---
+<script>
+  const island = document.querySelector('[data-gz-island="mirror-health"]');
+  if (island instanceof HTMLElement) {
+    const start = () => void import('./mirrorHealth').then(module => module.fillHealth(island)).catch(() => {});
+    if ('requestIdleCallback' in window) requestIdleCallback(start, {timeout: 3000});
+    else setTimeout(start, 1000);
+  }
+</script>

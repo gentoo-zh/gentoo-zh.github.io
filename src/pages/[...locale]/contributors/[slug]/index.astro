@@ -1,0 +1,41 @@
+---
+import {getCollection} from 'astro:content';
+import SectionLayout from '../../../../layouts/SectionLayout.astro';
+import {contributorAlternates, contributorAvatar, contributorBio, contributorCard, contributorGroup, contributorRoutes, type Contributor} from '../../../../content/contributors';
+import type {Locale} from '../../../../i18n/locales';
+import {localeParam} from '../../../../i18n/routes';
+import {renderContributors} from '../../../../ui/contributors/renderIsland';
+
+export async function getStaticPaths() {
+  return (await getCollection('contributors')).map(contributor => ({
+    params: {locale: localeParam(contributor.data.locale), slug: contributor.data.slug},
+    props: {contributor},
+  }));
+}
+const {contributor} = Astro.props as {contributor: Contributor};
+const {locale, slug, description, externalUrl, tags} = contributor.data as typeof contributor.data & {locale: Locale};
+const person = contributorCard(contributor, 'page');
+const title = person.handle == null ? person.name : `${person.name} (@${person.handle})`;
+const seoDescription = person.handle == null ? description : `${title} — ${description.startsWith(`${person.name} — `) ? description.slice(person.name.length + 3) : description}`;
+const alternates = await contributorAlternates(slug);
+const page = await renderContributors(locale, {kind: 'profile', page: {
+  person,
+  locale,
+  description,
+  feature: contributorAvatar(contributor, 'feature'),
+  group: contributorGroup(tags),
+  roles: tags,
+  profile: externalUrl,
+  body: contributorBio(contributor),
+}});
+---
+<SectionLayout
+  locale={locale}
+  title={title}
+  description={seoDescription}
+  path={contributorRoutes.page(locale, slug)}
+  alternates={alternates}
+  section="community"
+  current="contributors"
+  page={page}
+/>

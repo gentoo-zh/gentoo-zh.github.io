@@ -1,0 +1,10 @@
+/* Copyright (c) Meta Platforms, Inc. and affiliates. Copied from the Astryx docsite
+   (components/blog/BlogPostBody.module.css, MIT); the 16px offset is written as a spacing token. */
+
+/*
+ * A heading reached through its permalink scrolls clear of the sticky app header. The window
+ * is what scrolls on a post page, so the header offset goes on the target itself.
+ */
+.body :is(h1, h2, h3, h4, h5, h6)[id] {
+  scroll-margin-top: calc(var(--appshell-header-height, 0rem) + var(--spacing-4));
+}

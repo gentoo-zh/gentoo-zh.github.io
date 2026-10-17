@@ -1,0 +1,18 @@
+---
+// Wait for idle time and a nearby viewport before fetching the package index.
+---
+<script>
+  const root = document.querySelector('[data-gz-island="packages"]');
+  if (root != null) {
+    const start = () => void import('./packages-client');
+    const whenIdle = () =>
+      'requestIdleCallback' in window ? window.requestIdleCallback(start, {timeout: 2000}) : window.setTimeout(start, 200);
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        observer.disconnect();
+        whenIdle();
+      }
+    });
+    observer.observe(root);
+  }
+</script>

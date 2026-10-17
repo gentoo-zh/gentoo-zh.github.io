@@ -1,0 +1,26 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {loadData} from '../../../data/entries';
+import {routes} from '../../../i18n/routes';
+import {OfficialMediaPage} from '../../../ui/download/IsoPage';
+
+export const getStaticPaths = () => pagePaths('official-media');
+
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+const mirrors = await loadData('mirrors');
+const props = {mirrors, locale, section: 'download' as const, title: page.data.title, description: page.data.description, body: page.body ?? '', pages};
+---
+<SectionLayout
+  locale={locale}
+  title={page.data.title}
+  description={page.data.description}
+  path={routes.page(locale, 'official-media')}
+  alternates={alternates}
+  section="download"
+  current="officialMedia"
+  page={createElement(OfficialMediaPage, props)}
+/>

@@ -1,0 +1,142 @@
+{
+  "asOf": "2026-10-16",
+  "rows": {
+    "forum_ipv4": {
+      "spec": {
+        "zh-cn": "预留地址，0.0045 USD / 小时",
+        "zh-tw": "預留位址，0.0045 USD / 小時",
+        "en": "Reserved address, 0.0045 USD / hour"
+      }
+    },
+    "forum_ipv6": {
+      "spec": {
+        "zh-cn": "预留地址，0.0015 USD / 小时",
+        "zh-tw": "預留位址，0.0015 USD / 小時",
+        "en": "Reserved address, 0.0015 USD / hour"
+      }
+    },
+    "build_osuosl": {
+      "spec": {
+        "zh-cn": "binhost",
+        "zh-tw": "binhost",
+        "en": "binhost"
+      }
+    },
+    "mirror_osuosl": {
+      "spec": {
+        "zh-cn": "gentoo-zh",
+        "zh-tw": "gentoo-zh",
+        "en": "gentoo-zh"
+      }
+    },
+    "mail_osuosl": {
+      "spec": {
+        "zh-cn": "发送注册验证与通知邮件",
+        "zh-tw": "傳送註冊驗證與通知郵件",
+        "en": "Sign-up verification and notification mail"
+      }
+    },
+    "arm_osuosl": {
+      "spec": {
+        "zh-cn": "—",
+        "zh-tw": "—",
+        "en": "—"
+      }
+    },
+    "mail": {
+      "spec": {
+        "zh-cn": "Hostinger，供论坛发信",
+        "zh-tw": "Hostinger，供論壇發信",
+        "en": "Hostinger, used by the forum"
+      }
+    },
+    "mailbox": {
+      "spec": {
+        "zh-cn": "Purelymail，供社区成员收发邮件",
+        "zh-tw": "Purelymail，供社群成員收發郵件",
+        "en": "Purelymail, for community members"
+      }
+    },
+    "worker": {
+      "spec": {
+        "zh-cn": "付费方案，托管官网与镜像落地页",
+        "zh-tw": "付費方案，託管官網與鏡像落地頁",
+        "en": "Paid plan for the site and mirror landing pages"
+      }
+    },
+    "grafana": {
+      "spec": {
+        "zh-cn": "Oracle Cloud",
+        "zh-tw": "Oracle Cloud",
+        "en": "Oracle Cloud"
+      }
+    },
+    "domain": {
+      "spec": {
+        "zh-cn": "gentoozh.org，Porkbun",
+        "zh-tw": "gentoozh.org，Porkbun",
+        "en": "gentoozh.org · Porkbun"
+      },
+      "price": [
+        "11.84"
+      ],
+      "paid": [
+        "2"
+      ],
+      "accumulated": [
+        "19.82"
+      ],
+      "converted": [
+        "134",
+        "639",
+        "155"
+      ]
+    },
+    "domain_tw": {
+      "spec": {
+        "zh-cn": "gentootw.org，Porkbun",
+        "zh-tw": "gentootw.org，Porkbun",
+        "en": "gentootw.org · Porkbun"
+      }
+    }
+  },
+  "totals": {
+    "summary total": [
+      "2,364.06"
+    ],
+    "summary converted": [
+      "15,938",
+      "76,187",
+      "18,463"
+    ],
+    "summary monthly": [
+      "50.47"
+    ],
+    "ledger monthly": [
+      "50.47"
+    ],
+    "ledger total": [
+      "324.06"
+    ],
+    "ledger converted": [
+      "2,185",
+      "10,443",
+      "2,531"
+    ]
+  },
+  "payments": {
+    "domain": {
+      "amount": 11.84,
+      "periods": 2,
+      "accumulated": {
+        "USD": 19.82
+      },
+      "expires": "2027-11-29"
+    },
+    "domain_tw": {
+      "amount": 7.98,
+      "approx": false,
+      "expires": "2027-07-02"
+    }
+  }
+}

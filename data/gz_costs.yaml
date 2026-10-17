@@ -1,0 +1,207 @@
+# 社区基础设施的开销。资金计算表（/funding/）从这里渲染，改数字只改这一处。
+#
+# amount    当前每期价格，配合 currency 与 period
+# period    monthly 每月 / yearly 每年
+# start     开始计费的日期，用来算累计支出
+# paid_amounts 已付各期金额（原币种，含预缴）；填写后以笔数和金额合计替代按日期推算。
+#              这是当前付款记录，不用于还原历史账目；没有记录的项目仍按 start 累计。
+# usd_month 折算成美元的月均值，用于合计
+# end       停用日期；写了就只累计到这一天，也不计入月均
+# sponsored 由赞助方免费提供，价格一栏写赞助方而不是免费额度
+#
+# 汇率按 2026 年 7 月：EUR 1 = USD 1.1524
+# 汇率取自 distfiles 那笔年付的实际扣款：100 EUR = 115.24 USD = 777 CNY = 3713.80 TWD = 900 HKD
+rates:
+  eur_usd: 1.1524
+  usd_cny: 6.742
+  usd_twd: 32.227
+  usd_hkd: 7.810
+
+items:
+  - key: distfiles
+    spec: "EPYC-Genoa 4C8G / 256G NVMe / 2.5 Gbps 不限流量"
+    spec_tw: "EPYC-Genoa 4C8G / 256G NVMe / 2.5 Gbps 不限流量"
+    spec_en: "EPYC-Genoa 4C8G / 256G NVMe / 2.5 Gbps unmetered"
+    amount: 100
+    currency: EUR
+    period: yearly
+    start: 2026-06-01
+    usd_month: 9.60
+    note: "年付 100 EUR，约合 115.24 USD、777 CNY、3713.80 TWD、900 HKD"
+  - key: forum
+    spec: "EPYC-Milan-v3 4C8G / 40G"
+    spec_tw: "EPYC-Milan-v3 4C8G / 40G"
+    spec_en: "EPYC-Milan-v3 4C8G / 40G"
+    amount: 16.5
+    currency: USD
+    period: monthly
+    start: 2026-07-10
+    usd_month: 16.5
+    note: ""
+  - key: forum_ipv4
+    spec: "预留地址，0.0045 USD / 小时"
+    spec_tw: "預留位址，0.0045 USD / 小時"
+    spec_en: "Reserved address, 0.0045 USD / hour"
+    amount: 3.285
+    currency: USD
+    period: monthly
+    approx: true
+    start: 2026-07-10
+    usd_month: 3.285
+    note: "按小时计费，按每月 730 小时折算"
+  - key: forum_ipv6
+    spec: "预留地址，0.0015 USD / 小时"
+    spec_tw: "預留位址，0.0015 USD / 小時"
+    spec_en: "Reserved address, 0.0015 USD / hour"
+    amount: 1.095
+    currency: USD
+    period: monthly
+    approx: true
+    start: 2026-07-10
+    usd_month: 1.095
+    note: "按小时计费，按每月 730 小时折算"
+  - key: matrix
+    spec: "EPYC-Milan-v3 4C8G / 40G"
+    spec_tw: "EPYC-Milan-v3 4C8G / 40G"
+    spec_en: "EPYC-Milan-v3 4C8G / 40G"
+    amount: 12.5
+    currency: USD
+    period: monthly
+    start: 2026-06-10
+    usd_month: 12.5
+    note: ""
+  - key: build
+    spec: "Xeon Gold 6138 双路 40C80T / 128G / 1T NVMe / 10 Gbps 不限流量"
+    spec_tw: "Xeon Gold 6138 雙路 40C80T / 128G / 1T NVMe / 10 Gbps 不限流量"
+    spec_en: "Xeon Gold 6138 ×2, 40C80T / 128G / 1T NVMe / 10 Gbps unmetered"
+    amount: 500
+    currency: USD
+    period: monthly
+    approx: true
+    start: 2026-06-01
+    usd_month: 500
+    end: 2026-09-29
+    note: "机器自有，500 USD 是每月的托管流量与电费，按用量估算；binhost 迁到 OSUOSL 后停用"
+  - key: build_osuosl
+    spec: "binhost"
+    spec_tw: "binhost"
+    spec_en: "binhost"
+    amount: 0
+    currency: USD
+    period: monthly
+    sponsored: true
+    start: 2026-09-27
+    usd_month: 0
+    note: "赞助，不产生费用"
+  - key: mirror_osuosl
+    spec: "gentoo-zh"
+    spec_tw: "gentoo-zh"
+    spec_en: "gentoo-zh"
+    amount: 0
+    currency: USD
+    period: monthly
+    sponsored: true
+    start: 2026-09-27
+    usd_month: 0
+    note: "赞助，不产生费用"
+  - key: mail_osuosl
+    spec: "发送注册验证与通知邮件"
+    spec_tw: "傳送註冊驗證與通知郵件"
+    spec_en: "Sign-up verification and notification mail"
+    amount: 0
+    currency: USD
+    period: monthly
+    sponsored: true
+    start: 2026-10-14
+    usd_month: 0
+    note: "赞助，不产生费用"
+  - key: arm_osuosl
+    spec: "—"
+    spec_tw: "—"
+    spec_en: "—"
+    amount: 0
+    currency: USD
+    period: monthly
+    sponsored: true
+    start: 2026-10-14
+    usd_month: 0
+    note: "赞助，不产生费用"
+  - key: mail
+    spec: "Hostinger，供论坛发信"
+    spec_tw: "Hostinger，供論壇發信"
+    spec_en: "Hostinger, used by the forum"
+    amount: 20
+    currency: USD
+    period: yearly
+    start: 2026-07-10
+    usd_month: 1.67
+    end: 2026-10-14
+    note: "论坛的注册验证与通知邮件；改由 OSUOSL 转发后停用"
+  - key: mailbox
+    spec: "Purelymail，供社区成员收发邮件"
+    spec_tw: "Purelymail，供社群成員收發郵件"
+    spec_en: "Purelymail, for community members"
+    amount: 10
+    currency: USD
+    period: yearly
+    start: 2026-10-14
+    usd_month: 0.83
+    note: ""
+
+  - key: domain
+    spec: "gentoozh.org，Porkbun"
+    spec_tw: "gentoozh.org，Porkbun"
+    spec_en: "gentoozh.org · Porkbun"
+    amount: 11.84
+    paid_amounts: [7.98, 11.84]
+    currency: USD
+    period: yearly
+    start: 2025-11-29
+    expires: 2027-11-29
+    usd_month: 0.99
+    note: "社区主域名"
+
+  - key: domain_tw
+    spec: "gentootw.org，Porkbun"
+    spec_tw: "gentootw.org，Porkbun"
+    spec_en: "gentootw.org · Porkbun"
+    amount: 7.98
+    currency: USD
+    period: yearly
+    start: 2026-07-02
+    expires: 2027-07-02
+    usd_month: 0.67
+    note: ""
+
+  - key: worker
+    spec: "付费方案，托管官网与镜像落地页"
+    spec_tw: "付費方案，託管官網與鏡像落地頁"
+    spec_en: "Paid plan for the site and mirror landing pages"
+    amount: 5
+    currency: USD
+    period: monthly
+    start: 2026-06-01
+    usd_month: 5
+    note: "官网与几个 Worker 服务"
+
+  - key: node
+    spec: "Vultr 小型节点"
+    spec_tw: "Vultr 小型節點"
+    spec_en: "Vultr small instance"
+    amount: 5
+    currency: USD
+    period: monthly
+    start: 2026-06-01
+    usd_month: 5
+    end: 2026-09-30
+    note: ""
+  - key: grafana
+    spec: "Oracle Cloud"
+    spec_tw: "Oracle Cloud"
+    spec_en: "Oracle Cloud"
+    amount: 0
+    currency: USD
+    period: monthly
+    start: 2026-06-01
+    usd_month: 0
+    note: "免费额度，不产生费用"

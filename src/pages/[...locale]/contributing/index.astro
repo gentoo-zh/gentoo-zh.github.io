@@ -1,0 +1,32 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {routes} from '../../../i18n/routes';
+import LegacyAnchors from '../../../ui/LegacyAnchors.astro';
+import {SectionPage} from '../../../ui/section/SectionPage';
+import {PageEntries, CONTRIBUTION_ENTRIES} from '../../../ui/section/PageEntries';
+import {LegacyAnchorLinks, localizedAnchors} from '../../../ui/section/LegacyAnchorLinks';
+
+export const getStaticPaths = () => pagePaths('contributing');
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+const anchors = localizedAnchors(locale, (page.data.anchors ?? {}) as Record<string, string>);
+const slots = {
+  resources: createElement(PageEntries, {locale, entries: CONTRIBUTION_ENTRIES, title: page.data.title}),
+  legacy: createElement(LegacyAnchorLinks, {locale, anchors}),
+};
+---
+<SectionLayout
+  locale={locale}
+  title={page.data.title}
+  description={page.data.description}
+  path={routes.page(locale, 'contributing')}
+  alternates={alternates}
+  section="community"
+  current="contributing"
+  page={createElement(SectionPage, {locale, section: 'community', title: page.data.title, description: page.data.description, body: page.body ?? '', slots, pages, isDataPage: true})}
+>
+  <LegacyAnchors anchors={anchors} />
+</SectionLayout>

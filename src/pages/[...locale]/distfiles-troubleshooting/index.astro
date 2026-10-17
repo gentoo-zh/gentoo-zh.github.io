@@ -1,0 +1,23 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {routes} from '../../../i18n/routes';
+import {SectionPage} from '../../../ui/section/SectionPage';
+
+export const getStaticPaths = () => pagePaths('distfiles-troubleshooting');
+
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+---
+<SectionLayout
+  locale={locale}
+  title={page.data.title}
+  description={page.data.description}
+  path={routes.page(locale, 'distfiles-troubleshooting')}
+  alternates={alternates}
+  section="support"
+  current="distfilesTroubleshooting"
+  page={createElement(SectionPage, {locale, section: 'support', title: page.data.title, description: page.data.description, body: page.body ?? '', pages})}
+/>

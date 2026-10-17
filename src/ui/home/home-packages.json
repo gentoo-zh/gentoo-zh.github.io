@@ -1,0 +1,17 @@
+{
+  "source": "https://github.com/gentoo-zh/overlay",
+  "revision": "384e7aa6237a6953f5fb3ed07b87e869d67c4577",
+  "updated": "2026-10-15",
+  "count": 518,
+  "atoms": [
+    "app-i18n/fcitx-rime",
+    "app-i18n/fcitx-chinese-addons",
+    "app-i18n/fcitx-chewing",
+    "app-i18n/fcitx-bamboo",
+    "media-fonts/lxgw-wenkai-tc",
+    "media-fonts/sarasa-gothic",
+    "media-fonts/maple-mono",
+    "net-proxy/clash-verge-rev-bin",
+    "sci-ml/llama-cpp"
+  ]
+}

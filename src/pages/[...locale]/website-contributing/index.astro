@@ -1,0 +1,22 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {routes} from '../../../i18n/routes';
+import {ContributingPage} from '../../../ui/community/ContributingPage';
+
+export const getStaticPaths = () => pagePaths('website-contributing');
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+---
+<SectionLayout
+  locale={locale}
+  title={page.data.title}
+  description={page.data.description}
+  path={routes.page(locale, 'website-contributing')}
+  alternates={alternates}
+  section="community"
+  current="websiteContributing"
+  page={createElement(ContributingPage, {locale, section: 'community', title: page.data.title, description: page.data.description, body: page.body ?? '', pages})}
+></SectionLayout>
