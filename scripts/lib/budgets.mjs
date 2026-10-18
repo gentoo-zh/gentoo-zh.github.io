@@ -30,13 +30,14 @@ export const PAGE_TYPES = [
   // The board and its history render from the status API; Recharts stays lazy. `beforeLoad` is the startup
   // closure plus the board's (React and the navigation chunk included); how much of it a browser requests
   // before `load` varies from run to run (90-184 KB measured).
-  {name: 'status', route: locale('/status/'), sample: '/status/', startup: 5_700, beforeLoad: 185_700, total: 277_700},
+  // status, mirrorlist and packages: +100 B when `visible` began waiting for `load` (2026-10-18).
+  {name: 'status', route: locale('/status/'), sample: '/status/', startup: 5_800, beforeLoad: 185_700, total: 277_700},
   // Home renders statically; the live counts and the status badge add their boot modules.
   {name: 'home', route: locale('/'), sample: '/', startup: 4_500, total: 147_900},
   // Mirror health updates and legacy fragment resolution extend the section scripts.
-  {name: 'mirrorlist', route: locale('/mirrorlist/'), sample: '/mirrorlist/', startup: 5_100, total: 150_100},
+  {name: 'mirrorlist', route: locale('/mirrorlist/'), sample: '/mirrorlist/', startup: 5_200, total: 150_200},
   // A sortable, filterable table with the dependency view and its search controls.
-  {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_300, total: 235_500},
+  {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_300, total: 235_600},
   // The listing renders from distfiles' `/_ls/`; `beforeLoad` is the startup closure plus the browser's.
   {name: 'files', route: locale('/files/'), sample: '/files/', startup: 5_800, beforeLoad: 161_900, total: 165_600},
   // Setup guides add mirror/channel/sudo controls, pane switching and code rewriting.

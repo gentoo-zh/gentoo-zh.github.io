@@ -2,8 +2,9 @@
 // status API answers with scripts/fixtures/status.json, distfiles' `/_ls/` with the ls-server fixtures and
 // its package index with a generated one, all after a fixed delay, so the real fetch, parsing and rendering
 // run without the live services. Asserts the scripts requested before `load` on every type, and on status,
-// files and packages, whose content is data, how soon it renders and that the layout does not shift from
-// the server markup until it and the idle islands have arrived.
+// files and packages, whose content is data, that status and files start before `load` rather than in idle
+// time, and that the layout does not shift from the server markup until the data and the idle islands have
+// arrived. Wall-clock render times are not asserted: they measure the runner as much as the page.
 import {readFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {brotliCompressSync} from 'node:zlib';
@@ -17,8 +18,10 @@ import {live} from './hold';
 
 /** Both services answer after this delay, roughly a cross-continent round trip. */
 const LATENCY_MS = 300;
-/** Status and files show their data within this long after `load`, the fixed delay included. */
-const CONTENT_MS = 1_500;
+/** How long to wait for the data to render; a ceiling for slow runners, not a performance bound. */
+const CONTENT_TIMEOUT_MS = 15_000;
+/** Islands whose content is data and that must start at once, not in idle time. */
+const STARTS_AT_ONCE = new Set(['status', 'files']);
 
 const status = readFileSync('scripts/fixtures/status.json', 'utf8');
 /** One minute after the fixture's last probe, so relative times render the same on every run. */
@@ -171,15 +174,15 @@ for (const viewport of [
         await useFixtures(page);
         const scriptsBeforeLoad = recordScripts(page, new URL(siteURL).origin);
         await page.goto(type.sample, {waitUntil: 'load'});
-        const loadedAt = Date.now();
 
-        // Time the data before anything else: the script check below waits for every script and compresses the
-        // chunks at brotli quality 11 in this process (about 1 s for all of dist here, slower on CI), and the
-        // first test of a run pays for that before the cache fills.
         const content = CONTENT[type.name];
-        if (content != null) {
-          await expect(page.locator(`[data-gz-island="${content.island}"]`).getByText(content.text).filter({visible: true}).first()).toBeVisible({timeout: CONTENT_MS});
-          expect(Date.now() - loadedAt).toBeLessThanOrEqual(CONTENT_MS);
+        if (content != null && STARTS_AT_ONCE.has(content.island)) {
+          const startedBeforeLoad = await page.evaluate(island => {
+            const [navigation] = performance.getEntriesByType('navigation') as PerformanceNavigationTiming[];
+            const [start] = performance.getEntriesByName(`gz-island:${island}:start`);
+            return start != null && start.startTime < navigation.loadEventStart;
+          }, content.island);
+          expect(startedBeforeLoad, `${content.island} starts before load`).toBe(true);
         }
 
         const scripts = [...new Set(await scriptsBeforeLoad())];
@@ -188,6 +191,7 @@ for (const viewport of [
         expect(bytes, `scripts before load (brotli): ${scripts.join(', ')}`).toBeLessThanOrEqual(cap);
 
         if (content == null) return;
+        await expect(page.locator(`[data-gz-island="${content.island}"]`).getByText(content.text).filter({visible: true}).first()).toBeVisible({timeout: CONTENT_TIMEOUT_MS});
         // The navigation and the sidebar hydrate when idle, after the data on a fast connection.
         await live(page, 'nav');
         await live(page, 'section');

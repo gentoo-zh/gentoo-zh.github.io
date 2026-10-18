@@ -10,8 +10,9 @@ export type When =
   /** Start in idle time after the window's load event. */
   | {kind: 'idle'}
   /**
-   * Start when any target nears the viewport; a `display: contents` target is watched through its
-   * children. Targets with no layout box at all can never intersect, so they start in idle time instead.
+   * Start after the window's load event, as soon as any target is near the viewport; a `display: contents`
+   * target is watched through its children. Targets with no layout box at all can never intersect, so they
+   * start in idle time instead.
    */
   | {kind: 'visible'; target: Element[]}
   /** Wait for `visible`, then for idle time. */
@@ -65,7 +66,21 @@ function idle(run: () => void): Cancel {
 /** The elements that have a box: an island's `display: contents` container never intersects. */
 const boxes = (element: Element): Element[] => (getComputedStyle(element).display === 'contents' ? [...element.children].flatMap(boxes) : [element]);
 
+// Like idle time, nothing visible starts before `load`: an island near the first screen would otherwise
+// compete with the page's own resources (on a slow CI runner the guide pulled 166 KB in before `load`).
+// Input before then is held by an `intent` condition.
 function visible(targets: Element[], run: () => void): Cancel {
+  let cancel = none;
+  const cancelLoad = afterLoad(() => {
+    cancel = observe(targets, run);
+  });
+  return () => {
+    cancelLoad();
+    cancel();
+  };
+}
+
+function observe(targets: Element[], run: () => void): Cancel {
   if (!('IntersectionObserver' in window)) {
     run();
     return none;
