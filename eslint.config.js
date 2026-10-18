@@ -175,7 +175,7 @@ export default tseslint.config(
         'error',
         {
           paths: SHARED_IMPORTS.paths,
-          patterns: [...SHARED_IMPORTS.patterns, {group, message: 'Layer boundary: see docs/architecture.md.'}],
+          patterns: [...SHARED_IMPORTS.patterns, {group, message: 'Layer boundary: lower layers must not import from higher ones.'}],
         },
       ],
     },

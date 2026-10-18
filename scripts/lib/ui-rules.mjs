@@ -1,4 +1,4 @@
-// Shared ESLint/Astro rules; docs/architecture.md records native-element exceptions.
+// Shared ESLint/Astro rules.
 
 /** Native exceptions; div requires StyleX props, enforced by eslint.config.js. */
 export const NATIVE_ELEMENTS = [
