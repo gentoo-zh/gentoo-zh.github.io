@@ -173,15 +173,21 @@ for (const viewport of [
         await page.goto(type.sample, {waitUntil: 'load'});
         const loadedAt = Date.now();
 
+        // Time the data before anything else: the script check below waits for every script and compresses the
+        // chunks at brotli quality 11 in this process (about 1 s for all of dist here, slower on CI), and the
+        // first test of a run pays for that before the cache fills.
+        const content = CONTENT[type.name];
+        if (content != null) {
+          await expect(page.locator(`[data-gz-island="${content.island}"]`).getByText(content.text).filter({visible: true}).first()).toBeVisible({timeout: CONTENT_MS});
+          expect(Date.now() - loadedAt).toBeLessThanOrEqual(CONTENT_MS);
+        }
+
         const scripts = [...new Set(await scriptsBeforeLoad())];
         const bytes = scripts.reduce((sum, path) => sum + brotliSize(path), 0);
         const cap = type.beforeLoad ?? type.startup;
         expect(bytes, `scripts before load (brotli): ${scripts.join(', ')}`).toBeLessThanOrEqual(cap);
 
-        const content = CONTENT[type.name];
         if (content == null) return;
-        await expect(page.locator(`[data-gz-island="${content.island}"]`).getByText(content.text).filter({visible: true}).first()).toBeVisible({timeout: CONTENT_MS});
-        expect(Date.now() - loadedAt).toBeLessThanOrEqual(CONTENT_MS);
         // The navigation and the sidebar hydrate when idle, after the data on a fast connection.
         await live(page, 'nav');
         await live(page, 'section');
