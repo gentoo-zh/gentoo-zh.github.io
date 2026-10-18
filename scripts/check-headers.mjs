@@ -12,6 +12,8 @@ const SECURITY = {'X-Frame-Options': 'SAMEORIGIN', 'Referrer-Policy': 'strict-or
 /** Astro names bundles `<name>.<8-character hash>.<ext>` and font files `fonts/<16-hex content hash>.<ext>`; Pagefind names index chunks `<language>_<hex>.pf_*`. */
 const ASTRO_HASHED = /^\/_astro\/(?:.+\.[\w-]{8}|fonts\/[0-9a-f]{16})\.\w+$/;
 const PAGEFIND_HASHED = /^\/pagefind\/.*_[0-9a-f]{7,}\.pf_\w+$/;
+/** scripts/gen-home-images.mjs names the home images `<name>.<16-hex content hash>.<ext>`. */
+const HOME_HASHED = /^\/home\/[\w-]+\.[0-9a-f]{16}\.\w+$/;
 /** Images that keep their names when replaced: per-language contributor and post images, and the image-only directories and icons in `public/`. */
 const STATIC_IMAGES = [
   /^\/(?:(?:en|zh-tw)\/)?(?:contributors|posts)\/.+\.(?:webp|png|jpg|svg|gif)$/,
@@ -19,6 +21,7 @@ const STATIC_IMAGES = [
   /^\/(?:favicon[^/]*|apple-touch-icon\.png)$/,
 ];
 const failures = [];
+const isHashed = address => ASTRO_HASHED.test(address) || PAGEFIND_HASHED.test(address) || HOME_HASHED.test(address);
 
 /** Cloudflare's `_headers`: a path pattern line, then indented `Name: value` lines. */
 function parseHeaders(text) {
@@ -58,9 +61,9 @@ const addresses = files.flatMap(url => (url.endsWith('/index.html') ? [url, url.
 for (const address of addresses) {
   const cacheRules = rules.filter(rule => rule.test.test(address) && rule.headers.some(({name}) => name.toLowerCase() === 'cache-control'));
   const cacheValues = cacheRules.flatMap(rule => rule.headers.filter(({name}) => name.toLowerCase() === 'cache-control').map(({value}) => value));
-  const hashed = ASTRO_HASHED.test(address) || PAGEFIND_HASHED.test(address);
+  const hashed = isHashed(address);
   const staticImage = !hashed && STATIC_IMAGES.some(pattern => pattern.test(address));
-  if (address.startsWith('/_astro/') && !hashed) failures.push(`${address}: under /_astro/ without a content hash in its name`);
+  for (const directory of ['/_astro/', '/home/']) if (address.startsWith(directory) && !hashed) failures.push(`${address}: under ${directory} without a content hash in its name`);
   if (hashed) {
     if (cacheValues.length !== 1 || cacheValues[0] !== IMMUTABLE) {
       failures.push(`${address}: fingerprinted, expected one "Cache-Control: ${IMMUTABLE}", got ${JSON.stringify(cacheValues)}`);
@@ -82,6 +85,5 @@ for (const [name, value] of Object.entries(SECURITY)) {
 }
 
 const countOf = predicate => addresses.filter(predicate).length;
-const isHashed = address => ASTRO_HASHED.test(address) || PAGEFIND_HASHED.test(address);
 console.log(`check:headers: ${countOf(isHashed)} fingerprinted files, ${countOf(address => !isHashed(address) && STATIC_IMAGES.some(pattern => pattern.test(address)))} static images, ${rules.length} rules`);
 report('check:headers', failures);

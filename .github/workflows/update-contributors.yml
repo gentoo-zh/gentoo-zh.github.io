@@ -31,6 +31,17 @@ jobs:
       - name: Install Python dependencies
         run: pip install 'pyyaml==6.0.2'
 
+      - name: Setup Node
+        uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 22
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0; version from packageManager
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
       - name: Install webp tools
         run: |
           sudo apt-get update
@@ -41,17 +52,21 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python3 scripts/update-contributors.py --commits-only
 
+      # The home wall mosaic and AvatarGroup images follow the contributor list; the site build only reads them.
+      - name: Rebuild home images
+        run: pnpm gen:home-images
+
       - name: Check for changes
         id: check_changes
         run: |
           # Untracked files are new contributors.
-          if [ -z "$(git status --porcelain content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/)" ]; then
+          if [ -z "$(git status --porcelain content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/ public/home/ src/ui/home/home-images.json)" ]; then
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
             echo "No contributor changes"
           else
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
             echo "Changes:"
-            git status --short content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/ | head -50
+            git status --short content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/ public/home/ src/ui/home/home-images.json | head -50
           fi
 
       - name: Commit and push changes
@@ -60,7 +75,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          git add content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/
+          git add content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/ public/home/ src/ui/home/home-images.json
 
           changed=$(git diff --cached --name-only | wc -l | tr -d ' ')
           git commit -m "contributors: Update from GitHub (${changed} files)"

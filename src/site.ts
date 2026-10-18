@@ -23,6 +23,7 @@ export const SITE = {
   telegramChat: 'https://telegram.me/gentoo_zh',
   matrix: 'https://matrix.to/#/%23gentoo-zh:matrix.gentoozh.org',
   irc: 'https://web.libera.chat/#gentoo-zh',
+  discord: 'https://discord.gg/Csya7BFBG7',
   status: 'https://grafana.gentoozh.org/public-dashboards/d5754b79824d4d8dbd8c70e13e54c11e',
 } as const;
 

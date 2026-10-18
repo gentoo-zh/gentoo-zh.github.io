@@ -9,11 +9,11 @@ import {Text} from '@astryxdesign/core/Text';
 import type {Locale, MessageKey} from '../../i18n/locales';
 import {useMessage} from '../../i18n/useMessage';
 import {media} from '../../theme/layout.stylex';
-import {ICON, SPACE, TEMPLATE} from '../../theme/scale';
+import {CHANNEL_COLUMNS, ICON, SPACE} from '../../theme/scale';
 import {SectionPage, type SectionPageProps} from '../section/SectionPage';
 import {CHANNELS, type Channel, type ChannelPlatform} from './channels';
 
-const PLATFORMS: ChannelPlatform[] = ['telegram', 'matrix', 'irc'];
+const PLATFORMS: ChannelPlatform[] = ['telegram', 'matrix', 'irc', 'discord'];
 
 const styles = stylex.create({
   scroll: {
@@ -22,10 +22,10 @@ const styles = stylex.create({
     // A slot is not a padded Section; its first/last child must not consume the section gap.
     marginBlock: 0,
   },
-  // Below 1024px the four columns cannot fit beside the sidebar, so the stacked list replaces the
+  // Below 1024px the five columns cannot fit beside the sidebar, so the stacked list replaces the
   // table there and Matrix and IRC never hide in a sideways scroll.
-  wide: {display: {default: 'none', [media.desktop]: 'block'}, marginBlock: 0},
-  narrow: {display: {default: 'block', [media.desktop]: 'none'}, marginBlock: 0},
+  wide: {display: {default: 'none', [media.wide]: 'block'}, marginBlock: 0},
+  narrow: {display: {default: 'block', [media.wide]: 'none'}, marginBlock: 0},
 });
 
 const STATIC_SCROLL: TablePlugin<Channel> = {
@@ -37,13 +37,16 @@ const STATIC_SCROLL: TablePlugin<Channel> = {
 };
 
 function ChannelLink({join, locale, handleOnly = false}: {join: Channel['join'][number]; locale: Locale; handleOnly?: boolean}) {
+  const t = useMessage();
   const href = typeof join.href === 'string' ? join.href : join.href[locale];
+  // A join without a handle (a Discord invite) shows a short "Join" and names the target in its accessible name.
+  const label = handleOnly && !join.handle ? `${t('gz.channels.join')} ${join.label}` : undefined;
   return (
-    <Link href={href} target={href.startsWith('https:') ? '_blank' : undefined}>
+    <Link href={href} label={label} target={href.startsWith('https:') ? '_blank' : undefined}>
       {handleOnly ? (
         <HStack as="span" gap={SPACE.hairline} align="center">
           <Icon icon={join.icon} size={ICON.inline} />
-          <Text type="inherit" textWrap="nowrap">{join.handle}</Text>
+          <Text type="inherit" textWrap="nowrap">{join.handle ?? t('gz.channels.join')}</Text>
         </HStack>
       ) : join.label}
     </Link>
@@ -56,7 +59,7 @@ function ChannelTable({channels, locale}: {channels: Channel[]; locale: Locale})
     {
       key: 'channel',
       header: t('gz.channels.col.channel'),
-      width: proportional(1, {minWidth: TEMPLATE.channelNameWidth}),
+      width: proportional(1, {minWidth: CHANNEL_COLUMNS.nameWidth}),
       renderCell: channel => (
         <VStack gap={SPACE.hairline}>
           <Text weight="medium">{t(`gz.channels.${channel.id}.name` as MessageKey)}</Text>
@@ -67,7 +70,7 @@ function ChannelTable({channels, locale}: {channels: Channel[]; locale: Locale})
     ...PLATFORMS.map(platform => ({
       key: platform,
       header: t(`gz.channels.col.${platform}` as MessageKey),
-      width: pixel(TEMPLATE.channelPlatformWidth[platform]),
+      width: pixel(CHANNEL_COLUMNS.platformWidth[platform]),
       renderCell: (channel: Channel) => {
         const join = channel.join.find(target => target.platform === platform);
         return join ? <ChannelLink join={join} locale={locale} handleOnly /> : <Text color="secondary">—</Text>;

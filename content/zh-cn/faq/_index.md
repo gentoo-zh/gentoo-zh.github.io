@@ -93,7 +93,7 @@ questions:
 
 ### 如何寻求技术支持？ {#where-to-ask}
 
-Telegram、Matrix、IRC 等渠道见[交流渠道](/channels/)，也可以在[论坛](https://forum.gentoozh.org/)发帖。overlay 的缺陷请到 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues) 提交 issue。
+Telegram、Matrix、IRC、Discord 等渠道见[交流渠道](/channels/)，也可以在[论坛](https://forum.gentoozh.org/)发帖。overlay 的缺陷请到 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues) 提交 issue。
 
 ### 如何为社区贡献？ {#how-to-contribute}
 

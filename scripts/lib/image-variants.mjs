@@ -17,6 +17,7 @@ const RASTER = /\.(?:avif|gif|jpe?g|png|webp)$/i;
 export const IMAGE_EXEMPTIONS = [
   ['vector images', image => /\.svg$/i.test(image.pathname), 'an SVG scales to any width'],
   ['avatar derivatives', image => /\.webp\.\d+\.webp$/.test(image.pathname), 'avatar-thumbnails.mjs writes them at the displayed size; check:seo verifies them separately'],
+  ['home images', image => image.pathname.startsWith('/home/'), 'gen-home-images.mjs writes them at the displayed size; check:home-images verifies them'],
   ['external images', image => image.origin !== ORIGIN, 'no local file to resize'],
 ];
 

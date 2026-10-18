@@ -1,0 +1,194 @@
+{
+  "input": "1a729c1f5ec53938",
+  "locales": {
+    "zh-cn": {
+      "order": "ae59684558113dd8",
+      "wall": {
+        "compact": {
+          "media": "(width < 48em)",
+          "avif": [
+            [
+              "/home/wall-compact-1x.f2ca2a42be3d916f.avif",
+              1
+            ],
+            [
+              "/home/wall-compact-2x.bc95e058757cdbb1.avif",
+              2
+            ],
+            [
+              "/home/wall-compact-3x.54e229ff338e2973.avif",
+              3
+            ]
+          ],
+          "webp": "/home/wall-compact-2x.a74c79821638a0a7.webp"
+        },
+        "tablet": {
+          "media": "(48em <= width < 64em)",
+          "avif": [
+            [
+              "/home/wall-tablet-1x.107b79a65e8ac814.avif",
+              1
+            ],
+            [
+              "/home/wall-tablet-2x.530697819e832938.avif",
+              2
+            ],
+            [
+              "/home/wall-tablet-3x.8cfa67e5378ed4c9.avif",
+              3
+            ]
+          ],
+          "webp": "/home/wall-tablet-2x.575b3bbf05d211d5.webp"
+        },
+        "desktop": {
+          "media": "(width >= 64em)",
+          "avif": [
+            [
+              "/home/wall-desktop-1x.9a4e0afc88d130bf.avif",
+              1
+            ],
+            [
+              "/home/wall-desktop-2x.6f81695d734466d2.avif",
+              2
+            ]
+          ],
+          "webp": "/home/wall-desktop-2x.43457318b9ab5b64.webp"
+        }
+      },
+      "group": [
+        "/home/avatar.89748b2035851edf.webp",
+        "/home/avatar.7642ad38473352d3.webp",
+        "/home/avatar.32c8d9755de14ea2.webp",
+        "/home/avatar.1322bdd2707518ea.webp",
+        "/home/avatar.5150e4dacde80712.webp",
+        "/home/avatar.6419cba3de3641f1.webp"
+      ]
+    },
+    "zh-tw": {
+      "order": "3d5510578530314c",
+      "wall": {
+        "compact": {
+          "media": "(width < 48em)",
+          "avif": [
+            [
+              "/home/wall-compact-1x.f2ca2a42be3d916f.avif",
+              1
+            ],
+            [
+              "/home/wall-compact-2x.bc95e058757cdbb1.avif",
+              2
+            ],
+            [
+              "/home/wall-compact-3x.54e229ff338e2973.avif",
+              3
+            ]
+          ],
+          "webp": "/home/wall-compact-2x.a74c79821638a0a7.webp"
+        },
+        "tablet": {
+          "media": "(48em <= width < 64em)",
+          "avif": [
+            [
+              "/home/wall-tablet-1x.107b79a65e8ac814.avif",
+              1
+            ],
+            [
+              "/home/wall-tablet-2x.530697819e832938.avif",
+              2
+            ],
+            [
+              "/home/wall-tablet-3x.8cfa67e5378ed4c9.avif",
+              3
+            ]
+          ],
+          "webp": "/home/wall-tablet-2x.575b3bbf05d211d5.webp"
+        },
+        "desktop": {
+          "media": "(width >= 64em)",
+          "avif": [
+            [
+              "/home/wall-desktop-1x.9a4e0afc88d130bf.avif",
+              1
+            ],
+            [
+              "/home/wall-desktop-2x.6f81695d734466d2.avif",
+              2
+            ]
+          ],
+          "webp": "/home/wall-desktop-2x.43457318b9ab5b64.webp"
+        }
+      },
+      "group": [
+        "/home/avatar.89748b2035851edf.webp",
+        "/home/avatar.7642ad38473352d3.webp",
+        "/home/avatar.32c8d9755de14ea2.webp",
+        "/home/avatar.1322bdd2707518ea.webp",
+        "/home/avatar.5150e4dacde80712.webp",
+        "/home/avatar.6419cba3de3641f1.webp"
+      ]
+    },
+    "en": {
+      "order": "80610152236581e2",
+      "wall": {
+        "compact": {
+          "media": "(width < 48em)",
+          "avif": [
+            [
+              "/home/wall-compact-1x.f2ca2a42be3d916f.avif",
+              1
+            ],
+            [
+              "/home/wall-compact-2x.bc95e058757cdbb1.avif",
+              2
+            ],
+            [
+              "/home/wall-compact-3x.54e229ff338e2973.avif",
+              3
+            ]
+          ],
+          "webp": "/home/wall-compact-2x.a74c79821638a0a7.webp"
+        },
+        "tablet": {
+          "media": "(48em <= width < 64em)",
+          "avif": [
+            [
+              "/home/wall-tablet-1x.107b79a65e8ac814.avif",
+              1
+            ],
+            [
+              "/home/wall-tablet-2x.530697819e832938.avif",
+              2
+            ],
+            [
+              "/home/wall-tablet-3x.8cfa67e5378ed4c9.avif",
+              3
+            ]
+          ],
+          "webp": "/home/wall-tablet-2x.575b3bbf05d211d5.webp"
+        },
+        "desktop": {
+          "media": "(width >= 64em)",
+          "avif": [
+            [
+              "/home/wall-desktop-1x.9a4e0afc88d130bf.avif",
+              1
+            ],
+            [
+              "/home/wall-desktop-2x.6f81695d734466d2.avif",
+              2
+            ]
+          ],
+          "webp": "/home/wall-desktop-2x.43457318b9ab5b64.webp"
+        }
+      },
+      "group": [
+        "/home/avatar.89748b2035851edf.webp",
+        "/home/avatar.7642ad38473352d3.webp",
+        "/home/avatar.32c8d9755de14ea2.webp",
+        "/home/avatar.1322bdd2707518ea.webp",
+        "/home/avatar.5150e4dacde80712.webp",
+        "/home/avatar.6419cba3de3641f1.webp"
+      ]
+    }
+  }
+}

@@ -12,6 +12,9 @@
   Cache-Control: public, max-age=31536000, immutable
 /pagefind/pagefind.:hash.pf_meta
   Cache-Control: public, max-age=31536000, immutable
+# 首页头像墙拼图与头像组图片由 pnpm gen:home-images 生成，文件名带内容哈希。
+/home/*
+  Cache-Control: public, max-age=31536000, immutable
 
 # 文件名不带哈希的静态图片：同名替换后用户要在合理时间内看到新文件，不能 immutable。
 # 新鲜 1 天，过期后 7 天内先用旧图并在后台重新验证。Cloudflare 的 _headers 每条只能有一个 *，

@@ -1,9 +1,9 @@
 ---
 title: "Channels"
-description: "The gentoo-zh forum, Telegram, Matrix, IRC and feed channels."
+description: "The gentoo-zh forum, Telegram, Matrix, IRC, Discord and feed channels."
 ---
 
-Ask questions and hold longer discussions on the forum. For chat, use Telegram, Matrix or IRC; the main groups are bridged. Once you join the main group, you can join the other groups without verification.
+Ask questions and hold longer discussions on the forum. For chat, use Telegram, Matrix, IRC or Discord; the main groups are bridged. Once you join the main group, you can join the other groups without verification.
 
 ## Groups {#groups}
 

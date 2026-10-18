@@ -28,7 +28,7 @@ import {homeMedia} from '../../theme/layout.stylex';
 import {AVATAR, BUTTON, GRID, ICON, SPACE, TEMPLATE} from '../../theme/scale';
 import {HOME_LOGO_IMAGE} from '../../theme/images';
 import {ArrowRight, HeartHandshake, Hash} from '../chrome/icons';
-import {DiscourseLogo, TelegramLogo, MatrixLogo} from '../chrome/channelLogos';
+import {DiscordLogo, DiscourseLogo, TelegramLogo, MatrixLogo} from '../chrome/channelLogos';
 import {IconTile} from '../chrome/IconTile';
 import {EntryIcon} from '../section/entryIcons';
 import {PostCover} from '../blog/PostCover';
@@ -39,6 +39,12 @@ import {HOME_LIVE_ATTRIBUTE} from './homeLive';
 import {HOME_STATUS_ATTRIBUTE} from './homeStatus';
 
 export interface HomeContributor {name: string; avatar: string; href: string}
+/** A locale's entry in home-images.json, which scripts/gen-home-images.mjs writes. */
+export interface HomeImages {
+  order: string;
+  wall: Record<'compact' | 'tablet' | 'desktop', {media: string; avif: Array<[url: string, density: number]>; webp: string}>;
+  group: string[];
+}
 export interface HomePageProps {
   locale: Locale;
   posts: PostSummary[];
@@ -47,32 +53,23 @@ export interface HomePageProps {
   commits: number;
   days: number;
   sponsors: Sponsor[];
+  images: HomeImages;
 }
 
-const BRAND = 'gentoo-zh overlay';
-const AVATARS = 6;
-// Repeat the avatar wall every WALL_PERIOD tiles so a one-period translation loops seamlessly.
-const WALL_PERIOD = 14;
-const WALL_COLUMNS = 26;
-const WALL_ROWS = 26;
-// Wall tiles are 9cqw of the logo mark (homeLayout mark 32rem, markTablet 18rem, markCompact 12rem): 2.88rem,
-// 1.62rem and 1.08rem. scripts/lib/avatar-thumbnails.mjs writes each width so dpr 1-3 pick a file just above the tile.
-const WALL_WIDTHS = [36, 72, 96, 192];
-// Media queries in em (64em = media.desktop, 48em = media.tablet) and the content column in rem (75rem).
-const WALL_SIZES = '(min-width: 64em) 2.88rem, (min-width: 48em) 1.62rem, 1.08rem';
-// The AvatarGroup image takes no srcset; the wall's 192px derivative covers its 48px circle up to dpr 3.
-const GROUP_WIDTH = 192;
-// The logo wall's mask is the LCP; CSS alone would find it only after the stylesheet arrives.
+// The logo wall's mask; CSS alone would find it only after the stylesheet arrives.
 const WALL_MASK = '/brand/gentoo-zh-icon-transparent.svg';
 // Home post cards span the content column below 1024px and a third of it above.
 const COVER_WIDTHS = '400 800';
 const COVER_SIZES = '(min-width: 64em) calc(min(100vw - 3rem, 75rem) / 3), min(100vw - 3rem, 75rem)';
-/** Width candidates for a wall tile; build-seo writes each file (see WALL_WIDTHS). */
-const wallSrcSet = (avatar: string) => WALL_WIDTHS.map(width => `${avatar}.${width}.webp ${width}w`).join(', ');
+type WallImage = HomeImages['wall'][keyof HomeImages['wall']];
+/** A breakpoint's mosaic: AVIF per density, then the WebP for browsers without AVIF. */
+const wallImageSet = ({avif, webp}: WallImage) => `image-set(${[...avif.map(([url, density]) => `url(${url}) type("image/avif") ${density}x`), `url(${webp}) type("image/webp") 2x`].join(', ')})`;
 const CHANNELS = [
   {id: 'telegramChannel', logo: TelegramLogo},
   {id: 'telegramChat', logo: TelegramLogo},
+  {id: 'matrixChannel', logo: MatrixLogo},
   {id: 'matrix', logo: MatrixLogo},
+  {id: 'discord', logo: DiscordLogo},
   {id: 'irc', logo: Hash},
   {id: 'forum', logo: DiscourseLogo},
   {id: 'contribute', logo: HeartHandshake},
@@ -102,15 +99,16 @@ function PostCard({post, locale}: {post: PostSummary; locale: Locale}) {
   </ClickableCard>;
 }
 
-export function HomePage({locale, posts, contributors, contributorCount, commits, days, sponsors}: HomePageProps) {
+export function HomePage({locale, posts, contributors, contributorCount, commits, days, sponsors, images}: HomePageProps) {
   const t = useMessage();
-  preload(WALL_MASK, {as: 'image', fetchPriority: 'high'});
+  // CSS mask-image fetches in CORS mode; without crossOrigin the preload does not match and the mask (the LCP) loads twice.
+  preload(WALL_MASK, {as: 'image', fetchPriority: 'high', crossOrigin: 'anonymous'});
+  // The mosaic is the LCP; CSS alone would request it only after the stylesheet and layout.
+  for (const {media, avif} of Object.values(images.wall)) preload(avif[0]![0], {as: 'image', type: 'image/avif', media, imageSrcSet: avif.map(([url, density]) => `${url} ${density}x`).join(', '), fetchPriority: 'high'});
   const number = new Intl.NumberFormat(LANGUAGE_TAG[locale]);
   const page = (section: SectionId, id: SectionPageId) => sectionOf(section).pages.find(item => item.id === id)!;
   const entry = (section: SectionId, id: SectionPageId) => entryLink(locale, page(section, id)).href;
-  const tagline = t('gz.home.tagline');
-  const at = tagline.indexOf(BRAND);
-  const headline = <>{at < 0 ? tagline : tagline.slice(0, at)}{at >= 0 && <Text type="inherit" weight="semibold" xstyle={s.brandLine}>{BRAND}</Text>}{at >= 0 && tagline.slice(at + BRAND.length)}</>;
+  const headline = <Text type="inherit" weight="semibold" xstyle={s.brandLine}>{t('gz.home.tagline')}</Text>;
   const metrics = [
     {value: contributorCount, label: t('gz.homeE.people'), href: routes.page(locale, 'contributors')},
     {value: commits, label: t('gz.homeE.commits'), href: 'https://github.com/gentoo-zh/overlay/commits/master', live: 'commits'},
@@ -119,8 +117,10 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
   const links = {
     telegramChannel: {label: t('gz.homeF.telegramChannel'), handle: '@gentoocn', href: SITE.telegramChannel},
     telegramChat: {label: t('gz.homeF.telegramChat'), handle: '@gentoo_zh', href: SITE.telegramChat},
+    matrixChannel: {label: t('gz.homeF.matrixChannel'), handle: '#gentoocn:matrix.gentoozh.org', href: 'https://matrix.to/#/%23gentoocn:matrix.gentoozh.org'},
     matrix: {label: t('gz.homeF.matrix'), handle: '#gentoo-zh:matrix.gentoozh.org', href: SITE.matrix},
     irc: {label: 'IRC', handle: '#gentoo-zh @ Libera.Chat', href: SITE.irc},
+    discord: {label: t('gz.homeF.discord'), handle: 'discord.gg/Csya7BFBG7', href: SITE.discord},
     forum: {label: t('gz.nav.forum'), handle: 'forum.gentoozh.org', href: SITE.forum},
     contribute: {label: t('gz.homeF.contribute'), handle: '', href: entry('community', 'contributing')},
   };
@@ -128,11 +128,10 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
     <Button label={t('gz.homeF.useOverlay')} variant="primary" size={BUTTON.cta} href={entry('docs', 'overlay')} xstyle={s.button} />
     <Button label={t('gz.homeF.liveIso')} variant="secondary" size={BUTTON.cta} href={sectionHref(locale, sectionOf('download'))} xstyle={s.button} />
   </Grid>;
-  // Build-time derivatives exist only in the production output (see ContributorAvatar).
-  const derived = (avatar: string, width: number) => import.meta.env.DEV ? avatar : `${avatar}.${width}.webp`;
+  const group = contributors.slice(0, images.group.length).map((person, index) => ({...person, src: images.group[index]!}));
   const avatarGroup = <AvatarGroup size={AVATAR.card}>
-    {contributors.slice(0, AVATARS).map(person => <Avatar key={person.href} src={derived(person.avatar, GROUP_WIDTH)} name={person.name} xstyle={s.avatar} />)}
-    <AvatarGroupOverflow count={Math.max(0, contributorCount - AVATARS)} xstyle={[s.avatar, s.overflowCount]} />
+    {group.map(person => <Avatar key={person.href} src={person.src} name={person.name} xstyle={s.avatar} />)}
+    <AvatarGroupOverflow count={Math.max(0, contributorCount - group.length)} xstyle={[s.avatar, s.overflowCount]} />
   </AvatarGroup>;
   const entryOf = (section: SectionId, id: SectionPageId) => ({id, title: t(`gz.nav.${id}`), description: t(`gz.section.sub.${id}`), icon: <EntryIcon id={id} />, link: entryLink(locale, page(section, id))});
   // Two ranks: the gentoo-zh sources lead in their own panel with large tiles; the official sources, downloads and
@@ -151,7 +150,10 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
       <Grid xstyle={s.heroColumns}>
         <VStack gap={SPACE.page} xstyle={s.heroText}>
           <Heading level={1} type="display-1" weight="normal" textWrap="balance" id="home-title" xstyle={s.headline}>{headline}</Heading>
-          <Text type="large" weight="normal" color="secondary">{t('gz.homeF.intro')}</Text>
+          <VStack gap={TEMPLATE.zero}>
+            <Text type="large" weight="normal" color="secondary">{t('gz.home.subtitle')}</Text>
+            <Text type="large" weight="normal" color="secondary">{t('gz.homeF.intro')}</Text>
+          </VStack>
           {buttons}
           <HStack gap={SPACE.group} xstyle={s.metrics}>
             {metrics.map(metric => <Link key={metric.href} href={metric.href} color="inherit" aria-label={`${metric.label}: ${number.format(metric.value)}`}>
@@ -164,28 +166,13 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
         </VStack>
         <VStack aria-hidden xstyle={s.artwork}>
           <VStack aria-hidden xstyle={s.logoWall}>
-            <Grid xstyle={s.wallTrack}>
-              {Array.from({length: WALL_ROWS * WALL_COLUMNS}, (_, index) => {
-                const row = Math.floor(index / WALL_COLUMNS) % WALL_PERIOD;
-                const column = (index % WALL_COLUMNS) % WALL_PERIOD;
-                const avatar = contributors[(row * WALL_PERIOD + column) % contributors.length]!.avatar;
-                // Low priority keeps the tiles out of React's image preloads and behind the stylesheet and the mask.
-                // Not lazy: the compositor-driven loop moves tiles into view without triggering a lazy load. Only
-                // the first period carries the build markers; the repeats name the same files.
-                const srcSet = import.meta.env.DEV ? undefined : wallSrcSet(avatar);
-                const marked = srcSet != null && index < WALL_PERIOD * WALL_COLUMNS && index % WALL_COLUMNS < WALL_PERIOD;
-                return <img key={index} src={derived(avatar, WALL_WIDTHS[1]!)} srcSet={srcSet} sizes={srcSet && WALL_SIZES} data-avatar-source={marked ? avatar : undefined} data-avatar-widths={marked ? WALL_WIDTHS.join(' ') : undefined} alt="" fetchPriority="low" decoding="async" {...stylex.props(s.wallTile)} />;
-              })}
-            </Grid>
+            {/* Tile placeholders in the card colour; the mosaic of one period repeats over them. */}
+            <div {...stylex.props(s.wallTrack)}>
+              <div {...stylex.props(s.wallMosaic(wallImageSet(images.wall.compact), wallImageSet(images.wall.tablet), wallImageSet(images.wall.desktop)))} />
+            </div>
           </VStack>
         </VStack>
       </Grid>
-      <Link href={routes.page(locale, 'contributors')} aria-label={t('gz.homeF.contributors')} display="block" xstyle={s.contributors}>
-        <AvatarGroup size={AVATAR.card}>
-          {contributors.slice(0, AVATARS).map(person => <Avatar key={person.href} src={derived(person.avatar, GROUP_WIDTH)} name={person.name} tooltip={false} xstyle={s.avatar} />)}
-          <AvatarGroupOverflow count={Math.max(0, contributorCount - Math.min(AVATARS, contributors.length))} xstyle={[s.avatar, s.overflowCount]} />
-        </AvatarGroup>
-      </Link>
     </VStack>
     <VStack xstyle={s.sheet}>
       <VStack as="section" gap={SPACE.group} aria-labelledby="home-features" xstyle={s.section}>
@@ -219,7 +206,7 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
             <Button label={t('gz.homeF.allChannels')} href={entry('community', 'channels')} variant="ghost" size={BUTTON.inline} endContent={<Icon icon={ArrowRight} size={ICON.inline} />} xstyle={s.groupAction} />
           </HStack>
           <List hasDividers xstyle={s.channels}>
-            {CHANNELS.map(({id, logo: Logo}, index) => <ListItem key={id} xstyle={[s.row, CHANNELS.length % 2 === 0 && index === CHANNELS.length - 2 && s.lastRowStart]} href={links[id].href} label={links[id].label} description={links[id].handle || undefined} startContent={<IconTile><Logo size={ICON.toolbarPx} /></IconTile>} />)}
+            {CHANNELS.map(({id, logo: Logo}, index) => <ListItem key={id} xstyle={[s.row, index === CHANNELS.length - 2 && s.lastRowStart]} href={links[id].href} label={links[id].label} description={links[id].handle || undefined} startContent={<IconTile><Logo size={ICON.toolbarPx} /></IconTile>} />)}
           </List>
         </VStack>
       </VStack>

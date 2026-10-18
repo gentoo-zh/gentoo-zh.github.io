@@ -53,9 +53,6 @@ export const TEMPLATE = {
   sparkMargin: {top: 4, right: 0, left: 0, bottom: 2},
   chartAxisWidth: 56,
   chartPointRadius: 3,
-  /** Each platform column fits its longest handle and mark on one line; with the name floor they fit 756px. */
-  channelPlatformWidth: {telegram: 200, matrix: 176, irc: 216},
-  channelNameWidth: 160,
   fill: 'fill',
   libraryColumn: 240,
   logoColumn: 200,
@@ -70,6 +67,15 @@ export const TEMPLATE = {
   narrow: '(max-width: 1024px)',
   /** Phones stack or merge table columns instead of scrolling sideways (Astryx table-filter COMPACT_SURFACE_QUERY). */
   compactTable: '(max-width: 767px)',
+} as const;
+
+/**
+ * Channel table columns. Each platform column fits its longest handle (or header) and mark on one line; with the
+ * name floor they fit 756px. Kept out of TEMPLATE, which the shared chrome chunk ships to every page.
+ */
+export const CHANNEL_COLUMNS = {
+  platformWidth: {telegram: 174, matrix: 170, irc: 202, discord: 90},
+  nameWidth: 120,
 } as const;
 
 /** Keep figure/date widths fixed; specifications use the remaining space. */

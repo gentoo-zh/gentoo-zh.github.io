@@ -1,9 +1,9 @@
 ---
 title: "交流管道"
-description: "gentoo-zh 的論壇、Telegram、Matrix、IRC 與播報頻道。"
+description: "gentoo-zh 的論壇、Telegram、Matrix、IRC、Discord 與播報頻道。"
 ---
 
-提問和長期討論請到論壇。即時交流用 Telegram、Matrix 或 IRC，三者的主群互相橋接。加入主群後，其他群組都免去驗證。
+提問和長期討論請到論壇。即時交流用 Telegram、Matrix、IRC 或 Discord，四者的主群互相橋接。加入主群後，其他群組都免去驗證。
 
 ## 群組 {#groups}
 

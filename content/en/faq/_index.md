@@ -93,7 +93,7 @@ questions:
 
 ### Where can I get technical support? {#where-to-ask}
 
-The chat channels (Telegram, Matrix, IRC) are listed on the [channels page](/channels/), and questions can also be posted on the [forum](https://forum.gentoozh.org/). Report overlay bugs at [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues).
+The chat channels (Telegram, Matrix, IRC, Discord) are listed on the [channels page](/channels/), and questions can also be posted on the [forum](https://forum.gentoozh.org/). Report overlay bugs at [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues).
 
 ### How can I contribute? {#how-to-contribute}
 

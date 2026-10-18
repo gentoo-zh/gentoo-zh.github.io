@@ -9,7 +9,6 @@ const avatars = new Set();
 export async function buildAvatarThumbnails(html, dist) {
   for (const image of htmlElements(html).filter(e => e.name === 'img' && e.attrs.has('data-avatar-source'))) {
     const source = image.attrs.get('data-avatar-source');
-    // A fixed-size avatar gets 1x and 2x; one sized by CSS (the home wall) lists its square widths.
     const sizes = avatarWidths(image);
     for (const size of sizes) {
       const path = `${source}.${size}.webp`;
@@ -22,10 +21,8 @@ export async function buildAvatarThumbnails(html, dist) {
   }
 }
 
-/** Square widths an avatar `<img>` references: `data-avatar-widths`, else its width at 1x and 2x. */
+/** Square widths a fixed-size avatar `<img>` references: its width at 1x and 2x. */
 export function avatarWidths(image) {
-  const widths = image.attrs.get('data-avatar-widths');
-  if (widths != null) return widths.split(' ').map(Number);
   const width = Number(image.attrs.get('width'));
   return [width, width * 2];
 }

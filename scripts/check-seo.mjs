@@ -35,8 +35,8 @@ for (const file of listFiles(DIST).filter(file => file.endsWith('.html'))) {
     const source = image.attrs.get('data-avatar-source');
     const sizes = avatarWidths(image);
     const urls = sizes.map(size => `${source}.${size}.webp`);
-    const srcset = image.attrs.has('data-avatar-widths') ? urls.map((url, index) => `${url} ${sizes[index]}w`).join(', ') : `${urls[0]} 1x, ${urls[1]} 2x`;
-    if (!(image.attrs.has('data-avatar-widths') ? urls : urls.slice(0, 1)).includes(image.attrs.get('src')) || image.attrs.get('srcset') !== srcset) failures.push(`${path}: incorrect avatar srcset for ${source}`);
+    const srcset = `${urls[0]} 1x, ${urls[1]} 2x`;
+    if (image.attrs.get('src') !== urls[0] || image.attrs.get('srcset') !== srcset) failures.push(`${path}: incorrect avatar srcset for ${source}`);
     for (const [index, url] of urls.entries()) {
       if (avatarFiles.has(url)) continue;
       avatarFiles.add(url);
@@ -57,7 +57,7 @@ for (const file of listFiles(DIST).filter(file => file.endsWith('.html'))) {
     failures.push(`${path}: image preload ${link.attrs.get('href')} has sizes but no srcset, so it fetches the full-size source`);
   }
   for (const image of elements.filter(e => e.name === 'img')) {
-    // Home images fill boxes their styles size (AspectRatio, the sponsor row, the wall grid), so they need no dimensions.
+    // Home images fill boxes their styles size (AspectRatio, the sponsor row), so they need no dimensions.
     if (!/^\/(?:en\/|zh-tw\/)?$/.test(path) && !['width', 'height'].every(key => Number(image.attrs.get(key)) > 0)) failures.push(`${path}: missing image dimensions for ${image.attrs.get('src')}`);
     failures.push(...await imageFailures(image, path, intrinsic));
   }
