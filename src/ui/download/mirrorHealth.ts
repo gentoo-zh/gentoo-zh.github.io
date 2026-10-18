@@ -1,6 +1,6 @@
 // Patch the static health cells from the status API; it permits cross-origin requests.
+import {STATUS_API} from '../support/statusApi';
 
-const STATUS_API = 'https://status.gentoozh.org/api/status';
 /** A tree that trails the origin by more than a day is reported as lagging. */
 const LAG_LIMIT_SEC = 86400;
 

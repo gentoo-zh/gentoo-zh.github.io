@@ -1,6 +1,13 @@
-<script is:inline data-owner="src/ui/section/SectionNavScript.astro">
+---
+// Before paint, restore the sidebar's scroll position and keep the current page in view. The groups fold
+// once the island mounts, on first use or when idle; a plain click on a group header is held until then.
+import {islandSelector} from '../islands/kinds';
+
+const selector = islandSelector('section');
+---
+<script is:inline data-owner="src/ui/section/SectionNavScript.astro" define:vars={{selector}}>
   (function () {
-    const root = document.querySelector('[data-gz-island="section"]');
+    const root = document.querySelector(selector);
     const scroll = root?.parentElement;
     const selected = root?.querySelector('[aria-current="page"]');
     if (!scroll?.clientHeight || !selected) return;
@@ -17,5 +24,23 @@
   })();
 </script>
 <script>
-  import './section-nav-client';
+  import {buttons, hydrated, links, marked} from '../islands/intent';
+  import {islandSelector} from '../islands/kinds';
+  import {schedule} from '../islands/schedule';
+  import {SECTION_GROUP_ATTRIBUTE} from './sectionNavMarks';
+
+  const root = document.querySelector(islandSelector('section'));
+  if (root != null) {
+    void schedule(
+      'section',
+      [
+        // A modified or middle click on a header opens its category page natively.
+        {kind: 'intent', on: links(root, marked(SECTION_GROUP_ATTRIBUTE))},
+        // The chevron beside each header folds its group.
+        {kind: 'intent', on: buttons(root, hydrated('button[aria-controls]'))},
+        {kind: 'idle'},
+      ],
+      () => import('./section-nav-client').then(({mount}) => mount()),
+    );
+  }
 </script>

@@ -15,6 +15,7 @@ import {useMessage} from '../../i18n/useMessage';
 import {BUTTON, SPACE, TEMPLATE} from '../../theme/scale';
 import {layoutOf} from '../data/columns';
 import {stickyHeader} from '../data/stickyHeader';
+import {fetchPrefetched} from '../islands/prefetch';
 import {FILE_COLUMNS, FILE_COMPACT_COLUMNS, FilesSkeleton} from './FilesSkeleton';
 import {
   FILES_TIMEOUT_MS,
@@ -46,7 +47,8 @@ interface FileRow extends Record<string, unknown> {
 }
 
 async function fetchListing(url: string, signal: AbortSignal): Promise<Listing> {
-  const response = await fetch(url, {signal});
+  // The first listing takes the request FilesScript sent while this module loaded.
+  const response = await fetchPrefetched(url, {signal});
   if (response.status === 404) return {state: 'missing'};
   if (!response.ok) return {state: 'error', reason: 'failed'};
   const entries = (await response.json()) as unknown;

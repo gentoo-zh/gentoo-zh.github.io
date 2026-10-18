@@ -39,7 +39,7 @@ export function SearchButton({isHydrated}: {isHydrated: boolean}) {
   useSearchShortcut(open);
   return (
     <>
-      <Button isDisabled={!isHydrated} label={t('gz.search.open')} tooltip={t('gz.search.shortcut')} variant="ghost" isIconOnly icon={<Icon icon="search" color="inherit" />} data-search-open />
+      <Button isDisabled={!isHydrated} label={t('gz.search.open')} tooltip={t('gz.search.shortcut')} variant="ghost" isIconOnly icon={<Icon icon="search" color="inherit" />} data-search-open data-nav-control="search" />
       {SearchDialog != null ? (
         <Suspense fallback={<SearchDialogFallback isOpen={isOpen} onOpenChange={change} onShow={showFallback} />}>
           <SearchDialog isOpen={isOpen} onOpenChange={change} isReplacing={isReplacing} />

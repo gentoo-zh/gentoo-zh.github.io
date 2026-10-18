@@ -10,6 +10,7 @@ import type {Sponsor} from '../../data/schemas';
 import type {Locale} from '../../i18n/locales';
 import {useMessage} from '../../i18n/useMessage';
 import {BUTTON, SPACE, TEMPLATE} from '../../theme/scale';
+import {THANKS_LOGO_IMAGE} from '../../theme/images';
 import {SectionPage, type SectionPageProps} from '../section/SectionPage';
 import {anchorId} from './anchors';
 
@@ -66,7 +67,7 @@ export function ThanksPage({sponsors, ...page}: Props) {
               href={role.note === 'onepassword' ? NON_PROFIT[page.locale] : sponsor.href}
               label={name} target="_blank" padding={TEMPLATE.zero}>
               <AspectRatio ratio={TEMPLATE.libraryImageRatio} fit="contain" xstyle={styles.media}>
-                {(sponsor.logoDark ? [[sponsor.logo, modeDisplay.light], [sponsor.logoDark, modeDisplay.dark]] as const : [[sponsor.logo, null]] as const).map(([src, mode]) => <img key={src} src={src} alt="" loading="lazy" {...stylex.props(styles.logo, styles.scale(sponsor.scale ?? 1), mode)} />)}
+                {(sponsor.logoDark ? [[sponsor.logo, modeDisplay.light], [sponsor.logoDark, modeDisplay.dark]] as const : [[sponsor.logo, null]] as const).map(([src, mode]) => <img key={src} src={src} alt="" data-image-widths={THANKS_LOGO_IMAGE.widths} sizes={THANKS_LOGO_IMAGE.sizes} loading="lazy" decoding="async" {...stylex.props(styles.logo, styles.scale(sponsor.scale ?? 1), mode)} />)}
               </AspectRatio>
               <Section variant="transparent" padding={SPACE.block}>
                 <VStack gap={SPACE.hairline}>

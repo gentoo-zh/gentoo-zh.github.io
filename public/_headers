@@ -13,6 +13,62 @@
 /pagefind/pagefind.:hash.pf_meta
   Cache-Control: public, max-age=31536000, immutable
 
+# 文件名不带哈希的静态图片：同名替换后用户要在合理时间内看到新文件，不能 immutable。
+# 新鲜 1 天，过期后 7 天内先用旧图并在后台重新验证。Cloudflare 的 _headers 每条只能有一个 *，
+# 所以目录加扩展名各写一条；:lang 代表 en、zh-tw 两个语言前缀，默认语言的路径无前缀，另写一条。
+# 目录里还有 HTML，不能直接用 /contributors/*。HTML、feed、JSON、pagefind 入口仍保持 max-age=0。
+# 由 pnpm check:headers 核对：dist 里每个这类图片命中且只命中这一个值，其余文件一条都不命中。
+/contributors/*.webp
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/:lang/contributors/*.webp
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/contributors/*.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/:lang/contributors/*.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/contributors/*.jpg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/:lang/contributors/*.jpg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/contributors/*.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/:lang/contributors/*.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/contributors/*.gif
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/:lang/contributors/*.gif
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/posts/*.webp
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/:lang/posts/*.webp
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/posts/*.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/:lang/posts/*.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/posts/*.jpg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/:lang/posts/*.jpg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/posts/*.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/:lang/posts/*.svg
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/posts/*.gif
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/:lang/posts/*.gif
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/img/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/brand/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/authors/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/favicon*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/apple-touch-icon.png
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
 # 全站安全响应头
 /*
   X-Frame-Options: SAMEORIGIN

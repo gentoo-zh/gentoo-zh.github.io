@@ -3,7 +3,7 @@ import {dirname} from 'node:path';
 import {decodeEntities, fileFor, listFiles, refreshTarget} from './lib/html.mjs';
 import {imageMetadata} from 'astro/assets/utils';
 import {ERROR_PAGES, FILES_REWRITES, SITEMAP_REDIRECTS} from './lib/url-manifest.mjs';
-import {buildCoverThumbnails} from './lib/cover-thumbnails.mjs';
+import {buildImageVariants} from './lib/image-variants.mjs';
 import {buildAvatarThumbnails} from './lib/avatar-thumbnails.mjs';
 import {htmlElements, redirectAnchors} from './lib/html-elements.mjs';
 import {MANIFEST, contentHash, previousManifest} from './lib/sitemap-lastmod.mjs';
@@ -33,10 +33,10 @@ const redirectRules = (from, to) => [...new Set([from, encodeURI(from)])].map(so
 const redirects = Object.entries(SITEMAP_REDIRECTS).flatMap(([from, to]) => redirectRules(from, to));
 for (const file of listFiles(DIST).filter(file => file.endsWith('.html')).sort()) {
   const original = readFileSync(fileFor(DIST, file), 'utf8');
-  const html = await buildCoverThumbnails(original, DIST);
+  const path = file.replace(/index\.html$/, '');
+  const html = await buildImageVariants(original, DIST, path);
   await buildAvatarThumbnails(html, DIST);
   if (html !== original) writeFileSync(fileFor(DIST, file), html);
-  const path = file.replace(/index\.html$/, '');
   const target = refreshTarget(html);
   if (target) {
     if (!redirectAnchors(html)) {
@@ -52,7 +52,8 @@ for (const file of listFiles(DIST).filter(file => file.endsWith('.html')).sort()
     for (const element of elements.filter(e => e.name === 'img').reverse()) {
       if (element.attrs.has('width') && element.attrs.has('height')) continue;
       const source = new URL(element.attrs.get('src'), `${ORIGIN}${path}`);
-      if (source.origin !== ORIGIN) continue;
+      // Raster images take their size from the component or from data-image-widths; check:seo reports the rest.
+      if (source.origin !== ORIGIN || !source.pathname.endsWith('.svg')) continue;
       const file = fileFor(DIST, source.pathname);
       if (!existsSync(file)) throw new Error(`${path}: missing image ${source.pathname}`);
       const size = await imageDimensions(file);

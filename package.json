@@ -22,11 +22,14 @@
     "check:i18n": "node --experimental-strip-types scripts/check-i18n.mjs",
     "check:no-convert": "node scripts/check-no-convert.mjs",
     "check:urls": "node scripts/check-urls.mjs",
-    "check:budget": "node scripts/check-budget.mjs",
+    "check:budget": "node --experimental-strip-types scripts/check-budget.mjs",
     "check:search": "node scripts/check-search.mjs",
     "check:headers": "node scripts/check-headers.mjs",
     "check:stylex": "node scripts/check-stylex.mjs",
-    "check": "pnpm typecheck && pnpm check:theme && pnpm check:code && pnpm check:data && pnpm check:contributors && pnpm check:ui && pnpm check:no-convert && pnpm build && pnpm check:stylex && pnpm check:content-parity && pnpm check:i18n && pnpm check:urls && pnpm check:budget && pnpm check:search && pnpm check:headers && pnpm check:seo",
+    "test:islands": "playwright test --project=islands",
+    "test:site": "playwright test --project=site",
+    "check:runtime": "playwright test --project=runtime",
+    "check": "pnpm typecheck && pnpm check:theme && pnpm check:code && pnpm check:data && pnpm check:contributors && pnpm check:ui && pnpm check:no-convert && pnpm test:islands && pnpm build && pnpm check:stylex && pnpm check:content-parity && pnpm check:i18n && pnpm check:urls && pnpm check:budget && pnpm check:search && pnpm check:headers && pnpm check:seo && pnpm test:site && pnpm check:runtime",
     "check:seo": "node scripts/check-seo.mjs"
   },
   "dependencies": {
@@ -41,6 +44,7 @@
   "devDependencies": {
     "@astrojs/compiler-rs": "0.5.2",
     "@astryxdesign/cli": "0.7.0",
+    "@playwright/test": "1.64.1",
     "@stylexjs/unplugin": "0.19.1",
     "@types/node": "22.20.5",
     "@types/react": "19.3.0",
@@ -50,6 +54,7 @@
     "pagefind": "1.5.2",
     "typescript": "6.0.3",
     "typescript-eslint": "8.71.2",
-    "unplugin": "2.3.11"
+    "unplugin": "2.3.11",
+    "vite": "8.3.4"
   }
 }

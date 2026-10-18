@@ -1,15 +1,18 @@
 // Count each script in the import closure once, in Brotli bytes; enforce registered ownership.
-// User-triggered imports use ON_DEMAND; idle and initial imports count toward the page budget.
+// Two budgets per page: the startup closure (module scripts, modulepreloads and their static imports,
+// which the browser requests before the load event) and the total, idle imports included. User-triggered
+// imports use ON_DEMAND instead. scripts/check-runtime measures the same pages in a browser.
 import {existsSync, readFileSync} from 'node:fs';
 import {basename} from 'node:path';
 import {brotliCompressSync} from 'node:zlib';
 import {init, parse} from 'es-module-lexer';
 import {fileFor, listFiles, report} from './lib/html.mjs';
-import {BUDGETS, CHROME, ON_DEMAND, FRAGMENT_REDIRECT, isRedirect} from './lib/budgets.mjs';
+import {ON_DEMAND, budgetFor} from './lib/budgets.mjs';
 import {SCRIPT_OWNERS} from './lib/ui-rules.mjs';
 import {scriptDigest} from './lib/script-provenance.mjs';
 import {initialImports} from './lib/import-timing.mjs';
 import {htmlElements, redirectAnchors} from './lib/html-elements.mjs';
+import {ISLAND_ATTRIBUTE} from '../src/ui/islands/kinds.ts';
 
 const DIST = 'dist';
 const INLINE_OWNERS = new Set(SCRIPT_OWNERS.map(({source}) => source));
@@ -95,6 +98,24 @@ function followImports(code, base, page, scripts, onDemand = false) {
   }
 }
 
+/** Same-origin targets of a script's static imports, which load with it before any dynamic import. */
+function staticImports(code, base) {
+  if (!importCache.has(code)) return [];
+  return importCache.get(code).imports.filter(({type, specifier}) => type === 'static' && specifier != null && /^\.{0,2}\//.test(specifier)).map(({specifier}) => new URL(specifier, `https://dist${base}`).pathname);
+}
+
+/** The page's startup closure: `roots` and everything they import statically. */
+function startupClosure(roots, scripts) {
+  const closure = new Set();
+  const visit = url => {
+    if (closure.has(url) || !scripts.has(url)) return;
+    closure.add(url);
+    for (const target of staticImports(scripts.get(url).code, url)) visit(target);
+  };
+  for (const url of roots) visit(url);
+  return closure;
+}
+
 // The same shared chunks occur on hundreds of static contributor profiles.
 const compressedSizes = new Map();
 function compressedSize(code) {
@@ -109,7 +130,7 @@ function outsideToggles(elements, scripts) {
   return elements.filter(element => {
     if (!element.attrs.has('aria-expanded')) return false;
     for (let parent = element; parent; parent = parent.parent) {
-      if (parent.name === 'div' && entries.has(handlers[parent.attrs.get('data-gz-island')])) return false;
+      if (parent.name === 'div' && entries.has(handlers[parent.attrs.get(ISLAND_ATTRIBUTE)])) return false;
     }
     return true;
   }).length;
@@ -117,15 +138,19 @@ function outsideToggles(elements, scripts) {
 
 await init;
 let largest = {page: '', bytes: 0};
+let largestStartup = {page: '', bytes: 0};
 let largestLazy = {page: '', bytes: 0};
 for (const url of listFiles(DIST).filter(url => url.endsWith('.html'))) {
   const page = url.replace(/index\.html$/, '');
   const html = readFileSync(fileFor(DIST, url), 'utf8');
   const scripts = new Map();
+  /** Scripts the page itself requests: module scripts, modulepreloads and inline modules' static imports. */
+  const roots = [];
   const elements = htmlElements(html);
   for (const {name, attrs, content: inline} of elements) {
     if (name === 'link' && attrs.get('rel')?.toLowerCase().split(/\s+/).includes('modulepreload') && attrs.has('href')) {
-      follow(new URL(attrs.get('href'), `https://dist${page}`).pathname, page, scripts);
+      roots.push(new URL(attrs.get('href'), `https://dist${page}`).pathname);
+      follow(roots.at(-1), page, scripts);
     }
     if (name !== 'script') continue;
     if (attrs.get('type') === 'application/ld+json') {
@@ -134,19 +159,24 @@ for (const url of listFiles(DIST).filter(url => url.endsWith('.html'))) {
     }
     const src = attrs.get('src');
     if (src != null) {
-      follow(new URL(src, `https://dist${page}`).pathname, page, scripts);
+      roots.push(new URL(src, `https://dist${page}`).pathname);
+      follow(roots.at(-1), page, scripts);
       continue;
     }
     const owner = attrs.get('data-owner');
     if (!INLINE_OWNERS.has(owner)) failures.push(`${page}: inline script ${owner == null ? 'without data-owner' : `owned by ${owner}`} is not registered`);
     scripts.set(`inline:${inline}`, {code: inline, onDemand: false});
     followImports(inline, page, page, scripts);
+    roots.push(...staticImports(inline, page));
   }
   const size = lazy => [...scripts.values()].filter(({onDemand}) => onDemand === lazy).reduce((sum, {code}) => sum + compressedSize(code), 0);
   const bytes = size(false);
   const lazyBytes = size(true);
-  const budget = isRedirect(html) ? (redirectAnchors(html) ? FRAGMENT_REDIRECT : 0) : CHROME + BUDGETS.find(({route}) => route.test(page)).extra;
-  if (bytes > budget) failures.push(`${page}: ${bytes} B of script (brotli) exceeds ${budget} B`);
+  const startupBytes = [...startupClosure(roots, scripts)].reduce((sum, url) => sum + compressedSize(scripts.get(url).code), 0);
+  const budget = budgetFor(page, html, redirectAnchors(html));
+  if (startupBytes > budget.startup) failures.push(`${page}: startup closure ${startupBytes} B (brotli) exceeds ${budget.startup} B`);
+  if (bytes > budget.total) failures.push(`${page}: ${bytes} B of script in total (brotli) exceeds ${budget.total} B`);
+  if (startupBytes > largestStartup.bytes) largestStartup = {page, bytes: startupBytes};
   if (lazyBytes > ON_DEMAND) failures.push(`${page}: ${lazyBytes} B of on-demand script (brotli) exceeds ${ON_DEMAND} B`);
   if (bytes > largest.bytes) largest = {page, bytes};
   if (lazyBytes > largestLazy.bytes) largestLazy = {page, bytes: lazyBytes};
@@ -154,5 +184,5 @@ for (const url of listFiles(DIST).filter(url => url.endsWith('.html'))) {
   if (toggles > 0) failures.push(`${page}: ${toggles} aria-expanded control(s), outside hydrated roots with a registered handler`);
 }
 
-if (failures.length === 0) console.log(`check:budget: largest ${largest.page || 'none'} ${largest.bytes} B; on demand ${largestLazy.page || 'none'} ${largestLazy.bytes} B`);
+if (failures.length === 0) console.log(`check:budget: largest startup closure ${largestStartup.page || 'none'} ${largestStartup.bytes} B; total ${largest.page || 'none'} ${largest.bytes} B; on demand ${largestLazy.page || 'none'} ${largestLazy.bytes} B`);
 report('check:budget', failures);

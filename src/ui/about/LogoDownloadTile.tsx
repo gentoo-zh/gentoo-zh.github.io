@@ -7,6 +7,7 @@ import {HStack, StackItem, VStack} from '@astryxdesign/core/Layout';
 import {Text} from '@astryxdesign/core/Text';
 import {MediaTheme} from '@astryxdesign/core/theme';
 import {BUTTON, ICON, SPACE, STACK, TEMPLATE} from '../../theme/scale';
+import {LOGO_TILE_IMAGE} from '../../theme/images';
 import {Download} from '../chrome/icons';
 
 const styles = stylex.create({
@@ -32,7 +33,7 @@ export function LogoDownloadTile({file, name, downloadLabel, background}: LogoDo
       <MediaTheme mode={background === 'lavender' ? 'dark' : 'light'}>
         <Card padding={TEMPLATE.zero}>
           <AspectRatio ratio={TEMPLATE.productImageRatio} fit="contain" xstyle={styles[background]}>
-            <img src={src} alt="" loading="lazy" {...stylex.props(styles.image)} />
+            <img src={src} alt="" data-image-widths={LOGO_TILE_IMAGE.widths} sizes={LOGO_TILE_IMAGE.sizes} loading="lazy" decoding="async" {...stylex.props(styles.image)} />
           </AspectRatio>
         </Card>
       </MediaTheme>

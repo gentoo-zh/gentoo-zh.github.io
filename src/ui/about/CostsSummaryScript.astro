@@ -1,3 +1,15 @@
+---
+// The totals are server-rendered; the explanation popovers mount on first use or when idle.
+---
 <script>
-  import './costs-summary-client';
+  import {buttons, hydrated} from '../islands/intent';
+  import {islandSelector} from '../islands/kinds';
+  import {schedule} from '../islands/schedule';
+
+  const root = document.querySelector(islandSelector('costs'));
+  if (root != null) {
+    void schedule('costs', [{kind: 'intent', on: buttons(root, hydrated('button'))}, {kind: 'idle'}], () =>
+      import('./costs-summary-client').then(({mount}) => mount()),
+    );
+  }
 </script>

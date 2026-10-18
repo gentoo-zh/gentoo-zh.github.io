@@ -7,6 +7,8 @@ import {codeTokenizer} from '../src/markdown/codeTokenizer.ts';
 import {rewriteCode} from '../src/ui/start/guideSetup.ts';
 import {crumbsOf, dirPath, directoryOf, fileUrl, formatSize, listingUrl, parentOf} from '../src/ui/download/filesData.ts';
 import {distfilesLink} from '../src/i18n/distfilesLink.ts';
+import {imageFailures} from './lib/image-check.mjs';
+import {feedHtml} from '../src/ui/feedHtml.ts';
 
 function tokens(code, language) {
   let end = 0;
@@ -86,4 +88,48 @@ for (const href of ['https://distfiles.gentoozh.org.example/', 'https://gentoozh
 }
 assert.equal(formatSize(512, 'en'), '512 B');
 assert.equal(formatSize(1021231104, 'zh-CN'), '973.9 MiB');
+// check:seo's image rule: a srcset never lets an oversized source through (scripts/lib/image-check.mjs).
+const IMAGE_WIDTHS = {'/large.png': 2048, '/small.png': 64, '/s.png': 128, '/m.png': 256, '/l.png': 384, '/xl.png': 600};
+const intrinsic = async url => (url.pathname in IMAGE_WIDTHS ? {width: IMAGE_WIDTHS[url.pathname]} : null);
+const imageProblems = attrs => imageFailures({attrs: new Map(Object.entries(attrs))}, '/p/', intrinsic);
+for (const attrs of [
+  {src: '/small.png', width: '64'},
+  {src: '/small.png', srcset: '/small.png 1x, /s.png 2x', width: '64'},
+  {src: '/small.png', srcset: '/small.png', width: '64'},
+  {src: '/small.png', srcset: '/small.png 64w', sizes: '64px', width: '64'},
+  {src: '/s.png', srcset: '/s.png 128w, /m.png 256w', sizes: '(min-width: 48em) 4rem, 2rem'},
+  {src: '/s.png', srcset: '/s.png 128w, /m.png 256w, /l.png 384w', sizes: '100vw', width: '128'},
+  {src: '/s.png', srcset: '/s.png 128w, /m.png 256w', sizes: 'min(100vw - 3rem, 75rem)', width: '128'},
+]) {
+  assert.deepEqual(await imageProblems(attrs), [], JSON.stringify(attrs));
+}
+for (const [attrs, problem] of [
+  [{src: '/large.png', width: '64'}, /is 2048px wide but displayed at 64px/],
+  [{src: '/large.png', srcset: '/large.png invalid', width: '64'}, /invalid descriptor "invalid"/],
+  [{src: '/large.png', srcset: '/large.png 1x', width: '64'}, /over 96px for 64px at 1x/],
+  [{src: '/large.png', srcset: '/large.png', width: '64'}, /over 96px for 64px at 1x/],
+  [{src: '/small.png', srcset: '/small.png 1x, /large.png 2x', width: '64'}, /large\.png is 2048px wide, over 192px/],
+  [{src: '/large.png', srcset: '/large.png 2048w', sizes: '64px', width: '64'}, /over 96px for 64px at 1x/],
+  [{src: '/small.png', srcset: '/small.png 64w, /large.png 2048w', sizes: '100vw', width: '64'}, /over 288px for 64px at 3x/],
+  [{src: '/s.png', srcset: '/s.png 128w, /xl.png 600w', sizes: '(min-width: 48em) 4rem, 2rem'}, /over 288px for 64px at 3x/],
+  [{src: '/s.png', srcset: '/s.png 128w, /m.png 256w', sizes: '100vw'}, /neither a width nor a fixed-length sizes/],
+  [{src: '/small.png', srcset: '/small.png 64w, /s.png 128w', width: '64'}, /width descriptors but no sizes/],
+  [{src: '/small.png', srcset: '/small.png 64w, /s.png 2x', sizes: '64px', width: '64'}, /mixes w and x descriptors/],
+  [{src: '/small.png', srcset: '/small.png, /s.png 1x', width: '64'}, /repeats a descriptor/],
+  [{src: '/small.png', srcset: '/small.png 64w, /s.png 64w', sizes: '64px', width: '64'}, /repeats a descriptor/],
+  [{src: '/small.png', srcset: '/small.png 0x', width: '64'}, /invalid descriptor "0x"/],
+  [{src: '/small.png', srcset: '/small.png 0w', sizes: '64px', width: '64'}, /invalid descriptor "0w"/],
+  [{src: '/small.png', srcset: '/small.png 1.5w', sizes: '64px', width: '64'}, /invalid descriptor "1.5w"/],
+  [{src: '/small.png', srcset: '/small.png 1x 2x', width: '64'}, /malformed candidate/],
+  [{src: '/small.png', srcset: '/small.png 100w', sizes: '64px', width: '64'}, /is 64px wide, not 100w/],
+]) {
+  const found = await imageProblems(attrs);
+  assert.ok(found.some(text => problem.test(text)), `${JSON.stringify(attrs)}: ${found.join('; ') || 'no failure'}`);
+}
+// Feed bodies resolve every URL against the post, srcset candidates included, and keep sizes only beside a srcset.
+const post = new URL('https://gentoozh.org/posts/p/');
+assert.equal(
+  feedHtml('<p class="x"><img src="a.webp" srcset="/_astro/a-400w.webp 400w, a.webp?v=1&amp;q 800w,https://cdn.example/b.webp 900w" sizes="(min-width: 768px) 752px, 100vw" data-image-widths="400"/><a href="#top">t</a><img src="/c.png" sizes="100vw"/></p>', post),
+  '<p><img src="https://gentoozh.org/posts/p/a.webp" srcset="https://gentoozh.org/_astro/a-400w.webp 400w, https://gentoozh.org/posts/p/a.webp?v=1&amp;q 800w, https://cdn.example/b.webp 900w" sizes="(min-width: 768px) 752px, 100vw"/><a href="#top">t</a><img src="https://gentoozh.org/c.png"/></p>',
+);
 console.log('check:code: ok');

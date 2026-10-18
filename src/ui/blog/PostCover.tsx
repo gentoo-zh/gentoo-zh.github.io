@@ -10,7 +10,7 @@ type CoverImage = NonNullable<PostSummary['cover']>;
 export interface PostCoverProps extends Omit<ImgHTMLAttributes<HTMLImageElement>, 'src' | 'alt'> {
   image: CoverImage;
   dark?: CoverImage;
-  /** Mark each image for the build's list thumbnails (scripts/lib/cover-thumbnails.mjs). */
+  /** Mark each image for the build's fixed-size list thumbnails (scripts/lib/image-variants.mjs). */
   thumbnail?: boolean;
 }
 

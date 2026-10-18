@@ -2,8 +2,6 @@ import {pixel, proportional} from '@astryxdesign/core/Table';
 import type {ColumnLayout} from '../data/columns';
 import {GRID} from '../../theme/scale';
 
-export const PACKAGES_ISLAND = 'packages';
-
 const ORIGIN = 'https://distfiles.gentoozh.org';
 
 /** The hourly package index (build/gen-packages.py). */

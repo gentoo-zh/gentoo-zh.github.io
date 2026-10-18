@@ -35,17 +35,11 @@
   })();
 </script>
 <script>
-  const roots = [...document.querySelectorAll('[data-gz-island="packages"]')];
+  import {islandSelector} from '../islands/kinds';
+  import {schedule} from '../islands/schedule';
+
+  const roots = [...document.querySelectorAll(islandSelector('packages'))];
   if (roots.length > 0) {
-    const start = () => void import('./packages-client');
-    const whenIdle = () =>
-      'requestIdleCallback' in window ? window.requestIdleCallback(start, {timeout: 2000}) : window.setTimeout(start, 200);
-    const observer = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) {
-        observer.disconnect();
-        whenIdle();
-      }
-    });
-    for (const root of roots) observer.observe(root);
+    void schedule('packages', [{kind: 'visibleThenIdle', target: roots}], () => import('./packages-client').then(({mount}) => mount()));
   }
 </script>

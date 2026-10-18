@@ -16,7 +16,8 @@ import {SectionPage} from '../section/SectionPage';
 import {proportional, pixel} from '@astryxdesign/core/Table';
 import {MIRROR_COLUMNS, StatusDashboard} from './StatusDashboard';
 import {TableSkeleton} from '../data/TableSkeleton';
-import {STATUS_ISLAND, STATUS_ISLAND_ATTRIBUTE, StatusBoard, type StatusIslandProps} from './StatusBoard';
+import {islandProps} from '../islands/kinds';
+import {StatusBoard, type StatusIslandProps} from './StatusBoard';
 
 const styles = stylex.create({
   // The island container adds no box; the board inside lays out as the page's own child.
@@ -57,7 +58,7 @@ function StatusMount({locale, compact}: {locale: Locale; compact: boolean}) {
   const languageTag = LANGUAGE_TAG[locale];
   const props: StatusIslandProps = {languageTag, messages: statusMessages(locale), compact};
   return (
-    <VStack xstyle={styles.mount} {...{[STATUS_ISLAND_ATTRIBUTE]: STATUS_ISLAND}} data-props={JSON.stringify(props)}>
+    <VStack xstyle={styles.mount} {...islandProps('status')} data-props={JSON.stringify(props)}>
       {compact ? <StatusBoard data={null} languageTag={languageTag} compact /> : <StatusDashboard data={null} languageTag={languageTag} mirrorsSkeleton={<MirrorsSkeleton />} />}
     </VStack>
   );

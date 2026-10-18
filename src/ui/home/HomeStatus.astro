@@ -1,25 +1,26 @@
 ---
 // Fill the home status indicator at idle time; without usable data it shows unknown.
-import {HOME_STATUS_ATTRIBUTE as attribute} from './homeStatus';
 ---
-<script is:inline data-owner="src/ui/home/HomeStatus.astro" define:vars={{attribute}}>
-  const badge = document.querySelector(`[${attribute}]`);
-  if (badge?.dataset.api != null) {
-    const start = async () => {
-      let sites;
+<script>
+  import {schedule} from '../islands/schedule';
+  import {HOME_STATUS_ATTRIBUTE as attribute} from './homeStatus';
+
+  const badge = document.querySelector<HTMLElement>(`[${attribute}]`);
+  const api = badge?.dataset.api;
+  if (badge != null && api != null) {
+    void schedule('home-status', [{kind: 'idle'}], async () => {
+      let sites: {up?: boolean}[] | undefined;
       try {
-        const response = await fetch(badge.dataset.api, {cache: 'no-store', signal: AbortSignal.timeout(15_000)});
-        if (response.ok) ({sites} = await response.json());
+        const response = await fetch(api, {cache: 'no-store', signal: AbortSignal.timeout(15_000)});
+        if (response.ok) ({sites} = (await response.json()) as {sites?: {up?: boolean}[]});
       } catch {
         // Fall through to the unknown state.
       }
       // Only the monitor's verdicts: down if any service is down, up if all are up, otherwise unknown.
       const level = !Array.isArray(sites) || sites.length === 0 ? 'unknown'
         : sites.some(site => site.up === false) ? 'down' : sites.every(site => site.up === true) ? 'up' : 'unknown';
-      for (const node of badge.querySelectorAll('[data-loading]')) node.hidden = true;
-      for (const node of badge.querySelectorAll('[data-level]')) node.hidden = node.dataset.level !== level;
-    };
-    if ('requestIdleCallback' in window) requestIdleCallback(() => void start(), {timeout: 3000});
-    else setTimeout(() => void start(), 1000);
+      for (const node of badge.querySelectorAll<HTMLElement>('[data-loading]')) node.hidden = true;
+      for (const node of badge.querySelectorAll<HTMLElement>('[data-level]')) node.hidden = node.dataset.level !== level;
+    });
   }
 </script>

@@ -9,7 +9,8 @@ import {SITE} from '../../site';
 import {GRID, SPACE} from '../../theme/scale';
 import {NoScriptNote} from '../data/NoScriptNote';
 import {FilesSkeleton} from './FilesSkeleton';
-import {FILES_ISLAND, type FilesIslandProps} from './filesData';
+import {islandProps} from '../islands/kinds';
+import type {FilesIslandProps} from './filesData';
 
 const styles = stylex.create({
   root: {display: 'block'},
@@ -25,7 +26,7 @@ export function FilesIsland({props}: {props: FilesIslandProps}) {
     <>
       {/* The listing request starts after the script loads; open its connection now. */}
       <link rel="preconnect" href={props.origin} crossOrigin="anonymous" />
-      <VStack xstyle={styles.root} data-pagefind-ignore data-gz-island={FILES_ISLAND} data-props={JSON.stringify(props)}>
+      <VStack xstyle={styles.root} data-pagefind-ignore {...islandProps('files')} data-props={JSON.stringify(props)}>
         <NoScriptNote>
           <Text color="secondary">{t('gz.files.noscript')}</Text>
           <Code>{SITE.distfilesListing}</Code>

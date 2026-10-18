@@ -2,6 +2,7 @@ import {useState} from 'react';
 import * as stylex from '@stylexjs/stylex';
 import {Avatar} from '@astryxdesign/core/Avatar';
 import {AVATAR} from '../../theme/scale';
+import {PROFILE_IMAGE} from '../../theme/images';
 import {media} from '../../theme/layout.stylex';
 
 const styles = stylex.create({
@@ -28,5 +29,7 @@ export function ContributorAvatar({src, name, profile = false, byline}: {src?: s
   const source = !import.meta.env.DEV && !profile && src.startsWith('/') && !src.startsWith('//') ? src : undefined;
   const normal = source ? `${source}.${size}.webp` : src;
   const srcSet = source ? `${normal} 1x, ${source}.${size * 2}.webp 2x` : undefined;
-  return <img src={normal} srcSet={srcSet} data-avatar-source={source} alt={name} width={size} height={size} loading={profile ? 'eager' : 'lazy'} decoding="async" onError={() => setFailedSrc(src)} {...stylex.props(styles.image, responsive)} />;
+  // The profile photo changes size at 768px and renders in no island, so build-seo writes its variants by width.
+  const variants = profile && !import.meta.env.DEV ? {'data-image-widths': PROFILE_IMAGE.widths, sizes: PROFILE_IMAGE.sizes} : undefined;
+  return <img src={normal} srcSet={srcSet} data-avatar-source={source} {...variants} alt={name} width={size} height={size} loading={profile ? 'eager' : 'lazy'} decoding="async" onError={() => setFailedSrc(src)} {...stylex.props(styles.image, responsive)} />;
 }

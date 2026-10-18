@@ -21,6 +21,7 @@ import {BUTTON, CODE, GRID, SPACE, STACK} from '../../theme/scale';
 import {ArrowRight} from '../chrome/icons';
 import {codeTokenizer} from '../../markdown/codeTokenizer';
 import {articleTable} from '../data/stickyHeader';
+import {islandProps} from '../islands/kinds';
 
 const METADATA_LABEL = {position: 'top'} as const;
 
@@ -129,7 +130,7 @@ export function MirrorTable({locale, mirrors}: {locale: Locale; mirrors: Mirrors
   return (
     <VStack
       gap={SPACE.block}
-      data-gz-island="mirror-health"
+      {...islandProps('mirror-health')}
       data-gz-labels={JSON.stringify({
         up: t('gz.mirror.health.up'),
         lag: t('gz.mirror.health.lag'),

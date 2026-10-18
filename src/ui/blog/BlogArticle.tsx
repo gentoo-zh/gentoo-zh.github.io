@@ -23,6 +23,7 @@ import {AuthorByline} from './AuthorByline';
 import {PostCover} from './PostCover';
 import css from '../../markdown/MarkdownBody.module.css';
 import {BUTTON, CHIP, GRID, ICON, SPACE, TEMPLATE} from '../../theme/scale';
+import {PROSE_IMAGE} from '../../theme/images';
 
 const styles = stylex.create({
   section: {
@@ -76,7 +77,7 @@ export function BlogArticle({locale, post, body, pages, newer = null, older = nu
 
         {post.cover ? (
           <AspectRatio ratio={TEMPLATE.coverRatio} fit="contain" xstyle={styles.cover}>
-            <PostCover image={post.cover} dark={post.coverDark} decoding="async" />
+            <PostCover image={post.cover} dark={post.coverDark} data-image-widths={PROSE_IMAGE.widths} sizes={PROSE_IMAGE.sizes} decoding="async" />
           </AspectRatio>
         ) : null}
 

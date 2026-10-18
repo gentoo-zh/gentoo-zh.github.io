@@ -1,3 +1,33 @@
+---
+// The directory is server-rendered; its filters mount on first use or when idle. Text typed into the
+// search field before then is written back once the island is live, and a pressed filter is repeated:
+// a role by its category, since on a narrow screen the live list may fold that toggle into a menu.
+---
 <script>
-  import './contributors-client';
+  import {buttons, hydrated, marked, textInput, type Controls} from '../islands/intent';
+  import {islandSelector} from '../islands/kinds';
+  import {schedule} from '../islands/schedule';
+  import {ROLE_ATTRIBUTE, ROLE_EVENT} from './roles';
+
+  const root = document.querySelector(islandSelector('contributors'));
+  if (root != null) {
+    const roles: Controls = {
+      ...marked(ROLE_ATTRIBUTE),
+      // A folded role is pressed by name, and its menu's trigger takes the focus.
+      moved: role => ({
+        activate: () => root.dispatchEvent(new CustomEvent(ROLE_EVENT, {bubbles: true, detail: role})),
+        focus: [...root.querySelectorAll<HTMLElement>('[role="group"] [aria-haspopup]')].find(trigger => trigger.closest('[inert]') == null) ?? null,
+      }),
+    };
+    void schedule(
+      'contributors',
+      [
+        {kind: 'intent', on: textInput(root, 'input')},
+        {kind: 'intent', on: buttons(root, roles)},
+        {kind: 'intent', on: buttons(root, hydrated(`button:not([${ROLE_ATTRIBUTE}])`))},
+        {kind: 'idle'},
+      ],
+      () => import('./contributors-client').then(({mount}) => mount()),
+    );
+  }
 </script>

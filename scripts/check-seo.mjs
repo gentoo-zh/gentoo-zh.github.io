@@ -2,6 +2,9 @@ import {existsSync, readFileSync} from 'node:fs';
 import {decodeEntities, fileFor, listFiles, refreshTarget, report} from './lib/html.mjs';
 import {imageMetadata} from 'astro/assets/utils';
 import {htmlElements, redirectAnchors} from './lib/html-elements.mjs';
+import {avatarWidths} from './lib/avatar-thumbnails.mjs';
+import {IMAGE_EXEMPTIONS} from './lib/image-variants.mjs';
+import {imageFailures} from './lib/image-check.mjs';
 import {ERROR_PAGES, FILES_REWRITES, NOINDEX_PAGES, SITEMAP_REDIRECTS} from './lib/url-manifest.mjs';
 import {HASH, LASTMOD, MANIFEST} from './lib/sitemap-lastmod.mjs';
 
@@ -12,6 +15,12 @@ const pages = new Map();
 const redirects = new Map();
 const fragmentRedirects = new Set();
 const avatarFiles = new Set();
+const metadata = new Map();
+async function intrinsic(url) {
+  const file = fileFor(DIST, decodeURIComponent(url.pathname));
+  if (!metadata.has(file)) metadata.set(file, existsSync(file) ? imageMetadata(readFileSync(file), file) : null);
+  return metadata.get(file);
+}
 for (const file of listFiles(DIST).filter(file => file.endsWith('.html'))) {
   const path = file.replace(/index\.html$/, '');
   const html = readFileSync(fileFor(DIST, file), 'utf8');
@@ -24,18 +33,17 @@ for (const file of listFiles(DIST).filter(file => file.endsWith('.html'))) {
   const elements = htmlElements(html);
   for (const image of elements.filter(e => e.name === 'img' && e.attrs.has('data-avatar-source'))) {
     const source = image.attrs.get('data-avatar-source');
-    const width = Number(image.attrs.get('width'));
-    const height = Number(image.attrs.get('height'));
-    const normal = `${source}.${width}.webp`;
-    const retina = `${source}.${width * 2}.webp`;
-    if (image.attrs.get('src') !== normal || image.attrs.get('srcset') !== `${normal} 1x, ${retina} 2x`) failures.push(`${path}: incorrect avatar srcset for ${source}`);
-    for (const [url, density] of [[normal, 1], [retina, 2]]) {
+    const sizes = avatarWidths(image);
+    const urls = sizes.map(size => `${source}.${size}.webp`);
+    const srcset = image.attrs.has('data-avatar-widths') ? urls.map((url, index) => `${url} ${sizes[index]}w`).join(', ') : `${urls[0]} 1x, ${urls[1]} 2x`;
+    if (!(image.attrs.has('data-avatar-widths') ? urls : urls.slice(0, 1)).includes(image.attrs.get('src')) || image.attrs.get('srcset') !== srcset) failures.push(`${path}: incorrect avatar srcset for ${source}`);
+    for (const [index, url] of urls.entries()) {
       if (avatarFiles.has(url)) continue;
       avatarFiles.add(url);
       const file = fileFor(DIST, decodeURIComponent(url));
       if (!existsSync(file)) { failures.push(`${path}: missing avatar derivative ${url}`); continue; }
       const metadata = await imageMetadata(readFileSync(file), file);
-      if (metadata.format !== 'webp' || metadata.width !== width * density || metadata.height !== height * density) failures.push(`${url}: incorrect avatar format or dimensions`);
+      if (metadata.format !== 'webp' || metadata.width !== sizes[index] || metadata.height !== sizes[index]) failures.push(`${url}: incorrect avatar format or dimensions`);
     }
   }
   const metas = key => elements.filter(e => e.name === 'meta' && (e.attrs.get('name') === key || e.attrs.get('property') === key));
@@ -45,10 +53,13 @@ for (const file of listFiles(DIST).filter(file => file.endsWith('.html'))) {
   if (titles.length !== 1 || !titles[0].content.trim()) failures.push(`${path}: expected one nonempty title`);
   if (metas('description').length !== 1 || !meta('description')?.trim()) failures.push(`${path}: missing description`);
   if (elements.filter(e => e.name === 'h1').length !== 1) failures.push(`${path}: expected exactly one h1`);
-  if (!/^\/(?:en\/|zh-tw\/)?$/.test(path)) {
-    for (const image of elements.filter(e => e.name === 'img')) {
-      if (!['width', 'height'].every(key => Number(image.attrs.get(key)) > 0)) failures.push(`${path}: missing image dimensions for ${image.attrs.get('src')}`);
-    }
+  for (const link of elements.filter(e => e.name === 'link' && e.attrs.get('rel') === 'preload' && e.attrs.get('as') === 'image' && e.attrs.has('imagesizes') && !e.attrs.has('imagesrcset'))) {
+    failures.push(`${path}: image preload ${link.attrs.get('href')} has sizes but no srcset, so it fetches the full-size source`);
+  }
+  for (const image of elements.filter(e => e.name === 'img')) {
+    // Home images fill boxes their styles size (AspectRatio, the sponsor row, the wall grid), so they need no dimensions.
+    if (!/^\/(?:en\/|zh-tw\/)?$/.test(path) && !['width', 'height'].every(key => Number(image.attrs.get(key)) > 0)) failures.push(`${path}: missing image dimensions for ${image.attrs.get('src')}`);
+    failures.push(...await imageFailures(image, path, intrinsic));
   }
   if (elements.filter(e => e.name === 'link' && e.attrs.get('rel') === 'preload' && e.attrs.get('as') === 'font').length < 2) failures.push(`${path}: missing main font preloads`);
   const error = ERROR_PAGES.includes(path);
@@ -161,5 +172,5 @@ else {
     }
   }
 }
-console.log(`check:seo: ${pages.size} pages, ${redirects.size} redirect fallbacks`);
+console.log(`check:seo: ${pages.size} pages, ${redirects.size} redirect fallbacks; images exempt from srcset: ${IMAGE_EXEMPTIONS.map(([name]) => name).join(', ')}`);
 report('check:seo', failures);

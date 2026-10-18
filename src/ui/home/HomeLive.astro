@@ -1,22 +1,24 @@
 ---
 // Refresh the hero's build-time counts at idle time: days since founding from the clock, overlay commits from
 // GitHub. Any failure keeps the number the page was built with.
-import {FOUNDED_UTC as founded} from '../../content/home';
-import {HOME_LIVE_ATTRIBUTE as attribute, OVERLAY_COMMITS_API as api} from './homeLive';
 ---
-<script is:inline data-owner="src/ui/home/HomeLive.astro" define:vars={{attribute, founded, api}}>
+<script>
+  import {FOUNDED_UTC as founded} from '../../content/home';
+  import {schedule} from '../islands/schedule';
+  import {HOME_LIVE_ATTRIBUTE as attribute, OVERLAY_COMMITS_API as api} from './homeLive';
+
   const nodes = [...document.querySelectorAll(`[${attribute}]`)];
   if (nodes.length > 0) {
     const format = new Intl.NumberFormat(document.documentElement.lang || undefined);
     // The metric's first child shows the number and its last child the label; the link's name repeats both.
-    const show = (kind, value) => {
+    const show = (kind: string, value: number) => {
       for (const node of nodes) {
         if (node.getAttribute(attribute) !== kind || node.firstElementChild == null) continue;
         node.firstElementChild.textContent = format.format(value);
-        node.closest('a')?.setAttribute('aria-label', `${node.lastElementChild.textContent}: ${format.format(value)}`);
+        node.closest('a')?.setAttribute('aria-label', `${node.lastElementChild?.textContent}: ${format.format(value)}`);
       }
     };
-    const start = async () => {
+    void schedule('home-live', [{kind: 'idle'}], async () => {
       show('days', Math.floor((Date.now() - founded) / 86_400_000));
       try {
         const response = await fetch(api, {signal: AbortSignal.timeout(15_000)});
@@ -26,8 +28,6 @@ import {HOME_LIVE_ATTRIBUTE as attribute, OVERLAY_COMMITS_API as api} from './ho
       } catch {
         // Keep the build-time count.
       }
-    };
-    if ('requestIdleCallback' in window) requestIdleCallback(() => void start(), {timeout: 3000});
-    else setTimeout(() => void start(), 1000);
+    });
   }
 </script>

@@ -1,5 +1,3 @@
-export const FILES_ISLAND = 'files';
-
 /** distfiles serves `/_ls/` with CORS and sends browsers here, so the pages are indexed and in sitemap.xml. */
 export const FILES_INDEXED = true;
 

@@ -1,6 +1,7 @@
 // Ported from facebook/astryx apps/docsite/src/app/(site)/page.tsx and _landing (MIT).
 // Copyright (c) Meta Platforms, Inc. and affiliates.
 import * as stylex from '@stylexjs/stylex';
+import {preload} from 'react-dom';
 import {AspectRatio} from '@astryxdesign/core/AspectRatio';
 import {Avatar} from '@astryxdesign/core/Avatar';
 import {AvatarGroup, AvatarGroupOverflow} from '@astryxdesign/core/AvatarGroup';
@@ -25,6 +26,7 @@ import {SITE} from '../../site';
 import {homeTheme} from '../../theme/home.stylex';
 import {homeMedia} from '../../theme/layout.stylex';
 import {AVATAR, BUTTON, GRID, ICON, SPACE, TEMPLATE} from '../../theme/scale';
+import {HOME_LOGO_IMAGE} from '../../theme/images';
 import {ArrowRight, HeartHandshake, Hash} from '../chrome/icons';
 import {DiscourseLogo, TelegramLogo, MatrixLogo} from '../chrome/channelLogos';
 import {IconTile} from '../chrome/IconTile';
@@ -53,6 +55,20 @@ const AVATARS = 6;
 const WALL_PERIOD = 14;
 const WALL_COLUMNS = 26;
 const WALL_ROWS = 26;
+// Wall tiles are 9cqw of the logo mark (homeLayout mark 32rem, markTablet 18rem, markCompact 12rem): 2.88rem,
+// 1.62rem and 1.08rem. scripts/lib/avatar-thumbnails.mjs writes each width so dpr 1-3 pick a file just above the tile.
+const WALL_WIDTHS = [36, 72, 96, 192];
+// Media queries in em (64em = media.desktop, 48em = media.tablet) and the content column in rem (75rem).
+const WALL_SIZES = '(min-width: 64em) 2.88rem, (min-width: 48em) 1.62rem, 1.08rem';
+// The AvatarGroup image takes no srcset; the wall's 192px derivative covers its 48px circle up to dpr 3.
+const GROUP_WIDTH = 192;
+// The logo wall's mask is the LCP; CSS alone would find it only after the stylesheet arrives.
+const WALL_MASK = '/brand/gentoo-zh-icon-transparent.svg';
+// Home post cards span the content column below 1024px and a third of it above.
+const COVER_WIDTHS = '400 800';
+const COVER_SIZES = '(min-width: 64em) calc(min(100vw - 3rem, 75rem) / 3), min(100vw - 3rem, 75rem)';
+/** Width candidates for a wall tile; build-seo writes each file (see WALL_WIDTHS). */
+const wallSrcSet = (avatar: string) => WALL_WIDTHS.map(width => `${avatar}.${width}.webp ${width}w`).join(', ');
 const CHANNELS = [
   {id: 'telegramChannel', logo: TelegramLogo},
   {id: 'telegramChat', logo: TelegramLogo},
@@ -76,7 +92,7 @@ function StatusIndicator() {
 /** Content - Card Grid (library): the cover on top, then title and date. */
 function PostCard({post, locale}: {post: PostSummary; locale: Locale}) {
   return <ClickableCard href={routes.post(locale, post.slug)} label={post.title} padding={TEMPLATE.zero} xstyle={s.card}>
-    {post.image && <AspectRatio ratio={TEMPLATE.coverRatio} fit="cover" xstyle={s.cover}><PostCover image={post.image} dark={post.coverDark} loading="lazy" decoding="async" /></AspectRatio>}
+    {post.image && <AspectRatio ratio={TEMPLATE.coverRatio} fit="cover" xstyle={s.cover}><PostCover image={post.image} dark={post.coverDark} data-image-widths={COVER_WIDTHS} sizes={COVER_SIZES} loading="lazy" decoding="async" /></AspectRatio>}
     <Section variant="transparent" padding={SPACE.block}>
       <VStack gap={SPACE.hairline}>
         <Heading level={3} maxLines={2}>{post.title}</Heading>
@@ -88,6 +104,7 @@ function PostCard({post, locale}: {post: PostSummary; locale: Locale}) {
 
 export function HomePage({locale, posts, contributors, contributorCount, commits, days, sponsors}: HomePageProps) {
   const t = useMessage();
+  preload(WALL_MASK, {as: 'image', fetchPriority: 'high'});
   const number = new Intl.NumberFormat(LANGUAGE_TAG[locale]);
   const page = (section: SectionId, id: SectionPageId) => sectionOf(section).pages.find(item => item.id === id)!;
   const entry = (section: SectionId, id: SectionPageId) => entryLink(locale, page(section, id)).href;
@@ -111,8 +128,10 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
     <Button label={t('gz.homeF.useOverlay')} variant="primary" size={BUTTON.cta} href={entry('docs', 'overlay')} xstyle={s.button} />
     <Button label={t('gz.homeF.liveIso')} variant="secondary" size={BUTTON.cta} href={sectionHref(locale, sectionOf('download'))} xstyle={s.button} />
   </Grid>;
+  // Build-time derivatives exist only in the production output (see ContributorAvatar).
+  const derived = (avatar: string, width: number) => import.meta.env.DEV ? avatar : `${avatar}.${width}.webp`;
   const avatarGroup = <AvatarGroup size={AVATAR.card}>
-    {contributors.slice(0, AVATARS).map(person => <Avatar key={person.href} src={person.avatar} name={person.name} xstyle={s.avatar} />)}
+    {contributors.slice(0, AVATARS).map(person => <Avatar key={person.href} src={derived(person.avatar, GROUP_WIDTH)} name={person.name} xstyle={s.avatar} />)}
     <AvatarGroupOverflow count={Math.max(0, contributorCount - AVATARS)} xstyle={[s.avatar, s.overflowCount]} />
   </AvatarGroup>;
   const entryOf = (section: SectionId, id: SectionPageId) => ({id, title: t(`gz.nav.${id}`), description: t(`gz.section.sub.${id}`), icon: <EntryIcon id={id} />, link: entryLink(locale, page(section, id))});
@@ -149,7 +168,13 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
               {Array.from({length: WALL_ROWS * WALL_COLUMNS}, (_, index) => {
                 const row = Math.floor(index / WALL_COLUMNS) % WALL_PERIOD;
                 const column = (index % WALL_COLUMNS) % WALL_PERIOD;
-                return <img key={index} src={contributors[(row * WALL_PERIOD + column) % contributors.length]!.avatar} alt="" decoding="async" {...stylex.props(s.wallTile)} />;
+                const avatar = contributors[(row * WALL_PERIOD + column) % contributors.length]!.avatar;
+                // Low priority keeps the tiles out of React's image preloads and behind the stylesheet and the mask.
+                // Not lazy: the compositor-driven loop moves tiles into view without triggering a lazy load. Only
+                // the first period carries the build markers; the repeats name the same files.
+                const srcSet = import.meta.env.DEV ? undefined : wallSrcSet(avatar);
+                const marked = srcSet != null && index < WALL_PERIOD * WALL_COLUMNS && index % WALL_COLUMNS < WALL_PERIOD;
+                return <img key={index} src={derived(avatar, WALL_WIDTHS[1]!)} srcSet={srcSet} sizes={srcSet && WALL_SIZES} data-avatar-source={marked ? avatar : undefined} data-avatar-widths={marked ? WALL_WIDTHS.join(' ') : undefined} alt="" fetchPriority="low" decoding="async" {...stylex.props(s.wallTile)} />;
               })}
             </Grid>
           </VStack>
@@ -157,7 +182,7 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
       </Grid>
       <Link href={routes.page(locale, 'contributors')} aria-label={t('gz.homeF.contributors')} display="block" xstyle={s.contributors}>
         <AvatarGroup size={AVATAR.card}>
-          {contributors.slice(0, AVATARS).map(person => <Avatar key={person.href} src={person.avatar} name={person.name} tooltip={false} xstyle={s.avatar} />)}
+          {contributors.slice(0, AVATARS).map(person => <Avatar key={person.href} src={derived(person.avatar, GROUP_WIDTH)} name={person.name} tooltip={false} xstyle={s.avatar} />)}
           <AvatarGroupOverflow count={Math.max(0, contributorCount - Math.min(AVATARS, contributors.length))} xstyle={[s.avatar, s.overflowCount]} />
         </AvatarGroup>
       </Link>
@@ -213,7 +238,7 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
         <Grid gap={SPACE.page} xstyle={s.logos}>
           {sponsors.map(sponsor => <ClickableCard key={sponsor.href} href={sponsor.href} label={sponsor.name[locale]} padding={TEMPLATE.zero} xstyle={s.card}>
             <HStack vAlign="center" xstyle={s.logoBox}>
-              {(sponsor.logoDark ? [[sponsor.logo, homeMedia.light], [sponsor.logoDark, homeMedia.dark]] as const : [[sponsor.logo, null]] as const).map(([src, mode]) => <img key={src} src={src} alt="" loading="lazy" {...stylex.props(s.logo, s.logoScale(sponsor.scale ?? 1), mode)} />)}
+              {(sponsor.logoDark ? [[sponsor.logo, homeMedia.light], [sponsor.logoDark, homeMedia.dark]] as const : [[sponsor.logo, null]] as const).map(([src, mode]) => <img key={src} src={src} alt="" data-image-widths={HOME_LOGO_IMAGE.widths} sizes={HOME_LOGO_IMAGE.sizes} loading="lazy" decoding="async" {...stylex.props(s.logo, s.logoScale(sponsor.scale ?? 1), mode)} />)}
             </HStack>
           </ClickableCard>)}
         </Grid>

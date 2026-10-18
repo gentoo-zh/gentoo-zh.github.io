@@ -19,6 +19,7 @@ import {StaticCodeBlock} from './StaticCodeBlock';
 import {fileCodeTitles} from './codeTitle';
 import {anchorHeadingScope} from '../theme/markers.stylex';
 import {SPACE} from '../theme/scale';
+import {PROSE_IMAGE} from '../theme/images';
 import {media} from '../theme/layout.stylex';
 
 // Adapted from Astryx AnchorHeading (components/docs/AnchorHeading.tsx, MIT, Meta Platforms, Inc.).
@@ -197,7 +198,7 @@ function createConfig(locale: Locale, pages: ReadonlySet<string>, source: string
     locale,
     plugins: [],
     components: {
-      image: ({src, alt}) => <img src={src} alt={alt} loading={src.trim() === lead ? 'eager' : 'lazy'} decoding="async" {...stylex.props(styles.image)} />,
+      image: ({src, alt}) => <img src={src} alt={alt} data-image-widths={PROSE_IMAGE.widths} sizes={PROSE_IMAGE.sizes} loading={src.trim() === lead ? 'eager' : 'lazy'} decoding="async" {...stylex.props(styles.image)} />,
       code: FencedCode,
       inlineCode: ({children}) => renderInlineCode?.(children) ?? <Code xstyle={styles.inlineCode}>{children}</Code>,
       heading: PostHeading,

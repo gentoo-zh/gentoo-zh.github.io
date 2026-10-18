@@ -13,15 +13,10 @@ import {useMessage} from '../../i18n/useMessage';
 import {SITE} from '../../site';
 import {BUTTON, GRID, SPACE} from '../../theme/scale';
 
-/** The live status endpoint; it sends `access-control-allow-origin: *`. */
-export const STATUS_API = 'https://status.gentoozh.org/api/status';
+export {STATUS_API} from './statusApi';
 /** The public status board. */
 export const STATUS_BOARD = '/status/';
 export const STATUS_FEED = 'https://status.gentoozh.org/feed.rss';
-
-/** Marks the island's container; the value names the island. */
-export const STATUS_ISLAND_ATTRIBUTE = 'data-gz-island';
-export const STATUS_ISLAND = 'status';
 
 export type StatusLevel = 'up' | 'down' | 'unknown' | 'maintenance';
 

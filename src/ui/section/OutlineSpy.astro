@@ -1,30 +1,49 @@
 ---
 // After the Astryx docsite's docOutline (MIT, Meta Platforms, Inc.).
-// Learn active/inactive classes from static Outline links so the spy follows the theme.
+// Before paint, the phone outline closes on a jump and reserves its height as scroll padding. The spy
+// that marks the section being read starts once a rail is in view; it learns the active and inactive
+// classes from the static Outline links, so it follows the theme.
 ---
 <script is:inline data-owner="src/ui/section/OutlineSpy.astro">
   (() => {
     if (!('IntersectionObserver' in window)) return;
-    document.querySelectorAll('[data-gz-outline]').forEach(rail => {
-    const links = [...rail.querySelectorAll('a[href^="#"]')];
-    if (rail.tagName === 'DETAILS') {
+    document.querySelectorAll('details[data-gz-outline]').forEach(rail => {
       rail.addEventListener('click', event => {
         if (event.target.closest('a[href^="#"]')) {
           rail.open = false;
           rail.querySelector('summary').focus({preventScroll: true});
         }
       });
-    }
+      const links = [...rail.querySelectorAll('a[href^="#"]')];
+      if (links.length < 2 || !links.some(link => link.getAttribute('aria-current') === 'location')) return;
+      let timer;
+      const pad = () => {
+        document.documentElement.style.scrollPaddingTop = rail.offsetHeight ? 'calc(var(--size-element-md) + var(--spacing-6) + var(--border-width))' : '0rem';
+      };
+      pad();
+      addEventListener('resize', () => {
+        clearTimeout(timer);
+        timer = setTimeout(pad, 100);
+      });
+    });
+  })();
+</script>
+<script>
+  import {schedule} from '../islands/schedule';
+
+  const classes = (link: Element) => new Set(link.classList);
+  const diff = (a: Set<string>, b: Set<string>) => [...a].filter(name => !b.has(name));
+
+  function spy(rail: Element) {
+    const links = [...rail.querySelectorAll<HTMLAnchorElement>('a[href^="#"]')];
     const on = links.find(link => link.getAttribute('aria-current') === 'location');
     if (on == null || links.length < 2) return;
-    const classes = link => new Set(link.classList);
-    const diff = (a, b) => [...a].filter(name => !b.has(name));
     const onSet = classes(on);
-    const off = links.filter(link => link !== on).map(classes).sort((a, b) => diff(onSet, a).length + diff(a, onSet).length - diff(onSet, b).length - diff(b, onSet).length)[0];
+    const off = links.filter(link => link !== on).map(classes).sort((a, b) => diff(onSet, a).length + diff(a, onSet).length - diff(onSet, b).length - diff(b, onSet).length)[0]!;
     const active = diff(onSet, off);
     const plain = diff(off, onSet);
     const ids = links.map(link => decodeURIComponent(link.hash.slice(1)));
-    const set = id => {
+    const set = (id: string | undefined) => {
       links.forEach((link, index) => {
         const current = ids[index] === id;
         link.classList.remove(...(current ? plain : active));
@@ -43,9 +62,10 @@
       });
       set(current);
     };
-    let observer, timer;
+    let observer: IntersectionObserver | undefined;
+    let timer: ReturnType<typeof setTimeout>;
+    // The observed band is the top third of the viewport, so a resize rebuilds the observer.
     const observe = () => {
-      if (rail.tagName === 'DETAILS') document.documentElement.style.scrollPaddingTop = rail.offsetHeight ? 'calc(var(--size-element-md) + var(--spacing-6) + var(--border-width))' : '0rem';
       observer?.disconnect();
       observer = new IntersectionObserver(update, {rootMargin: [0, 0, -innerHeight * 2 / 3, 0].map(value => `${value}px`).join(' ')});
       for (const target of targets) if (target != null) observer.observe(target);
@@ -56,6 +76,10 @@
       clearTimeout(timer);
       timer = setTimeout(observe, 100);
     });
-    });
-  })();
+  }
+
+  const rails = [...document.querySelectorAll('[data-gz-outline]')];
+  if (rails.length > 0 && 'IntersectionObserver' in window) {
+    void schedule('outline', [{kind: 'visible', target: rails}], async () => rails.forEach(spy));
+  }
 </script>

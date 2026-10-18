@@ -1,5 +1,5 @@
 <script>
-  const load = () => void import('./status-client').then(module => module.mountStatus());
-  if ('requestIdleCallback' in window) window.requestIdleCallback(load, {timeout: 3000});
-  else setTimeout(load, 1);
+  import {startStatus} from './statusStart';
+
+  startStatus(() => import('./status-client'));
 </script>

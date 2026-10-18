@@ -1,22 +1,51 @@
 ---
-// Before paint, show the pane containing the URL fragment, or the manual pane by default.
-// Without JavaScript both panes remain visible; GuideSetup handles later tab and hash changes.
+// Before paint, show the pane containing the URL fragment, or the manual pane by default, and until
+// GuideSetup mounts, follow hash changes the same way. Without JavaScript both panes remain visible.
+// GuideSetup loads as it nears the viewport or on first use of its controls.
+import {GUIDE_LIVE_EVENT as live} from './guideSetup';
 ---
-<script is:inline data-owner="src/ui/start/GuideSetupScript.astro">
+<script is:inline data-owner="src/ui/start/GuideSetupScript.astro" define:vars={{live}}>
   (() => {
     const panes = [...document.querySelectorAll('[data-gz-pane]')];
     if (panes.length < 2) return;
-    let id = location.hash.slice(1);
-    try {
-      id = decodeURIComponent(id);
-    } catch {
-      id = '';
-    }
-    const target = id === '' ? null : document.getElementById(id);
-    const pane = target?.closest('[data-gz-pane]')?.dataset.gzPane ?? 'manual';
-    panes.forEach(element => { element.hidden = element.dataset.gzPane !== pane; });
+    const target = () => {
+      let id = location.hash.slice(1);
+      try {
+        id = decodeURIComponent(id);
+      } catch {
+        id = '';
+      }
+      return id === '' ? null : document.getElementById(id);
+    };
+    const paneOf = element => element?.closest('[data-gz-pane]')?.dataset.gzPane;
+    const show = pane => panes.forEach(element => { element.hidden = element.dataset.gzPane !== pane; });
+    show(paneOf(target()) ?? 'manual');
+    // A link to a pane, or into one, opens that pane and then scrolls, since a hidden element cannot be
+    // scrolled to. GuideSetup does the same once it is live.
+    const follow = () => {
+      const element = target();
+      const pane = paneOf(element);
+      if (pane == null) return;
+      show(pane);
+      element.scrollIntoView();
+    };
+    addEventListener('hashchange', follow);
+    addEventListener(live, () => removeEventListener('hashchange', follow), {once: true});
   })();
 </script>
 <script>
-  import './guide-setup-client';
+  import {buttons, hydrated} from '../islands/intent';
+  import {islandSelector} from '../islands/kinds';
+  import {schedule} from '../islands/schedule';
+  import {GUIDE_LIVE_EVENT} from './guideSetup';
+
+  const root = document.querySelector(islandSelector('guide'));
+  if (root != null) {
+    void schedule(
+      'guide',
+      [{kind: 'visible', target: [root]}, {kind: 'intent', on: buttons(root, hydrated('button, input'))}],
+      () => import('./guide-setup-client').then(({mount}) => mount()),
+      // On failure, which the schedule logs, the first-paint hash listener stays in charge.
+    ).then(() => dispatchEvent(new Event(GUIDE_LIVE_EVENT)), () => {});
+  }
 </script>

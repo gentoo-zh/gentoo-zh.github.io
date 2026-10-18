@@ -1,6 +1,20 @@
 ---
-// The listing is the page's content, so the browser loads at once rather than on idle.
+// The listing is the page's content, so the browser starts at once, and the listing request goes out
+// beside the browser's script rather than after it.
 ---
 <script>
-  if (document.querySelector('[data-gz-island="files"]') != null) void import('./files-client');
+  import {islandSelector} from '../islands/kinds';
+  import {prefetch} from '../islands/prefetch';
+  import {schedule} from '../islands/schedule';
+  import {directoryOf, listingUrl, type FilesIslandProps} from './filesData';
+
+  const root = document.querySelector<HTMLElement>(islandSelector('files'));
+  if (root?.dataset.props != null) {
+    const {origin, base} = JSON.parse(root.dataset.props) as FilesIslandProps;
+    void schedule('files', [{kind: 'now'}], () => {
+      // FilesTable's first listing is the directory in the address bar.
+      prefetch(listingUrl(origin, directoryOf(location.pathname, base) ?? ''));
+      return import('./files-client').then(({mount}) => mount());
+    });
+  }
 </script>

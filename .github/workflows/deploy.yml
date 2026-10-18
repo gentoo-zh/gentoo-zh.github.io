@@ -39,6 +39,9 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node scripts/update-overlay-stats.mjs
+      # pnpm check runs the Playwright tests; locally they use the system Chrome through CHROME_PATH.
+      - name: Install Playwright Chromium
+        run: pnpm exec playwright install --with-deps chromium
       - name: Check and build
         run: CI=true pnpm check
       - name: Deploy to Cloudflare Workers

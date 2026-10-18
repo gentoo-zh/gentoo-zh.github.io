@@ -8,6 +8,7 @@ import {useMessage} from '../../i18n/useMessage';
 import {ICON, BUTTON} from '../../theme/scale';
 import {typography} from '../../theme/layout.stylex';
 import {menuEntries, SECTIONS, sectionHref, type SectionId, type SectionPageId} from '../chrome/sections';
+import {SECTION_GROUP_ATTRIBUTE} from './sectionNavMarks';
 
 export interface SectionSideNavProps {
   locale: Locale;
@@ -42,6 +43,7 @@ export function SectionNavGroups({locale, section, current}: SectionSideNavProps
             xstyle={[styles.item, asXstyle(styles.header)]}
             label={t(`gz.nav.${entry.id}`)}
             href={sectionHref(locale, entry)}
+            {...{[SECTION_GROUP_ATTRIBUTE]: entry.id}}
             collapsible={{
               isCollapsed: collapsed[entry.id] ?? entry.id !== section,
               onCollapsedChange: value => setCollapsed(previous => ({...previous, [entry.id]: value})),

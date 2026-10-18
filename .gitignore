@@ -4,3 +4,4 @@ dist/
 # Written by `astryx theme build`; nothing imports CSS types.
 src/theme/built/*.css.d.ts
 .wrangler/
+test-results/

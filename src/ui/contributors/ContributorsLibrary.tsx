@@ -2,7 +2,8 @@
 
 'use client';
 
-import {useState, useMemo, useRef} from 'react';
+import {useEffect, useState, useMemo, useRef} from 'react';
+import {flushSync} from 'react-dom';
 import * as stylex from '@stylexjs/stylex';
 import {media} from '../../theme/layout.stylex';
 import {Text, Heading} from '@astryxdesign/core/Text';
@@ -24,6 +25,7 @@ import {Link} from '@astryxdesign/core/Link';
 import type {ContributorGroup} from '../../content/contributorOrder';
 import type {contributorCard} from '../../content/contributors';
 import {useMessage} from '../../i18n/useMessage';
+import {ROLE_ATTRIBUTE, ROLE_EVENT} from './roles';
 import {SPACE, BUTTON, ICON, TEMPLATE} from '../../theme/scale';
 
 export type ContributorCard = ReturnType<typeof contributorCard>;
@@ -103,6 +105,16 @@ export function ContributorsLibrary({groups}: ContributorsLibraryProps) {
       ).sort((a, b) => (sortOrder === 'commits' ? (b.commits ?? 0) - (a.commits ?? 0) : 0) || a.name.localeCompare(b.name, 'en')).map(person => ({...person, category: group})),
     })).filter(({items}) => items.length > 0);
   }, [groups, activeTab, search, repo, sortOrder]);
+  // A press held before mounting whose toggle the overflow list folded away; it toggles as the group does,
+  // and commits at once so a press repeated after it sees the result.
+  useEffect(() => {
+    const press = (event: Event) => {
+      const role = (event as CustomEvent<string>).detail;
+      flushSync(() => setActiveTab(active => (active === role ? '' : role)));
+    };
+    document.addEventListener(ROLE_EVENT, press);
+    return () => document.removeEventListener(ROLE_EVENT, press);
+  }, []);
 
   return (
     <VStack gap={SPACE.page}>
@@ -146,6 +158,7 @@ export function ContributorsLibrary({groups}: ContributorsLibraryProps) {
                       label={cat.label}
                       value={cat.value}
                       size={BUTTON.cta}
+                      {...{[ROLE_ATTRIBUTE]: cat.value}}
                     />
                   ))}
                 </OverflowList>

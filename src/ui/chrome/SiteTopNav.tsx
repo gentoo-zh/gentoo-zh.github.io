@@ -94,13 +94,14 @@ function LanguageMenu({locale, alternates}: {locale: Locale; alternates: Partial
       renderTrigger={trigger =>
         // DropdownMenu's press model needs a real <button> (it sets `popovertarget` on it).
         isHydrated ? (
-          <Button label={label} tooltip={label} variant="ghost" isIconOnly icon={<Languages />} {...trigger} />
+          <Button label={label} tooltip={label} variant="ghost" isIconOnly icon={<Languages />} {...trigger} data-nav-control="language" />
         ) : (
           <Button
             label={label}
             variant="ghost"
             isIconOnly
             icon={<Languages />}
+            data-nav-control="language"
             href={next == null ? undefined : alternates[next]}
             {...(next == null ? {} : {hrefLang: LANGUAGE_TAG[next]})}
           />
@@ -129,10 +130,10 @@ function ServiceMenu({locale}: {locale: Locale}) {
       alignment="end"
       renderTrigger={trigger =>
         isHydrated ? (
-          <Button label={label} tooltip={label} variant="ghost" isIconOnly icon={<LayoutGrid />} {...trigger} />
+          <Button label={label} tooltip={label} variant="ghost" isIconOnly icon={<LayoutGrid />} {...trigger} data-nav-control="service" />
         ) : (
           // Without the script, the button jumps to the footer, which lists the same sites.
-          <Button label={label} variant="ghost" isIconOnly icon={<LayoutGrid />} href={`#${FOOTER_ID}`} />
+          <Button label={label} variant="ghost" isIconOnly icon={<LayoutGrid />} href={`#${FOOTER_ID}`} data-nav-control="service" />
         )
       }>
       {services(locale).map(service => (
@@ -160,6 +161,7 @@ function ThemeToggle() {
       variant="ghost"
       isIconOnly
       isDisabled={!isHydrated}
+      data-nav-control="theme"
       icon={
         <>
           <Moon {...stylex.props(themeMode === 'system' ? styles.moonWhenSystem : mode === 'light' ? styles.iconShown : styles.iconHidden)} />
@@ -263,6 +265,7 @@ export function SiteTopNav({locale, section, alternates, isHome = false}: SiteTo
                 isIconOnly
                 icon={<Icon icon="menu" color="inherit" />}
                 data-mobile-nav-open
+                data-nav-control="menu"
                 aria-expanded={isMenuOpen}
                 // Before the script runs, the menu button is a link to the footer's site map.
                 {...(isHydrated ? {} : {href: `#${FOOTER_ID}`})}

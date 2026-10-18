@@ -12,8 +12,9 @@ import {useSkeletonColumns} from '../data/columns';
 import {NoScriptNote} from '../data/NoScriptNote';
 import {TableSkeleton, type SkeletonColumn} from '../data/TableSkeleton';
 import {pixel} from '@astryxdesign/core/Table';
+import {islandProps} from '../islands/kinds';
 import {PackagesFrame, type View} from './PackagesFrame';
-import {DEPS_COLUMNS, DEPS_COMPACT_COLUMNS, PACKAGE_COMPACT_COLUMNS, PACKAGES_ISLAND, PACKAGES_TEXT, packageColumns, type PackagesIslandProps} from './packagesData';
+import {DEPS_COLUMNS, DEPS_COMPACT_COLUMNS, PACKAGE_COMPACT_COLUMNS, PACKAGES_TEXT, packageColumns, type PackagesIslandProps} from './packagesData';
 
 const styles = stylex.create({
   // Legacy `#overlay` lands on the island (id `lists`), below the navigation bar.
@@ -49,7 +50,7 @@ export function PackagesIsland({props}: {props: PackagesIslandProps}) {
     </div>
   );
   return (
-    <VStack id="lists" xstyle={styles.root} data-pagefind-ignore data-gz-island={PACKAGES_ISLAND} data-props={JSON.stringify(props)}>
+    <VStack id="lists" xstyle={styles.root} data-pagefind-ignore {...islandProps('packages')} data-props={JSON.stringify(props)}>
       <NoScriptNote>
         <Text color="secondary">{t('gz.packages.noscript')}</Text>
         <Button variant="ghost" size={BUTTON.toolbar} label={t('gz.packages.statusHelp')} href={props.statusHref} icon={<Icon icon="info" />} />

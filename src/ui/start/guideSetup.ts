@@ -1,5 +1,8 @@
 // Share code rewriting between server defaults and client selections to keep their commands identical.
 
+/** Fired on window once GuideSetup is live and follows hash changes itself. */
+export const GUIDE_LIVE_EVENT = 'gz-guide-live';
+
 export type GuideKind = 'overlay' | 'binpkg' | 'distfiles' | 'official';
 export type GuideChannel = 'stable' | 'unstable';
 
