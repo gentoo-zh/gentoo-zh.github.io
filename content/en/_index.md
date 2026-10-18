@@ -9,7 +9,7 @@ toc: false
   badge="Open source · Community-driven"
   badgeLink="https://github.com/gentoo-zh"
   title="Gentoo-zh Community"
-  subtitle="Where Chinese-speaking Gentoo users hang out. Newcomers, veterans, everyone's here — hit a snag, we tinker through it together."
+  subtitle="Where Chinese-speaking Gentoo users hang out. Newcomers and veterans are all here. If you hit a snag, we'll work through it together."
   cta="Get started with the overlay"
   ctaLink="/overlay/"
   cta2="Download images"

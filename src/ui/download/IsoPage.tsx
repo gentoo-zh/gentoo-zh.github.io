@@ -8,7 +8,7 @@ import {List, ListItem} from '@astryxdesign/core/List';
 import {Text} from '@astryxdesign/core/Text';
 import type {Mirrors} from '../../data/schemas';
 import {officialMediaMirrors} from '../../data/mirrors';
-import type {MessageKey} from '../../i18n/locales';
+import type {Locale, MessageKey} from '../../i18n/locales';
 import {routes} from '../../i18n/routes';
 import {useMessage} from '../../i18n/useMessage';
 import {StaticCodeBlock} from '../../markdown/StaticCodeBlock';
@@ -20,13 +20,25 @@ const REPO = 'https://github.com/gentoo-zh/gentoo-cjk-livecd';
 const RELEASES = `${REPO}/releases`;
 const MAC_POST = '2025-10-02-gentoo-m-series-mac';
 
+/** A mirror row: `uri` is the address shown, `href` overrides where the button goes. */
+interface Site {
+  id: string;
+  uri: string;
+  href?: string;
+}
+
 /**
  * Every gentoo-zh distfiles mirror in data/gz_mirrors.yaml carries gentoo-cjk-livecd under the
- * same path; origin first. Names are gz.mirror.name.<id>, shared with the mirror list.
+ * same path; origin first, browsed on this site's files page. Names are gz.mirror.name.<id>,
+ * shared with the mirror list.
  */
-function isoMirrors(mirrors: Mirrors): {id: string; uri: string}[] {
+function isoMirrors(mirrors: Mirrors, locale: Locale): Site[] {
   const sites = [...mirrors.dist.filter(mirror => mirror.origin), ...mirrors.dist.filter(mirror => !mirror.origin)];
-  return sites.map(mirror => ({id: mirror.origin ? 'origin' : mirror.source, uri: `${mirror.uri.replace(/\/$/, '')}/gentoo-cjk-livecd/`}));
+  return sites.map(mirror => ({
+    id: mirror.origin ? 'origin' : mirror.source,
+    uri: `${mirror.uri.replace(/\/$/, '')}/gentoo-cjk-livecd/`,
+    href: mirror.origin ? `${routes.page(locale, 'files')}gentoo-cjk-livecd/` : undefined,
+  }));
 }
 
 /** Official media under `releases/amd64/autobuilds/` of any Gentoo mirror. */
@@ -38,7 +50,7 @@ const OFFICIAL = [
 
 const download = <Icon icon={DownloadGlyph} />;
 
-function MirrorList({sites}: {sites: {id: string; uri: string}[]}) {
+function MirrorList({sites}: {sites: Site[]}) {
   const t = useMessage();
   return (
     <List density="compact" hasDividers edgeCompensation="inline">
@@ -52,7 +64,7 @@ function MirrorList({sites}: {sites: {id: string; uri: string}[]}) {
             </Text>
           }
           endContent={
-            <Button variant="secondary" size={BUTTON.inline} label={t('gz.download.iso.open')} href={mirror.uri} icon={download} />
+            <Button variant="secondary" size={BUTTON.inline} label={t('gz.download.iso.open')} href={mirror.href ?? mirror.uri} icon={download} />
           }
         />
       ))}
@@ -91,7 +103,7 @@ type Props = Omit<GuidePageProps, 'slots'> & {mirrors: Mirrors};
 export function IsoPage({mirrors, ...page}: Props) {
   const t = useMessage();
   const {locale} = page;
-  const sites = isoMirrors(mirrors);
+  const sites = isoMirrors(mirrors, locale);
   const step = (key: string, code?: string) => ({
     title: t(`gz.download.iso.${key}.label` as MessageKey),
     description: t(`gz.download.iso.${key}.desc` as MessageKey),

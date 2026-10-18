@@ -37,7 +37,7 @@ The site comes in Simplified Chinese, Traditional Chinese and English, each writ
 
 <!-- anchor:why-zh -->
 
-The zh in the name comes from ISO 639, the code for the Chinese language: it identifies a language, not a country or region, while cn is an ISO 3166 country code with a narrower scope. gentoo-zh itself came from the old gentoo-tw and gentoo-china [when the two communities merged](https://code.google.com/archive/p/gentoo-taiwan/issues/2).
+The zh in the name is the ISO 639 language code for Chinese: it identifies a language, not a country or region, while cn is an ISO 3166 country code with a narrower scope. gentoo-zh itself came from the old gentoo-tw and gentoo-china [when the two communities merged](https://code.google.com/archive/p/gentoo-taiwan/issues/2).
 
 <!-- anchor:english -->
 

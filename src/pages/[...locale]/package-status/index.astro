@@ -1,0 +1,25 @@
+---
+import {createElement} from 'react';
+import SectionLayout from '../../../layouts/SectionLayout.astro';
+import {pagePaths, type PageRouteProps} from '../../../content/pages';
+import {postPaths} from '../../../content/posts';
+import {routes} from '../../../i18n/routes';
+import {PackageStatusPage} from '../../../ui/download/PackageStatusPage';
+
+// The packages page links here; it has no sidebar entry of its own.
+export const getStaticPaths = () => pagePaths('package-status');
+
+const {locale, page, alternates} = Astro.props as PageRouteProps;
+const pages = await postPaths(locale);
+---
+<SectionLayout
+  locale={locale}
+  title={page.data.title}
+  description={page.data.description}
+  path={routes.page(locale, 'package-status')}
+  alternates={alternates}
+  section="download"
+  current="packages"
+  slug="package-status"
+  page={createElement(PackageStatusPage, {locale, title: page.data.title, description: page.data.description, body: page.body ?? '', pages})}
+/>

@@ -11,6 +11,7 @@ import {CollectionSearch, CollectionEmpty} from './CollectionSearch';
 import type {PostSummary} from '../../content/posts';
 import type {Locale} from '../../i18n/locales';
 import {routes} from '../../i18n/routes';
+import {tagKey} from '../../i18n/tags';
 import {useMessage} from '../../i18n/useMessage';
 import {layout, media} from '../../theme/layout.stylex';
 import {BlogCard} from './BlogCard';
@@ -47,7 +48,7 @@ export function BlogIndex({locale, title, description, count, posts, tags = []}:
           <CollectionSearch />
           {tags.length > 0 ? (
             <HStack gap={SPACE.tight} wrap="wrap" role="navigation" aria-label={t('gz.tags.title')}>
-              {tags.map(tag => <Token key={tag} label={tag} href={routes.tag(locale, tag)} />)}
+              {tags.map(tag => <Token key={tag} label={t(tagKey(tag))} href={routes.tag(locale, tag)} />)}
             </HStack>
           ) : null}
         </VStack>

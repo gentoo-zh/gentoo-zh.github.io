@@ -3,7 +3,7 @@ title: "Website contribution guide"
 description: "Write articles and translations, set up development and submit changes"
 ---
 
-## Community Website Contributing Guide (articles / translations / docs)
+## Community website contribution guide (articles, translations and docs) {#community-website-contributing-guide-articles--translations--docs}
 
 The site's source is [gentoo-zh/gentoo-zh.github.io](https://github.com/gentoo-zh/gentoo-zh.github.io), built with [Astro](https://astro.build/) and Astryx components. Articles, translations and fixes all go in through pull requests.
 

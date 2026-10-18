@@ -8,12 +8,17 @@ import {TextInput} from '@astryxdesign/core/TextInput';
 import {useMessage} from '../../i18n/useMessage';
 import {BUTTON, ICON, SPACE} from '../../theme/scale';
 
-const styles = stylex.create({visibility: {display: {default: 'flex', ':is([hidden])': 'none'}}});
+const styles = stylex.create({
+  visibility: {display: {default: 'flex', ':is([hidden])': 'none'}},
+  // The field keeps its box while BlogSearch.astro has not revealed it yet, so the reveal moves
+  // nothing below it; without scripting nothing reveals it, so it takes no space.
+  search: {display: {default: 'flex', '@media (scripting: none)': 'none'}, visibility: {default: 'visible', ':is([hidden])': 'hidden'}},
+});
 
 export function CollectionSearch() {
   const t = useMessage();
   return (
-    <VStack data-collection-search hidden xstyle={styles.visibility}>
+    <VStack data-collection-search hidden xstyle={styles.search}>
       {/* A seed materializes Astryx's conditional clear button in static HTML. The delegate
           empties the field and hides the button before revealing the search control. */}
       <TextInput value=" " label={t('gz.blog.search')} isLabelHidden placeholder={t('gz.blog.search')} hasClear startIcon={<Icon icon="search" size={ICON.inline} />} width="100%" />

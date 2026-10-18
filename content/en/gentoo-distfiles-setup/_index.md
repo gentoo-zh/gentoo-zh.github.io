@@ -1,6 +1,6 @@
 ---
 title: "Official distfiles setup"
-description: "Choose GENTOO_MIRRORS for Portage source downloads"
+description: "Set GENTOO_MIRRORS for Portage source downloads"
 setupHint: "The selected mirror supplies the URLs in this page’s configuration."
 ---
 

@@ -1,0 +1,33 @@
+---
+// Refresh the hero's build-time counts at idle time: days since founding from the clock, overlay commits from
+// GitHub. Any failure keeps the number the page was built with.
+import {FOUNDED_UTC as founded} from '../../content/home';
+import {HOME_LIVE_ATTRIBUTE as attribute, OVERLAY_COMMITS_API as api} from './homeLive';
+---
+<script is:inline data-owner="src/ui/home/HomeLive.astro" define:vars={{attribute, founded, api}}>
+  const nodes = [...document.querySelectorAll(`[${attribute}]`)];
+  if (nodes.length > 0) {
+    const format = new Intl.NumberFormat(document.documentElement.lang || undefined);
+    // The metric's first child shows the number and its last child the label; the link's name repeats both.
+    const show = (kind, value) => {
+      for (const node of nodes) {
+        if (node.getAttribute(attribute) !== kind || node.firstElementChild == null) continue;
+        node.firstElementChild.textContent = format.format(value);
+        node.closest('a')?.setAttribute('aria-label', `${node.lastElementChild.textContent}: ${format.format(value)}`);
+      }
+    };
+    const start = async () => {
+      show('days', Math.floor((Date.now() - founded) / 86_400_000));
+      try {
+        const response = await fetch(api, {signal: AbortSignal.timeout(15_000)});
+        const last = response.ok ? response.headers.get('link')?.split(',').find(part => /rel="last"/.test(part)) : undefined;
+        const commits = Number(last == null ? NaN : new URL(last.match(/<([^>]+)>/)?.[1] ?? '').searchParams.get('page'));
+        if (Number.isSafeInteger(commits) && commits > 0) show('commits', commits);
+      } catch {
+        // Keep the build-time count.
+      }
+    };
+    if ('requestIdleCallback' in window) requestIdleCallback(() => void start(), {timeout: 3000});
+    else setTimeout(() => void start(), 1000);
+  }
+</script>

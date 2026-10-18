@@ -7,6 +7,7 @@ import {Heading, Text} from '@astryxdesign/core/Text';
 import type {PostSummary} from '../content/posts';
 import type {Locale} from '../i18n/locales';
 import {routes} from '../i18n/routes';
+import {tagKey} from '../i18n/tags';
 import {useMessage} from '../i18n/useMessage';
 import {layout} from '../theme/layout.stylex';
 import {SPACE} from '../theme/scale';
@@ -37,7 +38,7 @@ export function TagsPage({locale, tags}: TagsPageProps) {
         <TitleBlock title={t('gz.tags.title')} sub={t('gz.tags.description')} />
         <List hasDividers density="spacious" edgeCompensation="inline" aria-label={t('gz.tags.title')}>
           {tags.map(({tag, count}) => (
-            <ListItem key={tag} label={tag} href={routes.tag(locale, tag)} endContent={<Badge label={count} aria-label={t('gz.tags.count', {count})} />} />
+            <ListItem key={tag} label={t(tagKey(tag))} href={routes.tag(locale, tag)} endContent={<Badge label={count} aria-label={t('gz.tags.count', {count})} />} />
           ))}
         </List>
       </VStack>
@@ -52,5 +53,6 @@ export interface TagPostsProps {
 }
 
 export function TagPosts({locale, tag, posts}: TagPostsProps) {
-  return <BlogIndex locale={locale} title={tag} count={posts.length} posts={posts} />;
+  const t = useMessage();
+  return <BlogIndex locale={locale} title={t(tagKey(tag))} count={posts.length} posts={posts} />;
 }

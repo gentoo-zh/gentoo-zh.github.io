@@ -30,13 +30,13 @@ const irc = (room: string): Join => ({platform: 'irc', handle: `#${room}`, icon:
 export const CHANNELS: Record<ChannelGroup, Channel[]> = {
   groups: [
     {id: 'main', icon: MessageCircle, join: [tg('gentoo_zh'), mx('gentoo-zh'), irc('gentoo-zh')]},
-    {id: 'tc', icon: MessageCircle, join: [tg('gentootw'), mx('gentootw')]},
     {id: 'offtopic', icon: MessageCircle, join: [tg('talk_something'), mx('talk_something'), irc('gentoo-zh-offtopic')]},
     {id: 'ops', icon: MessageCircle, join: [tg('gentoo_zh_ops'), mx('gentoo_zh_ops')]},
     {id: 'space', icon: Layers, join: [mx('gentoo')]},
   ],
   feeds: [
     {id: 'announce', icon: Megaphone, join: [tg('gentoocn'), mx('gentoocn')]},
+    {id: 'tc', icon: Megaphone, join: [tg('gentootw'), mx('gentootw')]},
     {id: 'bugZh', icon: Bug, join: [tg('GentoozhBug'), mx('gentoo-zh-bug')]},
     {id: 'bugEn', icon: Bug, join: [tg('GentooBug'), mx('gentoo-bug')]},
   ],

@@ -162,7 +162,7 @@ $ curl -sIL -A "$UA" https://github.com/mxcl/homebrew     | grep -iE '^HTTP/|^lo
 $ curl -sIL -A "$UA" https://github.com/Homebrew/homebrew | grep -iE '^HTTP/|^location:'
 ```
 
-![以 Homebrew 实测 GitHub 的 301 单跳：mxcl/homebrew 与 Homebrew/homebrew 都一跳直达 Homebrew/legacy-homebrew，git ls-remote 正常](/img/gentoo-zh-overlay-301-homebrew.png)
+![以 Homebrew 实测 GitHub 的 301 单跳：mxcl/homebrew 与 Homebrew/homebrew 都一跳直达 Homebrew/legacy-homebrew，git ls-remote 正常](/img/gentoo-zh-overlay-301-homebrew.webp)
 
 所以把 `gentoo-zh/gentoo-zh` 改名为 `gentoo-zh/overlay` 之后，`microcai/gentoo-zh` 和 `gentoo-zh/gentoo-zh` 两个旧地址同样会一跳直达 `gentoo-zh/overlay`（网页和 git 都是），配过旧地址的用户不会断。
 

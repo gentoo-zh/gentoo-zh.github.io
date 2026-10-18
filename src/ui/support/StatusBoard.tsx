@@ -3,6 +3,7 @@ import type {StatusDotProps} from '@astryxdesign/core/StatusDot';
 import {Button} from '@astryxdesign/core/Button';
 import {Divider} from '@astryxdesign/core/Divider';
 import {Fragment} from 'react';
+import {Skeleton} from '@astryxdesign/core/Skeleton';
 import {StatusDot} from '@astryxdesign/core/StatusDot';
 import {InternationalizationProvider} from '@astryxdesign/core/i18n';
 import {HStack, VStack} from '@astryxdesign/core/Layout';
@@ -10,7 +11,7 @@ import {Heading, Text} from '@astryxdesign/core/Text';
 import type {MessageKey} from '../../i18n/locales';
 import {useMessage} from '../../i18n/useMessage';
 import {SITE} from '../../site';
-import {BUTTON, SPACE} from '../../theme/scale';
+import {BUTTON, GRID, SPACE} from '../../theme/scale';
 
 /** The live status endpoint; it sends `access-control-allow-origin: *`. */
 export const STATUS_API = 'https://status.gentoozh.org/api/status';
@@ -22,7 +23,7 @@ export const STATUS_FEED = 'https://status.gentoozh.org/feed.rss';
 export const STATUS_ISLAND_ATTRIBUTE = 'data-gz-island';
 export const STATUS_ISLAND = 'status';
 
-export type StatusLevel = 'up' | 'down' | 'unknown';
+export type StatusLevel = 'up' | 'down' | 'unknown' | 'maintenance';
 
 /** The one mapping from a service's level to its Astryx StatusDot variant. */
 export function statusVariant(level: StatusLevel): StatusDotProps['variant'] {
@@ -33,6 +34,36 @@ export function statusVariant(level: StatusLevel): StatusDotProps['variant'] {
       return 'error';
     case 'unknown':
       return 'neutral';
+    case 'maintenance':
+      return 'accent';
+  }
+}
+
+/** The one mapping from a level to its Token colour. */
+export function statusTokenColor(level: StatusLevel): 'green' | 'red' | 'gray' | 'blue' {
+  switch (level) {
+    case 'up':
+      return 'green';
+    case 'down':
+      return 'red';
+    case 'unknown':
+      return 'gray';
+    case 'maintenance':
+      return 'blue';
+  }
+}
+
+/** The one mapping from a level to its table row status colour. */
+export function statusRowColor(level: StatusLevel): 'success' | 'error' | 'gray' | 'accent' {
+  switch (level) {
+    case 'up':
+      return 'success';
+    case 'down':
+      return 'error';
+    case 'unknown':
+      return 'gray';
+    case 'maintenance':
+      return 'accent';
   }
 }
 
@@ -43,6 +74,8 @@ export interface StatusSite {
   desc?: string;
   url?: string;
   up?: boolean | null;
+  /** True only inside the scheduled window while the latest probe failed; `up` keeps its earlier value. */
+  maintenance?: boolean;
   ms?: number | null;
   uptimePct?: number | null;
   history?: {date: string; up: number | null}[];
@@ -58,7 +91,6 @@ export interface StatusTree {
 export interface StatusMirror extends StatusSite {
   host: string;
   origin: boolean;
-  landed?: string | null;
   trees?: StatusTree[];
 }
 
@@ -74,7 +106,8 @@ export interface StatusData {
   events?: {time: number; service: string; name: string; status: StatusLevel}[];
 }
 
-export function statusLevel(site: {up?: boolean | null}): StatusLevel {
+export function statusLevel(site: {up?: boolean | null; maintenance?: boolean}): StatusLevel {
+  if (site.maintenance === true) return 'maintenance';
   if (site.up == null) return 'unknown';
   // Only the monitor's own verdict: the API has no degraded state, and the board invents none.
   return site.up ? 'up' : 'down';
@@ -103,7 +136,7 @@ export function useServiceName() {
   return (site: StatusSite) => (isKnown(site.key) ? t(`gz.status.service.${site.key}` as MessageKey) : site.name);
 }
 
-function ServiceRow({site, languageTag}: {site: StatusSite; languageTag: string}) {
+function ServiceRow({site, languageTag, loading}: {site: StatusSite; languageTag: string; loading: boolean}) {
   const t = useMessage();
   const name = useServiceName();
   const level = statusLevel(site);
@@ -113,12 +146,12 @@ function ServiceRow({site, languageTag}: {site: StatusSite; languageTag: string}
       <HStack gap={SPACE.tight} vAlign="center">
         <StatusDot variant={statusVariant(level)} label={t(`gz.status.level.${level}`)} />
         <Heading level={3}>{name(site)}</Heading>
-        <Text type="supporting" color="secondary">{t(`gz.status.level.${level}`)}</Text>
+        {loading ? <Skeleton width={GRID.statusCell} height={12} radius={1} /> : <Text type="supporting" color="secondary">{t(`gz.status.level.${level}`)}</Text>}
       </HStack>
-      <HStack gap={SPACE.block} wrap="wrap">
+      {loading ? <Skeleton width={GRID.controlSkeleton} height={12} radius={1} index={1} /> : <HStack gap={SPACE.block} wrap="wrap">
         {pct == null ? null : <Text type="supporting" color="secondary" hasTabularNumbers>{t('gz.status.uptime', {pct})}</Text>}
         {!site.up || site.ms == null ? null : <Text type="supporting" color="secondary" hasTabularNumbers>{t('gz.status.latency', {ms: site.ms})}</Text>}
-      </HStack>
+      </HStack>}
     </HStack>
   );
 }
@@ -144,7 +177,7 @@ export function StatusBoard({data, languageTag, compact = true, failed = false}:
         {sites.map((site, index) => (
           <Fragment key={site.key}>
             {index === 0 ? null : <Divider />}
-            <ServiceRow site={site} languageTag={languageTag} />
+            <ServiceRow site={site} languageTag={languageTag} loading={data == null && !failed} />
           </Fragment>
         ))}
       </VStack>

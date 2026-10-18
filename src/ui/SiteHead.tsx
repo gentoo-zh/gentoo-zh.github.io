@@ -21,6 +21,12 @@ export interface SiteHeadProps {
   };
 }
 
+/**
+ * Without scripting nothing replaces the loading placeholders: drop the busy regions
+ * (`data-gz-skeleton`), stop every animation, and show the static notes (`data-gz-noscript`).
+ */
+const NO_SCRIPT_CSS = '[data-gz-skeleton]{display:none!important}[data-gz-noscript]{display:flex!important}*,*::before,*::after{animation:none!important}';
+
 const OG_LOCALE: Record<Locale, string> = {'zh-cn': 'zh_CN', 'zh-tw': 'zh_TW', en: 'en_US'};
 const absolute = (path: string) => new URL(path, SITE.origin).href;
 
@@ -90,6 +96,7 @@ function HeadTags({locale, title, description, path, alternates, section, noinde
       <link rel="icon" href="/favicon.ico" sizes="32x32" />
       <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
       <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+      <noscript><style>{NO_SCRIPT_CSS}</style></noscript>
     </>
   );
 }

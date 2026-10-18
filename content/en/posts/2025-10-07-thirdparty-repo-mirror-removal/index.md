@@ -2,7 +2,7 @@
 title: "Gentoo is dropping cache mirrors for third-party repos (gentoo-zh users, update your sync source)"
 date: 2025-10-07
 tags: ["announcement"]
-description: "Starting 2025-10-30, Gentoo no longer provides official cache mirrors for third-party overlays like gentoo-zh, syncing straight from the GitHub upstream instead. If you added gentoo-zh before, just update your sync URI as described here."
+description: "Starting 2025-10-30, Gentoo no longer provides official cache mirrors for third-party overlays like gentoo-zh; these overlays now sync straight from their GitHub upstream. If you added gentoo-zh before, just update your sync URI as described here."
 authors:
   - name: Zakk
     image: /contributors/zakkaus/feature.webp
@@ -34,4 +34,4 @@ Just update the sync URI — remove it and re-enable it, and the correct upstrea
 
 Then `emerge --sync gentoo-zh` as usual.
 
-Adding gentoo-zh for the first time? You're not affected — just enable it normally from the [Install the overlay](/overlay/) guide. If connecting straight to GitHub from mainland China is slow for you, use the [mainland China git mirror](/mirrorlist/#list).
+Adding gentoo-zh for the first time? You're not affected — just enable it normally from the [Install the overlay](/overlay/) guide. If connecting straight to GitHub from mainland China is slow for you, use the [mainland China Git mirror](/mirrorlist/#list).

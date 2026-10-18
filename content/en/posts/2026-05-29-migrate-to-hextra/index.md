@@ -37,7 +37,7 @@ Hextra is built on Tailwind CSS and made for docs and blogs:
 
 lzamora70 suggested this in the [@talk_something](https://t.me/talk_something) group — a bit of a wild card who's nuked and remade their account more than once, so that handle may already be out of date — so we did a pass to make the site work well in terminal / text browsers. It is Gentoo, after all:
 
-- Semantic HTML and a clean heading hierarchy, so the layout stays readable and links stay reachable in plain-text browsers like [lynx](https://lynx.invisible-island.net/) / [w3m](https://w3m.sourceforge.net/) / links;
+- Semantic HTML and a clean heading hierarchy, so the layout stays readable and links stay reachable in plain-text browsers like [Lynx](https://lynx.invisible-island.net/) / [w3m](https://w3m.sourceforge.net/) / Links;
 - Every page has a "skip to content" link at the top, so you can jump past the nav and start reading right away;
 - Every image has sensible alt text; decorative duplicates (the looping copies in the avatar wall, and the light/dark pair of logos) use empty `alt` so text browsers and screen readers don't read them out over and over;
 - In text mode, the contributor avatar wall and article bylines list each person only once;
@@ -45,7 +45,7 @@ lzamora70 suggested this in the [@talk_something](https://t.me/talk_something) g
 
 Try it with `lynx https://gentoozh.org/`.
 
-## Update: English on the public pages
+## Update: English on the Public Pages
 
 After the migration we also added English to the public pages — about, download, mirror list, contributing and so on — for the gentoo-zh overlay's overseas users, so you can now switch between Simplified / Traditional / English. To be clear, **not every technical article is in English**; only the public pages are translated for now. The English was drafted with translation software and reviewed and polished by Claude Fable 5 (ultracode) — the best and most expensive model we could find to date — so there may still be rough edges; corrections on [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io) are welcome.
 

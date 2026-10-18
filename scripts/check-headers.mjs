@@ -7,8 +7,8 @@ import {listFiles, report} from './lib/html.mjs';
 const DIST = 'dist';
 const IMMUTABLE = 'public, max-age=31536000, immutable';
 const SECURITY = {'X-Frame-Options': 'SAMEORIGIN', 'Referrer-Policy': 'strict-origin-when-cross-origin', 'X-Content-Type-Options': 'nosniff', 'Strict-Transport-Security': 'max-age=31536000; includeSubDomains'};
-/** Astro names bundles `<name>.<8-character hash>.<ext>`; Pagefind names index chunks `<language>_<hex>.pf_*`. */
-const ASTRO_HASHED = /^\/_astro\/.+\.[\w-]{8}\.\w+$/;
+/** Astro names bundles `<name>.<8-character hash>.<ext>` and font files `fonts/<16-hex content hash>.<ext>`; Pagefind names index chunks `<language>_<hex>.pf_*`. */
+const ASTRO_HASHED = /^\/_astro\/(?:.+\.[\w-]{8}|fonts\/[0-9a-f]{16})\.\w+$/;
 const PAGEFIND_HASHED = /^\/pagefind\/.*_[0-9a-f]{7,}\.pf_\w+$/;
 const failures = [];
 

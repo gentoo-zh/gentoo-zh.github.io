@@ -49,7 +49,7 @@ After the transfer, `microcai/gentoo-zh` redirects to `gentoo-zh/gentoo-zh`. Old
 
 To avoid breaking existing user configurations, the old path `microcai/gentoo-zh` is left empty after the transfer. GitHub's redirect from the old address depends on the old path not being taken again. If that path is occupied by a repository or fork of the same name, the old URL no longer redirects to the new repository, and users still on the old URL are affected. The original owner does not recreate or fork a repository named `gentoo-zh` under the `microcai` account. Anyone who wants to keep a personal fork should avoid a same-named repository that would occupy the old path.
 
-## For Users
+## For users
 
 gentoo-zh is now in Gentoo's official repository list (already pointing at the new overlay URL), so just re-enable it:
 
@@ -71,7 +71,7 @@ auto-sync = yes
 
 Then run `emerge --sync gentoo-zh`.
 
-## For Contributors
+## For contributors
 
 Submit new issues, pull requests, and maintenance discussions to:
 
@@ -94,7 +94,7 @@ $ git pull upstream master
 $ git checkout -b topic/name
 ```
 
-## Migration Steps
+## Migration steps
 
 ### 1. Preparation
 
@@ -154,7 +154,7 @@ After the transfer, confirm the following:
 
 ### 5. Confirm the rename won't break redirects (single-hop 301)
 
-Before renaming, confirm that GitHub's 301 redirect stays reliable after a transfer plus a rename: both the web and git keep working. Here is a real test with Homebrew, which went through the same transfer plus rename: [`mxcl/homebrew`](https://github.com/mxcl/homebrew) (the original) and [`Homebrew/homebrew`](https://github.com/Homebrew/homebrew) (the middle name) both 301-redirect in a single hop straight to the final [`Homebrew/legacy-homebrew`](https://github.com/Homebrew/legacy-homebrew), not a second hop; `git ls-remote` works as usual too. You can test it yourself:
+Before renaming, confirm that GitHub's 301 redirect stays reliable after a transfer plus a rename: both web access and Git operations keep working. Here is a real test with Homebrew, which went through the same transfer plus rename: [`mxcl/homebrew`](https://github.com/mxcl/homebrew) (the original) and [`Homebrew/homebrew`](https://github.com/Homebrew/homebrew) (the intermediate name) both 301-redirect in a single hop straight to the final [`Homebrew/legacy-homebrew`](https://github.com/Homebrew/legacy-homebrew), not a second hop; `git ls-remote` works as usual too. You can test it yourself:
 
 ```bash
 $ UA="Mozilla/5.0"
@@ -162,13 +162,13 @@ $ curl -sIL -A "$UA" https://github.com/mxcl/homebrew     | grep -iE '^HTTP/|^lo
 $ curl -sIL -A "$UA" https://github.com/Homebrew/homebrew | grep -iE '^HTTP/|^location:'
 ```
 
-![Testing GitHub's single-hop 301 with Homebrew: both mxcl/homebrew and Homebrew/homebrew redirect in a single hop straight to Homebrew/legacy-homebrew, and git ls-remote works](/img/gentoo-zh-overlay-301-homebrew.png)
+![Testing GitHub's single-hop 301 with Homebrew: both mxcl/homebrew and Homebrew/homebrew redirect in a single hop straight to Homebrew/legacy-homebrew, and git ls-remote works](/img/gentoo-zh-overlay-301-homebrew.webp)
 
-So after renaming `gentoo-zh/gentoo-zh` to `gentoo-zh/overlay`, both old addresses `microcai/gentoo-zh` and `gentoo-zh/gentoo-zh` also redirect in a single hop straight to `gentoo-zh/overlay` (both web and git), so users who configured an old address won't be cut off.
+So after renaming `gentoo-zh/gentoo-zh` to `gentoo-zh/overlay`, both old addresses `microcai/gentoo-zh` and `gentoo-zh/gentoo-zh` also redirect in a single hop straight to `gentoo-zh/overlay` (for both web access and Git operations), so users who configured an old address won't be cut off.
 
 ### 6. Community vote, final name gentoo-zh/overlay {#rename-to-overlay}
 
-After the transfer, the repository landed at `gentoo-zh/gentoo-zh` (a GitHub transfer keeps the original repository name). The community held a vote on the canonical repository name, and `gentoo-zh/overlay` won 21 votes to 9 (see [api-gentoo-org#829](https://github.com/gentoo/api-gentoo-org/pull/829)), finally settling on `gentoo-zh/overlay`.
+After the transfer, the repository landed at `gentoo-zh/gentoo-zh` (a GitHub transfer keeps the original repository name). The community held a vote on the canonical repository name, and `gentoo-zh/overlay` won 21 votes to 9 (see [api-gentoo-org#829](https://github.com/gentoo/api-gentoo-org/pull/829)).
 
 ### 7. Rename on GitHub
 
@@ -212,30 +212,9 @@ The exact changes (click to expand):
 ```
 {{% /details %}}
 
-{{% details title="MIGRATION.md (added)" %}}
+{{% details title="MIGRATION.md (added, English section)" %}}
 ````md
-# gentoo-zh repository migration / gentoo-zh 仓库迁移说明
-
-## 中文
-
-gentoo-zh overlay 已通过 GitHub repository transfer 从个人仓库迁移到社区组织仓库：
-
-- 原仓库：https://github.com/microcai/gentoo-zh
-- 当前仓库：https://github.com/gentoo-zh/overlay
-
-该仓库先从 microcai 个人账号 transfer 到 gentoo-zh 组织（当时为 `gentoo-zh/gentoo-zh`），随后经社区投票（21:9）定名并重命名为 `gentoo-zh/overlay`；`microcai/gentoo-zh` 和 `gentoo-zh/gentoo-zh` 两个旧地址都会一跳 301 直达新仓库（网页和 git 均可），现有用户不受影响。相关更新也已提交到 Gentoo 官方 overlay 登记（gentoo/api-gentoo-org#829）。
-
-迁移完成后，`gentoo-zh/overlay` 是 gentoo-zh overlay 的正式维护入口。
-
-过去所有维护者和用户对 gentoo-zh 的贡献会随仓库迁移一并保留。后续维护在 `gentoo-zh/overlay` 继续进行。
-
-为了让仓库地址与当前维护入口保持一致，建议在方便时将本地 remote 更新为：
-
-```bash
-git remote set-url origin https://github.com/gentoo-zh/overlay.git
-```
-
-后续 issue、pull request 和维护讨论请使用当前仓库。
+# gentoo-zh repository migration
 
 ## English
 
@@ -346,56 +325,9 @@ Then run emerge --sync gentoo-zh.
 
 {{% /details %}}
 
-{{% details title="news full text (.zh.txt, Chinese)" %}}
-
-```text
-Title: gentoo-zh overlay moved to gentoo-zh/overlay
-Author: zakkaus <zakk@gentoozh.org>
-Content-Type: text/plain
-Posted: 2026-07-05
-Revision: 1
-News-Item-Format: 1.0
-
-gentoo-zh overlay 已通过 GitHub repository transfer 从个人账号：
-
-https://github.com/microcai/gentoo-zh
-
-迁移到 gentoo-zh 组织，随后重命名为当前地址：
-
-https://github.com/gentoo-zh/overlay
-
-两个旧地址（microcai/gentoo-zh 和 gentoo-zh/gentoo-zh）都会一跳 301 直达新仓库
-（网页和 git 均可），现有配置不受影响。新仓库是 gentoo-zh overlay 后续维护的
-正式入口。
-
-后续 issue、pull request 和维护讨论请使用新仓库。
-
-更多细节请见仓库根目录的 MIGRATION.md。
-
-手动配置过 gentoo-zh overlay 的用户，建议在方便时更新到新地址。
-
-重新添加 overlay：
-
-sudo eselect repository remove gentoo-zh
-sudo eselect repository add gentoo-zh git https://github.com/gentoo-zh/overlay.git
-sudo emaint sync -r gentoo-zh
-
-或编辑 /etc/portage/repos.conf/ 下含 [gentoo-zh] 段的那个配置文件（用 eselect
-添加的在 eselect-repo.conf），把该段的 sync-uri 改成新地址：
-
-[gentoo-zh]
-location = /var/db/repos/gentoo-zh
-sync-type = git
-sync-uri = https://github.com/gentoo-zh/overlay.git
-auto-sync = yes
-
-然后 emerge --sync gentoo-zh。
-```
-{{% /details %}}
-
 ### 10. Sync the official Gentoo registry
 
-The overlay registry in `gentoo/api-gentoo-org` was submitted through [api-gentoo-org#829](https://github.com/gentoo/api-gentoo-org/pull/829) and, after the vote settled the name, merged as commit [`0f28fd9`](https://github.com/gentoo/api-gentoo-org/commit/0f28fd9d830936d17247274b390658a74f69cf9e). The changes to the gentoo-zh entry in `files/overlays/repositories.xml` (expand to view):
+The registry update in `gentoo/api-gentoo-org` was submitted through [api-gentoo-org#829](https://github.com/gentoo/api-gentoo-org/pull/829) and, after the vote settled the name, merged as commit [`0f28fd9`](https://github.com/gentoo/api-gentoo-org/commit/0f28fd9d830936d17247274b390658a74f69cf9e). The changes to the gentoo-zh entry in `files/overlays/repositories.xml` (expand to view):
 
 {{% details title="repositories.xml changes" %}}
 ```diff
@@ -421,9 +353,9 @@ The overlay registry in `gentoo/api-gentoo-org` was submitted through [api-gento
 
 ## Wrap-up and confirmation
 
-The overlay's internal metadata, README, and installation notes were updated in [PR #10744](https://github.com/gentoo-zh/overlay/pull/10744) (step 8); the official Gentoo registry was merged in [api-gentoo-org#829](https://github.com/gentoo/api-gentoo-org/pull/829) (step 10).
+The overlay's internal metadata, README, and installation notes were updated in [PR #10744](https://github.com/gentoo-zh/overlay/pull/10744) (step 8); the official Gentoo registry update was merged in [api-gentoo-org#829](https://github.com/gentoo/api-gentoo-org/pull/829) (step 10).
 
-Simulating the user switch hands-on: with `gentoo-zh` enabled straight from Gentoo's official repository list, `emerge --sync` pulls from the new overlay address (see the last line):
+Testing the migration as a user would: with `gentoo-zh` enabled straight from Gentoo's official repository list, `emerge --sync` pulls from the new overlay address (see the last line):
 
 ```console
 $ sudo eselect repository remove gentoo-zh
@@ -438,7 +370,7 @@ $ sudo emaint sync -r gentoo-zh
 /usr/sbin/git clone --depth 1 https://github.com/gentoo-zh/overlay.git .
 ```
 
-301 redirect confirmation: after the rename, both old addresses `microcai/gentoo-zh` and `gentoo-zh/gentoo-zh` redirect in a single hop straight to `gentoo-zh/overlay` (both web and git), so existing users aren't affected. Actual output:
+301 redirect confirmation: after the rename, both old addresses `microcai/gentoo-zh` and `gentoo-zh/gentoo-zh` redirect in a single hop straight to `gentoo-zh/overlay` (for both web access and Git operations), so existing users aren't affected. Actual output:
 
 ```console
 $ UA="Mozilla/5.0"

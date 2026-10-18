@@ -1,5 +1,5 @@
 ---
-title: "Contributing Guide"
+title: "Contributing guide"
 description: "How to contribute to the gentoo-zh overlay and website"
 anchors:
   "gentoo-zh-overlay-contributing-guide": "/overlay-contributing/#gentoo-zh-overlay-contributing-guide"

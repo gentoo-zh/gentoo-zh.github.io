@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /sitemap-lastmod.json
 
 Sitemap: https://gentoozh.org/sitemap.xml

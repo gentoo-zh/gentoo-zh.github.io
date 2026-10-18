@@ -3,7 +3,7 @@ title: "Overlay contribution guide"
 description: "Submit ebuilds, follow repository rules and configure autobump"
 ---
 
-## Gentoo-zh Overlay Contributing Guide
+## gentoo-zh overlay contribution guide {#gentoo-zh-overlay-contributing-guide}
 
 gentoo-zh is an ebuild repository stacked on top of the official Gentoo repository (`masters = gentoo`), with its source at [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay). New packages and updates arrive as GitHub pull requests, and problems go to [issues](https://github.com/gentoo-zh/overlay/issues). Community maintainers review every pull request and guide contributors through the changes it needs.
 
@@ -48,7 +48,7 @@ This page does not teach ebuild writing. The repository follows Gentoo's officia
 - [metadata.xml](https://devmanual.gentoo.org/ebuild-writing/misc-files/metadata/) and [keywording](https://devmanual.gentoo.org/keywording/)
 - [Ebuild repository](https://wiki.gentoo.org/wiki/Ebuild_repository): the repository layout
 - [pkgdev](https://pkgcore.github.io/pkgdev/) and [pkgcheck](https://pkgcore.github.io/pkgcheck/): documentation for the commit and QA tools
-- [GLEP 66](https://www.gentoo.org/glep/glep-0066.html): Gentoo's git workflow and commit message rules
+- [GLEP 66](https://www.gentoo.org/glep/glep-0066.html): Gentoo's Git workflow and commit message rules
 
 ### Repository rules
 

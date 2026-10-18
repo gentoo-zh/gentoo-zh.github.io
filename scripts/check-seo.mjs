@@ -2,7 +2,8 @@ import {existsSync, readFileSync} from 'node:fs';
 import {decodeEntities, fileFor, listFiles, refreshTarget, report} from './lib/html.mjs';
 import {imageMetadata} from 'astro/assets/utils';
 import {htmlElements, redirectAnchors} from './lib/html-elements.mjs';
-import {ERROR_PAGES, SITEMAP_REDIRECTS} from './lib/url-manifest.mjs';
+import {ERROR_PAGES, FILES_REWRITES, NOINDEX_PAGES, SITEMAP_REDIRECTS} from './lib/url-manifest.mjs';
+import {HASH, LASTMOD, MANIFEST} from './lib/sitemap-lastmod.mjs';
 
 const DIST = 'dist';
 const ORIGIN = 'https://gentoozh.org';
@@ -51,10 +52,12 @@ for (const file of listFiles(DIST).filter(file => file.endsWith('.html'))) {
   }
   if (elements.filter(e => e.name === 'link' && e.attrs.get('rel') === 'preload' && e.attrs.get('as') === 'font').length < 2) failures.push(`${path}: missing main font preloads`);
   const error = ERROR_PAGES.includes(path);
+  const noindex = meta('robots')?.split(/[,\s]+/).includes('noindex') ?? false;
+  if (noindex && !error && !NOINDEX_PAGES.includes(path)) failures.push(`${path}: unexpected noindex`);
   const canonicals = links('canonical');
-  if (error) {
+  if (error || noindex) {
     if (canonicals.length) failures.push(`${path}: canonical must be absent`);
-    if (!meta('robots')?.split(/[,\s]+/).includes('noindex')) failures.push(`${path}: missing noindex`);
+    if (!noindex) failures.push(`${path}: missing noindex`);
   } else if (canonicals.length !== 1 || canonicals[0].attrs.get('href') !== new URL(path, ORIGIN).href) {
     failures.push(`${path}: missing or incorrect self canonical`);
   }
@@ -80,14 +83,14 @@ for (const file of listFiles(DIST).filter(file => file.endsWith('.html'))) {
   });
   if (/^\/(?:en\/|zh-tw\/)?$/.test(path)) {
     for (const type of ['WebSite', 'Organization']) if (!schemas.some(s => s['@type'] === type)) failures.push(`${path}: missing ${type}`);
-  } else if (!error) {
+  } else if (!error && !noindex) {
     if (!schemas.some(s => s['@type'] === 'BreadcrumbList')) failures.push(`${path}: missing BreadcrumbList`);
   }
   if (/\/posts\/[^/]+\/$/.test(path)) {
     const article = schemas.find(s => s['@type'] === 'BlogPosting');
     if (!article?.author?.length || !article.image || !Number.isFinite(Date.parse(article.datePublished)) || !Number.isFinite(Date.parse(article.dateModified))) failures.push(`${path}: incomplete BlogPosting`);
   }
-  pages.set(new URL(path, ORIGIN).href, {path, error, alternates, title: titles[0]?.content, description: meta('description')});
+  pages.set(new URL(path, ORIGIN).href, {path, error, noindex, alternates, title: titles[0]?.content, description: meta('description')});
 }
 for (const [url, page] of pages) {
   for (const [lang, href] of page.alternates) {
@@ -111,27 +114,43 @@ if (!existsSync(sitemapFile)) failures.push('missing sitemap.xml');
 else {
   const xml = readFileSync(sitemapFile, 'utf8');
   if (!xml.includes('xmlns:xhtml="http://www.w3.org/1999/xhtml"')) failures.push('sitemap: missing xhtml namespace');
-  const found = new Set();
+  const found = new Map();
   for (const [, entry] of xml.matchAll(/<url>([\s\S]*?)<\/url>/g)) {
     const url = decodeEntities(/<loc>(.*?)<\/loc>/.exec(entry)?.[1] ?? '');
     if (found.has(url)) failures.push(`sitemap: duplicate ${url}`);
-    found.add(url);
+    const lastmod = /<lastmod>(.*?)<\/lastmod>/.exec(entry)?.[1];
+    found.set(url, lastmod);
+    if (!LASTMOD.test(lastmod ?? '') || !Number.isFinite(Date.parse(lastmod))) failures.push(`sitemap: missing or invalid lastmod for ${url}`);
     const page = pages.get(url);
-    if (!page || page.error) { failures.push(`sitemap: non-indexable ${url}`); continue; }
+    if (!page || page.error || page.noindex) { failures.push(`sitemap: non-indexable ${url}`); continue; }
     const alternates = htmlElements(entry).filter(e => e.name === 'xhtml:link');
     if (alternates.length !== page.alternates.size) failures.push(`sitemap: alternate count differs for ${url}`);
     for (const [lang, href] of page.alternates) if (!alternates.some(e => e.attrs.get('hreflang') === lang && e.attrs.get('href') === href && e.attrs.get('rel') === 'alternate')) failures.push(`sitemap: missing alternate ${lang} for ${url}`);
   }
-  for (const [url, page] of pages) if (!page.error && !found.has(url)) failures.push(`sitemap: missing ${url}`);
+  for (const [url, page] of pages) if (!page.error && !page.noindex && !found.has(url)) failures.push(`sitemap: missing ${url}`);
+  // The next deploy dates unchanged pages from this manifest, so it must match the sitemap exactly.
+  const manifestFile = fileFor(DIST, MANIFEST);
+  let manifest = {};
+  try { manifest = JSON.parse(readFileSync(manifestFile, 'utf8')); }
+  catch { failures.push(`${MANIFEST}: missing or invalid JSON`); }
+  for (const [url, entry] of Object.entries(manifest)) {
+    if (!found.has(url)) failures.push(`${MANIFEST}: ${url} is not in the sitemap`);
+    else if (entry?.lastmod !== found.get(url)) failures.push(`${MANIFEST}: lastmod differs from the sitemap for ${url}`);
+    if (!HASH.test(entry?.hash ?? '')) failures.push(`${MANIFEST}: invalid hash for ${url}`);
+  }
+  for (const url of found.keys()) if (!Object.hasOwn(manifest, url)) failures.push(`${MANIFEST}: missing ${url}`);
 }
-if (!readFileSync(fileFor(DIST, '/robots.txt'), 'utf8').split(/\r?\n/).includes(`Sitemap: ${ORIGIN}/sitemap.xml`)) failures.push('robots.txt: incorrect Sitemap');
+const robots = readFileSync(fileFor(DIST, '/robots.txt'), 'utf8').split(/\r?\n/);
+if (!robots.includes(`Sitemap: ${ORIGIN}/sitemap.xml`)) failures.push('robots.txt: incorrect Sitemap');
+if (!robots.includes(`Disallow: ${MANIFEST}`)) failures.push(`robots.txt: missing Disallow: ${MANIFEST}`);
 const redirectFile = fileFor(DIST, '/_redirects');
 if (!existsSync(redirectFile)) failures.push('missing _redirects');
 else {
   const rows = readFileSync(redirectFile, 'utf8').trim().split(/\r?\n/).filter(line => line && !line.startsWith('#')).map(line => line.split(/\s+/));
   // A non-ASCII source carries a second, percent-encoded row for production.
   const permanent = [...redirects, ...Object.entries(SITEMAP_REDIRECTS)].filter(([from]) => !fragmentRedirects.has(from));
-  if (rows.length !== permanent.reduce((count, [from]) => count + (encodeURI(from) === from ? 1 : 2), 0)) failures.push('_redirects: count differs from permanent HTML fallbacks');
+  if (rows.length !== permanent.reduce((count, [from]) => count + (encodeURI(from) === from ? 1 : 2), 0) + Object.keys(FILES_REWRITES).length) failures.push('_redirects: count differs from permanent HTML fallbacks and /files/ rewrites');
+  for (const [from, to] of Object.entries(FILES_REWRITES)) if (!rows.some(([source, target, status]) => source === from && target === to && status === '200')) failures.push(`_redirects: missing 200 ${from}`);
   for (const [from, target] of [...redirects, ...Object.entries(SITEMAP_REDIRECTS)]) {
     if (fragmentRedirects.has(from)) {
       if (rows.some(([source]) => source === from || source === encodeURI(from))) failures.push(`_redirects: fragment redirect must stay in HTML ${from}`);

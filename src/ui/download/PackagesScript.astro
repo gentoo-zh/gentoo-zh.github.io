@@ -1,9 +1,42 @@
 ---
 // Wait for idle time and a nearby viewport before fetching the package index.
+// Before paint, `?view=deps` swaps the package skeleton for the dependency one.
+// The skeleton's tabs already switch, through the same `view` parameter the live table starts from,
+// so a tab picked while the index loads is the view that appears.
 ---
+<script is:inline data-owner="src/ui/download/PackagesScript.astro">
+  (() => {
+    const show = (view, focus) => {
+      document.querySelectorAll('[data-gz-view-skeleton]').forEach(element => {
+        element.hidden = element.dataset.gzViewSkeleton !== view;
+        if (focus && !element.hidden) element.querySelector('[role=tab][aria-selected=true]')?.focus();
+      });
+    };
+    const pick = (view, focus) => {
+      const url = new URL(location.href);
+      if (view === 'deps') url.searchParams.set('view', 'deps');
+      else url.searchParams.delete('view');
+      history.replaceState(null, '', url);
+      show(view, focus);
+    };
+    show(new URLSearchParams(location.search).get('view') === 'deps' ? 'deps' : 'packages', false);
+    const tabOf = event => (event.target instanceof Element ? event.target.closest('[data-gz-view-skeleton] [role=tab]') : null);
+    document.addEventListener('click', event => {
+      const tab = tabOf(event);
+      if (tab != null) pick(tab.dataset.tabValue, event.detail === 0);
+    });
+    document.addEventListener('keydown', event => {
+      const tab = tabOf(event);
+      if (tab == null || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+      event.preventDefault();
+      const view = event.key === 'Home' ? 'packages' : event.key === 'End' ? 'deps' : tab.dataset.tabValue === 'deps' ? 'packages' : 'deps';
+      pick(view, true);
+    });
+  })();
+</script>
 <script>
-  const root = document.querySelector('[data-gz-island="packages"]');
-  if (root != null) {
+  const roots = [...document.querySelectorAll('[data-gz-island="packages"]')];
+  if (roots.length > 0) {
     const start = () => void import('./packages-client');
     const whenIdle = () =>
       'requestIdleCallback' in window ? window.requestIdleCallback(start, {timeout: 2000}) : window.setTimeout(start, 200);
@@ -13,6 +46,6 @@
         whenIdle();
       }
     });
-    observer.observe(root);
+    for (const root of roots) observer.observe(root);
   }
 </script>

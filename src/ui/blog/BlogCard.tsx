@@ -1,4 +1,4 @@
-// Editorial rows use the library template's content hierarchy without synthetic covers.
+// Editorial rows use the library template's content hierarchy; a cover shows whole, in its 1200:630 frame.
 import * as stylex from '@stylexjs/stylex';
 import {spacingVars, radiusVars, typeScaleVars} from '@astryxdesign/core/theme/tokens.stylex';
 import {AspectRatio} from '@astryxdesign/core/AspectRatio';
@@ -11,8 +11,11 @@ import {Token} from '@astryxdesign/core/Token';
 import type {PostSummary} from '../../content/posts';
 import type {Locale} from '../../i18n/locales';
 import {routes} from '../../i18n/routes';
+import {tagKey} from '../../i18n/tags';
+import {useMessage} from '../../i18n/useMessage';
 import {media} from '../../theme/layout.stylex';
 import {CHIP, SPACE, TEMPLATE} from '../../theme/scale';
+import {PostCover} from './PostCover';
 
 const styles = stylex.create({
   row: {
@@ -38,14 +41,16 @@ const styles = stylex.create({
     borderRadius: radiusVars['--radius-container'],
     overflow: 'hidden',
     marginBlockStart: spacingVars['--spacing-1'],
+    // Covers are transparent; the frame takes the card colour the home cards use.
+    backgroundColor: 'var(--color-home-card)',
   },
-  image: {width: '100%', height: '100%', objectFit: 'cover'},
 });
 
 export function BlogCard({locale, post}: {locale: Locale; post: PostSummary}) {
+  const t = useMessage();
   return (
     <ListItem
-      data-post-search={[post.title, post.description, ...post.tags].join(' ')}
+      data-post-search={[post.title, post.description, ...post.tags.map(tag => t(tagKey(tag)))].join(' ')}
       xstyle={styles.row}
       label={
         <VStack gap={SPACE.tight}>
@@ -55,13 +60,13 @@ export function BlogCard({locale, post}: {locale: Locale; post: PostSummary}) {
           </Heading>
           <Text weight="normal" color="secondary" xstyle={styles.excerpt}>{post.description}</Text>
           <HStack gap={SPACE.hairline} wrap="wrap">
-            {post.tags.map(tag => <Token key={tag} size={CHIP.small} label={tag} href={routes.tag(locale, tag)} />)}
+            {post.tags.map(tag => <Token key={tag} size={CHIP.small} label={t(tagKey(tag))} href={routes.tag(locale, tag)} />)}
           </HStack>
         </VStack>
       }
       endContent={post.image ? (
-        <AspectRatio ratio={TEMPLATE.libraryImageRatio} xstyle={styles.cover}>
-          <img src={post.image.src} alt={post.image.alt} data-blog-cover={post.image.src} width={TEMPLATE.libraryImageWidth} height={TEMPLATE.libraryImageHeight} loading="lazy" decoding="async" {...stylex.props(styles.image)} />
+        <AspectRatio ratio={TEMPLATE.coverRatio} fit="contain" xstyle={styles.cover}>
+          <PostCover image={post.image} dark={post.coverDark} thumbnail width={TEMPLATE.coverThumbWidth} height={TEMPLATE.coverThumbHeight} loading="lazy" decoding="async" />
         </AspectRatio>
       ) : undefined}
     />

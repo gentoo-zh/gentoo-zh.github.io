@@ -34,4 +34,4 @@ authors:
 
 之后照常 `emerge --sync gentoo-zh`。
 
-新添加 gentoo-zh 的用户不受影响，按 [Overlay 安装](/overlay/) 正常启用即可。国内直连 GitHub 较慢时，可以使用 [国内 git 镜像](/mirrorlist/#list)。
+新添加 gentoo-zh 的用户不受影响，按 [Overlay 安装](/overlay/) 正常启用即可。中国大陆直连 GitHub 较慢时，可以使用 [中国大陆 git 镜像](/mirrorlist/#list)。

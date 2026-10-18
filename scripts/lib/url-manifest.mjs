@@ -1,9 +1,12 @@
 // Check current routes and preserve baseline Hugo pages and redirect targets for their slugs.
-export const PAGE_SLUGS = ['', 'docs', 'download', 'community', 'support', 'mirrorlist', 'gentoo-mirrors', 'faq', 'overlay-troubleshooting', 'binpkg-troubleshooting', 'distfiles-troubleshooting', 'paste', 'status', 'overlay', 'binpkg-setup', 'binpkg-signing', 'distfiles-setup', 'about', 'contributing', 'overlay-contributing', 'website-contributing', 'gentoo-repo-setup', 'gentoo-distfiles-setup', 'gentoo-binpkg-setup', 'gentoo-prefix-setup', 'costs', 'thanks', 'logo', 'changelog', 'channels', 'iso', 'official-media', 'packages', 'contributors', 'posts', 'tags'];
+export const PAGE_SLUGS = ['', 'docs', 'download', 'community', 'support', 'mirrorlist', 'gentoo-mirrors', 'faq', 'overlay-troubleshooting', 'binpkg-troubleshooting', 'distfiles-troubleshooting', 'paste', 'status', 'overlay', 'binpkg-setup', 'binpkg-signing', 'distfiles-setup', 'about', 'contributing', 'overlay-contributing', 'website-contributing', 'gentoo-repo-setup', 'gentoo-distfiles-setup', 'gentoo-binpkg-setup', 'gentoo-prefix-setup', 'costs', 'thanks', 'logo', 'changelog', 'channels', 'iso', 'official-media', 'packages', 'package-status', 'files', 'contributors', 'posts', 'tags'];
 
 /** Current single/index pages, independent of whether Hugo served them. */
 export const ERROR_PAGES = ['/404.html', '/zh-tw/404.html', '/en/404.html'];
 export const CURRENT_PAGES = [...PAGE_SLUGS.flatMap(slugPaths), ...ERROR_PAGES];
+
+/** Pages that may ship noindex while a server change they depend on is pending (FILES_INDEXED in src/ui/download/filesData.ts). */
+export const NOINDEX_PAGES = slugPaths('files');
 
 /** Legacy redirects to distfiles.gentoozh.org that this site serves as pages. */
 export const PROMOTED_REDIRECTS = ['/overlay/', '/zh-tw/overlay/', '/en/overlay/'];
@@ -25,3 +28,6 @@ export function slugPaths(slug) {
 export const SITEMAP_REDIRECTS = Object.fromEntries(
   ['zh-cn', 'zh-tw', 'en'].map(locale => [`/${locale}/sitemap.xml`, '/sitemap.xml']),
 );
+
+/** Directory paths below /files/ serve the browser page, which reads the path from the address bar. */
+export const FILES_REWRITES = Object.fromEntries(slugPaths('files').map(path => [`${path}*`, path]));

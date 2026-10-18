@@ -1,7 +1,11 @@
 ---
 title: "gentoo-zh website redesign"
-description: "The main site moves from Hugo to Astro and Astryx and absorbs the download site's guides and the service status page; GigOS is paused; OSUOSL provides an ARM test machine."
+description: "The main site moves from Hugo to Astro and Astryx and absorbs the download site's guides and the service status page; GigOS downloads are suspended; OSUOSL provides an ARM test machine."
 date: 2026-10-17
+cover: "cover.webp"
+coverAlt: "The gentoo-zh logo made of contributors' avatars"
+pinned: true
+tag: "Announcement"
 tags: ["announcement", "website"]
 authors:
   - name: Zakk
@@ -19,12 +23,12 @@ gentoozh.org, previously generated with Hugo, has been rewritten with Astro and 
 
 The [changelog](/changelog/#redesign) describes the site's architecture.
 
-## GigOS paused
+## GigOS downloads suspended
 
-For lack of resources, GigOS images (a KDE Plasma 6 desktop live OS with Chinese settings built in) are paused for now. The [download page](/download/) still offers the CJK minimal installation image.
+For lack of resources, we have temporarily stopped offering GigOS images (a KDE Plasma 6 desktop live OS with Chinese settings built in). The [download page](/download/) still offers the CJK minimal installation image.
 
 ## OSUOSL provides an ARM test machine
 
-The [Oregon State University Open Source Lab (OSUOSL)](https://osuosl.org/) has provided gentoo-zh with an ARM test machine. It is used first for version bumps of overlay packages; see [Costs](/costs/).
+The [Oregon State University Open Source Lab (OSUOSL)](https://osuosl.org/) has provided gentoo-zh with an ARM test machine. For now, it is used for version bumps of overlay packages; see [Costs](/costs/).
 
 Report problems on [GitHub](https://github.com/gentoo-zh/gentoo-zh.github.io/issues).

@@ -38,7 +38,7 @@ Gentoo-zh, which qingfeng founded years ago, and the vision on the front page of
 - Picked up maintenance of the [cjktty patches](https://github.com/gentoo-zh/cjktty-patches) after six years without an update
 - Added three packages built on the official kernel with the cjktty patch applied: `sys-kernel/gentoo-cjk-sources`, `gentoo-cjk-kernel` and `gentoo-cjk-kernel-bin`
 - The `-bin` packages are built and distributed by the community ([distfiles.gentoozh.org](https://distfiles.gentoozh.org/)); the same machine also gives overlay developers a personal area on a [public file server](https://distfiles.gentoozh.org/files/)
-- Got back in touch with the university mirrors in mainland China and repaired their mirroring of the gentoo-zh overlay git and of the [distfiles.gentoozh.org](https://distfiles.gentoozh.org/) download site. There are now three mirrors — [Nanjing University](https://mirror.nju.edu.cn/gentoo-zh), [Nanyang Institute of Technology](https://mirror.nyist.edu.cn/gentoo-zh) and the [Henan Education and Research Network](https://mirrors.ha.edu.cn/gentoo-zh) — plus the [MirrorZ](https://mirrors.cernet.edu.cn/gentoo-zh) redirect service
+- Got back in touch with the university mirrors in mainland China and repaired their mirroring of the gentoo-zh overlay's Git repository and of the [distfiles.gentoozh.org](https://distfiles.gentoozh.org/) download site. There are now three mirrors — [Nanjing University](https://mirror.nju.edu.cn/gentoo-zh), [Nanyang Institute of Technology](https://mirror.nyist.edu.cn/gentoo-zh) and the [Henan Education and Research Network](https://mirrors.ha.edu.cn/gentoo-zh) — plus the [MirrorZ](https://mirrors.cernet.edu.cn/gentoo-zh) redirect service
 
 ### Documentation and translation
 
@@ -54,7 +54,7 @@ For example, a [discussion](https://wiki.gentoo.org/wiki/Help_talk:Translating#A
 
 ## What the process is missing
 
-Language, efficiency, how hard the tools are to use, and guidance for the process itself — all of it is missing pieces.
+Communication across languages, efficiency, tool usability and guidance on the process itself all have large gaps.
 
 For example:
 
@@ -93,7 +93,7 @@ None of these paths has proper guidance.
 
 It is good to see the [Telegram group](https://t.me/gentoo_zh) pass 900 members, which it had not managed to do for several years.
 
-Lasting, bringing in new people, getting more of them involved, and lowering the barriers to communication all matter just as much. I hope the [Gentoo Wiki](https://wiki.gentoo.org/) and the [gentoozh.org](https://gentoozh.org/) site, both of which have stood still for the past ten years, and the [overlay](https://github.com/gentoo-zh/overlay) that has only just been moved out of a personal account, can all get going again.
+Keeping the community going, bringing in new people, getting more of them involved, and lowering the barriers to communication all matter just as much. I hope the [Gentoo Wiki](https://wiki.gentoo.org/) and the [gentoozh.org](https://gentoozh.org/) site, both of which have stood still for the past ten years, and the [overlay](https://github.com/gentoo-zh/overlay) that has only just been moved out of a personal account, can all get going again.
 
 There is plenty in the Chinese (Simplified) part of the [Gentoo Wiki](https://wiki.gentoo.org/) that needs updating and filling in; for Traditional Chinese there is almost nothing at all.
 

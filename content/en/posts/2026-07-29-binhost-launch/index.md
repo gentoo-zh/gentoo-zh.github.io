@@ -34,7 +34,7 @@ The status column at <https://distfiles.gentoozh.org/packages> shows which categ
 
 Packages that are not on the list but get built as dependencies inside the overlay (`acct-*`, `virtual/*` and the like) still show up in the index.
 
-Portage only takes a binary package when the USE flags match exactly, so packages whose USE combinations vary widely rarely get a hit, the build cost never pays off, and they are not on the list either. If `emerge` still compiles from source after you have set this up, check with `emerge -pv`: only a `[binary]` prefix means a binary package was used.
+Portage only takes a binary package when the USE flags match exactly, so packages whose USE combinations vary widely rarely get a hit, the build cost never pays off, and they are not on the list either. If `emerge` still compiles from source after you have set this up, check with `emerge -pv`: only a `[binary]` prefix means Portage will use a binary package.
 
 ## distfiles mirror
 

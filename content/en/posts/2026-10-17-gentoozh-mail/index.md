@@ -2,6 +2,8 @@
 title: "Developer mailboxes and forum mail"
 description: "gentoozh.org offers @gentoozh.org mailboxes to developers; OSUOSL provides SMTP for the forum."
 date: 2026-10-17
+cover: "cover.webp"
+coverAlt: "The gentoo-zh logo made of contributors' avatars"
 tags: ["announcement", "community"]
 authors:
   - name: Zakk
@@ -10,6 +12,8 @@ authors:
 ---
 
 gentoozh.org now offers `@gentoozh.org` mailboxes to gentoo-zh developers. To get one, write to [zakk@gentoozh.org](mailto:zakk@gentoozh.org) or ask in the [Telegram group](https://t.me/gentoo_zh).
+
+The mailboxes run on [Purelymail](https://purelymail.com/), which Zakk pays for personally. We do not recommend buying it.
 
 ## Forum mail
 

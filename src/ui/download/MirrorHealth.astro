@@ -1,10 +1,17 @@
 ---
-// Load health data at idle time; retain the static dash when the request fails.
+// Swap the server's unknown dashes for the pending placeholder, then load health data at idle time;
+// any failure writes the unknown dash back.
 ---
 <script>
   const island = document.querySelector('[data-gz-island="mirror-health"]');
   if (island instanceof HTMLElement) {
-    const start = () => void import('./mirrorHealth').then(module => module.fillHealth(island)).catch(() => {});
+    const pending = island.querySelector('[data-gz-health-pending]')?.firstElementChild;
+    if (pending != null) for (const cell of island.querySelectorAll('[data-gz-mirror-host]')) cell.replaceChildren(pending.cloneNode(true));
+    const settle = () => {
+      const {unknown = ''} = JSON.parse(island.dataset.gzLabels ?? '{}') as {unknown?: string};
+      for (const cell of island.querySelectorAll('[data-gz-mirror-host]')) cell.textContent = unknown;
+    };
+    const start = () => void import('./mirrorHealth').then(module => module.fillHealth(island)).catch(settle);
     if ('requestIdleCallback' in window) requestIdleCallback(start, {timeout: 3000});
     else setTimeout(start, 1000);
   }

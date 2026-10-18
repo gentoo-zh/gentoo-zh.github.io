@@ -12,7 +12,7 @@ authors:
     link: https://github.com/simpleWrite
 ---
 
-The Gentoo-zh Community website officially moves to **gentoozh.org** today. The forum (forum.gentoozh.org) is up as well, and should go live around July 5. The old addresses (gentoo.org.cn, gentoocn.org) all 301 permanent-redirect, so bookmarks and existing links won't break, but it's best to update them soon.
+The Gentoo-zh Community website officially moves to **gentoozh.org** today. The forum (forum.gentoozh.org) is set up as well, and [launched on July 12](/posts/2026-07-12-forum-launch/). The old addresses (gentoo.org.cn, gentoocn.org) all redirect permanently (HTTP 301), so bookmarks and existing links won't break, but it's best to update them soon.
 
 ## More Than Just a New Domain
 
@@ -25,7 +25,7 @@ We recently sorted these out:
 - Bridged IRC and Matrix
 - Unified the various groups
 - Centralized control of the domains
-- Coordinating the Chinese translation of the Gentoo Wiki
+- Organized the Chinese translation of the Gentoo Wiki
 
 The domain is the most important piece. Things have moved quickly these last two weeks, with a lot of announcements. Thanks for bearing with us.
 
@@ -33,7 +33,7 @@ The domain is the most important piece. Things have moved quickly these last two
 
 Because the old domains came with compliance requirements, standing up services like a forum, Matrix, or a download site meant going through a process that is hard for a volunteer project like ours to complete. gentoozh.org is an international domain, without that restriction, and has always been in our hands. This time [@zakkaus](https://github.com/zakkaus) will hand out management access for the domain and related services to the people responsible for each, so control doesn't get lost again.
 
-The zh in the domain comes from ISO 639, the code for the Chinese language. It identifies a language, not a country or any particular region. The cn, by contrast, is an ISO 3166 country code, and its scope is actually narrower. On top of that, gentoo-zh came from the old gentoo-tw and gentoo-china [when the two communities merged](https://code.google.com/archive/p/gentoo-taiwan/issues/2). archlinuxcn actually calls itself the "Arch Linux Chinese community" too; the cn there is just a name left over from history. People there have suggested switching to zh, but it's too big to change now. We don't carry that kind of baggage, so since we're changing it, we'll do it right.
+The zh in the domain is the ISO 639 language code for Chinese. It identifies a language, not a country or any particular region. The cn, by contrast, is an ISO 3166 country code, and its scope is actually narrower. On top of that, gentoo-zh came from the old gentoo-tw and gentoo-china [when the two communities merged](https://code.google.com/archive/p/gentoo-taiwan/issues/2). archlinuxcn actually calls itself the "Arch Linux Chinese community" too; the cn there is just a name left over from history. People there have suggested switching to zh, but it's too big to change now. We don't carry that kind of baggage, so since we're changing it, we'll do it right.
 
 ## Moving Site Hosting to Cloudflare
 

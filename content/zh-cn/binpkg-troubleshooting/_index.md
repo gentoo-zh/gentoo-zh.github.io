@@ -9,11 +9,11 @@ description: "排查二进制包的系统兼容性、公钥导入与源码回退
 
 ### OpenRC 和 systemd 都能使用吗？ {#q3}
 
-能否使用取决于软件包的 USE 与依赖是否适合当前系统。两个频道均使用 `desktop/systemd` profile 构建，没有单独的 OpenRC 产物。USE 不匹配时见[源码回退排查](#q1)。
+两个频道均以 `desktop/systemd` profile 构建，没有单独的 OpenRC 产物；OpenRC 系统能否使用，取决于软件包的 USE 与依赖。USE 不匹配时见[源码回退排查](#q1)。
 
 ### 导入公钥时出现 no writable keyring found，怎么办？ {#binpkg-keyring}
 
-先执行 `getuto`，再按[公钥导入步骤](/binpkg-setup/#import-key)执行完整命令。目录、Portage Local Trust Key、口令与 `trustdb` 的初始化都在该步骤中完成。
+先执行 `getuto`，再按[公钥导入步骤](/binpkg-setup/#import-key)执行完整命令。目录、Portage Local Trust Key、口令与 `trustdb` 的初始化都在该步骤中完成。口令由 `--passphrase-file` 从 `/etc/portage/gnupg/pass` 读取；验签以 `portage` 用户执行，因此须预先生成 `trustdb`，即该步骤最后的 `--check-trustdb`。
 
 <!-- anchor:troubleshooting -->
 

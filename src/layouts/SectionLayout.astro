@@ -13,12 +13,14 @@ type Props = SiteHeadProps & {
   section: SectionId;
   /** The sidebar entry to select: this page's id in sections.ts, or 'landing'. */
   current: SectionPageId | 'landing';
+  /** The content slug, for a page without a sidebar entry of its own. */
+  slug?: string;
   page: ReactElement;
 };
-const {section, current, page, ...head} = Astro.props;
+const {section, current, slug: ownSlug, page, ...head} = Astro.props;
 const sideNav = await renderSectionSideNav({locale: head.locale, section, current});
 const entry = sectionOf(section).pages.find(item => item.id === current);
-const slug = current === 'landing' ? sectionOf(section).slug : entry?.kind === 'page' ? entry.slug : undefined;
+const slug = ownSlug ?? (current === 'landing' ? sectionOf(section).slug : entry?.kind === 'page' ? entry.slug : undefined);
 const source = slug == null ? null : `content/${head.locale}/${slug}/_index.md`;
 const editHref = source != null && existsSync(source) ? `https://github.com/gentoo-zh/gentoo-zh.github.io/edit/master/${source}` : null;
 const framed = createElement(SectionPageContext.Provider, {value: {current, editHref}}, page);

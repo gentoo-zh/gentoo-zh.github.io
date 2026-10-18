@@ -19,13 +19,14 @@
     "check:data": "node --experimental-strip-types scripts/check-data.mjs",
     "check:contributors": "node scripts/check-contributors.mjs",
     "check:ui": "eslint . && node scripts/check-ui.mjs",
-    "check:i18n": "node scripts/check-i18n.mjs",
+    "check:i18n": "node --experimental-strip-types scripts/check-i18n.mjs",
     "check:no-convert": "node scripts/check-no-convert.mjs",
     "check:urls": "node scripts/check-urls.mjs",
     "check:budget": "node scripts/check-budget.mjs",
     "check:search": "node scripts/check-search.mjs",
     "check:headers": "node scripts/check-headers.mjs",
-    "check": "pnpm typecheck && pnpm check:theme && pnpm check:code && pnpm check:data && pnpm check:contributors && pnpm check:ui && pnpm check:no-convert && pnpm build && pnpm check:content-parity && pnpm check:i18n && pnpm check:urls && pnpm check:budget && pnpm check:search && pnpm check:headers && pnpm check:seo",
+    "check:stylex": "node scripts/check-stylex.mjs",
+    "check": "pnpm typecheck && pnpm check:theme && pnpm check:code && pnpm check:data && pnpm check:contributors && pnpm check:ui && pnpm check:no-convert && pnpm build && pnpm check:stylex && pnpm check:content-parity && pnpm check:i18n && pnpm check:urls && pnpm check:budget && pnpm check:search && pnpm check:headers && pnpm check:seo",
     "check:seo": "node scripts/check-seo.mjs"
   },
   "dependencies": {

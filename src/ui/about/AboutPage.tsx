@@ -1,5 +1,6 @@
 import {Icon} from '@astryxdesign/core/Icon';
 import {List, ListItem} from '@astryxdesign/core/List';
+import {distfilesLink} from '../../i18n/distfilesLink';
 import type {MessageKey} from '../../i18n/locales';
 import {useMessage} from '../../i18n/useMessage';
 import {ICON} from '../../theme/scale';
@@ -31,16 +32,20 @@ function Rows({id, rows}: {id: string; rows: Row[]}) {
   const t = useMessage();
   return (
     <List density="compact" hasDividers edgeCompensation="inline">
-      {rows.map(row => (
-        <ListItem
-          key={row.id}
-          label={t(`gz.about.${id}.${row.id}` as MessageKey)}
-          description={row.detail}
-          href={row.href}
-          target={row.href.startsWith('https:') ? '_blank' : undefined}
-          endContent={<Icon icon={row.href.startsWith('https:') ? 'externalLink' : 'chevronRight'} size={ICON.inline} color="secondary" />}
-        />
-      ))}
+      {rows.map(row => {
+        // Download-site files read as part of this site.
+        const isExternal = row.href.startsWith('https:') && !distfilesLink(row.href);
+        return (
+          <ListItem
+            key={row.id}
+            label={t(`gz.about.${id}.${row.id}` as MessageKey)}
+            description={row.detail}
+            href={row.href}
+            target={isExternal ? '_blank' : undefined}
+            endContent={<Icon icon={isExternal ? 'externalLink' : 'chevronRight'} size={ICON.inline} color="secondary" />}
+          />
+        );
+      })}
     </List>
   );
 }

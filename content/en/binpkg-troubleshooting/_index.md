@@ -9,11 +9,11 @@ description: "Diagnose binary package compatibility, key import failures and sou
 
 ### Does it work on both OpenRC and systemd? {#q3}
 
-Compatibility depends on whether the package’s USE flags and dependencies match your system. Both channels build with a `desktop/systemd` profile, without separate OpenRC artifacts. For USE mismatches, see [source fallback troubleshooting](#q1).
+Both channels build with a `desktop/systemd` profile, without separate OpenRC artifacts; whether a package works on OpenRC depends on its USE flags and dependencies. For USE mismatches, see [source fallback troubleshooting](#q1).
 
 ### How do I fix no writable keyring found when importing the key? {#binpkg-keyring}
 
-Run `getuto` first, then follow all commands in the [key import step](/binpkg-setup/#import-key). That step initializes the directory, Portage Local Trust Key, passphrase and `trustdb`.
+Run `getuto` first, then follow all commands in the [key import step](/binpkg-setup/#import-key). That step initializes the directory, Portage Local Trust Key, passphrase and `trustdb`. The passphrase is read from `/etc/portage/gnupg/pass` with `--passphrase-file`; verification runs as the `portage` user, so the `trustdb` must exist beforehand, which the step's final `--check-trustdb` creates.
 
 <!-- anchor:troubleshooting -->
 

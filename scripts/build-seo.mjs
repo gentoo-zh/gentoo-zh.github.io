@@ -2,10 +2,11 @@ import {existsSync, readFileSync, renameSync, rmdirSync, writeFileSync} from 'no
 import {dirname} from 'node:path';
 import {decodeEntities, fileFor, listFiles, refreshTarget} from './lib/html.mjs';
 import {imageMetadata} from 'astro/assets/utils';
-import {ERROR_PAGES, SITEMAP_REDIRECTS} from './lib/url-manifest.mjs';
+import {ERROR_PAGES, FILES_REWRITES, SITEMAP_REDIRECTS} from './lib/url-manifest.mjs';
 import {buildCoverThumbnails} from './lib/cover-thumbnails.mjs';
 import {buildAvatarThumbnails} from './lib/avatar-thumbnails.mjs';
 import {htmlElements, redirectAnchors} from './lib/html-elements.mjs';
+import {MANIFEST, contentHash, previousManifest} from './lib/sitemap-lastmod.mjs';
 
 const DIST = 'dist';
 const ORIGIN = 'https://gentoozh.org';
@@ -24,6 +25,9 @@ for (const path of ERROR_PAGES) {
   }
 }
 const urls = [];
+const previous = await previousManifest();
+const now = new Date().toISOString().replace(/\.\d+Z$/, 'Z');
+const manifest = {};
 // Production matches the percent-encoded request path, wrangler dev the decoded one; emit both forms.
 const redirectRules = (from, to) => [...new Set([from, encodeURI(from)])].map(source => `${source} ${to} 301`);
 const redirects = Object.entries(SITEMAP_REDIRECTS).flatMap(([from, to]) => redirectRules(from, to));
@@ -42,6 +46,7 @@ for (const file of listFiles(DIST).filter(file => file.endsWith('.html')).sort()
     continue;
   }
   const elements = htmlElements(html);
+  let page = html;
   if (!/^\/(?:en\/|zh-tw\/)?$/.test(path)) {
     let output = html;
     for (const element of elements.filter(e => e.name === 'img').reverse()) {
@@ -57,13 +62,20 @@ for (const file of listFiles(DIST).filter(file => file.endsWith('.html')).sort()
       output = output.slice(0, element.start) + output.slice(element.start, element.end).replace(/\s*\/?>(?=$)/, `${attributes}>`) + output.slice(element.end);
     }
     if (output !== html) writeFileSync(fileFor(DIST, file), output);
+    page = output;
   }
   if (elements.some(e => e.name === 'meta' && e.attrs.get('name') === 'robots' && e.attrs.get('content')?.split(/[,\s]+/).includes('noindex'))) continue;
   const canonical = elements.find(e => e.name === 'link' && e.attrs.get('rel') === 'canonical')?.attrs.get('href');
   if (!canonical) throw new Error(`${path}: cannot generate sitemap without canonical`);
   const alternates = elements.filter(e => e.name === 'link' && e.attrs.get('rel') === 'alternate' && e.attrs.has('hreflang'));
-  urls.push(`  <url><loc>${xml(canonical)}</loc>${alternates.map(e => `<xhtml:link rel="alternate" hreflang="${xml(e.attrs.get('hreflang'))}" href="${xml(e.attrs.get('href'))}"/>`).join('')}</url>`);
+  const hash = contentHash(page);
+  manifest[canonical] = {hash, lastmod: previous[canonical]?.hash === hash ? previous[canonical].lastmod : now};
+  urls.push(`  <url><loc>${xml(canonical)}</loc><lastmod>${manifest[canonical].lastmod}</lastmod>${alternates.map(e => `<xhtml:link rel="alternate" hreflang="${xml(e.attrs.get('hreflang'))}" href="${xml(e.attrs.get('href'))}"/>`).join('')}</url>`);
 }
 writeFileSync(`${DIST}/sitemap.xml`, `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join('\n')}\n</urlset>\n`);
-writeFileSync(`${DIST}/_redirects`, `${redirects.join('\n')}\n`);
-console.log(`build:seo: ${urls.length} sitemap URLs, ${redirects.length} permanent redirects`);
+writeFileSync(`${DIST}${MANIFEST}`, `${JSON.stringify(manifest, null, 1)}\n`);
+// Rewrites are dynamic rules, so they follow every static redirect.
+const rewrites = Object.entries(FILES_REWRITES).map(([from, to]) => `${from} ${to} 200`);
+writeFileSync(`${DIST}/_redirects`, `${[...redirects, ...rewrites].join('\n')}\n`);
+const changed = Object.values(manifest).filter(entry => entry.lastmod === now).length;
+console.log(`build:seo: ${urls.length} sitemap URLs (${changed} new or changed), ${redirects.length} permanent redirects`);

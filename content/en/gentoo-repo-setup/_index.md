@@ -32,7 +32,7 @@ $ sudo eselect repository add gentoo git https://github.com/gentoo-mirror/gentoo
 $ sudo emaint sync -r gentoo
 ```
 
-Remove the current Gentoo ebuild repository configuration and local copy, then add the Git repository from the selected mirror. Mirrors can have different synchronization progress; when changing Git mirrors, consider deleting and adding the repository again.
+Remove the current Gentoo ebuild repository configuration and local copy, then add the Git repository from the selected mirror. Mirrors may be out of sync with one another; when changing Git mirrors, consider deleting and adding the repository again.
 
 With CERNET selected, git prints `warning: redirecting to ...`, because CERNET routes the request to the nearest member mirror. The sync itself completes normally.
 
@@ -62,7 +62,7 @@ See [Portage with Git](https://wiki.gentoo.org/wiki/Portage_with_Git) for config
 ## Synchronize the Gentoo ebuild repository with rsync {#rsync-sync}
 
 {{< callout type="warning" >}}
-Most mirrors only offer git / distfiles, not rsync sync. The mirrors below are tested and do list the `gentoo-portage` module.
+Most mirrors offer only Git and distfiles, not rsync. The mirrors below have been tested and list the `gentoo-portage` module.
 {{< /callout >}}
 
 | Mirror | Sync URL |

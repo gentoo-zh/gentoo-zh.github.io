@@ -1,5 +1,6 @@
 // Adapted from the Astryx docsite (components/blog/BlogArticle.tsx, MIT, Meta Platforms, Inc.).
 import * as stylex from '@stylexjs/stylex';
+import {AspectRatio} from '@astryxdesign/core/AspectRatio';
 import {Breadcrumbs, BreadcrumbItem} from '@astryxdesign/core/Breadcrumbs';
 import {Button} from '@astryxdesign/core/Button';
 import {Divider} from '@astryxdesign/core/Divider';
@@ -12,14 +13,16 @@ import {Token} from '@astryxdesign/core/Token';
 import type {PostSummary} from '../../content/posts';
 import type {Locale} from '../../i18n/locales';
 import {routes} from '../../i18n/routes';
+import {tagKey} from '../../i18n/tags';
 import {useMessage} from '../../i18n/useMessage';
 import {PostMarkdown} from '../../markdown/PostMarkdown';
 import {layout} from '../../theme/layout.stylex';
 import {sectionHref, sectionOf} from '../chrome/sections';
 import {LinkCard} from '../LinkCard';
 import {AuthorByline} from './AuthorByline';
+import {PostCover} from './PostCover';
 import css from '../../markdown/MarkdownBody.module.css';
-import {BUTTON, CHIP, GRID, ICON, SPACE} from '../../theme/scale';
+import {BUTTON, CHIP, GRID, ICON, SPACE, TEMPLATE} from '../../theme/scale';
 
 const styles = stylex.create({
   section: {
@@ -27,6 +30,13 @@ const styles = stylex.create({
   },
   tagRow: {
     flexWrap: 'wrap',
+  },
+  cover: {
+    width: '100%',
+    borderRadius: 'var(--radius-container)',
+    overflow: 'hidden',
+    // Covers are transparent; the frame takes the card colour the home cards use.
+    backgroundColor: 'var(--color-home-card)',
   },
 });
 
@@ -50,7 +60,7 @@ export function BlogArticle({locale, post, body, pages, newer = null, older = nu
           <Breadcrumbs data-pagefind-ignore>
             <BreadcrumbItem href={sectionHref(locale, sectionOf('community'))}>{t('gz.nav.community')}</BreadcrumbItem>
             <BreadcrumbItem href={routes.posts(locale)}>{t('gz.nav.posts')}</BreadcrumbItem>
-            {post.tags.length > 0 ? <BreadcrumbItem href={routes.tag(locale, post.tags[0])}>{post.tags[0]}</BreadcrumbItem> : null}
+            {post.tags.length > 0 ? <BreadcrumbItem href={routes.tag(locale, post.tags[0])}>{t(tagKey(post.tags[0]))}</BreadcrumbItem> : null}
           </Breadcrumbs>
           <Heading level={1} type="display-1">
             {post.title}
@@ -64,6 +74,12 @@ export function BlogArticle({locale, post, body, pages, newer = null, older = nu
           <Divider />
         </VStack>
 
+        {post.cover ? (
+          <AspectRatio ratio={TEMPLATE.coverRatio} fit="contain" xstyle={styles.cover}>
+            <PostCover image={post.cover} dark={post.coverDark} decoding="async" />
+          </AspectRatio>
+        ) : null}
+
         <VStack className={css.body}>
           <PostMarkdown locale={locale} pages={pages}>
             {body}
@@ -73,7 +89,7 @@ export function BlogArticle({locale, post, body, pages, newer = null, older = nu
         {post.tags.length > 0 ? (
           <HStack gap={SPACE.hairline} xstyle={styles.tagRow} data-pagefind-ignore>
             {post.tags.map(tag => (
-              <Token key={tag} label={tag} size={CHIP.small} href={routes.tag(locale, tag)} />
+              <Token key={tag} label={t(tagKey(tag))} size={CHIP.small} href={routes.tag(locale, tag)} />
             ))}
           </HStack>
         ) : null}

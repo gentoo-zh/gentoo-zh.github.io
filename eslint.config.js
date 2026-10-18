@@ -26,8 +26,8 @@ const SHARED_IMPORTS = {
 const SCALE_PROPS = '/^(gap|rowGap|columnGap|padding|paddingInline|paddingBlock|paddingBlockStart|paddingBlockEnd|paddingInlineStart|paddingInlineEnd|size)$/';
 /** The same keys inside a spread object literal, plus a grid's minWidth. */
 const SCALE_SPREAD_KEYS = SCALE_PROPS.replace(')$/', '|minWidth)$/');
-const SCALE_OBJECTS = '/^(SPACE|BUTTON|ICON|AVATAR|CHIP|GRID|CARD|STACK|CODE|TEMPLATE)$/';
-const SCALE_MESSAGE = 'Spacing and sizes come from src/theme/scale.ts (SPACE, BUTTON, ICON, AVATAR, CHIP, GRID, CARD, STACK, CODE, TEMPLATE).';
+const SCALE_OBJECTS = '/^(SPACE|BUTTON|ICON|AVATAR|CHIP|GRID|CARD|STACK|CODE|TEMPLATE|TAB)$/';
+const SCALE_MESSAGE = 'Spacing and sizes come from src/theme/scale.ts (SPACE, BUTTON, ICON, AVATAR, CHIP, GRID, CARD, STACK, CODE, TEMPLATE, TAB).';
 
 const LAYERS = {
   // Lower layers never reach up into the page composition.

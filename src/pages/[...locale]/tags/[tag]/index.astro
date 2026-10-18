@@ -5,6 +5,7 @@ import SectionLayout from '../../../../layouts/SectionLayout.astro';
 import {getPosts, groupByTag, summarize, type Post} from '../../../../content/posts';
 import {CATALOGS, LOCALES, type Locale} from '../../../../i18n/locales';
 import {localeParam, routes, tagSlug} from '../../../../i18n/routes';
+import {fillTag, tagKey} from '../../../../i18n/tags';
 import {TagPosts} from '../../../../ui/TagsPage';
 
 export async function getStaticPaths() {
@@ -26,7 +27,8 @@ export async function getStaticPaths() {
 type Props = {locale: Locale; tag: string; posts: Post[]; alternates: Partial<Record<Locale, string>>};
 const {locale, tag, posts, alternates} = Astro.props as Props;
 const path = routes.tag(locale, tag);
+const label = CATALOGS[locale][tagKey(tag)];
 ---
-<SectionLayout locale={locale} title={CATALOGS[locale]['gz.seo.tag.title'].replace('{tag}', tag)} description={CATALOGS[locale]['gz.seo.tag.description'].replace('{tag}', tag)} path={path} alternates={alternates} section="community" current="tags" page={createElement(TagPosts, {locale, tag, posts: posts.map(summarize)})} >
+<SectionLayout locale={locale} title={fillTag(CATALOGS[locale]['gz.seo.tag.title'], label)} description={fillTag(CATALOGS[locale]['gz.seo.tag.description'], label)} path={path} alternates={alternates} section="community" current="tags" page={createElement(TagPosts, {locale, tag, posts: posts.map(summarize)})} >
   <BlogSearch />
 </SectionLayout>

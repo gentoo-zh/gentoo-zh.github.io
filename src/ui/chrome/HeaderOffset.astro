@@ -2,18 +2,27 @@
 /**
  * Adapted from Astryx DocsShell's initialHeaderHeightScript (MIT, Meta Platforms, Inc.).
  * Static AppShell cannot measure its header; publish offsets for sticky sidebars and anchors before paint.
+ * Base.astro loads this in the head: the browser paints the streamed body before an end-of-body script
+ * runs, and the page start's fallback (48px) then dropped the title 12px on phones (60px header).
+ * Animation-frame callbacks run before every paint, so the first frame that has the header publishes it.
  */
 ---
 <script is:inline data-owner="src/ui/chrome/HeaderOffset.astro">
   (function () {
-    var header = document.querySelector('.astryx-app-shell-header');
-    if (header == null) return;
-    var publish = function () {
-      var height = header.getBoundingClientRect().height + 'px';
-      document.documentElement.style.setProperty('--_app-shell-header-height', height);
-      document.documentElement.style.setProperty('--appshell-header-height', height);
+    var attach = function () {
+      var header = document.querySelector('.astryx-app-shell-header');
+      if (header == null) {
+        if (document.readyState === 'loading') requestAnimationFrame(attach);
+        return;
+      }
+      var publish = function () {
+        var height = header.getBoundingClientRect().height + 'px';
+        document.documentElement.style.setProperty('--_app-shell-header-height', height);
+        document.documentElement.style.setProperty('--appshell-header-height', height);
+      };
+      publish();
+      if (typeof ResizeObserver === 'function') new ResizeObserver(publish).observe(header);
     };
-    publish();
-    if (typeof ResizeObserver === 'function') new ResizeObserver(publish).observe(header);
+    requestAnimationFrame(attach);
   })();
 </script>

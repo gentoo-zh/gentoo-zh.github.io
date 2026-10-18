@@ -43,7 +43,7 @@ steps:
       FEATURES="${FEATURES} getbinpkg"
       ```
 quick: |
-      This command runs the three manual steps in order.
+      Run the following commands in order to complete the three manual steps.
 
       ```sh
       $ sudo emerge sec-keys/openpgp-keys-gentoozh

@@ -25,10 +25,10 @@ anchors:
   "signing": "/binpkg-signing/#verification"
   "key-download": "/binpkg-signing/#key-download"
   "q11": "/binpkg-signing/#key-download"
-  "q7": "/packages/#scope"
-  "q10": "/packages/#scope"
-  "package-status": "/packages/#status-help"
-  "q12": "/packages/#status-help"
+  "q7": "/package-status/#scope"
+  "q10": "/package-status/#scope"
+  "package-status": "/package-status/#status-help"
+  "q12": "/package-status/#status-help"
   "mirrors": "/mirrorlist/#list"
   "q8": "/mirrorlist/#list"
   "cernet-redirect": "/mirrorlist/#cernet-redirect"
@@ -51,16 +51,16 @@ questions:
     href: "/distfiles-troubleshooting/#q15"
   - title: "What if a downloaded file does not match the Manifest size or checksum?"
     href: "/distfiles-troubleshooting/#q16"
-  - title: "Should I choose stable or unstable?"
+  - title: "How do I choose between the stable and unstable channels?"
     href: "/binpkg-setup/#channel"
   - title: "Where do I configure binary packages?"
     href: "/binpkg-setup/#setup"
   - title: "Does it work on both OpenRC and systemd?"
     href: "/binpkg-troubleshooting/#q3"
   - title: "Which binary packages does this host publish?"
-    href: "/packages/#scope"
+    href: "/package-status/#scope"
   - title: "What do the statuses in the package list mean?"
-    href: "/packages/#status-help"
+    href: "/package-status/#status-help"
   - title: "How do I verify that a downloaded binary package came from this host unchanged?"
     href: "/binpkg-signing/#verification"
   - title: "How do I get the public signing key without installing the sec-keys package?"
@@ -93,7 +93,7 @@ questions:
 
 ### Where can I get technical support? {#where-to-ask}
 
-The chat channels (Telegram, Matrix, IRC) are listed on the [channels page](/channels/), and the [forum](https://forum.gentoozh.org/) takes questions too. Report overlay bugs at [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues).
+The chat channels (Telegram, Matrix, IRC) are listed on the [channels page](/channels/), and questions can also be posted on the [forum](https://forum.gentoozh.org/). Report overlay bugs at [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues).
 
 ### How can I contribute? {#how-to-contribute}
 

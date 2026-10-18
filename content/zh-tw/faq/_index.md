@@ -25,10 +25,10 @@ anchors:
   "signing": "/binpkg-signing/#verification"
   "key-download": "/binpkg-signing/#key-download"
   "q11": "/binpkg-signing/#key-download"
-  "q7": "/packages/#scope"
-  "q10": "/packages/#scope"
-  "package-status": "/packages/#status-help"
-  "q12": "/packages/#status-help"
+  "q7": "/package-status/#scope"
+  "q10": "/package-status/#scope"
+  "package-status": "/package-status/#status-help"
+  "q12": "/package-status/#status-help"
   "mirrors": "/mirrorlist/#list"
   "q8": "/mirrorlist/#list"
   "cernet-redirect": "/mirrorlist/#cernet-redirect"
@@ -51,16 +51,16 @@ questions:
     href: "/distfiles-troubleshooting/#q15"
   - title: "下載檔案的大小或總和檢查碼與 Manifest 不符，怎麼辦？"
     href: "/distfiles-troubleshooting/#q16"
-  - title: "我該選 stable 還是 unstable？"
+  - title: "如何選擇 stable 與 unstable 頻道？"
     href: "/binpkg-setup/#channel"
   - title: "二進位套件應該在哪裡設定？"
     href: "/binpkg-setup/#setup"
   - title: "OpenRC 和 systemd 都能使用嗎？"
     href: "/binpkg-troubleshooting/#q3"
   - title: "本站提供哪些二進位套件？"
-    href: "/packages/#scope"
+    href: "/package-status/#scope"
   - title: "套件列表中的狀態表示什麼？"
-    href: "/packages/#status-help"
+    href: "/package-status/#status-help"
   - title: "如何驗證下載的二進位套件來自本站且內容未被修改？"
     href: "/binpkg-signing/#verification"
   - title: "不安裝 sec-keys 套件時，如何取得簽章公鑰？"
@@ -71,7 +71,7 @@ questions:
     href: "/binpkg-troubleshooting/#q1"
   - title: "二進位套件是否可能無法在我的 CPU 上執行？"
     href: "/binpkg-troubleshooting/#q4"
-  - title: "有哪些鏡像，分別怎麼設定？"
+  - title: "有哪些鏡像，如何設定？"
     href: "/mirrorlist/#list"
   - title: "使用教育網聯合鏡像站時，為什麼 Git 提示重新導向？"
     href: "/mirrorlist/#cernet-redirect"
@@ -87,13 +87,13 @@ questions:
 
 ### 首次使用 Gentoo 應從何處開始？ {#where-to-start}
 
-- 想完整安裝一遍、理解每個步驟：照 [Gentoo 官方 Handbook（中文）](https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation/zh-cn) 逐步安裝。
-- 想在安裝時讓主控台顯示中文：使用社群的 [CJK 最小安裝映像](/iso/)，其餘步驟與 Handbook 相同。
-- 裝好系統後[加入 gentoo-zh overlay](/overlay/)，安裝官方來源沒有的中文與 CJK 套件。
+- 需要理解完整安裝過程：依 [Gentoo 官方 Handbook（中文）](https://wiki.gentoo.org/wiki/Handbook:AMD64/Full/Installation/zh-cn) 逐步安裝。
+- 需要在安裝環境中顯示中文：使用社群的 [CJK 最小安裝映像](/iso/)，其餘步驟與 Handbook 相同。
+- 系統安裝完成後[加入 gentoo-zh overlay](/overlay/)，以安裝官方來源未收錄的中文與 CJK 套件。
 
 ### 如何尋求技術支援？ {#where-to-ask}
 
-交流管道（Telegram、Matrix、IRC 等）見[交流管道](/channels/)，也可以在[論壇](https://forum.gentoozh.org/)發文。overlay 的缺陷請到 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues) 提交 issue。
+Telegram、Matrix、IRC 等管道見[交流管道](/channels/)，也可以在[論壇](https://forum.gentoozh.org/)發文。overlay 的缺陷請到 [gentoo-zh/overlay](https://github.com/gentoo-zh/overlay/issues) 提交 issue。
 
 ### 如何為社群貢獻？ {#how-to-contribute}
 

@@ -1,10 +1,12 @@
 // Check catalog coverage, ICU formatting and locale-specific strings in built pages.
-import {readFileSync} from 'node:fs';
+import {readdirSync, readFileSync} from 'node:fs';
+import {parseFrontmatter} from 'astro/markdown';
 import {createElement} from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {InternationalizationProvider, useTranslator} from '@astryxdesign/core/i18n';
 import {listFiles, readPage, refreshTarget, report} from './lib/html.mjs';
 import {EXTRA_REDIRECTS} from './lib/url-manifest.mjs';
+import {RENAMED_TAGS} from '../src/i18n/tagRenames.ts';
 
 const LOCALES = {'zh-cn': {tag: 'zh-CN', prefix: ''}, 'zh-tw': {tag: 'zh-TW', prefix: '/zh-tw'}, en: {tag: 'en', prefix: '/en'}};
 const SAMPLE = {site: 'S', page: 'P', tag: 'Gentoo', count: 2, days: 5000, date: '2026-10-16', ms: 120, time: '02:40', pct: 99.9, cny: '1', twd: '2', hkd: '3', approx: 'true', amount: '1', currency: 'USD', period: 'monthly', start: 'A', end: 'B', region: 'us', host: 'H', query: 'Q', name: 'N', repo: 'R', git: 'TUNA', rsync: 'TUNA'};
@@ -29,6 +31,18 @@ for (const path of listFiles('src').map(url => `src${url}`).filter(path => /\.(t
     const matches = keys.filter(key => key.startsWith(prefix));
     if (matches.length === 0) failures.push(`${path}: no messages start with "${prefix}"`);
     matches.forEach(key => used.add(key));
+  }
+}
+// Post tags show `gz.tag.<slug>` (src/i18n/tags.ts); a tag without its message would show the raw slug.
+for (const locale of Object.keys(LOCALES)) {
+  for (const post of readdirSync(`content/${locale}/posts`, {withFileTypes: true}).filter(entry => entry.isDirectory())) {
+    const path = `content/${locale}/posts/${post.name}/index.md`;
+    for (const tag of parseFrontmatter(readFileSync(path, 'utf8')).frontmatter.tags ?? []) {
+      // tagSlug in src/i18n/routes.ts.
+      const key = `gz.tag.${tag.trim().toLowerCase().replace(/\s+/g, '-')}`;
+      if (!keys.includes(key)) failures.push(`${path}: tag "${tag}" has no message ${key}`);
+      used.add(key);
+    }
   }
 }
 for (const key of keys.filter(key => !used.has(key))) failures.push(`unused message "${key}"`);
@@ -69,7 +83,8 @@ const PAGE_TYPES = {
 const OPTIONAL_TYPES = new Set(['page']);
 // Contributor role tags redirect to groups in the library; only baseline tag routes qualify.
 const contributorTags = json('scripts/baseline/p3-contributors.json').pages.filter(page => /^(\/zh-tw|\/en)?\/tags\//.test(page));
-const REDIRECTS = new Set([...Object.keys(json('scripts/baseline/hugo.json').allRedirects), ...EXTRA_REDIRECTS, ...contributorTags]);
+const renamedTags = Object.entries(RENAMED_TAGS).flatMap(([locale, renamed]) => Object.keys(renamed).map(tag => `${LOCALES[locale].prefix}/tags/${tag}/`));
+const REDIRECTS = new Set([...Object.keys(json('scripts/baseline/hugo.json').allRedirects), ...EXTRA_REDIRECTS, ...contributorTags, ...renamedTags]);
 const pages = listFiles('dist').filter(url => url.endsWith('/index.html')).map(url => url.slice(0, -'index.html'.length));
 if (pages.length === 0) failures.push('dist has no pages; run pnpm build first');
 for (const [locale, {tag, prefix}] of Object.entries(LOCALES)) {

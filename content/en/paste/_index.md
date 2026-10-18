@@ -68,13 +68,13 @@ $ gzpaste /var/tmp/portage/app-text/gzpaste-0.1.3/temp/build.log  # a failed bui
 
 | Option | What it does |
 | --- | --- |
-| `-e, --ext EXT` | syntax-highlight language, an extension or filename (see below); omit for no highlighting |
+| `-e, --ext EXT` | syntax highlighting language, given as an extension or filename (see below); omit for no highlighting |
 | `-x, --expires SECS` | expire after SECS seconds |
 | `-b, --burn` | burn after reading (delete on first view) |
 | `-p, --password PW` | encrypt (read with the `wastebin-password` HTTP header) |
 | `-r, --raw` | print the `/raw/` plain-text URL |
 | `-m, --md` | print the `/md/` rendered-Markdown URL |
-| `-o, --owner` | Print the owner token required for deletion |
+| `-o, --owner` | print the owner token required for deletion |
 | `-v, --verbose` | print progress to stderr (URL still on stdout) |
 | `-h, --help` | show help |
 | `-V, --version` | show version |
@@ -82,7 +82,7 @@ $ gzpaste /var/tmp/portage/app-text/gzpaste-0.1.3/temp/build.log  # a failed bui
 
 `gzpaste -h` shows the same.
 
-## Highlight languages (178)
+## Syntax highlighting languages (178)
 
 `-e` takes an extension or filename; the web form lists them all in a dropdown too:
 

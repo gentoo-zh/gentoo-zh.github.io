@@ -2,6 +2,8 @@
 title: "开发者邮箱与论坛发信服务"
 description: "gentoozh.org 为开发者提供 @gentoozh.org 邮箱；OSUOSL 为论坛提供 SMTP 发信服务。"
 date: 2026-10-17
+cover: "cover.webp"
+coverAlt: "由贡献者头像拼成的 gentoo-zh 标志"
 tags: ["announcement", "community"]
 authors:
   - name: Zakk
@@ -10,6 +12,8 @@ authors:
 ---
 
 gentoozh.org 现在为 gentoo-zh 的开发者提供 `@gentoozh.org` 邮箱。需要的话，发邮件到 [zakk@gentoozh.org](mailto:zakk@gentoozh.org)，或在 [Telegram 交流群](https://t.me/gentoo_zh)联系。
+
+开发者邮箱使用 [Purelymail](https://purelymail.com/)，由 Zakk 自费购买。本站不推荐购买。
 
 ## 论坛发信服务
 

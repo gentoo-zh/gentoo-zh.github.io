@@ -5,9 +5,11 @@ import {pagePaths, type PageRouteProps} from '../../../content/pages';
 import {postPaths} from '../../../content/posts';
 import {LANGUAGE_TAG, providerMessages} from '../../../i18n/locales';
 import {routes} from '../../../i18n/routes';
+import LegacyAnchors from '../../../ui/LegacyAnchors.astro';
 import {PackagesIsland} from '../../../ui/download/PackagesIsland';
 import PackagesScript from '../../../ui/download/PackagesScript.astro';
 import {PACKAGES_MESSAGE_KEYS} from '../../../ui/download/packagesData';
+import {LegacyAnchorLinks} from '../../../ui/section/LegacyAnchorLinks';
 import {SectionPage} from '../../../ui/section/SectionPage';
 
 export const getStaticPaths = () => pagePaths('packages');
@@ -18,6 +20,8 @@ const languageTag = LANGUAGE_TAG[locale];
 const messages = Object.fromEntries(
   Object.entries(providerMessages(locale)[languageTag] ?? {}).filter(([key]) => PACKAGES_MESSAGE_KEYS.test(key)),
 );
+// The status help and scope moved to /package-status/; the table's toolbar links it and the plain-text lists.
+const anchors = (page.data.anchors ?? {}) as Record<string, string>;
 
 ---
 <SectionLayout
@@ -28,7 +32,8 @@ const messages = Object.fromEntries(
   alternates={alternates}
   section="download"
   current="packages"
-  page={createElement(SectionPage, {locale, section: 'download', title: page.data.title, description: page.data.description, pages, isDataPage: true, body: `<!-- slot:table -->\n\n${page.body ?? ''}`, slots: {table: createElement(PackagesIsland, {props: {languageTag, messages}})}})}
+  page={createElement(SectionPage, {locale, section: 'download', title: page.data.title, description: page.data.description, pages, isDataPage: true, isTablePage: true, body: `<!-- slot:table -->\n\n${page.body ?? ''}\n\n<!-- slot:legacy -->`, slots: {table: createElement(PackagesIsland, {props: {languageTag, messages, statusHref: routes.page(locale, 'package-status')}}), legacy: createElement(LegacyAnchorLinks, {locale, anchors})}})}
 >
+  <LegacyAnchors locale={locale} anchors={anchors} />
   <PackagesScript />
 </SectionLayout>

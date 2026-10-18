@@ -66,7 +66,6 @@ export interface Section {
 const page = (id: SectionPageId, slug: string, {anchor}: {anchor?: Anchor} = {}): SectionPage =>
   ({id, kind: 'page', slug, anchor});
 const external = (id: SectionPageId, href: (locale: Locale) => string): SectionPage => ({id, kind: 'external', href});
-const distfiles = (path: string, locale: Locale) => `${SITE.distfiles}/${path}?lang=${locale}`;
 
 export const SECTIONS: Section[] = [
   {
@@ -92,7 +91,7 @@ export const SECTIONS: Section[] = [
       page('mirrorlist', 'mirrorlist', {anchor: {'zh-cn': '镜像源', 'zh-tw': '鏡像源', en: 'mirrors'}}),
       page('gentooMirrors', 'gentoo-mirrors'),
       page('packages', 'packages'),
-      external('files', locale => distfiles('files/', locale)),
+      page('files', 'files'),
     ],
   },
   {
@@ -179,7 +178,7 @@ export function services(locale: Locale): Array<{id: ServiceId; href: string}> {
   return [
     {id: 'main', href: routes.home(locale)},
     {id: 'forum', href: SITE.forum},
-    {id: 'distfiles', href: distfiles('', locale)},
+    {id: 'distfiles', href: routes.page(locale, 'files')},
     {id: 'paste', href: SITE.paste},
     {id: 'status', href: routes.page(locale, 'status')},
     {id: 'github', href: SITE.github},

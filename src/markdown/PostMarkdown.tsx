@@ -8,6 +8,7 @@ import {createMarkdownPlugin, type MarkdownPluginEntry} from '@astryxdesign/core
 import {VStack} from '@astryxdesign/core/Stack';
 import {Heading, Text} from '@astryxdesign/core/Text';
 import type {Locale} from '../i18n/locales';
+import {distfilesLink} from '../i18n/distfilesLink';
 import {localizeHref} from '../i18n/routes';
 import {useMessage} from '../i18n/useMessage';
 import {headingAnchors, type AnchorNode} from './headingAnchors';
@@ -56,6 +57,8 @@ export interface PostMarkdownProps {
   /** Existing localized post paths; other page links receive the locale prefix. */
   pages: ReadonlySet<string>;
   children: string;
+  /** Replaces matching inline code, such as status names drawn as the tokens they name; undefined keeps the code. */
+  renderInlineCode?: (text: string) => ReactNode | undefined;
 }
 
 interface Config {
@@ -186,7 +189,7 @@ function createPlugins(config: Config): MarkdownPluginEntry[] {
   ];
 }
 
-function createConfig(locale: Locale, pages: ReadonlySet<string>, source: string): Config {
+function createConfig(locale: Locale, pages: ReadonlySet<string>, source: string, renderInlineCode?: PostMarkdownProps['renderInlineCode']): Config {
   const first = parseMarkdownAst(source).children[0];
   const lead = (first?.type === 'image' ? first.url : first?.type === 'paragraph' && first.children[0]?.type === 'image' ? first.children[0].url : undefined)?.trim();
   const isLocalPage = (path: string) => !/^\/(zh-tw\/|en\/)?posts\//.test(path) || pages.has(path);
@@ -196,18 +199,23 @@ function createConfig(locale: Locale, pages: ReadonlySet<string>, source: string
     components: {
       image: ({src, alt}) => <img src={src} alt={alt} loading={src.trim() === lead ? 'eager' : 'lazy'} decoding="async" {...stylex.props(styles.image)} />,
       code: FencedCode,
-      inlineCode: ({children}) => <Code xstyle={styles.inlineCode}>{children}</Code>,
+      inlineCode: ({children}) => renderInlineCode?.(children) ?? <Code xstyle={styles.inlineCode}>{children}</Code>,
       heading: PostHeading,
       // Underlined because the theme's accent is near-black; inline so CJK punctuation after a link
       // stays on its line instead of wrapping alone.
-      link: ({href, children}) =>
-        EXTERNAL.test(href) ? (
+      // Download-site pages and directories open here; its files stay on that host but read as
+      // part of this site, so they open in place.
+      link: ({href, children}) => {
+        const distfiles = distfilesLink(href);
+        const target = distfiles?.kind === 'page' ? distfiles.path : href;
+        return !distfiles && EXTERNAL.test(href) ? (
           <Link href={href} target="_blank" hasUnderline display="inline">
             {children}
           </Link>
         ) : (
-          <Link href={localizeHref(locale, href, isLocalPage)} hasUnderline display="inline">{children}</Link>
-        ),
+          <Link href={localizeHref(locale, target, isLocalPage)} hasUnderline display="inline">{children}</Link>
+        );
+      },
     },
   };
   config.plugins = createPlugins(config);
@@ -215,6 +223,6 @@ function createConfig(locale: Locale, pages: ReadonlySet<string>, source: string
 }
 
 /** A post body: Astryx Markdown plus the Hugo constructs the posts use. */
-export function PostMarkdown({locale, pages, children}: PostMarkdownProps): ReactNode {
-  return <Body config={createConfig(locale, pages, children)}>{children}</Body>;
+export function PostMarkdown({locale, pages, children, renderInlineCode}: PostMarkdownProps): ReactNode {
+  return <Body config={createConfig(locale, pages, children, renderInlineCode)}>{children}</Body>;
 }

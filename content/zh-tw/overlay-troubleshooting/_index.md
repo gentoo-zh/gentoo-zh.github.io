@@ -7,7 +7,7 @@ description: "處理 gentoo-zh overlay 的同步位址問題。"
 
 ### gentoo-zh overlay 和官方 Portage 樹是什麼關係？ {#overlay-vs-gentoo}
 
-overlay 是疊加在官方 Portage 樹之上的套件來源，存放官方來源沒有的套件：中文輸入法、字型、詞庫，以及跟進新版或加了修補的套件。安裝與測試關鍵字見 [Overlay 設定](/overlay/)。
+overlay 是疊加在官方 Portage 樹之上的套件來源，存放官方來源沒有的套件：中文輸入法、字型、詞庫，以及版本更新或附加修補的套件。安裝與測試關鍵字見 [Overlay 設定](/overlay/)。
 
 ### 舊的 overlay 同步位址還可用嗎？ {#overlay-sync}
 

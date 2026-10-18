@@ -152,27 +152,33 @@ export function ContributorsLibrary({groups}: ContributorsLibraryProps) {
               </ToggleButtonGroup>
             </VStack>
           </StackItem>
-          <DropdownMenu
-            hasChevron={false}
-            button={{
-              label: t('gz.contributors.filterRepo'),
-              tooltip: repo || t('gz.contributors.filterAllRepos'),
-              icon: <Icon icon="funnel" size={ICON.inline} />,
-              isIconOnly: true,
-              size: BUTTON.cta,
-            }}
-            items={[
-              {label: t('gz.contributors.filterAllRepos'), onClick: () => setRepo('')},
-              ...repos.map(value => ({label: value, onClick: () => setRepo(value)})),
-            ]}
-          />
-          <DropdownMenu
-            button={{label: t(`gz.contributors.sort.${sortOrder}`), 'aria-label': t('gz.contributors.sort'), size: BUTTON.cta}}
-            items={[
-              {label: t('gz.contributors.sort.commits'), onClick: () => setSortOrder('commits')},
-              {label: t('gz.contributors.sort.name'), onClick: () => setSortOrder('name')},
-            ]}
-          />
+          {/* Static items keep their width: before OverflowList measures, every role toggle is on the
+              line, and shrinking these buttons then let them widen and jump once the toggles folded. */}
+          <StackItem>
+            <DropdownMenu
+              hasChevron={false}
+              button={{
+                label: t('gz.contributors.filterRepo'),
+                tooltip: repo || t('gz.contributors.filterAllRepos'),
+                icon: <Icon icon="funnel" size={ICON.inline} />,
+                isIconOnly: true,
+                size: BUTTON.cta,
+              }}
+              items={[
+                {label: t('gz.contributors.filterAllRepos'), onClick: () => setRepo('')},
+                ...repos.map(value => ({label: value, onClick: () => setRepo(value)})),
+              ]}
+            />
+          </StackItem>
+          <StackItem>
+            <DropdownMenu
+              button={{label: t(`gz.contributors.sort.${sortOrder}`), 'aria-label': t('gz.contributors.sort'), size: BUTTON.cta}}
+              items={[
+                {label: t('gz.contributors.sort.commits'), onClick: () => setSortOrder('commits')},
+                {label: t('gz.contributors.sort.name'), onClick: () => setSortOrder('name')},
+              ]}
+            />
+          </StackItem>
         </HStack>
       </VStack>
 

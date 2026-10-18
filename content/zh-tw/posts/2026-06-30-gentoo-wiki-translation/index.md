@@ -2,7 +2,7 @@
 title: "如何參與 Gentoo Wiki 的翻譯工作"
 description: "面向中文譯者的 Gentoo Wiki 翻譯入門：前置要求、帳號與翻譯權限申請、翻譯介面用法，以及翻譯規範與中文排版約定。"
 date: 2026-06-30
-tags: ["wiki", "翻譯", "貢獻"]
+tags: ["wiki", "translation", "contributing"]
 authors:
   - name: Mame
     image: /contributors/yangmame/feature.webp

@@ -4,10 +4,8 @@ import '@astryxdesign/core/astryx.css';
 import '../theme/built/gentoo.css';
 import '../markdown/CodeHighlight.css';
 // Self-host Latin fonts because Google Fonts is blocked in mainland China; use system CJK fonts.
-import '@fontsource/figtree/latin-400.css';
-import '@fontsource/figtree/latin-600.css';
-import figtree400 from '@fontsource/figtree/files/figtree-latin-400-normal.woff2?url';
-import figtree600 from '@fontsource/figtree/files/figtree-latin-600-normal.woff2?url';
+// astro.config.ts declares Figtree; <Font> writes its faces and preloads.
+import {Font} from 'astro:assets';
 import {createElement, type ReactElement} from 'react';
 import {LANGUAGE_TAG, navMessages} from '../i18n/locales';
 import {routes} from '../i18n/routes';
@@ -44,14 +42,13 @@ const pageHtml = await renderStatic(createElement(SiteShell, {locale, nav: {html
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="preload" href={figtree400} as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href={figtree600} as="font" type="font/woff2" crossorigin />
+    <Font cssVariable="--font-figtree" preload />
     <ThemeScript />
+    <HeaderOffset />
     <Fragment set:html={headHtml} />
   </head>
   <body>
     <Fragment set:html={pageHtml} />
-    <HeaderOffset />
     <NavScript />
     <!-- The copy-button delegate: any route may render a CodeBlock (landing pages, FAQ, posts). -->
     <CopyCode locale={locale} />

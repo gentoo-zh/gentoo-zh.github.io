@@ -15,6 +15,8 @@ export const SITE = {
   /** The mask takes its color from --color-wordmark without client-side script. */
   wordmark: {mark: '/img/logo-mark.svg', mask: '/img/logo-wordmark-mask.svg'},
   distfiles: 'https://distfiles.gentoozh.org',
+  /** The download site's plain-text root listing; it sends browsers back to /files/. */
+  distfilesListing: 'curl https://distfiles.gentoozh.org/',
   forum: 'https://forum.gentoozh.org/',
   paste: 'https://paste.gentoozh.org/',
   telegramChannel: 'https://telegram.me/gentoocn',

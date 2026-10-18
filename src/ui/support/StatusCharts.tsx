@@ -4,11 +4,8 @@ import {Card} from '@astryxdesign/core/Card';
 import {VStack} from '@astryxdesign/core/Layout';
 import {Text} from '@astryxdesign/core/Text';
 import {SPACE, TEMPLATE} from '../../theme/scale';
-import type {StatusSite, StatusLevel} from './StatusBoard';
+import type {StatusSite} from './StatusBoard';
 
-export const STATUS_STROKE: Record<StatusLevel, string> = {
-  up: 'var(--color-success)', down: 'var(--color-error)', unknown: 'var(--color-text-secondary)',
-};
 const LINE_PROPS = {type: 'linear', strokeLinejoin: 'miter', strokeLinecap: 'butt', isAnimationActive: false} as const;
 const AXIS_TICK = {fontSize: 'var(--font-size-sm)', fill: 'var(--color-text-secondary)'};
 const GRID_STROKE = 'var(--color-border)';

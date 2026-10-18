@@ -1,14 +1,22 @@
 // Load the dialog and Pagefind on first open; check:budget accounts for them as on-demand code.
-import {lazy, Suspense, useEffect, useRef, useState, type LazyExoticComponent} from 'react';
+import {lazy, Suspense, useCallback, useEffect, useRef, useState, type LazyExoticComponent} from 'react';
 import {Button} from '@astryxdesign/core/Button';
 import {Icon} from '@astryxdesign/core/Icon';
 import {useMessage} from '../../i18n/useMessage';
+import {SearchDialogFallback} from './SearchLoading';
 import {useSearchShortcut} from './useSearchShortcut';
 
 export function SearchButton({isHydrated}: {isHydrated: boolean}) {
   const [SearchDialog, setSearchDialog] = useState<LazyExoticComponent<typeof import('./SearchDialog').default> | null>(null);
   const t = useMessage();
   const [isOpen, setIsOpen] = useState(false);
+  // The palette skips its entry animation when it replaces the open placeholder.
+  const [isReplacing, setIsReplacing] = useState(false);
+  const showFallback = useCallback(() => setIsReplacing(true), []);
+  const change = (next: boolean) => {
+    setIsOpen(next);
+    if (!next) setIsReplacing(false);
+  };
   const opener = useRef<HTMLElement | null>(null);
   useEffect(() => {
     if (isOpen || opener.current == null) return;
@@ -33,8 +41,8 @@ export function SearchButton({isHydrated}: {isHydrated: boolean}) {
     <>
       <Button isDisabled={!isHydrated} label={t('gz.search.open')} tooltip={t('gz.search.shortcut')} variant="ghost" isIconOnly icon={<Icon icon="search" color="inherit" />} data-search-open />
       {SearchDialog != null ? (
-        <Suspense fallback={null}>
-          <SearchDialog isOpen={isOpen} onOpenChange={setIsOpen} />
+        <Suspense fallback={<SearchDialogFallback isOpen={isOpen} onOpenChange={change} onShow={showFallback} />}>
+          <SearchDialog isOpen={isOpen} onOpenChange={change} isReplacing={isReplacing} />
         </Suspense>
       ) : null}
     </>

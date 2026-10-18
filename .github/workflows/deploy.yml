@@ -33,8 +33,9 @@ jobs:
         uses: pnpm/action-setup@41ff72655975bd51cab0327fa583b6e92b6d3061 # v4.2.0; version from packageManager
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      # Every build refreshes the count; when GitHub does not answer, the committed value stands.
       - name: Refresh overlay statistics
-        if: github.event_name != 'push'
+        continue-on-error: true
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: node scripts/update-overlay-stats.mjs

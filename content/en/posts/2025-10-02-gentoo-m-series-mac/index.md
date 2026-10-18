@@ -337,7 +337,7 @@ Once the script finishes, skip to 6.3 to set up fstab.
 
 ### 6.2 Method B: Manual Install
 
-Set up Portage and the Asahi overlay (synced via git):
+Set up Portage and the Asahi overlay (synced via Git):
 
 ```bash
 # emerge --sync
@@ -446,7 +446,7 @@ UUID=<root-uuid>  /      btrfs  defaults  0 1
 UUID=<boot-uuid>  /boot  vfat   defaults  0 2
 ```
 
-### 6.4 Configure LUKS (Encrypted Users Only)
+### 6.4 Configure LUKS (Encrypted Installations Only) {#64-configure-luks-encrypted-users-only}
 
 Enable systemd's cryptsetup support:
 
@@ -469,7 +469,7 @@ GRUB_CMDLINE_LINUX="rd.luks.name=<LUKS-UUID>=gentoo-root root=/dev/mapper/gentoo
 ```
 
 - `rd.luks.name=<LUKS-UUID>=gentoo-root`: unlock using the LUKS container UUID (`blkid /dev/nvme0n1p6`) and name the mapper `gentoo-root`, to match crypttab / luksClose
-- `root=/dev/mapper/gentoo-root`: the decrypted btrfs root (so you don't have to look up the filesystem UUID again)
+- `root=/dev/mapper/gentoo-root`: the decrypted Btrfs root (so you don't have to look up the filesystem UUID again)
 - `rd.luks.allow-discards`: lets SSD TRIM pass through the encryption layer (a security trade-off)
 
 dracut configuration:
@@ -556,7 +556,7 @@ First switch to a suitable profile (the numbers vary between systems, so go by t
 #   default/linux/arm64/23.0/desktop (generic, Xfce, etc.)
 ```
 
-Pick the number that fits. The examples below (use the actual numbers from your own `eselect profile list`):
+Pick the profile that fits. The examples below use profile names; check them against your own `eselect profile list` output:
 
 ```bash
 # Pick the number for the desktop/plasma/systemd line, for example:
