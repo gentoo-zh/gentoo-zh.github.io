@@ -129,7 +129,8 @@ export function HomePage({locale, posts, contributors, contributorCount, commits
     <Button label={t('gz.homeF.liveIso')} variant="secondary" size={BUTTON.cta} href={sectionHref(locale, sectionOf('download'))} xstyle={s.button} />
   </Grid>;
   const group = contributors.slice(0, images.group.length).map((person, index) => ({...person, src: images.group[index]!}));
-  const avatarGroup = <AvatarGroup size={AVATAR.card}>
+  // Far below the fold: build-seo.mjs lazy-loads these images and drops their preloads.
+  const avatarGroup = <AvatarGroup size={AVATAR.card} data-below-fold>
     {group.map(person => <Avatar key={person.href} src={person.src} name={person.name} xstyle={s.avatar} />)}
     <AvatarGroupOverflow count={Math.max(0, contributorCount - group.length)} xstyle={[s.avatar, s.overflowCount]} />
   </AvatarGroup>;

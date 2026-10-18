@@ -69,6 +69,39 @@ async function source(dist, url) {
 
 const replaceTag = (html, image, tag) => html.slice(0, image.start) + tag + html.slice(image.end);
 const dropAttribute = (tag, name) => tag.replace(new RegExp(`\\s+${name}="[^"]*"`, 'gi'), '');
+/** An opening tag at the start of the string, with quoted `>` allowed as in html-elements.mjs. */
+const OPEN_TAG = /^<[a-z][\w:-]*\b(?:[^"'<>]|"[^"]*"|'[^']*')*>/i;
+
+/**
+ * Defer images a component marks as below the fold. React preloads every `<img>` that is not `loading="lazy"`, and
+ * components such as Astryx `Avatar` expose no `loading` prop, so the wrapper carries `data-below-fold` instead:
+ * each `<img>` inside gets `loading="lazy" decoding="async"`, and preloads of those images are dropped unless an eager
+ * `<img>` elsewhere on the page uses the same source. The mark itself is removed.
+ */
+export function deferBelowFold(html) {
+  const elements = htmlElements(html);
+  const marks = elements.filter(e => e.attrs.has('data-below-fold'));
+  if (!marks.length) return html;
+  const inside = e => marks.some(mark => e.start > mark.start && e.end <= mark.end);
+  const images = elements.filter(e => e.name === 'img');
+  const deferred = new Set(images.filter(inside).map(e => e.attrs.get('src')));
+  const eager = new Set(images.filter(e => !inside(e) && e.attrs.get('loading') !== 'lazy').map(e => e.attrs.get('src')));
+  const edits = [
+    ...marks.map(mark => {
+      const open = html.slice(mark.start).match(OPEN_TAG)[0];
+      return {start: mark.start, end: mark.start + open.length, tag: open.replace(/\s+data-below-fold(?:="[^"]*")?/i, '')};
+    }),
+    ...images.filter(inside).map(image => {
+      let tag = html.slice(image.start, image.end);
+      for (const [name, value] of [['loading', 'lazy'], ['decoding', 'async']]) tag = dropAttribute(tag, name).replace(/\s*\/?>$/, ` ${name}="${value}">`);
+      return {start: image.start, end: image.end, tag};
+    }),
+    ...elements.filter(e => e.name === 'link' && e.attrs.get('rel') === 'preload' && e.attrs.get('as') === 'image' && deferred.has(e.attrs.get('href')) && !eager.has(e.attrs.get('href')))
+      .map(link => ({start: link.start, end: link.end, tag: ''})),
+  ];
+  for (const edit of edits.sort((a, b) => b.start - a.start)) html = replaceTag(html, edit, edit.tag);
+  return html;
+}
 
 /**
  * Serve images at their displayed size. Two marks, both written by components and consumed here:

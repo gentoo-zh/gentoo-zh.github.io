@@ -3,7 +3,7 @@ import {dirname} from 'node:path';
 import {decodeEntities, fileFor, listFiles, refreshTarget} from './lib/html.mjs';
 import {imageMetadata} from 'astro/assets/utils';
 import {ERROR_PAGES, FILES_REWRITES, SITEMAP_REDIRECTS} from './lib/url-manifest.mjs';
-import {buildImageVariants} from './lib/image-variants.mjs';
+import {buildImageVariants, deferBelowFold} from './lib/image-variants.mjs';
 import {buildAvatarThumbnails} from './lib/avatar-thumbnails.mjs';
 import {htmlElements, redirectAnchors} from './lib/html-elements.mjs';
 import {MANIFEST, contentHash, previousManifest} from './lib/sitemap-lastmod.mjs';
@@ -34,7 +34,7 @@ const redirects = Object.entries(SITEMAP_REDIRECTS).flatMap(([from, to]) => redi
 for (const file of listFiles(DIST).filter(file => file.endsWith('.html')).sort()) {
   const original = readFileSync(fileFor(DIST, file), 'utf8');
   const path = file.replace(/index\.html$/, '');
-  const html = await buildImageVariants(original, DIST, path);
+  const html = await buildImageVariants(deferBelowFold(original), DIST, path);
   await buildAvatarThumbnails(html, DIST);
   if (html !== original) writeFileSync(fileFor(DIST, file), html);
   const target = refreshTarget(html);

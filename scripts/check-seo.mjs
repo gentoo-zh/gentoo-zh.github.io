@@ -56,6 +56,14 @@ for (const file of listFiles(DIST).filter(file => file.endsWith('.html'))) {
   for (const link of elements.filter(e => e.name === 'link' && e.attrs.get('rel') === 'preload' && e.attrs.get('as') === 'image' && e.attrs.has('imagesizes') && !e.attrs.has('imagesrcset'))) {
     failures.push(`${path}: image preload ${link.attrs.get('href')} has sizes but no srcset, so it fetches the full-size source`);
   }
+  // A preload of an image that only lazy `<img>` use competes with the LCP image for nothing (see deferBelowFold).
+  const eagerImages = new Set(elements.filter(e => e.name === 'img' && e.attrs.get('loading') !== 'lazy').map(e => e.attrs.get('src')));
+  for (const link of elements.filter(e => e.name === 'link' && e.attrs.get('rel') === 'preload' && e.attrs.get('as') === 'image' && !eagerImages.has(e.attrs.get('href')))) {
+    if (elements.some(e => e.name === 'img' && e.attrs.get('src') === link.attrs.get('href'))) failures.push(`${path}: image preload ${link.attrs.get('href')} targets a lazy image`);
+  }
+  // The contributor avatars sit far below the fold on the home page (data-below-fold in HomePage.tsx).
+  if (/^\/(?:en\/|zh-tw\/)?$/.test(path) && elements.some(e => e.name === 'img' && e.attrs.get('src')?.startsWith('/home/avatar.') && e.attrs.get('loading') !== 'lazy')) failures.push(`${path}: contributor avatars must load lazily`);
+  if (elements.some(e => e.attrs.has('data-below-fold'))) failures.push(`${path}: data-below-fold left in the output`);
   for (const image of elements.filter(e => e.name === 'img')) {
     // Home images fill boxes their styles size (AspectRatio, the sponsor row), so they need no dimensions.
     if (!/^\/(?:en\/|zh-tw\/)?$/.test(path) && !['width', 'height'].every(key => Number(image.attrs.get(key)) > 0)) failures.push(`${path}: missing image dimensions for ${image.attrs.get('src')}`);
