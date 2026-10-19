@@ -42,6 +42,9 @@ const pageHtml = await renderStatic(createElement(SiteShell, {locale, nav: {html
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- The site has its own light and dark themes that follow the OS: keep Dark Reader and the browser's forced dark off it. -->
+    <meta name="color-scheme" content="light dark" />
+    <meta name="darkreader-lock" />
     <Font cssVariable="--font-figtree" preload />
     <ThemeScript />
     <HeaderOffset />
