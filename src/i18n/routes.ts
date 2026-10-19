@@ -1,4 +1,4 @@
-import {DEFAULT_LOCALE, LOCALES, type Locale} from './locales';
+import {DEFAULT_LOCALE, LOCALES, type Locale} from './localeCodes.ts';
 
 /** The one place that knows how a locale maps to a URL prefix: zh-cn sits at the root. */
 export function localePrefix(locale: Locale): string {

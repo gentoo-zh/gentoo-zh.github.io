@@ -174,3 +174,65 @@ test.describe('contributors roles at 390 px', () => {
     await expect(page.locator(`${island} [aria-haspopup]:visible`).first()).toBeFocused();
   });
 });
+
+test.describe('language menu', () => {
+  // The menu writes the cookie that the Worker reads on the next entry (src/worker/language.ts).
+  const picked = async (page: Page) => (await page.context().cookies()).find(({name}) => name === 'gz-lang')?.value;
+  const trigger = (page: Page) => page.locator('[data-nav-control="language"]:visible');
+
+  // Headless Chromium reports a mouseover at (0, 0), over the nav, as the page lays out; it would start
+  // the nav before the press, so it is dropped as in nav.spec.ts.
+  test.beforeEach(async ({page}) => {
+    await page.addInitScript(() => {
+      for (const type of ['pointerover', 'mouseover', 'pointerenter', 'mouseenter', 'pointermove', 'mousemove']) {
+        window.addEventListener(type, event => {
+          const {clientX, clientY} = event as MouseEvent;
+          if (clientX === 0 && clientY === 0) event.stopImmediatePropagation();
+        }, {capture: true});
+      }
+    });
+  });
+
+  test('a plain click on the stand-in is held to open the menu and picks nothing', async ({page}) => {
+    const held = await holdLateScripts(page);
+    await page.goto('/');
+    held.loaded();
+    await trigger(page).click();
+    await expect.poll(() => hasMark(page, 'nav', 'start')).toBe(true);
+    expect(await picked(page)).toBeUndefined();
+    held.release();
+    await live(page, 'nav');
+    await expect(page.locator('[role="menu"]:visible')).toBeVisible();
+    expect(await picked(page)).toBeUndefined();
+  });
+
+  for (const {name, options} of [
+    {name: 'modified', options: {modifiers: ['ControlOrMeta' as const]}},
+    {name: 'middle', options: {button: 'middle' as const}},
+  ]) {
+    test(`a ${name} click on the stand-in picks the language it opens`, async ({page, context}) => {
+      const held = await holdLateScripts(page);
+      await page.goto('/');
+      held.loaded();
+      await expect(trigger(page)).toHaveAttribute('href', '/zh-tw/');
+      const [opened] = await Promise.all([context.waitForEvent('page'), trigger(page).click(options)]);
+      await opened.waitForURL(/\/zh-tw\/$/);
+      expect(await hasMark(page, 'nav', 'ready')).toBe(false);
+      expect(await picked(page)).toBe('zh-tw');
+    });
+  }
+
+  for (const {from, item, to, locale} of [
+    {from: '/en/', item: '简体中文', to: '/', locale: 'zh-cn'},
+    {from: '/', item: 'English', to: '/en/', locale: 'en'},
+  ]) {
+    test(`picking ${item} on ${from} remembers ${locale}`, async ({page}) => {
+      await page.goto(from);
+      await trigger(page).click();
+      await live(page, 'nav');
+      await page.getByRole('menuitem', {name: item}).click();
+      await page.waitForURL(url => url.pathname === to);
+      expect(await picked(page)).toBe(locale);
+    });
+  }
+});

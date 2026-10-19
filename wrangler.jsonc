@@ -6,9 +6,13 @@
     { "pattern": "gentoozh.org", "custom_domain": true },
     { "pattern": "web.gentoozh.org", "custom_domain": true }
   ],
+  "main": "./src/worker/index.ts",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "html_handling": "auto-trailing-slash"
+    "html_handling": "auto-trailing-slash",
+    // Pages go through the Worker for the language redirect; folders of files never do.
+    "run_worker_first": ["/*", "!/_astro/*", "!/pagefind/*", "!/authors/*", "!/brand/*", "!/home/*", "!/img/*"]
   }
 }

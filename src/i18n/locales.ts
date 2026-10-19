@@ -3,18 +3,14 @@ import astryxZhTW from '@astryxdesign/core/locales/zh-TW.generated.js';
 import en from './en.json';
 import zhCN from './zh-cn.json';
 import zhTW from './zh-tw.json';
+import {LANGUAGE_TAG, type Locale} from './localeCodes.ts';
 
-export const LOCALES = ['zh-cn', 'zh-tw', 'en'] as const;
-export type Locale = (typeof LOCALES)[number];
-export const DEFAULT_LOCALE: Locale = 'zh-cn';
+export {DEFAULT_LOCALE, LANGUAGE_TAG, LOCALES, type Locale} from './localeCodes.ts';
 
 export type MessageKey = keyof typeof zhCN;
 export type Catalog = Record<MessageKey, string>;
 
 export const CATALOGS: Record<Locale, Catalog> = {'zh-cn': zhCN, 'zh-tw': zhTW, en};
-
-/** BCP 47 tag used for `<html lang>`, feeds, and Astryx's catalogs. */
-export const LANGUAGE_TAG: Record<Locale, string> = {'zh-cn': 'zh-CN', 'zh-tw': 'zh-TW', en: 'en'};
 
 /** Astryx ships `en` built in; the Chinese catalogs are merged under the site catalog. */
 const ASTRYX_CATALOGS: Partial<Record<Locale, Record<string, string>>> = {

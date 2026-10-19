@@ -26,30 +26,32 @@ const locale = path => new RegExp(`^(\\/zh-tw|\\/en)?${path}$`);
 // Startup rose about 300 B on every type, and 520 B on contributors, when held input became an ordered
 // queue with native fallbacks for links, focus tracking for text fields, and contributors' role toggles
 // replayed by category (`islands/intent.ts`, `contributors/roles.ts`).
+// Startup rose 114 B on every type (`beforeLoad` +200 B) when the boot script began remembering a
+// language picked from the menu (`chrome/languageChoice.ts`).
 export const PAGE_TYPES = [
   // The board and its history render from the status API; Recharts stays lazy. `beforeLoad` is the startup
   // closure plus the board's (React and the navigation chunk included); how much of it a browser requests
   // before `load` varies from run to run (90-184 KB measured).
   // status, mirrorlist and packages: +100 B when `visible` began waiting for `load` (2026-10-18).
-  {name: 'status', route: locale('/status/'), sample: '/status/', startup: 5_800, beforeLoad: 185_700, total: 277_700},
+  {name: 'status', route: locale('/status/'), sample: '/status/', startup: 5_900, beforeLoad: 185_900, total: 277_800},
   // Home renders statically; the live counts and the status badge add their boot modules.
-  {name: 'home', route: locale('/'), sample: '/', startup: 4_500, total: 147_900},
+  {name: 'home', route: locale('/'), sample: '/', startup: 4_600, total: 147_900},
   // Mirror health updates and legacy fragment resolution extend the section scripts.
-  {name: 'mirrorlist', route: locale('/mirrorlist/'), sample: '/mirrorlist/', startup: 5_200, total: 150_200},
+  {name: 'mirrorlist', route: locale('/mirrorlist/'), sample: '/mirrorlist/', startup: 5_300, total: 150_200},
   // A sortable, filterable table with the dependency view and its search controls.
-  {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_300, total: 235_600},
+  {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_400, total: 235_600},
   // The listing renders from distfiles' `/_ls/`; `beforeLoad` is the startup closure plus the browser's.
-  {name: 'files', route: locale('/files/'), sample: '/files/', startup: 5_800, beforeLoad: 161_900, total: 165_600},
+  {name: 'files', route: locale('/files/'), sample: '/files/', startup: 6_000, beforeLoad: 162_100, total: 165_600},
   // Setup guides add mirror/channel/sudo controls, pane switching and code rewriting.
-  {name: 'guide', route: locale('/(?:overlay|binpkg-setup|distfiles-setup|gentoo-(?:repo|distfiles|binpkg|prefix)-setup)/'), sample: '/overlay/', startup: 5_800, total: 171_500},
+  {name: 'guide', route: locale('/(?:overlay|binpkg-setup|distfiles-setup|gentoo-(?:repo|distfiles|binpkg|prefix)-setup)/'), sample: '/overlay/', startup: 6_000, total: 171_500},
   // Contributor lists hydrate filters and cards; profiles share this route family's budget.
-  {name: 'contributors', route: locale('/contributors/(?:[^/]+/)?'), sample: '/contributors/', startup: 5_500, total: 164_600},
+  {name: 'contributors', route: locale('/contributors/(?:[^/]+/)?'), sample: '/contributors/', startup: 5_600, total: 164_600},
   // The cost explanation popovers.
-  {name: 'costs', route: locale('/costs/'), sample: '/costs/', startup: 5_200, total: 153_500},
+  {name: 'costs', route: locale('/costs/'), sample: '/costs/', startup: 5_300, total: 153_600},
   // Posts need the copy delegate without the section outline.
-  {name: 'post', route: locale('/posts/[^/]+/'), sample: '/posts/2013-02-05-gentoo-zh-community-has-been-founded/', startup: 3_700, total: 147_100},
+  {name: 'post', route: locale('/posts/[^/]+/'), sample: '/posts/2013-02-05-gentoo-zh-community-has-been-founded/', startup: 3_800, total: 147_100},
   // Section pages and the rest: the sidebar boot, the outline spy and the copy delegate.
-  {name: 'section', route: /.*/, sample: '/faq/', startup: 4_700, total: 149_500},
+  {name: 'section', route: /.*/, sample: '/faq/', startup: 4_900, total: 149_600},
 ];
 
 /** Redirect pages (Redirect.astro) have no site frame. */
