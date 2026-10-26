@@ -25,6 +25,8 @@ description: "網站與社群服務的重要變更。"
 
 [在 Apple Silicon Mac 上安裝 Gentoo Linux](/zh-tw/posts/2025-10-02-gentoo-m-series-mac/) 依 MacBook Air M2 的實際安裝過程重寫：改用經實機驗證的 20260827 版 Live ISO（20261006 版無法啟動），列出 Asahi 安裝程式與 Recovery 的完整畫面，Stage3 改為下載最新版本，`make.conf` 範例改用台灣鏡像。
 
+教學後半同樣依實機補齊：Live 環境用 `net-setup` 連 Wi-Fi，加密根分割區的 fstab、crypttab、dracut 與 GRUB 設定改用實際輸出，安裝後配置改以 KDE 為例，涵蓋 Rime 輸入法、音訊、睡眠、瀏海與自訂核心。教學改為分頁閱讀，每節一頁，舊連結自動轉到對應頁面。
+
 移除轉載文章〈Gentoo Linux with ZFS〉，原網址轉向文章列表。
 
 ## 2026-10 網站改版 {#redesign}
