@@ -46,8 +46,19 @@ $ pnpm dev        # 本地预览
 
 - 新文章放在 `content/<语言>/posts/<日期>-<名称>/index.md`，图片放在同一目录，正文用相对路径引用。
 - 简体（`zh-cn`）、正体（`zh-tw`）、英文（`en`）三个版本各自撰写，不做自动转换；没有译文的语言可以先缺。
-- front matter 只接受 `title`、`description`、`date`、`lastmod`、`tags`、`authors`（`name`、`image`、`link`）、`aliases`、`featured`、`image`、`cover`、`summary`，拼错字段时构建失败。
+- front matter 只接受 `title`、`description`、`date`、`lastmod`、`tags`、`authors`（`name`、`image`、`link`）、`aliases`、`featured`、`image`、`cover`、`summary`、`paged`，拼错字段时构建失败。
 - 可用的短代码：`callout`（`type` 为 `info`、`warning` 或 `error`）与 `details`。
+
+长篇教程可以分页：在 front matter 加 `paged`，每个 `## N.` 标题各成一页，`## 1.` 之前的内容留在总览页。三个语言版本的节号必须一致。不分组时写 `paged: true`；`groups` 把侧栏目录分组，`from` 是该组第一节的编号：
+
+```yaml
+paged:
+  groups:
+    - title: 安装
+      from: 1
+    - title: 安装后
+      from: 8
+```
 
 首页显示最新的三篇文章。
 

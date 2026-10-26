@@ -21,6 +21,15 @@ export const routes = {
   page: (locale: Locale, slug: string) => `${localePrefix(locale)}/${slug}/`,
 };
 
+/**
+ * One page of a post read in pages (front matter `paged`): 0 is the overview at the post's own address, a
+ * section number its page. Kept out of `routes`, which the navigation bundle carries whole, so only pages
+ * that link them ship it.
+ */
+export function chapterRoute(locale: Locale, slug: string, page: number): string {
+  return page === 0 ? routes.post(locale, slug) : `${routes.post(locale, slug)}${page}/`;
+}
+
 /** Value of the `[...locale]` rest parameter: undefined renders at the root. */
 export function localeParam(locale: Locale): string | undefined {
   return locale === DEFAULT_LOCALE ? undefined : locale;

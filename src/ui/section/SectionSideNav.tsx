@@ -30,10 +30,10 @@ const styles = stylex.create({
 });
 
 // The fixed-width frame stays static; only its collapsible groups hydrate.
-export function SectionSideNav({children}: {children: ReactNode}) {
+export function SectionSideNav({label, children}: {/** Defaults to the site navigation's name. */ label?: string; children: ReactNode}) {
   const t = useMessage();
   return (
-    <SideNav aria-label={t('gz.nav.label')} xstyle={styles.sideNav}>
+    <SideNav aria-label={label ?? t('gz.nav.label')} xstyle={styles.sideNav}>
       <div {...stylex.props(styles.scroll)}>{children}</div>
     </SideNav>
   );

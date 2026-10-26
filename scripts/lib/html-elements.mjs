@@ -39,6 +39,16 @@ export function htmlElements(html) {
   return elements;
 }
 
+/** The fragment map of src/ui/LegacyAnchors.astro, which sends renamed or moved heading ids on in the browser. */
+export function legacyAnchors(html) {
+  if (!html.includes('data-owner="src/ui/LegacyAnchors.astro"')) return undefined;
+  const script = htmlElements(html).find(e => e.name === 'script' && e.attrs.get('data-owner') === 'src/ui/LegacyAnchors.astro');
+  // define:vars writes the map as the first statement of the inline script.
+  const json = script?.content.match(/^\(function\(\)\{const anchors = (\{.*?\});\n/)?.[1];
+  if (json == null) throw new Error('legacyAnchors: the LegacyAnchors script no longer starts with its map');
+  return JSON.parse(json);
+}
+
 /** The fragment map that requires a redirect to run in the browser instead of an HTTP 301. */
 export function redirectAnchors(html) {
   if (!html.includes('data-redirect-anchors=')) return undefined;

@@ -74,6 +74,7 @@ const PAGE_TYPES = {
   home: /^\/$/,
   list: /^\/posts\/$/,
   post: /^\/posts\/[^/]+\/$/,
+  chapter: /^\/posts\/[^/]+\/\d+\/$/,
   tags: /^\/tags\/$/,
   tag: /^\/tags\/[^/]+\/$/,
   section: /^\/(docs|download|community|support|about)\/$/,

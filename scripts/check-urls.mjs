@@ -3,7 +3,7 @@ import {existsSync, readdirSync, readFileSync} from 'node:fs';
 import {parseFrontmatter} from 'astro/markdown';
 import {decodeEntities, fileFor, ids, listFiles, parseFeed, readPage, refreshTarget, report} from './lib/html.mjs';
 import {CURRENT_PAGES, FILES_REWRITES, SITEMAP_REDIRECTS, EXTRA_REDIRECTS, FRAGMENT_REDIRECTS, PAGE_SLUGS, PROMOTED_REDIRECTS, slugPaths} from './lib/url-manifest.mjs';
-import {redirectAnchors} from './lib/html-elements.mjs';
+import {legacyAnchors, redirectAnchors} from './lib/html-elements.mjs';
 import {RETIRED_REDIRECTS} from './lib/retired-posts.mjs';
 
 const DIST = 'dist';
@@ -150,6 +150,7 @@ for (const [path, target] of Object.entries(RETIRED_REDIRECTS)) {
 }
 
 // New headings are allowed; existing heading IDs remain valid link targets, except on retired posts.
+const historicalIds = new Map();
 for (const page of new Set([...postPages, ...Object.keys(baseline.headings)])) {
   if (Object.hasOwn(RETIRED_REDIRECTS, page)) continue;
   const expectedIds = baseline.headings[page] ?? [];
@@ -165,12 +166,19 @@ for (const page of new Set([...postPages, ...Object.keys(baseline.headings)])) {
       failures.push(`${page}#${own[0]}: heading has no permalink to itself`);
     }
   }
-  const missing = expectedIds.filter(id => !actualIds.includes(id));
-  if (missing.length) failures.push(`${page}: missing historical heading ids: ${missing.join(', ')}`);
+  historicalIds.set(page, expectedIds.filter(id => !actualIds.includes(id)));
 }
 
 const pages = listFiles(DIST).filter(url => url.endsWith('/index.html'));
 const idsByPage = new Map(pages.map(url => [url.slice(0, -'index.html'.length), ids(readFileSync(fileFor(DIST, url), 'utf8'))]));
+// A paged post's overview sends the ids that moved to its section pages on in the browser through a
+// LegacyAnchors map; those ids resolve through it like a redirect page's fragments. Other pages' maps
+// (FAQ, overlay) predate this check and are not read.
+for (const url of pages.filter(url => /^\/(?:zh-tw\/|en\/)?posts\//.test(url))) {
+  const html = readFileSync(fileFor(DIST, url), 'utf8');
+  const anchors = legacyAnchors(html);
+  if (anchors) fragmentMaps.set(url.slice(0, -'index.html'.length), anchors);
+}
 
 function fragmentExists(path, id) {
   const anchors = fragmentMaps.get(path);
@@ -179,6 +187,11 @@ function fragmentExists(path, id) {
     return target.origin === ORIGIN && idsByPage.get(decodeURIComponent(target.pathname))?.includes(decodeURIComponent(target.hash.slice(1)));
   }
   return idsByPage.get(path)?.includes(id);
+}
+
+for (const [page, absent] of historicalIds) {
+  const missing = absent.filter(id => !fragmentExists(page, id));
+  if (missing.length) failures.push(`${page}: missing historical heading ids: ${missing.join(', ')}`);
 }
 
 for (const [path, anchors] of fragmentMaps) {

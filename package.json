@@ -16,6 +16,7 @@
     "check:theme": "astryx theme build src/theme/gentoo.ts --out src/theme/built/gentoo.css --check",
     "check:content-parity": "node --experimental-strip-types scripts/check-content-parity.mjs",
     "check:code": "node --experimental-strip-types scripts/check-code.mjs",
+    "check:markdown": "node scripts/check-markdown.mjs",
     "check:worker": "node --experimental-strip-types scripts/check-worker.mjs",
     "check:data": "node --experimental-strip-types scripts/check-data.mjs",
     "check:contributors": "node scripts/check-contributors.mjs",
@@ -32,7 +33,7 @@
     "test:islands": "playwright test --project=islands",
     "test:site": "playwright test --project=site",
     "check:runtime": "playwright test --project=runtime",
-    "check": "pnpm typecheck && pnpm check:theme && pnpm check:code && pnpm check:worker && pnpm check:data && pnpm check:contributors && pnpm check:home-images && pnpm check:ui && pnpm check:no-convert && pnpm test:islands && pnpm build && pnpm check:stylex && pnpm check:content-parity && pnpm check:i18n && pnpm check:urls && pnpm check:budget && pnpm check:search && pnpm check:headers && pnpm check:seo && pnpm test:site && pnpm check:runtime",
+    "check": "pnpm typecheck && pnpm check:theme && pnpm check:code && pnpm check:markdown && pnpm check:worker && pnpm check:data && pnpm check:contributors && pnpm check:home-images && pnpm check:ui && pnpm check:no-convert && pnpm test:islands && pnpm build && pnpm check:stylex && pnpm check:content-parity && pnpm check:i18n && pnpm check:urls && pnpm check:budget && pnpm check:search && pnpm check:headers && pnpm check:seo && pnpm test:site && pnpm check:runtime",
     "check:seo": "node scripts/check-seo.mjs"
   },
   "dependencies": {

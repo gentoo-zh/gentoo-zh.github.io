@@ -47,6 +47,11 @@ function stripExplicitId(children: ReadonlyArray<Phrasing>): {children: Phrasing
   return {children: [...children.slice(0, -1), ...(rest ? [{...last, value: rest}] : [])], id: match[1]};
 }
 
+/** The id a heading's own `{#id}` sets, if it has one. */
+export function explicitId(children: ReadonlyArray<Phrasing>): string | undefined {
+  return stripExplicitId(children).id;
+}
+
 /**
  * Gives every heading the id Hugo gave it (an explicit `{#id}` or the anchor of its text),
  * carried by a leading anchor node that the post's heading renderer reads and puts on the
