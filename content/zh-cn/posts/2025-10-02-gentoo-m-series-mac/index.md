@@ -1311,7 +1311,27 @@ $ sudo nmtui
 # emerge --ask media-fonts/noto-cjk
 ```
 
-以 Rime 为例，安装输入法和配置工具：
+以 Rime 为例。`fcitx-rime`、`fcitx-qt` 和 `fcitx-configtool` 在 arm64 上仍是测试版，要先接受测试关键字：
+
+```bash
+# mkdir -p /etc/portage/package.accept_keywords
+```
+
+```conf
+# /etc/portage/package.accept_keywords/fcitx
+app-i18n/fcitx-rime ~arm64
+app-i18n/fcitx-qt ~arm64
+app-i18n/fcitx-configtool ~arm64
+```
+
+`fcitx-configtool` 要启用 `kcm`，「系统设置」才会有输入法页面：
+
+```conf
+# /etc/portage/package.use/fcitx
+app-i18n/fcitx-configtool kcm
+```
+
+安装输入法和配置工具：
 
 ```bash
 # emerge --ask app-i18n/fcitx-rime app-i18n/fcitx-configtool

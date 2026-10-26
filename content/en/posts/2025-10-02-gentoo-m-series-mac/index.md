@@ -1311,7 +1311,27 @@ The desktop already brings Latin fonts: fontconfig depends on `virtual/ttf-fonts
 # emerge --ask media-fonts/noto-cjk
 ```
 
-This guide uses Rime. Install it and the settings tool:
+This guide uses Rime. `fcitx-rime`, `fcitx-qt` and `fcitx-configtool` are still testing on arm64, so accept the testing keyword first:
+
+```bash
+# mkdir -p /etc/portage/package.accept_keywords
+```
+
+```conf
+# /etc/portage/package.accept_keywords/fcitx
+app-i18n/fcitx-rime ~arm64
+app-i18n/fcitx-qt ~arm64
+app-i18n/fcitx-configtool ~arm64
+```
+
+Enable `kcm` on `fcitx-configtool`; without it System Settings has no Input Method page:
+
+```conf
+# /etc/portage/package.use/fcitx
+app-i18n/fcitx-configtool kcm
+```
+
+Install the input method and the settings tool:
 
 ```bash
 # emerge --ask app-i18n/fcitx-rime app-i18n/fcitx-configtool
