@@ -393,22 +393,55 @@ setenv bootmeths "efi"
 boot
 ```
 
-用 NetworkManager 连接网络，再检查 IP 连通性和 DNS：
+### 3.1 连接 Wi-Fi
+
+Live USB 没有 NetworkManager，用 `net-setup` 设置 Wi-Fi：
 
 ```bash
-# nmtui
-# ping -c 3 1.1.1.1
+# net-setup
+```
+
+1. 选择无线网卡 `wld0`。
+
+   ![net-setup 接口菜单，列出 wld0](net-setup-1.webp)
+
+2. `Interface details` 确认网卡信息，选 `Yes`。
+3. 选 `3 My network is wireless (WPA-PSK/WPA2-PSK)`。
+
+   ![net-setup 网络类型菜单，选中 WPA-PSK/WPA2-PSK](net-setup-2.webp)
+
+4. 输入 Wi-Fi 名称（SSID）。
+
+   ![net-setup 输入 SSID](net-setup-3.webp)
+
+5. 输入 Wi-Fi 密码，长度 8 至 63 个字符。
+
+   ![net-setup 输入 WPA 密码](net-setup-4.webp)
+
+6. `TCP/IP setup` 选 `1 Use DHCP to auto-detect my network settings`。
+
+确认获得 IP，并检查 DNS：
+
+```bash
+# ip a show wld0
 # ping -c 3 www.gentoo.org
 ```
 
 内核已含 Apple Silicon Wi-Fi 驱动；连接不稳时改试 2.4 GHz。
 
-通过 SSH 操作 OpenRC Live USB：设置 root 密码并启动 sshd。
+### 3.2 开启 SSH
+
+Live USB 只有 `root` 账户。设置 root 密码并启动 sshd：
 
 ```bash
 # passwd
 # rc-service sshd start
-# ip a
+```
+
+从另一台电脑连接，`192.168.8.155` 替换为 `ip a show wld0` 显示的地址：
+
+```bash
+$ ssh root@192.168.8.155
 ```
 
 ## 4. 分区与文件系统

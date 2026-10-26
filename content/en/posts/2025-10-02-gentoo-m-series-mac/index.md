@@ -393,22 +393,55 @@ setenv bootmeths "efi"
 boot
 ```
 
-Connect with NetworkManager, then check IP connectivity and DNS:
+### 3.1 Connect to Wi-Fi
+
+The live USB has no NetworkManager; set up Wi-Fi with `net-setup`:
 
 ```bash
-# nmtui
-# ping -c 3 1.1.1.1
+# net-setup
+```
+
+1. Select the wireless interface `wld0`.
+
+   ![net-setup interface menu listing wld0](net-setup-1.webp)
+
+2. At `Interface details`, confirm with `Yes`.
+3. Choose `3 My network is wireless (WPA-PSK/WPA2-PSK)`.
+
+   ![net-setup network type menu with WPA-PSK/WPA2-PSK selected](net-setup-2.webp)
+
+4. Enter the Wi-Fi name (SSID).
+
+   ![net-setup SSID prompt](net-setup-3.webp)
+
+5. Enter the Wi-Fi password, 8 to 63 characters.
+
+   ![net-setup WPA key prompt](net-setup-4.webp)
+
+6. At `TCP/IP setup`, choose `1 Use DHCP to auto-detect my network settings`.
+
+Check the address and DNS:
+
+```bash
+# ip a show wld0
 # ping -c 3 www.gentoo.org
 ```
 
 The kernel includes the Apple Silicon Wi-Fi driver. Try 2.4 GHz if unstable.
 
-For SSH on the OpenRC live USB, set a root password and start sshd:
+### 3.2 Enable SSH
+
+The live USB has only the `root` account. Set a root password and start sshd:
 
 ```bash
 # passwd
 # rc-service sshd start
-# ip a
+```
+
+Connect from another computer; replace `192.168.8.155` with the address shown by `ip a show wld0`:
+
+```bash
+$ ssh root@192.168.8.155
 ```
 
 ## 4. Partitioning and Filesystem
