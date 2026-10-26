@@ -6,30 +6,27 @@ authors:
   - name: Zakk
     image: /contributors/zakkaus/feature.webp
     link: https://github.com/zakkaus
-summary: "The complete process for installing Gentoo Linux on Apple Silicon Macs (M1/M2), built on official Asahi Linux support."
-description: "The full workflow for getting Gentoo onto an M1/M2 MacBook, based on Asahi Linux: live USB, partitioning, kernel, all the way to the desktop."
+summary: "Install Gentoo on an M1/M2 Mac with Asahi boot support, an ARM64 Stage3, and systemd."
+description: "Gentoo installation on M1/M2 Macs: live USB, Stage3 verification, Asahi packages, encrypted root, and desktop setup."
 ---
 
 ![Gentoo on Apple Silicon Mac](gentoo-asahi-mac.webp)
 
-This article documents the complete process of installing native ARM64 Gentoo Linux on an Apple Silicon Mac (the M1/M2 series).
+Install ARM64 Gentoo alongside macOS on supported M1/M2 Macs. Use systemd for Gentoo; the OpenRC commands apply only to the live USB.
 
-Thanks to the Asahi Linux team (especially [chadmed](https://github.com/chadmed/gentoo-asahi-releng)), Gentoo now has an [official Asahi installation guide](https://wiki.gentoo.org/wiki/Project:Asahi/Guide). This article builds on that guide and fills in details from actually doing it.
+Installation guide: <https://wiki.gentoo.org/wiki/Project:Asahi/Guide>
 
-Hardware support (per the current Asahi [Feature Support](https://asahilinux.org/docs/platform/feature-support/overview/) status):
+Check model support before partitioning. M2 Mac Pro installer support is WIP; later generations are outside this guide.
 
-- M1, M2 (whole lineup): good enough for daily desktop use
-- M3: GPU is a work in progress; Wi-Fi / audio and the rest are still TBA, not a good desktop yet
-- M4: most of the core drivers are TBA, not usable for now
-- M5: not on the official support table yet
+M1 support: <https://asahilinux.org/docs/platform/feature-support/m1/>
 
-This guide is for M1/M2. Last checked: May 29, 2026.
+M2 support: <https://asahilinux.org/docs/platform/feature-support/m2/>
+
+All generations: <https://asahilinux.org/docs/platform/feature-support/overview/>
 
 ## Process Overview
 
-Required steps:
-
-1. Download the official Gentoo Asahi live USB image
+1. Download the Gentoo Asahi live USB image
 2. Set up U-Boot via the Asahi installer
 3. Boot from the live USB
 4. Partition and mount the filesystem
@@ -39,45 +36,42 @@ Required steps:
 
 Optional steps: LUKS encryption, a custom kernel, PipeWire audio, a desktop environment.
 
-When you're done you'll have a macOS + Gentoo Linux ARM64 dual-boot setup on the Mac.
-
 ## Prerequisites
 
 ### Hardware Requirements
 
-- An Apple Silicon Mac (only M1/M2 work as a desktop; M3/M4 drivers are incomplete, and M5 isn't on the official support table yet)
+- An M1/M2 Mac supported by the Asahi installer
 - At least 80 GB of free disk space, 120 GB or more is better
 - Stable Wi-Fi or Ethernet
-- Back up anything you care about
 
 ### Known Working Status
 
-Working: CPU, RAM, storage, Wi-Fi, keyboard, trackpad, power management, built-in and external displays, USB-C / Thunderbolt.
+CPU, storage, Wi-Fi, laptop keyboards and trackpads, and GPU acceleration work on supported models. Display and audio support vary by model. Thunderbolt and USB-C DisplayPort Alt Mode are marked WIP; Touch ID is unsupported.
 
-Partial support: GPU acceleration (OpenGL is partially supported).
-
-Not working: Touch ID, macOS virtualization.
+macOS virtualization is not supported.
 
 ## 1. Prepare the Gentoo Asahi Live USB
 
 ### 1.1 Download the Image
 
-Use Gentoo's own ARM64 live USB directly, no Fedora middleman needed:
+Download directory: <https://chadmed.au/pub/gentoo/>
 
-```
-https://chadmed.au/pub/gentoo/
+Download the newest dated `install-arm64-asahi-YYYYMMDD.iso` and its `.sha256` (the `latest` link is broken), then check it:
+
+```bash
+$ shasum -a 256 -c install-arm64-asahi-<date>.iso.sha256
 ```
 
-Go with `install-arm64-asahi-latest.iso` (a stable symlink chadmed maintains), or pick a dated build so you can reproduce things later. If you hit boot problems, try the previous stable dated build.
+Write the USB only after it prints `OK`.
 
 ### 1.2 Create the Bootable USB
 
-On macOS:
+In the download directory, identify the USB with `diskutil list`; replace `/dev/disk4` and `<date>`. Writing erases the USB:
 
 ```bash
 $ diskutil list
 $ diskutil unmountDisk /dev/disk4
-$ sudo dd if=install-arm64-asahi-*.iso of=/dev/rdisk4 bs=4m status=progress
+$ sudo dd if=install-arm64-asahi-<date>.iso of=/dev/rdisk4 bs=4m
 $ diskutil eject /dev/disk4
 ```
 
@@ -85,36 +79,310 @@ $ diskutil eject /dev/disk4
 
 ### 2.1 Run the Asahi Installer
 
-In macOS Terminal:
+Details: <https://alx.sh>
+
+Open Terminal in macOS and run:
 
 ```bash
 $ curl https://alx.sh | sh
 ```
 
-It's a good idea to open <https://alx.sh> and read the script before you pipe it into a shell.
+Enter the sudo password after bootstrapping, then press Enter at `Press enter to continue`.
+
+Output from a MacBook Air (M2, 2022):
+
+```text
+Collecting system information...
+  Product name: MacBook Air (M2, 2022)
+  SoC: Apple M2
+  Device class: j413ap
+  Product type: Mac14,2
+  Board ID: 0x28
+  Chip ID: 0x8112
+  System firmware: mBoot-20457.1.29
+  Boot UUID: 0396B26F-E9D1-47A3-AC3C-6D26CC3F2F64
+  Boot VGID: 0396B26F-E9D1-47A3-AC3C-6D26CC3F2F64
+  Default boot VGID: 0396B26F-E9D1-47A3-AC3C-6D26CC3F2F64
+  Boot mode: macOS
+  OS version: 27.0.1 (26A434)
+  OS restore version: 26.1.434.0.0,0
+  Main firmware version: 27.0.1 (26A434)
+  No Fallback System Firmware / rOS
+  SFR version: 26.1.434.0.0,0
+  SystemRecovery version: 25.7.83.0.0,0 (26.6.2 25G83)
+  Login user: zakk
+```
 
 ### 2.2 Follow the Installer
 
-1. Choose `r` (Resize an existing partition to make space for a new OS)
-2. Allocate space for Linux (at least 80 GB recommended; you can enter a percentage or an absolute size)
-3. Choose **UEFI environment only (m1n1 + U-Boot + ESP)**
-4. Enter `Gentoo` as the OS name
-5. Shut down as instructed
+1. Enter `r` to shrink macOS, or `f` if enough unallocated space exists (skip to step 5).
+
+   ```text
+   Partitions in system disk (disk0):
+     1: APFS [Macintosh HD] (494.38 GB, 6 volumes)
+       OS: [B*] [Macintosh HD] macOS v27.0.1 [disk3s3s1, 0396B26F-E9D1-47A3-AC3C-6D26CC3F2F64]
+     2: APFS (System Recovery) (5.37 GB, 2 volumes)
+       OS: [  ] recoveryOS v27.0.1 [Primary recoveryOS]
+
+     [B ] = Booted OS, [R ] = Booted recovery, [? ] = Unknown
+     [ *] = Default boot volume
+
+   Using OS 'Macintosh HD' (disk3s3s1) for machine authentication.
+
+   Choose what to do:
+     r: Resize an existing partition to make space for a new OS
+     q: Quit without doing anything
+   » Action (r): r
+   ```
+
+2. Enter the size macOS keeps after shrinking; the rest is left for Gentoo.
+
+   ```text
+   We're going to resize this partition:
+     APFS [Macintosh HD] (494.38 GB, 6 volumes)
+     Total size: 494.38 GB
+     Free space: 244.98 GB
+     Available space: 206.98 GB
+     Overhead: 0 B
+     Minimum new size: 287.41 GB (58.13%)
+
+   Enter the new size for your existing partition:
+     You can enter a size such as '1GB', a fraction such as '50%',
+     or the word 'min' for the smallest allowable size.
+
+     Examples:
+     30%  - 30% to macOS, 70% to the new OS
+     80GB - 80GB to macOS, the rest to your new OS
+     min  - Shrink macOS as much as (safely) possible
+
+   » New size (min): 366GB
+   ```
+
+   `80GB` keeps 80 GB for macOS; `30%` keeps 30% and frees 70%; `min` uses the smallest safe size. Leave at least 80 GB for Gentoo. The minimum depends on used space; if rejected, enter a larger value or `min`.
+
+   ```text
+   Size is too small, please enter a value > 287.41 GB
+   ```
+
+3. Check the space to be freed, then enter `y` at `Continue?`.
+
+   ```text
+   Resizing will free up 128.38 GB of space.
+
+   Note: your system may appear to freeze during the resize.
+   This is normal, just wait until the process completes.
+   » Continue? (y/N): y
+   ```
+
+   The fsck lines and warnings are normal. At `Resize complete`, press Enter to return to the menu.
+
+   ```text
+   Finished APFS operation
+   Resize complete. Press enter to continue.
+   ```
+
+4. Check the newly freed space:
+
+   ```text
+   Partitions in system disk (disk0):
+     1: APFS [Macintosh HD] (366.00 GB, 6 volumes)
+       OS: [B*] [Macintosh HD] macOS v27.0.1 [disk3s3s1, 0396B26F-E9D1-47A3-AC3C-6D26CC3F2F64]
+     2: (free space: 128.38 GB)
+     3: APFS (System Recovery) (5.37 GB, 2 volumes)
+       OS: [  ] recoveryOS v27.0.1 [Primary recoveryOS]
+   ```
+
+   Enter `f` at the action menu.
+
+   ```text
+   Choose what to do:
+     f: Install an OS into free space
+     r: Resize an existing partition to make space for a new OS
+     q: Quit without doing anything
+   » Action (f): f
+   ```
+
+5. Choose `UEFI environment only (m1n1 + U-Boot + ESP)`, not Fedora Asahi Remix. Use its displayed number, not a fixed `5`.
+
+   ```text
+   Choose an OS to install:
+     1: Fedora Asahi Remix 44 with KDE Plasma
+     2: Fedora Asahi Remix 44 with GNOME
+     3: Fedora Asahi Remix 44 Server
+     4: Fedora Asahi Remix 44 Minimal
+     5: UEFI environment only (m1n1 + U-Boot + ESP)
+   » OS: 5
+   ```
+
+   Enter any name; the startup volume list shows it. This guide uses `Gentoo Linux`.
+
+   ```text
+   Minimum required space for this OS: 3.00 GB
+
+   Available free space: 128.38 GB
+
+   Enter a name for your OS
+   » OS name (UEFI boot): Gentoo Linux
+   ```
+
+6. Wait for the stub macOS and roughly 500 MB EFI partition to be created.
+
+   ```text
+   Creating new stub macOS named Gentoo Linux
+   ```
+
+   Re-enter the macOS administrator password; the new OS becomes the default boot volume.
+
+   ```text
+   To continue the installation, you will need to enter your macOS
+   admin credentials.
+   Password for zakk:
+   ```
+
+7. After `Installation successful!`, choose `y` to send the anonymous report, `n` to decline, or `d` to inspect it.
+
+   ```text
+   Installation successful!
+   ```
+
+   ```text
+   Help us improve Asahi Linux!
+   We'd love to know how many people are installing Asahi and on what
+   kind of hardware. Would you mind sending a one-time installation
+   report to us?
+
+   This will only report what kind of machine you have, the OS you're
+   installing, basic version info, and the rough install size.
+   No personally identifiable information (such as serial numbers,
+   specific partition sizes, etc.) is included. You can view the
+   exact data that will be sent.
+
+   Report your install?
+     y: Yes
+     n: No
+     d: View the data that will be sent
+   » Choice (y/n/d):
+   ```
 
 ### 2.3 Complete the Recovery Setup
 
-1. Wait 25 seconds to ensure a full shutdown
-2. Hold the power button until "Loading startup options..." appears
-3. Release the power button
-4. Select Gentoo from the list of volumes
-5. Enter macOS Recovery and enter your user password (FileVault)
-6. Follow the prompts to finish setup
+Press Enter to view the final instructions, then Enter at the shutdown prompt:
 
-If you end up in a boot loop or get asked to reinstall macOS, hold the power button to shut down and start over; or boot into macOS, rerun `curl https://alx.sh | sh`, and choose `p` to retry.
+```text
+Press enter to shut down the system.
+```
+
+1. Wait 25 seconds for the system to shut down fully.
+2. Press and hold the power button once; do not press it repeatedly. The text below the Apple logo changes while you hold it:
+
+   | Screen text | Action |
+   | --- | --- |
+   | `Continue holding for startup options...` | Keep holding |
+   | `Loading startup options...` | Release the button |
+
+3. Wait for the volume list: `Macintosh HD`, `Gentoo Linux` (Asahi icon) and `Options`.
+4. Select `Gentoo Linux` and click `Continue`.
+
+   ![Startup picker with Macintosh HD, Gentoo Linux and Options; Gentoo Linux is selected](boot-picker.webp)
+
+5. `macOS Recovery` appears briefly. At `Select a volume to recover`, choose your normal macOS volume, click `Next`, and enter your macOS credentials if asked.
+6. When the `Asahi Linux installer` screen appears, Terminal runs the second step, `step2.sh`, on its own. It changes the security level of the Gentoo install only; macOS is not affected. You enter your macOS credentials twice.
+
+   Press Enter to continue:
+
+   ```text
+   -bash-3.2# /Volumes/Gentoo\ Linux/Finish\ Installation.app/Contents/Resources/step2.sh ; exit;
+
+   Asahi Linux installer (second step)
+
+   VGID: 053D3C79-831B-4D09-9D75-199B5AA0924B
+   System volume: /Volumes/Gentoo Linux
+
+   You will see some messages advising you that you are changing the
+   security level of your system. These changes apply only to your
+   Asahi Linux install, and are necessary to install a third-party OS.
+
+   Apple Silicon platforms maintain a separate security level for each
+   installed OS, and are designed to retain their security with mixed OSes.
+   The security level of your macOS install will not be affected.
+
+   You will be prompted for login credentials two times.
+   Please enter your macOS credentials (for the macOS that you
+   used to run the first step of the installation).
+
+   Press enter to continue.
+   ```
+
+   Enter your macOS password:
+
+   ```text
+   Operating on Volume Group UUID 053D3C79-831B-4D09-9D75-199B5AA0924B
+
+   This utility is not meant for normal users or even sysadmins.
+   It provides unabstracted access to capabilities which are normally handled for the user automatically when changing the security policy through GUIs such as the Startup Security Utility in macOS Recovery ("recoveryOS").
+   It is possible to make your system security much weaker and therefore easier to compromise using this tool.
+   This tool is not to be used in production environments.
+   It is possible to render your system unbootable with this tool.
+   It should only be used to understand how the security of Apple Silicon Macs works.
+   Use at your own risk!
+
+   Please enter password for user zakk:
+   ```
+
+   The installer updates the local policy and prints it. `Security Mode` becomes `Permissive`, for Gentoo only:
+
+   ```text
+   Local policy update is in progress, please wait...
+
+   Resulting local policy:
+   (chip ID and hashes omitted)
+   Security Mode:               Permissive (smb0 && smb1): 1
+   3rd Party Kexts Status:      Disabled   (smb2): absent
+   User-allowed MDM Control:    Disabled   (smb3): absent
+   DEP-allowed MDM Control:     Disabled   (smb4): absent
+   SIP Status:                  Enabled    (sip0): absent
+   Signed System Volume Status: Enabled    (sip1): absent
+   Kernel CTRR Status:          Disabled   (sip2): 1
+   Boot Args Filtering Status:  Enabled    (sip3): absent
+   ```
+
+   Enter `y` to confirm:
+
+   ```text
+   By setting a custom boot object, you will be putting your system into Permissive Security.
+
+   Are you sure you want to do this? (enter y or n) y
+   found raw boot object, deriving Mach-O boot properties...
+   wrapping boot object payload...
+   going to change bootpolicy to permissive...
+   updating local machine policy...
+   ```
+
+   Enter your macOS user name and password again:
+
+   ```text
+   Username: zakk
+   Password:
+   installing boot object...
+   done.
+
+   Wrapping up...
+   ```
+
+   Press Enter to reboot:
+
+   ```text
+   Installation complete! Press enter to reboot.
+   ```
+
+
+A boot loop or macOS reinstall message means the startup sequence was missed. **Shut down fully:** wait the full 25 seconds with the screen dark, then press and hold the power button once.
+
+Only if that retry still fails, boot macOS, rerun `curl https://alx.sh | sh`, and choose `p` as a last resort.
 
 ## 3. Boot from the Live USB
 
-Plug in the USB and power on; U-Boot boots GRUB from the USB on its own. If you need to point it there manually:
+Insert the USB and power on; U-Boot boots its GRUB automatically. To select it manually:
 
 ```
 setenv boot_targets "usb"
@@ -122,27 +390,27 @@ setenv bootmeths "efi"
 boot
 ```
 
-Set up networking (the Gentoo live USB now uses NetworkManager, and nmtui is the quickest way):
+Connect with NetworkManager, then check IP connectivity and DNS:
 
 ```bash
-# nmtui                  # Select a Wi-Fi network or edit a wired connection
-# ping -c 3 1.1.1.1      # Verify connectivity by IP first (sidesteps DNS issues)
-# ping -c 3 www.gentoo.org   # Then test DNS
+# nmtui
+# ping -c 3 1.1.1.1
+# ping -c 3 www.gentoo.org
 ```
 
-The Apple Silicon Wi-Fi driver is already in the kernel. If it's flaky, try a 2.4 GHz network.
+The kernel includes the Apple Silicon Wi-Fi driver. Try 2.4 GHz if unstable.
 
-Optionally enable SSH for remote operation (the live USB uses OpenRC):
+For SSH on the OpenRC live USB, set a root password and start sshd:
 
 ```bash
-# passwd                 # Set the root password
-# rc-service sshd start  # Start SSH (OpenRC command)
-# ip a | grep inet       # Show the IP address
+# passwd
+# rc-service sshd start
+# ip a
 ```
 
 ## 4. Partitioning and Filesystem
 
-Leave the existing APFS container, EFI partition, and Recovery partition alone. Only work inside the space the Asahi installer set aside.
+Partition only the space left by the Asahi installer. Do not delete, resize, or format existing APFS, EFI, or Recovery partitions. Boot partition damage may require a second Mac for DFU restore, erasing the internal SSD.
 
 Inspect the partitions:
 
@@ -151,7 +419,7 @@ Inspect the partitions:
 # blkid --label "EFI - GENTO"
 ```
 
-A typical layout:
+Replace `/dev/nvme0n1p4`, the other partition numbers, and the ESP label with yours.
 
 ```
 nvme0n1p1   500M    Apple Silicon boot
@@ -164,7 +432,13 @@ nvme0n1p5   5G      Apple Silicon recovery
 
 ### 4.1 Create the Root Partition
 
-Use `cfdisk /dev/nvme0n1` to create a Linux filesystem-type partition in the free space.
+Create a Linux filesystem partition in free space with `cfdisk /dev/nvme0n1`.
+
+Create the mount point:
+
+```bash
+# mkdir -p /mnt/gentoo
+```
 
 Without encryption:
 
@@ -182,9 +456,9 @@ With encryption (recommended):
 # mount /dev/mapper/gentoo-root /mnt/gentoo
 ```
 
-What the parameters do: `argon2id` resists ASIC/GPU brute-forcing; `luks2` works with better security tooling; the M1 has the AES instruction set, so it can hardware-accelerate `aes-xts`.
-
 ### 4.2 Mount the EFI Partition
+
+Mount the Asahi ESP without formatting; the support script needs its vendor firmware.
 
 ```bash
 # mkdir -p /mnt/gentoo/boot
@@ -193,37 +467,31 @@ What the parameters do: `argon2id` resists ASIC/GPU brute-forcing; `luks2` works
 
 ## 5. Stage3 and chroot
 
-From here you can follow the [AMD64 Handbook](https://wiki.gentoo.org/wiki/Handbook:AMD64) up to the kernel installation chapter.
+Follow the Handbook with an ARM64 Stage3. If the clock is wrong, complete section 5.3 before downloading.
+
+Handbook: <https://wiki.gentoo.org/wiki/Handbook:AMD64>
 
 ### 5.1 Download and Extract the Stage3
 
-`wget` doesn't do wildcards over HTTPS, so first grab the current Stage3 filename from the `latest-stage3-*.txt` index file, then download it and verify it with the Gentoo Release Engineering GPG public key:
+Download, verify, and extract the latest arm64 desktop-systemd Stage3.
+
+Verification: <https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Stage#Verifying_and_validating>
 
 ```bash
 # cd /mnt/gentoo
 # BASE=https://distfiles.gentoo.org/releases/arm64/autobuilds
-
-# 1. Get the latest Stage3 path from the official index
-# STAGE3=$(wget -qO- ${BASE}/latest-stage3-arm64-desktop-systemd.txt | grep -v '^#' | cut -d' ' -f1)
-
-# 2. Download the tarball + signature
-# wget "${BASE}/${STAGE3}"
-# wget "${BASE}/${STAGE3}.asc"
-
-# 3. Get the Gentoo Release Engineering signing public keys (needed the first time)
-# gpg --keyserver hkps://keys.gentoo.org --recv-keys 13EBBDBEDE7A12775DFDB1BABB572E0E2D182910 D99EAC7379A850BCE47DA5F29E6438C817072058
-
-# 4. Verify the signature (you must see "Good signature from ...")
-# gpg --verify "$(basename ${STAGE3}).asc" "$(basename ${STAGE3})"
-
-# 5. Extract (preserve attributes)
-# tar xpvf "$(basename ${STAGE3})" --xattrs-include='*.*' --numeric-owner
+# STAGE3=$(wget -qO- "${BASE}/latest-stage3-arm64-desktop-systemd.txt" | grep -o '^[^ ]*\.tar\.xz')
+# wget "${BASE}/${STAGE3}" "${BASE}/${STAGE3}.asc"
 ```
 
-Or pick one by hand with the `links` text browser:
+If the live image lacks the key file, obtain and import it here:
+
+Release keys: <https://www.gentoo.org/downloads/signatures/>
 
 ```bash
-# links https://distfiles.gentoo.org/releases/arm64/autobuilds/current-stage3-arm64-desktop-systemd/
+# gpg --import /usr/share/openpgp-keys/gentoo-release.asc
+# gpg --verify "$(basename "${STAGE3}").asc" "$(basename "${STAGE3}")" && \
+    tar xpvf "$(basename "${STAGE3}")" --xattrs-include='*.*' --numeric-owner
 ```
 
 ### 5.2 Configure the Portage Repository
@@ -240,7 +508,7 @@ Or pick one by hand with the `links` text browser:
 # date
 ```
 
-A wrong clock makes SSL certificate verification fail and emerge throw errors.
+A wrong clock breaks SSL verification and emerge.
 
 ### 5.4 Mount and Enter the chroot
 
@@ -261,13 +529,12 @@ A wrong clock makes SSL certificate verification fail and emerge throw errors.
 
 ### 5.5 Edit make.conf
 
-```bash
-# nano -w /etc/portage/make.conf
-```
+Edit the existing file:
 
 ```conf
+# /etc/portage/make.conf
 CHOST="aarch64-unknown-linux-gnu"
-COMMON_FLAGS="-march=armv8.5-a+fp16+simd+crypto+i8mm -mtune=native -O2 -pipe"
+COMMON_FLAGS="-march=native -O2 -pipe"
 CFLAGS="${COMMON_FLAGS}"
 CXXFLAGS="${COMMON_FLAGS}"
 FCFLAGS="${COMMON_FLAGS}"
@@ -275,22 +542,38 @@ FFLAGS="${COMMON_FLAGS}"
 RUSTFLAGS="-C target-cpu=native"
 LC_MESSAGES=C
 MAKEOPTS="-j4"
-# The R2 mirror the Asahi community recommends; in mainland China switch to BFSU / USTC / Tsinghua, see /mirrorlist/
-GENTOO_MIRRORS="https://gentoo.rgst.io/gentoo"
+GENTOO_MIRRORS="https://tw.mirrors.cicku.me/gentoo/"
 EMERGE_DEFAULT_OPTS="--jobs 3"
 VIDEO_CARDS="asahi"
+GRUB_PLATFORMS="efi-64"
 L10N="zh-CN zh-TW zh en"
 ```
 
-Set `MAKEOPTS` to your core count. Keep a trailing newline at the end of the file.
+Use CICKU Taiwan from the official mirror list, or BFSU, USTC, or Tsinghua TUNA in mainland China.
+
+Official mirrors: <https://www.gentoo.org/downloads/mirrors/>
+
+[Gentoo mirrors](/gentoo-mirrors/)
+
+Per-chip compiler options: <https://gcc.gnu.org/onlinedocs/gcc/AArch64-Options.html>
+
+Sync Portage and set your time zone; replace `Asia/Shanghai` with `Asia/Taipei`, `Asia/Hong_Kong`, or your zone:
 
 ```bash
 # emerge-webrsync
-# Choose the time zone for your location: mainland China Asia/Shanghai, Taiwan Asia/Taipei, Hong Kong Asia/Hong_Kong
 # ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 ```
 
-Edit `/etc/locale.gen` to uncomment the locales you need, then:
+Enable locales in the existing file:
+
+```conf
+# /etc/locale.gen
+en_US.UTF-8 UTF-8
+zh_CN.UTF-8 UTF-8
+zh_TW.UTF-8 UTF-8
+```
+
+Generate and select the locale:
 
 ```bash
 # locale-gen
@@ -308,9 +591,28 @@ Create a user:
 
 ## 6. Install the Asahi Support Package Set
 
-This section stands in for the "Installing the kernel" chapter of the official Handbook.
+Both methods use dracut for initramfs, with or without encryption. Create the USE configuration directory:
+
+```bash
+# mkdir -p /etc/portage/package.use
+```
+
+Create the file or append to it:
+
+```conf
+# /etc/portage/package.use/installkernel
+sys-kernel/installkernel dracut
+```
+
+Install the generator and its kernel-install integration:
+
+```bash
+# emerge --ask sys-kernel/dracut sys-kernel/installkernel
+```
 
 ### 6.1 Method A: Automated Script (Recommended)
+
+Run as root in the chroot, with the Asahi ESP at `/boot` and `/boot/vendorfw` present. The script configures Portage, enables the overlay, installs Asahi packages, the distribution kernel and GRUB, and updates firmware and m1n1—not `@world`.
 
 ```bash
 # emerge --sync
@@ -322,79 +624,56 @@ This section stands in for the "Installing the kernel" chapter of the official H
 # ./install.sh
 ```
 
-The script turns on the Asahi overlay, installs GRUB, sets `VIDEO_CARDS="asahi"`, installs `asahi-meta` (kernel, firmware, m1n1, and U-Boot), runs `asahi-fwupdate` and `update-m1n1`, then updates the system.
-
-If you hit a USE flag conflict:
-
-```bash
-# Ctrl+C to interrupt the script
-# emerge --autounmask-write <conflicting-package>
-# etc-update              # Usually choose -3 to auto-merge
-# cd /tmp/asahi-gentoosupport && ./install.sh
-```
-
-Once the script finishes, skip to 6.3 to set up fstab.
+Merge requested USE changes and rerun the script; on completion, go to section 6.3.
 
 ### 6.2 Method B: Manual Install
 
-Set up Portage and the Asahi overlay (synced via Git):
+Keep the Gentoo repository from section 5.2 and add Asahi.
+
+Overlay: <https://github.com/chadmed/asahi-overlay>
 
 ```bash
-# emerge --sync
 # emerge --ask dev-vcs/git
-# rm -rf /var/db/repos/gentoo
+# mkdir -p /etc/portage/repos.conf /etc/portage/package.mask /etc/portage/package.use /etc/portage/package.license
+```
 
-$ sudo tee /etc/portage/repos.conf/gentoo.conf << 'EOF'
-[DEFAULT]
-main-repo = gentoo
-[gentoo]
-location = /var/db/repos/gentoo
-sync-type = git
-sync-uri = https://mirrors.bfsu.edu.cn/git/gentoo-portage.git
-auto-sync = yes
-sync-depth = 1
-EOF
+Create the repository configuration:
 
-$ sudo tee /etc/portage/repos.conf/asahi.conf << 'EOF'
+```conf
+# /etc/portage/repos.conf/asahi.conf
 [asahi]
 location = /var/db/repos/asahi
 sync-type = git
 sync-uri = https://github.com/chadmed/asahi-overlay.git
 auto-sync = yes
-EOF
+```
 
+Sync both repositories:
+
+```bash
 # emerge --sync
 ```
 
-Simplified Chinese users can use the BFSU mirror `https://mirrors.bfsu.edu.cn/git/gentoo-portage.git`. For other mirrors, see the [mirror list](/mirrorlist/).
+Create a mask file for the Gentoo dist-kernel virtual:
 
-Keep the official dist-kernel from overriding the Asahi version:
-
-```bash
-# mkdir -p /etc/portage/package.mask
-# cat > /etc/portage/package.mask/asahi << 'EOF'
+```conf
+# /etc/portage/package.mask/asahi
 virtual/dist-kernel::gentoo
-EOF
 ```
 
-Set up USE flags and VIDEO_CARDS:
+Create the Rust USE configuration:
 
-```bash
-# mkdir -p /etc/portage/package.use
-# cat > /etc/portage/package.use/asahi << 'EOF'
+```conf
+# /etc/portage/package.use/asahi
 dev-lang/rust-bin rustfmt rust-src
 dev-lang/rust rustfmt rust-src
-EOF
-# echo 'VIDEO_CARDS="asahi"' >> /etc/portage/make.conf
-# echo 'GRUB_PLATFORMS="efi-64"' >> /etc/portage/make.conf
 ```
 
-Firmware license:
+Create the license file if you accept these firmware licenses:
 
-```bash
-# mkdir -p /etc/portage/package.license
-# echo 'sys-kernel/linux-firmware linux-fw-redistributable no-source-code' \
-  > /etc/portage/package.license/firmware
+```conf
+# /etc/portage/package.license/firmware
+sys-kernel/linux-firmware linux-fw-redistributable no-source-code
 ```
 
 Install:
@@ -411,8 +690,6 @@ Update the firmware and bootloader:
 # update-m1n1
 ```
 
-You have to run `update-m1n1` after every kernel, U-Boot, or m1n1 update.
-
 Install GRUB:
 
 ```bash
@@ -421,105 +698,114 @@ Install GRUB:
 # grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-`--removable` is required so the system can boot from the ESP; `--boot-directory` and `--efi-directory` both point at `/boot/`; and `make.conf` must have `GRUB_PLATFORMS="efi-64"`.
+The ESP mounts at `/boot`; `--removable` puts GRUB at U-Boot's fallback EFI path. Section 5.5 sets `GRUB_PLATFORMS="efi-64"`.
 
-Optionally, run `emerge --ask --update --deep --changed-use @world` to update the system.
+`asahi-meta` installs m1n1, U-Boot, firmware tools and Mesa support. `virtual/dist-kernel:asahi` selects `sys-kernel/asahi-kernel`; use `sys-kernel/asahi-sources` for manual builds. Keep `VIDEO_CARDS="asahi"` for Mesa.
 
 ### 6.3 Configure fstab
 
-Get the partition UUIDs (adjust to your actual device paths):
+After either method, review the system update:
 
 ```bash
-# Root partition (unencrypted: use the device directly; encrypted: use the decrypted mapper device)
-# blkid /dev/nvme0n1p6                    # unencrypted
-# blkid /dev/mapper/gentoo-root           # encrypted
-
-# EFI partition (the "EFI - GENTO" label set by the Asahi installer)
-# blkid --label "EFI - GENTO"
-
-# nano -w /etc/fstab
+# emerge --ask --update --deep --changed-use @world
 ```
 
+Get the root filesystem and ESP UUIDs. For encrypted root, use `/dev/mapper/gentoo-root`, not the LUKS UUID:
+
+```bash
+# blkid
+```
+
+Add these entries with your UUIDs, replacing conflicting root/boot entries. For ext4, replace `btrfs` with `ext4`:
+
 ```fstab
+# /etc/fstab
 UUID=<root-uuid>  /      btrfs  defaults  0 1
-# If using ext4, change the third column to ext4
 UUID=<boot-uuid>  /boot  vfat   defaults  0 2
 ```
 
 ### 6.4 Configure LUKS (Encrypted Installations Only) {#64-configure-luks-encrypted-users-only}
 
-Enable systemd's cryptsetup support:
+Create the USE file or append to it:
+
+```conf
+# /etc/portage/package.use/fde
+sys-apps/systemd cryptsetup
+```
+
+Rebuild systemd with cryptsetup support:
 
 ```bash
-# mkdir -p /etc/portage/package.use
-# echo "sys-apps/systemd cryptsetup" >> /etc/portage/package.use/fde
 # emerge --ask --oneshot sys-apps/systemd
 ```
 
-Get the LUKS UUID (note this is the UUID of the encrypted container, not of the filesystem inside it):
+Get the UUID of the LUKS container:
 
 ```bash
 # blkid /dev/nvme0n1p6
 ```
 
-Edit `/etc/default/grub`:
+Edit `GRUB_CMDLINE_LINUX`, keeping other required parameters. For ext4, use `rootfstype=ext4`:
 
 ```conf
+# /etc/default/grub
 GRUB_CMDLINE_LINUX="rd.luks.name=<LUKS-UUID>=gentoo-root root=/dev/mapper/gentoo-root rootfstype=btrfs rd.luks.allow-discards"
 ```
 
-- `rd.luks.name=<LUKS-UUID>=gentoo-root`: unlock using the LUKS container UUID (`blkid /dev/nvme0n1p6`) and name the mapper `gentoo-root`, to match crypttab / luksClose
-- `root=/dev/mapper/gentoo-root`: the decrypted Btrfs root (so you don't have to look up the filesystem UUID again)
+- `rd.luks.name=<LUKS-UUID>=gentoo-root`: unlock the container as `gentoo-root`
+- `root=/dev/mapper/gentoo-root`: use the unlocked device as the root filesystem
 - `rd.luks.allow-discards`: lets SSD TRIM pass through the encryption layer (a security trade-off)
 
-dracut configuration:
+Create the dracut configuration directory:
 
 ```bash
-# emerge --ask sys-kernel/dracut
-
-# Have dist-kernel updates automatically call dracut to rebuild the initramfs (recommended)
-# echo 'sys-kernel/installkernel dracut' > /etc/portage/package.use/installkernel
-# emerge --ask --oneshot sys-kernel/installkernel
-
-# nano -w /etc/dracut.conf.d/luks.conf
+# mkdir -p /etc/dracut.conf.d
 ```
 
+Create the encrypted-root configuration. For ext4, remove `btrfs` from `add_dracutmodules` and set `filesystems` to `ext4`:
+
 ```conf
-# Leave kernel_cmdline empty; GRUB's GRUB_CMDLINE_LINUX will override it
+# /etc/dracut.conf.d/luks.conf
 kernel_cmdline=""
-# The crypt module pulls in cryptsetup automatically, no manual install_items needed
 add_dracutmodules+=" btrfs systemd crypt dm "
 filesystems+=" btrfs "
 ```
 
-You can optionally write to `/etc/crypttab` so the system prompts for unlocking automatically:
+Optionally append the root mapping to crypttab with the same LUKS UUID:
 
 ```conf
+# /etc/crypttab
 gentoo-root UUID=<LUKS-UUID> none luks,discard
 ```
 
 Generate the initramfs:
 
 ```bash
-# Regenerate the initramfs for all installed kernels (recommended for dist-kernel:asahi)
 # dracut --force --regenerate-all
-
-# Or target only the currently selected kernel:
-# KVER=$(uname -r)   # Doesn't work inside the chroot, run it on the installed system
-# dracut --force --kver "${KVER}"
-
 # grub-mkconfig -o /boot/grub/grub.cfg
 # grep initrd /boot/grub/grub.cfg
 ```
 
-You have to redo this step after every kernel update. Installing `sys-apps/asahi-scripts` gives you an installkernel hook that handles it automatically.
+`installkernel[dracut]` generates initramfs images when kernels are installed; the Asahi scripts hook runs `update-m1n1`.
 
 ## 7. Finishing Up and Rebooting
 
+Create or replace the hostname file:
+
+```conf
+# /etc/hostname
+macbook
+```
+
+Before leaving the chroot, enable networking and regenerate initramfs and GRUB after configuration, even without encryption:
+
 ```bash
-# echo "macbook" > /etc/hostname
+# emerge --ask net-misc/networkmanager
 # systemctl enable NetworkManager
 # passwd root
+# dracut --force --regenerate-all
+# grub-mkconfig -o /boot/grub/grub.cfg
+# grep initrd /boot/grub/grub.cfg
 ```
 
 Exit the chroot and reboot:
@@ -538,28 +824,15 @@ First boot order: U-Boot → GRUB (pick Gentoo) → (if encrypted) type the LUKS
 ### 8.1 Networking
 
 ```bash
-$ nmcli device wifi connect <SSID> password <password>
-# Or the graphical interface
 $ nmtui
 ```
 
 ### 8.2 Desktop Environment
 
-First switch to a suitable profile (the numbers vary between systems, so go by the profile name):
+Select an available ARM64 desktop profile ending in `/systemd`:
 
 ```bash
 # eselect profile list
-# Output looks something like:
-#   default/linux/arm64/23.0/systemd
-#   default/linux/arm64/23.0/desktop/gnome/systemd
-#   default/linux/arm64/23.0/desktop/plasma/systemd
-#   default/linux/arm64/23.0/desktop (generic, Xfce, etc.)
-```
-
-Pick the profile that fits. The examples below use profile names; check them against your own `eselect profile list` output:
-
-```bash
-# Pick the number for the desktop/plasma/systemd line, for example:
 # eselect profile set default/linux/arm64/23.0/desktop/plasma/systemd
 # emerge -avuDN @world
 ```
@@ -583,13 +856,13 @@ GNOME:
 Xfce:
 
 ```bash
-# eselect profile set default/linux/arm64/23.0/desktop
+# eselect profile set default/linux/arm64/23.0/desktop/systemd
 # emerge -avuDN @world
 # emerge --ask xfce-base/xfce4-meta x11-misc/lightdm
 # systemctl enable lightdm
 ```
 
-The first build of a desktop environment takes about 2–4 hours; stick to `--jobs 3` or fewer to avoid OOM.
+Choose one desktop and display manager. The first build takes about 2–4 hours; use `--jobs 3` or fewer to avoid OOM.
 
 ### 8.3 Fonts and Chinese Input
 
@@ -601,52 +874,57 @@ The first build of a desktop environment takes about 2–4 hours; stick to `--jo
 # emerge --ask app-i18n/fcitx-chinese-addons
 ```
 
-In testing, `app-i18n/fcitx-rime` doesn't work right in the current version; use `fcitx-chinese-addons` instead.
+Use `fcitx-chinese-addons`; the tested `app-i18n/fcitx-rime` version does not work.
 
 ### 8.4 Audio
 
+Install the Asahi audio configuration as root:
+
 ```bash
 # emerge --ask media-libs/asahi-audio
+```
 
-# If PulseAudio is installed, stop it first to avoid conflicts
-$ systemctl --user disable --now pulseaudio.socket pulseaudio.service 2>/dev/null
+As your normal user, stop PulseAudio if installed, then enable PipeWire and WirePlumber:
 
-# Enable PipeWire (socket-activation; the pipewire daemon starts on demand)
+```bash
+$ systemctl --user disable --now pulseaudio.socket pulseaudio.service
 $ systemctl --user enable --now pipewire-pulse.socket
 $ systemctl --user enable --now wireplumber.service
 ```
+
+OpenRC setup: <https://wiki.gentoo.org/wiki/PipeWire#OpenRC>
 
 ## 9. System Maintenance
 
 Update regularly:
 
 ```bash
-# emerge --sync             # Includes the Asahi overlay
-# Or sync only the overlay
-# emaint sync -r asahi
+# emerge --sync
 # emerge --ask --update --deep --newuse @world
-# emerge --ask --depclean   # Confirm the packages to be removed before running
-# dispatch-conf             # Handle .__cfg config changes
+# emerge --ask --depclean
+# dispatch-conf
 ```
 
-Mandatory after every kernel update:
+`emerge --sync` includes the Asahi overlay; `emerge-webrsync` does not. To sync only Asahi, use `emaint sync -r asahi`.
+
+Refresh boot files after kernel, U-Boot, or m1n1 updates:
 
 ```bash
 # update-m1n1
 # grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-m1n1 Stage 2 holds the devicetree blobs the kernel needs to detect hardware. `sys-apps/asahi-scripts` provides an installkernel hook that can automate this.
+m1n1 Stage 2 supplies the kernel's hardware devicetrees. The `sys-apps/asahi-scripts` installkernel hook can automate updates.
 
-macOS updates ship firmware updates with them, so keep the macOS partition around to pull the latest firmware.
+Keep macOS for firmware updates.
 
 ## 10. Troubleshooting
 
 **Can't boot from USB**: U-Boot's USB driver is picky. Try a different USB drive, a USB 2.0 device, or go through a USB hub.
 
-**Boot hangs or black screen**: m1n1 / U-Boot / kernel versions don't match. Rerun `curl https://alx.sh | sh` from macOS and choose `p`, and make sure you ran `update-m1n1` inside the chroot.
+**Boot hangs or black screen**: match the kernel and m1n1 devicetrees; confirm `update-m1n1` ran with the ESP mounted. For installer Recovery failures, retry with `p` from macOS (section 2.3).
 
-**Encrypted partition won't unlock**: check `GRUB_CMDLINE_LINUX` in `/etc/default/grub`, double-check the LUKS UUID (`blkid /dev/nvme0n1p6`), and rerun `grub-mkconfig -o /boot/grub/grub.cfg`.
+**Encrypted partition won't unlock**: check `/etc/default/grub`'s `GRUB_CMDLINE_LINUX` and the LUKS UUID (`blkid /dev/nvme0n1p6`), then rerun `grub-mkconfig -o /boot/grub/grub.cfg`.
 
 **Wi-Fi is unstable**: usually a WPA3 or 6 GHz band issue. Switch to WPA2, 2.4 GHz, or 5 GHz.
 
@@ -665,9 +943,9 @@ The notch: add this to the GRUB kernel parameters
 appledrm.show_notch=1
 ```
 
-(Before Asahi kernel 6.18 it was `apple_dcp.show_notch=1`; as of 6.18 the `apple_dcp` module got renamed to `appledrm`.)
+Before kernel 6.18, use `apple_dcp.show_notch=1`; 6.18 renamed `apple_dcp` to `appledrm`.
 
-In KDE Plasma you can add a full-width panel at the top and line its height up with the bottom of the notch.
+In KDE Plasma, add a full-width top panel reaching the notch's lower edge.
 
 Custom kernel:
 
@@ -682,7 +960,7 @@ Custom kernel:
 # grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-Keep a working kernel around as a fallback.
+Keep a working fallback kernel.
 
 Switching between kernels:
 
@@ -697,10 +975,13 @@ Switching between kernels:
 - [Gentoo Wiki: Project:Asahi/Guide](https://wiki.gentoo.org/wiki/Project:Asahi/Guide)
 - [Asahi Linux official site](https://asahilinux.org/)
 - [Asahi Linux Feature Support](https://asahilinux.org/docs/platform/feature-support/overview/)
-- [Gentoo AMD64 Handbook](https://wiki.gentoo.org/wiki/Handbook:AMD64)
+- [Gentoo Handbook: Stage file verification](https://wiki.gentoo.org/wiki/Handbook:AMD64/Installation/Stage)
 - [asahi-gentoosupport](https://github.com/chadmed/asahi-gentoosupport)
 - [Gentoo Asahi Releng](https://github.com/chadmed/gentoo-asahi-releng)
 - [User:Jared/Gentoo On An M1 Mac](https://wiki.gentoo.org/wiki/User:Jared/Gentoo_On_An_M1_Mac)
+- [Gentoo release signatures](https://www.gentoo.org/downloads/signatures/)
+- [Gentoo source mirrors](https://www.gentoo.org/downloads/mirrors/)
+- [GCC Apple CPU definitions](https://github.com/gcc-mirror/gcc/blob/master/gcc/config/aarch64/aarch64-cores.def)
 
 Community support:
 
