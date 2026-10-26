@@ -54,24 +54,27 @@ macOS virtualization is not supported.
 
 ### 1.1 Download the Image
 
-Download directory: <https://chadmed.au/pub/gentoo/>
+Download the ISO and its `.sha256`, then check it:
 
-Download the newest dated `install-arm64-asahi-YYYYMMDD.iso` and its `.sha256` (the `latest` link is broken), then check it:
+- <https://chadmed.au/pub/gentoo/install-arm64-asahi-20260827.iso>
+- <https://chadmed.au/pub/gentoo/install-arm64-asahi-20260827.iso.sha256>
 
 ```bash
-$ shasum -a 256 -c install-arm64-asahi-<date>.iso.sha256
+$ shasum -a 256 -c install-arm64-asahi-20260827.iso.sha256
 ```
 
 Write the USB only after it prints `OK`.
 
+The 20260827 image has been verified to boot on a MacBook Air M2. The 20261006 image ships GRUB 2.16, which fails on Asahi U-Boot with `cannot allocate memory for memory map`; do not use it for now.
+
 ### 1.2 Create the Bootable USB
 
-In the download directory, identify the USB with `diskutil list`; replace `/dev/disk4` and `<date>`. Writing erases the USB:
+In the download directory, identify the USB with `diskutil list`; replace `/dev/disk4`. Writing erases the USB:
 
 ```bash
 $ diskutil list
 $ diskutil unmountDisk /dev/disk4
-$ sudo dd if=install-arm64-asahi-<date>.iso of=/dev/rdisk4 bs=4m
+$ sudo dd if=install-arm64-asahi-20260827.iso of=/dev/rdisk4 bs=4m
 $ diskutil eject /dev/disk4
 ```
 

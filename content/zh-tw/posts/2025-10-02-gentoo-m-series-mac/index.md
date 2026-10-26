@@ -54,24 +54,27 @@ macOS 虛擬化尚不支援。
 
 ### 1.1 下載鏡像
 
-下載目錄：<https://chadmed.au/pub/gentoo/>
+下載 ISO 和同名的 `.sha256`，然後校驗：
 
-下載日期最新的 `install-arm64-asahi-YYYYMMDD.iso` 和同名的 `.sha256`（`latest` 連結無效），然後校驗：
+- <https://chadmed.au/pub/gentoo/install-arm64-asahi-20260827.iso>
+- <https://chadmed.au/pub/gentoo/install-arm64-asahi-20260827.iso.sha256>
 
 ```bash
-$ shasum -a 256 -c install-arm64-asahi-<date>.iso.sha256
+$ shasum -a 256 -c install-arm64-asahi-20260827.iso.sha256
 ```
 
 顯示 `OK` 再寫入 USB。
 
+20260827 版已在 MacBook Air M2 上驗證可正常啟動。20261006 版內建 GRUB 2.16，在 Asahi U-Boot 上啟動時報錯 `cannot allocate memory for memory map`，暫勿使用。
+
 ### 1.2 製作啟動 USB
 
-在下載目錄用 `diskutil list` 找出 USB，替換 `/dev/disk4` 與 `<date>`。寫入會清除 USB 資料：
+在下載目錄用 `diskutil list` 找出 USB，替換 `/dev/disk4`。寫入會清除 USB 資料：
 
 ```bash
 $ diskutil list
 $ diskutil unmountDisk /dev/disk4
-$ sudo dd if=install-arm64-asahi-<date>.iso of=/dev/rdisk4 bs=4m
+$ sudo dd if=install-arm64-asahi-20260827.iso of=/dev/rdisk4 bs=4m
 $ diskutil eject /dev/disk4
 ```
 
