@@ -7,6 +7,7 @@ import {DEFAULT_LOCALE, LANGUAGE_TAG, LOCALES, type Locale} from '../i18n/locale
 import {localePrefix, routes, tagSlug} from '../i18n/routes';
 import {RENAMED_TAGS} from '../i18n/tagRenames';
 import {CONTENT_ROOT, postBundles} from './loader';
+import {RETIRED_POSTS} from './retiredPosts';
 
 export type Post = CollectionEntry<'posts'>;
 
@@ -108,13 +109,15 @@ export function summarize(post: Post): PostSummary {
 
 /**
  * Old addresses kept as redirect pages: front-matter `aliases` (copied verbatim), Hugo's
- * `page/1`, renamed tags, and `/zh-cn/`, which Hugo writes because the default language lives at the root.
+ * `page/1`, renamed tags, retired posts, and `/zh-cn/`, which Hugo writes because the default
+ * language lives at the root.
  */
 export async function redirects(): Promise<Array<{from: string; to: string; locale: Locale}>> {
   const perLocale = await Promise.all(
     LOCALES.map(async locale => [
       {from: `${routes.posts(locale)}page/1/`, to: routes.posts(locale), locale},
       ...Object.entries(RENAMED_TAGS[locale]).map(([old, tag]) => ({from: routes.tag(locale, old), to: routes.tag(locale, tag), locale})),
+      ...Object.entries(RETIRED_POSTS[locale]).map(([slug, to]) => ({from: routes.post(locale, slug), to, locale})),
       ...(await getPosts(locale)).flatMap(post =>
         post.data.aliases.map(alias => ({
           from: `${localePrefix(locale)}${alias}`,

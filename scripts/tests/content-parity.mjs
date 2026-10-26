@@ -6,6 +6,7 @@ import {tmpdir} from 'node:os';
 import {dirname, join} from 'node:path';
 import {fileURLToPath} from 'node:url';
 import {decodeEntities, fileFor} from '../lib/html.mjs';
+import {RETIRED_REDIRECTS} from '../lib/retired-posts.mjs';
 
 const repo = fileURLToPath(new URL('../../', import.meta.url));
 const temp = mkdtempSync(join(tmpdir(), 'content-compatibility-'));
@@ -18,7 +19,7 @@ const write = (path, text) => {
   writeFileSync(path, text);
 };
 const check = (script, expected, message = '') => {
-  const result = spawnSync(process.execPath, [join(repo, `scripts/${script}.mjs`)], {cwd: temp, encoding: 'utf8'});
+  const result = spawnSync(process.execPath, ['--experimental-strip-types', join(repo, `scripts/${script}.mjs`)], {cwd: temp, encoding: 'utf8'});
   assert.equal(result.status, expected, result.stdout + result.stderr);
   assert.ok(result.stderr.includes(message), result.stderr);
 };
@@ -77,6 +78,12 @@ try {
   const historical = JSON.parse(readFileSync(join(repo, 'scripts/baseline/historical-fragments.json'), 'utf8'));
   const [path, fragments] = Object.entries(historical.pages).find(([path]) => path === '/en/contributing/');
   reject(pageFile(path), html => writeFileSync(pageFile(path), withoutId(html, fragments[0])), 'check-urls', `missing historical fragment #${fragments[0]}`, 'deleted historical page anchor');
+
+  for (const [retired, target] of Object.entries(RETIRED_REDIRECTS)) {
+    const retarget = html => writeFileSync(pageFile(retired), html.replaceAll(new URL(target, 'https://gentoozh.org').href, 'https://gentoozh.org/tags/'));
+    reject(pageFile(retired), retarget, 'check-content-parity', `retired post ${retired}: expected redirect`, `retargeted retired post ${retired} in content parity`);
+    reject(pageFile(retired), retarget, 'check-urls', `retired post ${retired}: expected redirect`, `retargeted retired post ${retired} in URLs`);
+  }
 
   const feedReject = (mutate, message, label) => reject(feedFile, xml => writeFileSync(feedFile, mutate(xml)), 'check-urls', message, label);
   feedReject(xml => xml.replace(/<item>[\s\S]*?<\/item>/, ''), 'items differ from current posts', 'missing feed post');
