@@ -48,8 +48,9 @@ export const PAGE_TYPES = [
   {name: 'contributors', route: locale('/contributors/(?:[^/]+/)?'), sample: '/contributors/', startup: 5_600, total: 164_600},
   // The cost explanation popovers.
   {name: 'costs', route: locale('/costs/'), sample: '/costs/', startup: 5_300, total: 153_600},
-  // Posts need the copy delegate without the section outline.
-  {name: 'post', route: locale('/posts/[^/]+/'), sample: '/posts/2013-02-05-gentoo-zh-community-has-been-founded/', startup: 3_800, total: 147_100},
+  // Posts need the copy delegate; a post with headings adds the outline spy (measured startup 4338 B,
+  // total up to 148068 B, 2026-10-26); one without headings loads no spy.
+  {name: 'post', route: locale('/posts/[^/]+/'), sample: '/posts/2013-02-05-gentoo-zh-community-has-been-founded/', startup: 4_400, total: 148_100},
   // Section pages and the rest: the sidebar boot, the outline spy and the copy delegate.
   {name: 'section', route: /.*/, sample: '/faq/', startup: 4_900, total: 149_600},
 ];

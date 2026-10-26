@@ -15,10 +15,12 @@ import type {Locale} from '../../i18n/locales';
 import {routes} from '../../i18n/routes';
 import {tagKey} from '../../i18n/tags';
 import {useMessage} from '../../i18n/useMessage';
+import {outlineItems} from '../../markdown/outline';
 import {PostMarkdown} from '../../markdown/PostMarkdown';
 import {layout} from '../../theme/layout.stylex';
 import {sectionHref, sectionOf} from '../chrome/sections';
 import {LinkCard} from '../LinkCard';
+import {MobileOutline, OutlineRow} from '../section/PageOutline';
 import {AuthorByline} from './AuthorByline';
 import {PostCover} from './PostCover';
 import css from '../../markdown/MarkdownBody.module.css';
@@ -28,6 +30,13 @@ import {PROSE_IMAGE} from '../../theme/images';
 const styles = stylex.create({
   section: {
     marginInline: 'auto',
+  },
+  // Beside the outline rail the row centres the pair, so the article only has to shrink.
+  sectionInRow: {
+    marginInline: 0,
+    width: '100%',
+    flexShrink: 1,
+    minWidth: 0,
   },
   tagRow: {
     flexWrap: 'wrap',
@@ -54,8 +63,10 @@ export interface BlogArticleProps {
 
 export function BlogArticle({locale, post, body, pages, newer = null, older = null}: BlogArticleProps) {
   const t = useMessage();
-  return (
-    <Section maxWidth={layout.proseMaxWidth} padding={SPACE.page} xstyle={styles.section}>
+  const outline = outlineItems(body);
+  const hasOutline = outline.length > 0;
+  const article = (
+    <Section maxWidth={layout.proseMaxWidth} padding={SPACE.page} xstyle={hasOutline ? styles.sectionInRow : styles.section}>
       <VStack gap={SPACE.section} data-pagefind-body>
         <VStack gap={SPACE.block}>
           <Breadcrumbs data-pagefind-ignore>
@@ -80,6 +91,8 @@ export function BlogArticle({locale, post, body, pages, newer = null, older = nu
             <PostCover image={post.cover} dark={post.coverDark} data-image-widths={PROSE_IMAGE.widths} sizes={PROSE_IMAGE.sizes} decoding="async" />
           </AspectRatio>
         ) : null}
+
+        {hasOutline ? <MobileOutline items={outline} /> : null}
 
         <VStack className={css.body}>
           <PostMarkdown locale={locale} pages={pages}>
@@ -120,4 +133,5 @@ export function BlogArticle({locale, post, body, pages, newer = null, older = nu
       </VStack>
     </Section>
   );
+  return hasOutline ? <OutlineRow items={outline}>{article}</OutlineRow> : article;
 }

@@ -4,7 +4,9 @@ import Base from '../../../../layouts/Base.astro';
 import {getPosts, postAlternates, summarize, type Post} from '../../../../content/posts';
 import {LOCALES} from '../../../../i18n/locales';
 import {localeParam, routes} from '../../../../i18n/routes';
+import {outlineItems} from '../../../../markdown/outline';
 import {BlogArticle} from '../../../../ui/blog/BlogArticle';
+import OutlineSpy from '../../../../ui/section/OutlineSpy.astro';
 
 export async function getStaticPaths() {
   const perLocale = await Promise.all(LOCALES.map(getPosts));
@@ -23,6 +25,9 @@ const pages = new Set(siblings.map(entry => routes.post(locale, entry.data.slug)
 const index = siblings.findIndex(entry => entry.data.slug === slug);
 const newer = index > 0 ? summarize(siblings[index - 1]) : null;
 const older = index >= 0 && index < siblings.length - 1 ? summarize(siblings[index + 1]) : null;
+// BlogArticle renders the outline from the same headings; posts without any load no spy.
+const Spy = outlineItems(post.body ?? '').length > 0 ? OutlineSpy : Fragment;
 ---
 <Base locale={locale} title={summary.title} description={summary.description} path={routes.post(locale, slug)} alternates={alternates} article={{title: summary.title, datePublished: post.data.date.toISOString(), dateModified: (post.data.lastmod ?? post.data.date).toISOString(), authors: summary.authors}} section="community" page={createElement(BlogArticle, {locale, post: summary, body: post.body ?? '', pages, newer, older})}>
+  <Spy />
 </Base>
