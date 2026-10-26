@@ -43,7 +43,20 @@
     const active = diff(onSet, off);
     const plain = diff(off, onSet);
     const ids = links.map(link => decodeURIComponent(link.hash.slice(1)));
+    // A rail taller than the viewport scrolls itself, so it follows the active entry as the page moves.
+    const follow = (link: HTMLAnchorElement) => {
+      if (rail.matches('details') || rail.scrollHeight <= rail.clientHeight) return;
+      const box = rail.getBoundingClientRect();
+      const item = link.getBoundingClientRect();
+      if (item.top < box.top || item.bottom > box.bottom) rail.scrollTop += item.top - box.top - (box.height - item.height) / 2;
+    };
+    let shown: string | undefined;
     const set = (id: string | undefined) => {
+      if (id !== shown && id != null) {
+        shown = id;
+        const link = links[ids.indexOf(id)];
+        if (link != null) requestAnimationFrame(() => follow(link));
+      }
       links.forEach((link, index) => {
         const current = ids[index] === id;
         link.classList.remove(...(current ? plain : active));

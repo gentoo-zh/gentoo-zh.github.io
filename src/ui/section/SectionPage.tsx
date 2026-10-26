@@ -8,10 +8,8 @@ import {Divider} from '@astryxdesign/core/Divider';
 import {Grid} from '@astryxdesign/core/Grid';
 import {VStack} from '@astryxdesign/core/Layout';
 import {Section} from '@astryxdesign/core/Section';
-import {Outline, type OutlineItem} from '@astryxdesign/core/Outline';
+import type {OutlineItem} from '@astryxdesign/core/Outline';
 import {HStack} from '@astryxdesign/core/Layout';
-import {Icon} from '@astryxdesign/core/Icon';
-import {Text} from '@astryxdesign/core/Text';
 import {PageHeader} from '../PageHeader';
 import type {Locale} from '../../i18n/locales';
 import {useMessage} from '../../i18n/useMessage';
@@ -25,6 +23,7 @@ import {menuEntries, sectionHref, sectionOf, type SectionId} from '../chrome/sec
 import {useSectionPageContext} from './sectionContext';
 import {LinkCard} from '../LinkCard';
 import {pageStart} from './pageStart.stylex';
+import {MobileOutline, OutlineRow} from './PageOutline';
 
 // Pad only the article below the navigation; sidebar and outline retain their sticky positions.
 const ARTICLE_BODY = {
@@ -56,39 +55,6 @@ const styles = stylex.create({
   },
   prose: {maxWidth: layout.proseMaxWidth, width: '100%'},
   titleDivider: {display: {default: 'block', [media.toc]: 'none'}},
-  mobileOutline: {
-    display: {default: 'none', [media.toc]: 'block'},
-    position: 'sticky',
-    top: 'var(--appshell-header-height, 0rem)',
-    zIndex: 1,
-    backgroundColor: 'var(--color-background-surface)',
-    paddingBlock: spacingVars['--spacing-3'],
-    borderBottomWidth: 'var(--border-width)',
-    borderBottomStyle: 'solid',
-    borderBottomColor: 'var(--color-border)',
-  },
-  outlineSummary: {
-    cursor: 'pointer',
-    minHeight: 'var(--size-element-md)',
-    paddingInline: spacingVars['--spacing-3'],
-    borderWidth: 'var(--border-width)',
-    borderStyle: 'solid',
-    borderColor: 'var(--color-border)',
-    borderRadius: 'var(--radius-element)',
-    listStyle: 'none',
-    '::-webkit-details-marker': {display: 'none'},
-  },
-  outlineLinks: {maxHeight: '60dvh', overflowY: 'auto', paddingBlockStart: spacingVars['--spacing-3']},
-  aside: {
-    color: 'var(--color-text-primary)',
-    display: {default: 'block', [media.toc]: 'none'},
-    position: 'sticky',
-    top: `calc(var(--appshell-header-height, 0rem) + ${spacingVars['--spacing-6']})`,
-    alignSelf: 'flex-start',
-    flexShrink: 0,
-    width: layout.tocWidth,
-    paddingBlockStart: spacingVars['--spacing-6'],
-  },
 });
 
 export interface SectionPageProps {
@@ -142,7 +108,6 @@ function bodyParts(title: string, body: string, slots: Readonly<Record<string, R
 }
 
 export function SectionPage({locale, section, title, description, headerNavigation, body, slots = {}, outline: extra = [], isDataPage = false, isTablePage = false, isFullWidthDataPage = false, pages, renderInlineCode, children}: SectionPageProps) {
-  const t = useMessage();
   const parts = body == null ? [] : bodyParts(title, body, slots);
   const outline = [...parts.flatMap(part => (part.kind === 'markdown' ? outlineItems(part.source) : part.outline)), ...extra];
   const hasOutline = outline.length > 0 && !isTablePage;
@@ -156,15 +121,7 @@ export function SectionPage({locale, section, title, description, headerNavigati
         </VStack>
         }
         {hasOutline ? (
-          <VStack as="details" xstyle={styles.mobileOutline} data-pagefind-ignore data-gz-outline>
-            <HStack as="summary" align="center" justify="between" gap={SPACE.tight} xstyle={styles.outlineSummary}>
-              <Text type="label">{t('gz.section.onThisPage')}</Text>
-              <Icon icon="chevronDown" size={ICON.inline} color="secondary" />
-            </HStack>
-            <VStack xstyle={styles.outlineLinks}>
-              <Outline items={outline} label={t('gz.section.onThisPage')} density="compact" />
-            </VStack>
-          </VStack>
+          <MobileOutline items={outline} />
         ) : null}
         <VStack gap={SPACE.section} className={className}>
           {parts.length === 0 ? null : (
@@ -189,14 +146,7 @@ export function SectionPage({locale, section, title, description, headerNavigati
   );
   // Data pages keep the rail like the docs; only a full-width dashboard drops it.
   if (!hasOutline || isFullWidthDataPage) return article;
-  return (
-    <HStack gap={SPACE.group} vAlign="start" hAlign="center" width="100%">
-      {article}
-      <VStack xstyle={styles.aside} data-pagefind-ignore data-gz-outline>
-        <Outline items={outline} label={t('gz.section.onThisPage')} density="compact" />
-      </VStack>
-    </HStack>
-  );
+  return <OutlineRow items={outline}>{article}</OutlineRow>;
 }
 
 /** Adjacent pages follow sidebar order, with the overview first and external entries skipped. */
