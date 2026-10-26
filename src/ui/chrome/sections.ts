@@ -134,7 +134,15 @@ export const SECTIONS: Section[] = [
   },
 ];
 
-export function sectionHref(locale: Locale, section: Section): string {
+/** A top navigation item: a category, or Posts, which also sits there as a direct link. */
+export type TopNavId = SectionId | 'posts';
+export type TopNavEntry = Pick<Section, 'slug' | 'pages'> & {id: TopNavId};
+
+/** The top navigation: the categories, with Posts right after Community. */
+export const TOP_NAV: TopNavEntry[] = SECTIONS.flatMap(section =>
+  section.id === 'community' ? [section, {id: 'posts', slug: 'posts', pages: []}] : [section]);
+
+export function sectionHref(locale: Locale, section: Pick<Section, 'slug'>): string {
   return routes.page(locale, section.slug);
 }
 
@@ -156,7 +164,7 @@ export function entryAnchor(locale: Locale, entry: SectionPage): string | undefi
   return typeof entry.anchor === 'string' ? entry.anchor : entry.anchor[locale];
 }
 
-export function menuEntries(locale: Locale, section: Section): Array<{entry: SectionPage; link: EntryLink}> {
+export function menuEntries(locale: Locale, section: Pick<Section, 'pages'>): Array<{entry: SectionPage; link: EntryLink}> {
   return section.pages.map(entry => ({entry, link: entryLink(locale, entry)}));
 }
 

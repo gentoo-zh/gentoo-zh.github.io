@@ -30,7 +30,9 @@ type Props = SiteHeadProps & {
 const {page, section, sideNav, ...head} = Astro.props;
 const {locale, alternates} = head;
 const isHome = head.path === routes.home(locale) || undefined;
-const nav: NavIslandProps = {locale, section, alternates, isHome, languageTag: LANGUAGE_TAG[locale], messages: navMessages(locale)};
+// The top navigation selects Posts, not Community, on the post index and on posts.
+const navSection = head.path.startsWith(routes.posts(locale)) ? 'posts' : section;
+const nav: NavIslandProps = {locale, section: navSection, alternates, isHome, languageTag: LANGUAGE_TAG[locale], messages: navMessages(locale)};
 const [headHtml, navHtml] = await Promise.all([
   renderStatic(createElement(SiteHead, {...head, section})),
   renderStatic(createElement(NavIslandRoot, nav), {identifierPrefix: NAV_ISLAND_ID_PREFIX}),

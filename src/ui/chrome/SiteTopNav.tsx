@@ -18,7 +18,7 @@ import {BUTTON, ICON, SPACE} from '../../theme/scale';
 import {SearchButton} from '../search/SearchButton';
 import {FOOTER_ID} from './footerId';
 import {GitHubLogo, Languages, LayoutGrid, Moon, Sun} from './icons';
-import {menuEntries, SECTIONS, sectionHref, services, type SectionId} from './sections';
+import {menuEntries, SECTIONS, sectionHref, services, TOP_NAV, type TopNavId} from './sections';
 import {useThemeMode} from './themeMode';
 import {Wordmark} from './Wordmark';
 
@@ -173,12 +173,12 @@ function ThemeToggle() {
   );
 }
 
-function DrawerLinks({locale, section, onNavigate}: {locale: Locale; section?: SectionId; onNavigate: () => void}) {
+function DrawerLinks({locale, section, onNavigate}: {locale: Locale; section?: TopNavId; onNavigate: () => void}) {
   const t = useMessage();
-  const sections = SECTIONS.map(entry => (
+  const sections = TOP_NAV.map(entry => (
     <VStack key={entry.id} gap={SPACE.toolbar} paddingBlockStart={SPACE.tight}>
       <TopNavItem label={t(`gz.nav.${entry.id}`)} href={sectionHref(locale, entry)} isSelected={section === entry.id} onClick={onNavigate} />
-      <VStack gap={SPACE.toolbar} paddingInlineStart={SPACE.inline}>
+      {entry.pages.length > 0 && <VStack gap={SPACE.toolbar} paddingInlineStart={SPACE.inline}>
         {menuEntries(locale, entry).map(({entry: page, link}) => (
           <TopNavItem
             key={page.id}
@@ -188,7 +188,7 @@ function DrawerLinks({locale, section, onNavigate}: {locale: Locale; section?: S
             onClick={onNavigate}
           />
         ))}
-      </VStack>
+      </VStack>}
     </VStack>
   ));
   return (
@@ -214,8 +214,8 @@ function DrawerLinks({locale, section, onNavigate}: {locale: Locale; section?: S
 
 export interface SiteTopNavProps {
   locale: Locale;
-  /** The category the page belongs to, shown as the selected item. */
-  section?: SectionId;
+  /** The item shown as selected: the page's category, or Posts on the post index and on posts. */
+  section?: TopNavId;
   /** The same page in each locale; a missing locale has no translation of this page. */
   alternates: Partial<Record<Locale, string>>;
   isHome?: boolean;
@@ -236,7 +236,7 @@ export function SiteTopNav({locale, section, alternates, isHome = false}: SiteTo
         heading={<TopNavHeading logoLabel={t('gz.site.title')} headingHref={routes.home(locale)} logo={logo} />}
         centerContent={
           <div {...stylex.props(styles.desktopNav)}>
-            {SECTIONS.map(entry => (
+            {TOP_NAV.map(entry => (
               <TopNavItem key={entry.id} label={t(`gz.nav.${entry.id}`)} href={sectionHref(locale, entry)} isSelected={section === entry.id} />
             ))}
           </div>
