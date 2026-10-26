@@ -23,7 +23,7 @@ The May–October 2026 changelog entries are no longer included after the site r
 
 ## 2026-10 Apple silicon Mac guide update {#apple-silicon-guide}
 
-[Installing Gentoo Linux on Apple Silicon Macs](/en/posts/2025-10-02-gentoo-m-series-mac/) is rewritten from an install on a MacBook Air M2: the 20260827 live ISO verified on hardware (the 20261006 image does not boot), the full Asahi installer and Recovery screens, the latest stage3, and a Taiwan mirror in the `make.conf` example.
+[Installing Gentoo Linux on Apple Silicon Macs](/en/posts/2025-10-02-gentoo-m-series-mac/) is rewritten from an install on a MacBook Air M2: the 20260827 live ISO verified on hardware (the 20261006 image does not boot), the full Asahi installer and Recovery screens, the latest stage3, a Taiwan mirror in the `make.conf` example, and `net-setup` for Wi-Fi on the live USB.
 
 The Chinese-only repost "Gentoo Linux with ZFS" is removed; its links redirect to the post list.
 
