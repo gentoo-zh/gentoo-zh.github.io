@@ -26,7 +26,6 @@ export function StaticCodeBlock({code, language, title}: {code: string; language
       hasLanguageLabel={snippet.title == null}
       width="100%"
       hasCopyButton
-      isWrapped
       isCollapsible={false}
     />
   );
