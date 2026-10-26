@@ -6,6 +6,7 @@ import {renderToStaticMarkup} from 'react-dom/server';
 import {InternationalizationProvider, useTranslator} from '@astryxdesign/core/i18n';
 import {listFiles, readPage, refreshTarget, report} from './lib/html.mjs';
 import {EXTRA_REDIRECTS} from './lib/url-manifest.mjs';
+import {RETIRED_REDIRECTS} from './lib/retired-posts.mjs';
 import {RENAMED_TAGS} from '../src/i18n/tagRenames.ts';
 
 const LOCALES = {'zh-cn': {tag: 'zh-CN', prefix: ''}, 'zh-tw': {tag: 'zh-TW', prefix: '/zh-tw'}, en: {tag: 'en', prefix: '/en'}};
@@ -84,7 +85,7 @@ const OPTIONAL_TYPES = new Set(['page']);
 // Contributor role tags redirect to groups in the library; only baseline tag routes qualify.
 const contributorTags = json('scripts/baseline/p3-contributors.json').pages.filter(page => /^(\/zh-tw|\/en)?\/tags\//.test(page));
 const renamedTags = Object.entries(RENAMED_TAGS).flatMap(([locale, renamed]) => Object.keys(renamed).map(tag => `${LOCALES[locale].prefix}/tags/${tag}/`));
-const REDIRECTS = new Set([...Object.keys(json('scripts/baseline/hugo.json').allRedirects), ...EXTRA_REDIRECTS, ...contributorTags, ...renamedTags]);
+const REDIRECTS = new Set([...Object.keys(json('scripts/baseline/hugo.json').allRedirects), ...EXTRA_REDIRECTS, ...contributorTags, ...renamedTags, ...Object.keys(RETIRED_REDIRECTS)]);
 const pages = listFiles('dist').filter(url => url.endsWith('/index.html')).map(url => url.slice(0, -'index.html'.length));
 if (pages.length === 0) failures.push('dist has no pages; run pnpm build first');
 for (const [locale, {tag, prefix}] of Object.entries(LOCALES)) {

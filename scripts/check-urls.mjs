@@ -4,6 +4,7 @@ import {parseFrontmatter} from 'astro/markdown';
 import {decodeEntities, fileFor, ids, listFiles, parseFeed, readPage, refreshTarget, report} from './lib/html.mjs';
 import {CURRENT_PAGES, FILES_REWRITES, SITEMAP_REDIRECTS, EXTRA_REDIRECTS, FRAGMENT_REDIRECTS, PAGE_SLUGS, PROMOTED_REDIRECTS, slugPaths} from './lib/url-manifest.mjs';
 import {redirectAnchors} from './lib/html-elements.mjs';
+import {RETIRED_REDIRECTS} from './lib/retired-posts.mjs';
 
 const DIST = 'dist';
 const ORIGIN = 'https://gentoozh.org';
@@ -110,10 +111,10 @@ for (const [url, expected] of Object.entries(baseline.feeds)) {
   if (JSON.stringify(actual.items) !== JSON.stringify(posts)) {
     failures.push(`${url} items differ from current posts (title, URL, date, or newest-first order)`);
   }
-  // Titles and new posts may change; every Hugo feed item link stays in the feed.
+  // Titles and new posts may change; every Hugo feed item link stays in the feed unless its post retired.
   const links = new Set(actual.items.map(({link}) => link));
   for (const {link} of expected.items) {
-    if (!links.has(link)) failures.push(`${url}: Hugo feed item ${link} is missing`);
+    if (!links.has(link) && !Object.hasOwn(RETIRED_REDIRECTS, new URL(link).pathname)) failures.push(`${url}: Hugo feed item ${link} is missing`);
   }
   actual.items.forEach(({link}, index) => {
     const body = actual.bodies[index];
@@ -140,8 +141,17 @@ for (const [url, expected] of Object.entries(baseline.feeds)) {
   });
 }
 
-// New headings are allowed; existing heading IDs remain valid link targets.
+// A retired post redirects permanently to a current page; its old path carries no post.
+for (const [path, target] of Object.entries(RETIRED_REDIRECTS)) {
+  if (postPages.includes(path)) failures.push(`${path}: retired post is still published`);
+  const actual = refreshTarget(readPage(DIST, path) ?? '');
+  if (actual == null || new URL(actual, ORIGIN).href !== new URL(target, ORIGIN).href) failures.push(`retired post ${path}: expected redirect to ${target}, got ${actual ?? 'none'}`);
+  if (!CURRENT_PAGES.includes(target)) failures.push(`retired post ${path}: target ${target} is not a current page`);
+}
+
+// New headings are allowed; existing heading IDs remain valid link targets, except on retired posts.
 for (const page of new Set([...postPages, ...Object.keys(baseline.headings)])) {
+  if (Object.hasOwn(RETIRED_REDIRECTS, page)) continue;
   const expectedIds = baseline.headings[page] ?? [];
   const html = readPage(DIST, page) ?? '';
   const actualIds = ids(html);
