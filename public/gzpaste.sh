@@ -4,7 +4,7 @@
 # SPDX-License-Identifier: MIT
 set -eu
 
-VERSION=0.1.3
+VERSION=0.1.4
 BASE="${GZPASTE_URL:-https://paste.gentoozh.org}"
 
 # Locale -> en / cn (Simplified) / tw (Traditional). GZPASTE_LANG overrides.
@@ -36,6 +36,15 @@ t() { # localized message by key
 	up.cn) echo "上传失败" ;;
 	up.tw) echo "上傳失敗" ;;
 	up.*) echo "upload failed" ;;
+	text.cn) echo "paste 站只存 UTF-8 文本，这个文件不是。先转码（iconv -f gbk -t utf-8 文件 | gzpaste）或编码（base64 文件 | gzpaste）" ;;
+	text.tw) echo "paste 站只存 UTF-8 文字，這個檔案不是。先轉碼（iconv -f gbk -t utf-8 檔案 | gzpaste）或編碼（base64 檔案 | gzpaste）" ;;
+	text.*) echo "the pastebin stores UTF-8 text only and this file is not text. Convert it first (iconv -f gbk -t utf-8 FILE | gzpaste) or encode it (base64 FILE | gzpaste)" ;;
+	big.cn) echo "超过服务器的大小上限" ;;
+	big.tw) echo "超過伺服器的大小上限" ;;
+	big.*) echo "larger than the server's size limit" ;;
+	rate.cn) echo "请求太频繁，等一会儿再试" ;;
+	rate.tw) echo "請求太頻繁，等一會兒再試" ;;
+	rate.*) echo "too many requests, wait a moment and retry" ;;
 	opt.cn) echo "未知选项：" ;;
 	opt.tw) echo "未知選項：" ;;
 	opt.*) echo "unknown option: " ;;
@@ -169,8 +178,9 @@ esac
 # control characters, so gzpaste needs only curl (no jq).
 json_str() {
 	LC_ALL=C awk '
-	BEGIN { RS = "\0"; ORS = ""; seen = 0 }
+	BEGIN { RS = "\0"; ORS = ""; seen = 0; nul = 0 }
 	{
+		if (seen) nul = 1
 		seen = 1; s = $0
 		gsub(/\\/, "&&", s); gsub(/"/, "\\\"", s)
 		gsub(/\010/, "\\b", s); gsub(/\011/, "\\t", s); gsub(/\012/, "\\n", s)
@@ -186,12 +196,13 @@ json_str() {
 		gsub(/\036/, "\\u001e", s); gsub(/\037/, "\\u001f", s); gsub(/\177/, "\\u007f", s)
 		printf "\"%s\"", s
 	}
-	END { if (!seen) printf "\"\"" }
+	END { if (nul) exit 2; if (!seen) printf "\"\"" }
 	'
 }
 
 build_json() { # reads the paste text from stdin
-	printf '{"text":%s' "$(json_str)"
+	text=$(json_str) || return 1 # 2 = NUL byte, i.e. not a text file
+	printf '{"text":%s' "$text"
 	if [ -n "$ext" ]; then printf ',"extension":%s' "$(printf '%s' "$ext" | json_str)"; fi
 	if [ -n "$password" ]; then printf ',"password":%s' "$(printf '%s' "$password" | json_str)"; fi
 	if [ -n "$expires" ]; then printf ',"expires":%s' "$expires"; fi
@@ -205,17 +216,37 @@ if [ -z "$file" ] && [ -t 0 ]; then usage; exit 0; fi
 
 if [ -n "$file" ]; then
 	if [ ! -f "$file" ] || [ ! -r "$file" ]; then die "$(t file)$file"; fi
-	json=$(build_json <"$file")
+	json=$(build_json <"$file") || die "$(t text)"
 else
-	json=$(build_json)
+	json=$(build_json) || die "$(t text)"
 fi
 
 if [ "$verbose" = true ]; then echo "gzpaste: $(t send)$BASE" >&2; fi
-resp=$(printf '%s' "$json" | curl -fsS -H 'content-type: application/json' --data-binary @- "$BASE/") ||
-	die "$(t up)"
+# No -f here: the server explains a rejection in the body, and curl -f throws
+# that away, which turned every binary or non-UTF-8 file into a bare
+# "upload failed". The status code comes last so sed can split the two.
+out=$(printf '%s' "$json" | curl -sS -w '\n%{http_code}' \
+	-H 'content-type: application/json' --data-binary @- "$BASE/") || die "$(t up)"
+code=$(printf '%s' "$out" | sed -n '$p')
+resp=$(printf '%s' "$out" | sed '$d')
+
+case "$code" in
+2??) ;;
+400)
+	# wastebin takes the paste as a JSON string, so a NUL byte, a raw control
+	# byte or invalid UTF-8 (GBK text, an image, an archive) fails to parse.
+	case "$resp" in
+	*"invalid unicode code point"* | *"control character"*) die "$(t text)" ;;
+	esac
+	die "$(t up) (HTTP $code)${resp:+: $resp}"
+	;;
+413) die "$(t big)" ;;
+429) die "$(t rate)" ;;
+*) die "$(t up) (HTTP $code)${resp:+: $resp}" ;;
+esac
 
 path=$(printf '%s' "$resp" | sed -n 's/.*"path":"\([^"]*\)".*/\1/p')
-[ -n "$path" ] || die "$(t up)"
+[ -n "$path" ] || die "$(t up)${resp:+: $resp}"
 if [ "$raw" = true ]; then
 	url="$BASE/raw$path"
 elif [ "$md" = true ]; then
