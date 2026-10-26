@@ -46,8 +46,19 @@ $ pnpm dev        # local preview
 
 - A new article goes in `content/<locale>/posts/<date>-<name>/index.md`, with its images in the same directory, referenced by relative path.
 - Simplified Chinese (`zh-cn`), Traditional Chinese (`zh-tw`) and English (`en`) are each written directly; nothing is converted. A locale without a translation can wait.
-- Front matter accepts only `title`, `description`, `date`, `lastmod`, `tags`, `authors` (`name`, `image`, `link`), `aliases`, `featured`, `image`, `cover` and `summary`; a misspelled field fails the build.
+- Front matter accepts only `title`, `description`, `date`, `lastmod`, `tags`, `authors` (`name`, `image`, `link`), `aliases`, `featured`, `image`, `cover`, `summary` and `paged`; a misspelled field fails the build.
 - Available shortcodes: `callout` (`type` is `info`, `warning` or `error`) and `details`.
+
+A long guide can be split into pages: add `paged` to the front matter, and each `## N.` heading gets its own page while everything before `## 1.` stays on the overview page. Section numbers must match in all three languages. Write `paged: true` for one flat list, or use `groups` to split the sidebar list; `from` is the number of each group's first section:
+
+```yaml
+paged:
+  groups:
+    - title: Installation
+      from: 1
+    - title: After installation
+      from: 8
+```
 
 The homepage shows the three latest articles.
 

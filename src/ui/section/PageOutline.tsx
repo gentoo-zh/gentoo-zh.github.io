@@ -4,13 +4,12 @@
 import * as stylex from '@stylexjs/stylex';
 import {spacingVars} from '@astryxdesign/core/theme/tokens.stylex';
 import type {ReactNode} from 'react';
-import {Icon} from '@astryxdesign/core/Icon';
 import {HStack, VStack} from '@astryxdesign/core/Layout';
 import {Outline, type OutlineItem} from '@astryxdesign/core/Outline';
-import {Text} from '@astryxdesign/core/Text';
 import {useMessage} from '../../i18n/useMessage';
+import {DisclosureSummary} from '../../markdown/DisclosureSummary';
 import {layout, media} from '../../theme/layout.stylex';
-import {ICON, SPACE} from '../../theme/scale';
+import {SPACE} from '../../theme/scale';
 
 const styles = stylex.create({
   mobileOutline: {
@@ -23,17 +22,6 @@ const styles = stylex.create({
     borderBottomWidth: 'var(--border-width)',
     borderBottomStyle: 'solid',
     borderBottomColor: 'var(--color-border)',
-  },
-  outlineSummary: {
-    cursor: 'pointer',
-    minHeight: 'var(--size-element-md)',
-    paddingInline: spacingVars['--spacing-3'],
-    borderWidth: 'var(--border-width)',
-    borderStyle: 'solid',
-    borderColor: 'var(--color-border)',
-    borderRadius: 'var(--radius-element)',
-    listStyle: 'none',
-    '::-webkit-details-marker': {display: 'none'},
   },
   outlineLinks: {maxHeight: '60dvh', overflowY: 'auto', paddingBlockStart: spacingVars['--spacing-3']},
   aside: {
@@ -64,10 +52,7 @@ export function MobileOutline({items}: {items: OutlineItem[]}) {
   const t = useMessage();
   return (
     <VStack as="details" xstyle={styles.mobileOutline} data-pagefind-ignore data-gz-outline>
-      <HStack as="summary" align="center" justify="between" gap={SPACE.tight} xstyle={styles.outlineSummary}>
-        <Text type="label">{t('gz.section.onThisPage')}</Text>
-        <Icon icon="chevronDown" size={ICON.inline} color="secondary" />
-      </HStack>
+      <DisclosureSummary label={t('gz.section.onThisPage')} />
       <VStack xstyle={styles.outlineLinks}>
         <Outline items={items} label={t('gz.section.onThisPage')} density="compact" />
       </VStack>

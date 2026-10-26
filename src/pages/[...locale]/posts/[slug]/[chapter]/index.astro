@@ -1,0 +1,43 @@
+---
+import {createElement} from 'react';
+import Base from '../../../../../layouts/Base.astro';
+import {getPosts, summarize} from '../../../../../content/posts';
+import {pagedPosts, type PagedPost} from '../../../../../ui/blog/pagedPosts';
+import type {Locale} from '../../../../../i18n/locales';
+import {chapterRoute, localeParam, routes} from '../../../../../i18n/routes';
+import {outlineItems} from '../../../../../markdown/outline';
+import {PagedArticle, pageList} from '../../../../../ui/blog/BlogArticle';
+import {ChapterSideNav} from '../../../../../ui/blog/PostChapters';
+import OutlineSpy from '../../../../../ui/section/OutlineSpy.astro';
+
+/**
+ * Posts with front matter `paged` read in pages: the overview stays at the post's address ([slug]/index.astro),
+ * and each numbered section lives here at its number.
+ */
+export async function getStaticPaths() {
+  const paged = await pagedPosts();
+  const locales = (slug: string) => paged.filter(({post}) => post.data.slug === slug).map(({post}) => post.data.locale);
+  return paged.flatMap(entry =>
+    entry.split.pages.filter(page => page.number > 0).map(({number: page}) => ({
+      params: {locale: localeParam(entry.post.data.locale), slug: entry.post.data.slug, chapter: String(page)},
+      props: {...entry, page, locales: locales(entry.post.data.slug)},
+    })),
+  );
+}
+
+const {post, split, groups, page, locales} = Astro.props as PagedPost & {page: number; locales: Locale[]};
+const {locale, slug} = post.data;
+const summary = summarize(post);
+const siblings = await getPosts(locale);
+const pages = new Set(siblings.map(entry => routes.post(locale, entry.data.slug)));
+const index = siblings.findIndex(entry => entry.data.slug === slug);
+const newer = index > 0 ? summarize(siblings[index - 1]) : null;
+const older = index >= 0 && index < siblings.length - 1 ? summarize(siblings[index + 1]) : null;
+const alternates = Object.fromEntries(locales.map(other => [other, chapterRoute(other, slug, page)]));
+const section = split.pages.find(entry => entry.number === page)!;
+const props = {locale, post: summary, body: post.body ?? '', pages, newer, older, split, groups, page};
+const Spy = outlineItems(section.body).length > 0 ? OutlineSpy : Fragment;
+---
+<Base locale={locale} title={`${section.title} · ${summary.title}`} description={summary.description} path={chapterRoute(locale, slug, page)} alternates={alternates} article={{title: `${section.title} · ${summary.title}`, datePublished: post.data.date.toISOString(), dateModified: (post.data.lastmod ?? post.data.date).toISOString(), authors: summary.authors}} section="community" sideNav={createElement(ChapterSideNav, pageList(props))} page={createElement(PagedArticle, props)}>
+  <Spy />
+</Base>

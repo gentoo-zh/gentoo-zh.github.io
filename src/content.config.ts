@@ -38,6 +38,13 @@ const posts = defineCollection({
       /** CSS object-position for the cover on the home lead card, which fills its frame. */
       coverPosition: z.string().optional(),
       summary: z.string().optional(),
+      /**
+       * Serve the post in pages, one per numbered `## N.` heading after an overview;
+       * `groups` heads the sidebar list, each from the section it starts at.
+       */
+      paged: z
+        .union([z.literal(true), z.object({groups: z.array(z.object({title: z.string(), from: z.number().int().positive()}).strict())}).strict()])
+        .optional(),
     })
     .strict(),
 });
