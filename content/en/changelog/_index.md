@@ -25,6 +25,8 @@ The May–October 2026 changelog entries are no longer included after the site r
 
 [Installing Gentoo Linux on Apple Silicon Macs](/en/posts/2025-10-02-gentoo-m-series-mac/) is rewritten from an install on a MacBook Air M2: the 20260827 live ISO verified on hardware (the 20261006 image does not boot), the full Asahi installer and Recovery screens, the latest stage3, and a Taiwan mirror in the `make.conf` example.
 
+The rest of the guide is filled in from the same machine: Wi-Fi in the live system with `net-setup`, fstab, crypttab, dracut and GRUB for the encrypted root with real output, and post-install setup on KDE covering Rime input, audio, sleep, the notch and custom kernels. The guide now reads one section per page, and old links land on the right page.
+
 The Chinese-only repost "Gentoo Linux with ZFS" is removed; its links redirect to the post list.
 
 ## 2026-10 Site redesign {#redesign}
