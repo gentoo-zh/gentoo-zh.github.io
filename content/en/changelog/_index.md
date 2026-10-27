@@ -21,6 +21,10 @@ description: "Notable changes to the site and community services."
 
 The May–October 2026 changelog entries are no longer included after the site redesign. Historical links to those months land here; the current changelog begins below.
 
+## 2026-10 Thanks and costs {#sponsors}
+
+[Thanks](/en/thanks/) adds Onidel, which provides 120 USD of cloud credit through its Launch Pack program for the forum and the Matrix bridges, and a new section for individuals. The ledger on [Infrastructure costs](/en/costs/) lists the credit and deducts the used part from the totals.
+
 ## 2026-10 Apple silicon Mac guide update {#apple-silicon-guide}
 
 [Installing Gentoo Linux on Apple Silicon Macs](/en/posts/2025-10-02-gentoo-m-series-mac/) is rewritten from an install on a MacBook Air M2: the 20260827 live ISO verified on hardware (the 20261006 image does not boot), the full Asahi installer and Recovery screens, the latest stage3, and a Taiwan mirror in the `make.conf` example.

@@ -21,6 +21,10 @@ description: "網站與社群服務的重要變更。"
 
 網站改版後不再保留 2026 年 5 至 10 月的舊版更新紀錄。指向這些月份的歷史連結會定位至此處；目前的更新紀錄列於下方。
 
+## 2026-10 致謝與開銷 {#sponsors}
+
+[致謝](/zh-tw/thanks/)加入 Onidel：它透過 Launch Pack 計畫提供 120 USD 雲端額度，用於論壇與 Matrix 橋接；並新增「個人」一節。[基礎設施開銷](/zh-tw/costs/)的支出表加入這筆額度，已抵扣的部分從累計支出中扣除。
+
 ## 2026-10 Apple Silicon Mac 安裝教學更新 {#apple-silicon-guide}
 
 [在 Apple Silicon Mac 上安裝 Gentoo Linux](/zh-tw/posts/2025-10-02-gentoo-m-series-mac/) 依 MacBook Air M2 的實際安裝過程重寫：改用經實機驗證的 20260827 版 Live ISO（20261006 版無法啟動），列出 Asahi 安裝程式與 Recovery 的完整畫面，Stage3 改為下載最新版本，`make.conf` 範例改用台灣鏡像。
