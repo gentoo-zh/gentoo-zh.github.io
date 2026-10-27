@@ -33,3 +33,10 @@ test('contributor cards are listed', async ({page}) => {
   await page.goto('/contributors/');
   expect(await page.locator('[data-gz-island="contributors"] h3 a:visible').count()).toBeGreaterThan(10);
 });
+
+test('a section page of a paged post renders its subsections one level up, the overview does not', async ({page}) => {
+  await page.goto('/posts/2025-10-02-gentoo-m-series-mac/10/');
+  await expect(page.locator('h2[id="85-睡眠"]')).toHaveCount(1);
+  await page.goto('/posts/2025-10-02-gentoo-m-series-mac/');
+  await expect(page.locator('h3[id="硬件需求"]')).toHaveCount(1);
+});
