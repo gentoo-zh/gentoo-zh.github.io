@@ -21,6 +21,6 @@ description: "為 gentoo-zh 提供建置機、鏡像與服務的機構。"
 
 ## 來源與授權 {#credits}
 
-- 鏡像標誌取自各鏡像的網站，僅縮放尺寸、保留原色；OSUOSL 標誌取自其[標誌頁面](https://osuosl.org/about/logos/)，依其規則不改顏色與排列。1Password 圖示取自 [Simple Icons](https://simpleicons.org/)。
+- 鏡像標誌取自各鏡像的網站，僅縮放尺寸、保留原色；OSUOSL 標誌取自其[標誌頁面](https://osuosl.org/about/logos/)，依其規則不改顏色與排列。1Password 圖示取自 [Simple Icons](https://simpleicons.org/)。Onidel 標誌取自其[網站](https://onidel.com/)，未經修改。
 - [gentoo-zh 的標誌](/logo/)改編自 Gentoo 標誌，適用 [CC BY-SA 2.5](https://creativecommons.org/licenses/by-sa/2.5/)。
 - 本站內容採用 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) 授權條款，除非另有說明；[gentoo-zh.github.io](https://github.com/gentoo-zh/gentoo-zh.github.io) 儲存庫的程式碼採用 [MIT 授權條款](https://github.com/gentoo-zh/gentoo-zh.github.io/blob/master/LICENSE)。
