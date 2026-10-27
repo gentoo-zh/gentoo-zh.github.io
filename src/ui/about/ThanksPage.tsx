@@ -23,22 +23,29 @@ const styles = stylex.create({
 
 type Group = 'builder' | 'mirrors' | 'services';
 /** What each sponsor provides and where it is, by host; a sponsor missing here fails the build. */
-const ROLES: Record<string, {group: Group; region: 'us' | 'cn' | 'ca'; note?: 'osuosl' | 'onepassword'}> = {
+const ROLES: Record<string, {group: Group; region: 'us' | 'cn' | 'ca' | 'au'; note?: 'osuosl' | 'onepassword' | 'onidel'}> = {
   'osuosl.org': {group: 'builder', region: 'us', note: 'osuosl'},
   'mirrors.cernet.edu.cn': {group: 'mirrors', region: 'cn'},
   'mirror.nju.edu.cn': {group: 'mirrors', region: 'cn'},
   'mirror.nyist.edu.cn': {group: 'mirrors', region: 'cn'},
   'mirrors.ha.edu.cn': {group: 'mirrors', region: 'cn'},
   '1password.com': {group: 'services', region: 'ca', note: 'onepassword'},
+  'onidel.com': {group: 'services', region: 'au', note: 'onidel'},
 };
 
 const hostOf = (sponsor: Sponsor) => new URL(sponsor.href).hostname;
 
-/** The 1Password tile opens its non-profit programme page, localized as the Hugo page linked it. */
-const NON_PROFIT: Record<Locale, string> = {
-  'zh-cn': 'https://1password.com/zh-cn/for-non-profits',
-  'zh-tw': 'https://1password.com/zh-tw/for-non-profits',
-  en: 'https://1password.com/for-non-profits',
+/**
+ * Tiles that open the sponsor's programme page instead of its home page, by host; 1Password's is
+ * localized as the Hugo page linked it.
+ */
+const PROGRAMME: Record<string, Record<Locale, string>> = {
+  '1password.com': {
+    'zh-cn': 'https://1password.com/zh-cn/for-non-profits',
+    'zh-tw': 'https://1password.com/zh-tw/for-non-profits',
+    en: 'https://1password.com/for-non-profits',
+  },
+  'onidel.com': {'zh-cn': 'https://onidel.com/launch-pack', 'zh-tw': 'https://onidel.com/launch-pack', en: 'https://onidel.com/launch-pack'},
 };
 /** The distfiles page's fragment id for one sponsor, kept for its links after the 301. */
 const SPONSOR_ID: Record<string, string> = {'osuosl.org': 'osuosl'};
@@ -64,7 +71,7 @@ export function ThanksPage({sponsors, ...page}: Props) {
             <ClickableCard
               key={sponsor.href}
               id={SPONSOR_ID[hostOf(sponsor)]}
-              href={role.note === 'onepassword' ? NON_PROFIT[page.locale] : sponsor.href}
+              href={PROGRAMME[hostOf(sponsor)]?.[page.locale] ?? sponsor.href}
               label={name} target="_blank" padding={TEMPLATE.zero}>
               <AspectRatio ratio={TEMPLATE.libraryImageRatio} fit="contain" xstyle={styles.media}>
                 {(sponsor.logoDark ? [[sponsor.logo, modeDisplay.light], [sponsor.logoDark, modeDisplay.dark]] as const : [[sponsor.logo, null]] as const).map(([src, mode]) => <img key={src} src={src} alt="" data-image-widths={THANKS_LOGO_IMAGE.widths} sizes={THANKS_LOGO_IMAGE.sizes} loading="lazy" decoding="async" {...stylex.props(styles.logo, styles.scale(sponsor.scale ?? 1), mode)} />)}
