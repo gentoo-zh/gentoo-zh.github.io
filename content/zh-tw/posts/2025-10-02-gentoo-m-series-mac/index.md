@@ -1524,7 +1524,168 @@ Memory Pressure Monitored CGroups:
 		Memory Pressure Limit: 50.00%
 ```
 
-## 9. 系統維護
+## 9. Mac 鍵位與觸控板
+
+讓鍵盤和觸控板的用法接近 macOS：Cmd 負責快捷鍵，Option 按單字移動，按下觸控板才算點擊。
+
+### 9.1 啟用 gentoo-zh
+
+keyd 由 [gentoo-zh overlay](/overlay/) 提供。新增並同步 overlay：
+
+```bash
+# emerge --ask app-eselect/eselect-repository
+# eselect repository add gentoo-zh git https://github.com/gentoo-zh/overlay.git
+# emaint sync -r gentoo-zh
+```
+
+keyd 在 arm64 上只有測試關鍵字，接受整個 overlay 的 `~arm64`：
+
+```conf
+# /etc/portage/package.accept_keywords/gentoo-zh
+*/*::gentoo-zh ~arm64
+```
+
+### 9.2 Mac 鍵位（keyd）
+
+安裝 keyd：
+
+```bash
+# emerge --ask app-misc/keyd
+```
+
+套件自帶 `/etc/keyd/default.conf`，用下面的 Mac 鍵位取代它：
+
+```conf
+# /etc/keyd/default.conf
+# Mac 式鍵位：Cmd 負責應用程式快捷鍵，Ctrl 保留原樣給終端機。
+
+[ids]
+*
+
+[main]
+leftmeta = layer(meta_mac)
+rightmeta = layer(meta_mac)
+leftalt = layer(alt_mac)
+rightalt = layer(alt_mac)
+
+# 短按送出左 Shift，讓 Rime 切換中英文；按住 300 ms 才切換大寫。
+capslock = timeout(macro(leftshift), 300, capslock)
+
+# Cmd 預設等同 Ctrl，以下為例外。
+[meta_mac:C]
+# 終端機裡 Ctrl+C 是中斷程式，所以複製、貼上、剪下改用 Insert 系列。
+c = C-insert
+v = S-insert
+x = S-delete
+
+# Cmd+Space 開 KRunner，Cmd+` 在同一應用程式的視窗間切換。
+space = A-space
+` = A-`
+
+left = home
+right = end
+up = C-home
+down = C-end
+
+tab = swapm(app_switch_state, A-tab)
+
+[app_switch_state:A]
+tab = A-tab
+right = A-tab
+` = A-S-tab
+left = A-S-tab
+
+# Option 移動、刪除整個單字。
+[alt_mac:A]
+left = C-left
+right = C-right
+backspace = C-backspace
+```
+
+檢查設定，啟用並立即啟動 keyd：
+
+```bash
+$ keyd check /etc/keyd/default.conf
+```
+
+```text
+Parsing /etc/keyd/default.conf
+
+No errors found.
+```
+
+```bash
+# systemctl enable --now keyd
+```
+
+{{< callout type="warning" >}}
+設定出錯導致鍵盤失靈時，同時按 Backspace + Escape + Enter 強制結束 keyd。
+{{< /callout >}}
+
+| 按鍵 | 作用 |
+|---|---|
+| Cmd + 字母 | 同 Ctrl + 字母；C、V、X 見設定註解 |
+| Cmd+Tab | 切換視窗 |
+| Cmd+Space | 開啟 KRunner |
+| Option+←/→、Option+Backspace | 按單字移動、刪除 |
+| 短按 Caps Lock | 切換中英文 |
+| 按住 Caps Lock | 切換大寫 |
+
+日後更新 keyd 時，`dispatch-conf` 會提示用套件的 `default.conf` 覆蓋，保留自己的版本。
+
+keyd 接管內建鍵盤後，按鍵改由 `keyd virtual keyboard` 送出，libinput 把它當成外接鍵盤，「打字時停用」因此失效。把它標記為內建鍵盤：
+
+```bash
+# mkdir -p /etc/libinput
+```
+
+```conf
+# /etc/libinput/local-overrides.quirks
+[Serial Keyboards]
+
+MatchUdevType=keyboard
+MatchName=keyd*keyboard
+AttrKeyboardIntegration=internal
+```
+
+在 `libinput list-devices` 的輸出中找到 `keyd virtual keyboard`，它的 `Kernel:` 行是裝置節點（本機為 `/dev/input/event4`）。節點編號因機器而異，重新開機後也可能改變。把下面指令中的節點換成它，再確認規則已套用：
+
+```bash
+# libinput list-devices
+# libinput quirks list /dev/input/event4
+```
+
+```text
+AttrKeyboardIntegration=internal
+```
+
+再確認觸控板已與 keyd 配對。啟動後輸出中出現下面這行（節錄）即可，按 Ctrl+C 結束：
+
+```bash
+# libinput debug-events --verbose
+```
+
+```text
+palm: dwt activated with Apple MTP multi-touch<->keyd virtual keyboard
+```
+
+KWin 只在啟動時讀取 quirks，重新登入後生效。
+
+### 9.3 觸控板設定
+
+在「系統設定 → 觸控板」取消勾選「輕點以點擊」，改為按下觸控板才算點擊，與 macOS 預設相同；「捲動速度」調慢。設定存放在 `~/.config/kcminputrc`，本機的結果（節錄，`ScrollFactor` 隨滑桿位置而變）：
+
+```bash
+$ cat ~/.config/kcminputrc
+```
+
+```text
+[Libinput][1452][849][Apple MTP multi-touch]
+ScrollFactor=0.3
+TapToClick=false
+```
+
+## 10. 系統維護 {#9-系統維護}
 
 定期更新：
 
@@ -1548,7 +1709,7 @@ m1n1 Stage 2 提供核心辨識硬體所需的裝置樹；`sys-apps/asahi-script
 
 保留 macOS 以取得韌體更新。
 
-## 10. 常見問題
+## 11. 常見問題 {#10-常見問題}
 
 **無法從 USB 啟動**：U-Boot 的 USB 驅動較挑剔，嘗試不同 USB、使用 USB 2.0 裝置、或經過 USB Hub。
 
@@ -1573,9 +1734,9 @@ m1n1 Stage 2 提供核心辨識硬體所需的裝置樹；`sys-apps/asahi-script
 # emerge --ask sys-apps/asahi-meta
 ```
 
-## 11. 進階選項
+## 12. 進階選項 {#11-進階選項}
 
-### 11.1 顯示劉海兩側
+### 12.1 顯示劉海兩側
 
 預設畫面避開劉海，頂部少一條顯示區域。在 `GRUB_CMDLINE_LINUX` 結尾加入 `appledrm.show_notch=1`，讓畫面延伸到劉海兩側：
 
@@ -1603,7 +1764,7 @@ Y
 
 劉海會擋住頂端中間。KDE Plasma 可以把面板放在頂部，高度對齊劉海底部，讓劉海落在面板裡。
 
-### 11.2 自訂核心
+### 12.2 自訂核心
 
 用 `eselect kernel set` 選取剛安裝的 `asahi-sources`，以目前執行中核心的設定為基礎再調整：
 
@@ -1624,7 +1785,7 @@ Y
 
 保留目前可開機的核心，新核心開不了機時可在 GRUB 選回舊版。
 
-### 11.3 切換核心
+### 12.3 切換核心
 
 `update-m1n1` 從 `/usr/src/linux` 取得裝置樹（見 `/etc/default/update-m1n1`），所以要切換開機的核心，先把 `/usr/src/linux` 指向該版本：
 

@@ -1524,7 +1524,168 @@ Memory Pressure Monitored CGroups:
 		Memory Pressure Limit: 50.00%
 ```
 
-## 9. System Maintenance
+## 9. Mac Keyboard and Touchpad
+
+Make the keyboard and touchpad behave closer to macOS: Cmd carries the shortcuts, Option moves by word, and a click needs a press.
+
+### 9.1 Enable gentoo-zh
+
+keyd comes from the [gentoo-zh overlay](/overlay/). Add and sync the overlay:
+
+```bash
+# emerge --ask app-eselect/eselect-repository
+# eselect repository add gentoo-zh git https://github.com/gentoo-zh/overlay.git
+# emaint sync -r gentoo-zh
+```
+
+keyd carries only a testing keyword on arm64; accept `~arm64` for the whole overlay:
+
+```conf
+# /etc/portage/package.accept_keywords/gentoo-zh
+*/*::gentoo-zh ~arm64
+```
+
+### 9.2 Mac Keys with keyd
+
+Install keyd:
+
+```bash
+# emerge --ask app-misc/keyd
+```
+
+The package ships its own `/etc/keyd/default.conf`; replace it with this Mac layout:
+
+```conf
+# /etc/keyd/default.conf
+# Mac-style layout: Cmd carries application shortcuts, Ctrl stays as is for terminals.
+
+[ids]
+*
+
+[main]
+leftmeta = layer(meta_mac)
+rightmeta = layer(meta_mac)
+leftalt = layer(alt_mac)
+rightalt = layer(alt_mac)
+
+# Tap sends left Shift so Rime toggles Chinese and English; hold for 300 ms for Caps Lock.
+capslock = timeout(macro(leftshift), 300, capslock)
+
+# Cmd acts as Ctrl by default, with the exceptions below.
+[meta_mac:C]
+# In a terminal Ctrl+C interrupts the program, so copy, paste and cut use the Insert keys.
+c = C-insert
+v = S-insert
+x = S-delete
+
+# Cmd+Space opens KRunner; Cmd+` switches between windows of the same application.
+space = A-space
+` = A-`
+
+left = home
+right = end
+up = C-home
+down = C-end
+
+tab = swapm(app_switch_state, A-tab)
+
+[app_switch_state:A]
+tab = A-tab
+right = A-tab
+` = A-S-tab
+left = A-S-tab
+
+# Option moves and deletes by word.
+[alt_mac:A]
+left = C-left
+right = C-right
+backspace = C-backspace
+```
+
+Check the config, then enable and start keyd:
+
+```bash
+$ keyd check /etc/keyd/default.conf
+```
+
+```text
+Parsing /etc/keyd/default.conf
+
+No errors found.
+```
+
+```bash
+# systemctl enable --now keyd
+```
+
+{{< callout type="warning" >}}
+If a config error locks up the keyboard, press Backspace + Escape + Enter together to stop keyd.
+{{< /callout >}}
+
+| Keys | Action |
+|---|---|
+| Cmd + letter | Ctrl + the same letter; for C, V and X see the config comments |
+| Cmd+Tab | Switch windows |
+| Cmd+Space | Open KRunner |
+| Option+←/→, Option+Backspace | Move or delete by word |
+| Tap Caps Lock | Toggle Chinese and English |
+| Hold Caps Lock | Caps Lock |
+
+On later keyd updates, `dispatch-conf` offers the packaged `default.conf` again; keep your own.
+
+Once keyd takes over the built-in keyboard, keys come from `keyd virtual keyboard`, which libinput treats as an external keyboard, so Disable while typing stops working. Mark it as internal:
+
+```bash
+# mkdir -p /etc/libinput
+```
+
+```conf
+# /etc/libinput/local-overrides.quirks
+[Serial Keyboards]
+
+MatchUdevType=keyboard
+MatchName=keyd*keyboard
+AttrKeyboardIntegration=internal
+```
+
+In the output of `libinput list-devices`, find `keyd virtual keyboard`; its `Kernel:` line is the device node (`/dev/input/event4` here). The number differs between machines and can change across reboots. Put your node in the command below, then confirm the quirk matches:
+
+```bash
+# libinput list-devices
+# libinput quirks list /dev/input/event4
+```
+
+```text
+AttrKeyboardIntegration=internal
+```
+
+Then confirm that the touchpad pairs with keyd. This line (excerpt) appears at startup; press Ctrl+C to stop:
+
+```bash
+# libinput debug-events --verbose
+```
+
+```text
+palm: dwt activated with Apple MTP multi-touch<->keyd virtual keyboard
+```
+
+KWin reads quirks only at startup; log in again for this to apply.
+
+### 9.3 Touchpad Settings
+
+Under System Settings → Touchpad, untick Tap to click so a click needs a press, as on macOS by default, and lower the Scrolling speed. The settings land in `~/.config/kcminputrc`; on this machine (excerpt; `ScrollFactor` follows the slider):
+
+```bash
+$ cat ~/.config/kcminputrc
+```
+
+```text
+[Libinput][1452][849][Apple MTP multi-touch]
+ScrollFactor=0.3
+TapToClick=false
+```
+
+## 10. System Maintenance {#9-system-maintenance}
 
 Update regularly:
 
@@ -1548,7 +1709,7 @@ m1n1 Stage 2 supplies the kernel's hardware devicetrees. The `sys-apps/asahi-scr
 
 Keep macOS for firmware updates.
 
-## 10. Troubleshooting
+## 11. Troubleshooting {#10-troubleshooting}
 
 **Can't boot from USB**: U-Boot's USB driver is picky. Try a different USB drive, a USB 2.0 device, or go through a USB hub.
 
@@ -1573,9 +1734,9 @@ In the chroot, check that the UUID in `GRUB_CMDLINE_LINUX` matches `blkid /dev/n
 # emerge --ask sys-apps/asahi-meta
 ```
 
-## 11. Advanced Options
+## 12. Advanced Options {#11-advanced-options}
 
-### 11.1 Use the Area Beside the Notch
+### 12.1 Use the Area Beside the Notch
 
 By default the display stops below the notch, leaving a strip at the top unused. Append `appledrm.show_notch=1` to `GRUB_CMDLINE_LINUX` to extend it beside the notch:
 
@@ -1603,7 +1764,7 @@ Y
 
 The notch then covers the middle of the top edge. In KDE Plasma, put a panel at the top, as tall as the notch, so the notch sits inside it.
 
-### 11.2 Custom Kernel
+### 12.2 Custom Kernel
 
 Select the newly installed `asahi-sources` with `eselect kernel set` and start from the running kernel's configuration:
 
@@ -1624,7 +1785,7 @@ Select the newly installed `asahi-sources` with `eselect kernel set` and start f
 
 Keep the current bootable kernel; if the new one fails to boot, pick the old one in GRUB.
 
-### 11.3 Switching Kernels
+### 12.3 Switching Kernels
 
 `update-m1n1` takes the devicetrees from `/usr/src/linux` (see `/etc/default/update-m1n1`), so to switch the kernel you boot, point `/usr/src/linux` at that version first:
 

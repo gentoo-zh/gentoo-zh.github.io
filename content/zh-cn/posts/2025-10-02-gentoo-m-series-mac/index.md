@@ -1524,7 +1524,168 @@ Memory Pressure Monitored CGroups:
 		Memory Pressure Limit: 50.00%
 ```
 
-## 9. 系统维护
+## 9. Mac 键位与触摸板
+
+让键盘和触摸板的用法接近 macOS：Cmd 负责快捷键，Option 按单词移动，按下触摸板才算点击。
+
+### 9.1 启用 gentoo-zh
+
+keyd 由 [gentoo-zh overlay](/overlay/) 提供。添加并同步 overlay：
+
+```bash
+# emerge --ask app-eselect/eselect-repository
+# eselect repository add gentoo-zh git https://mirrors.cernet.edu.cn/gentoo-zh.git
+# emaint sync -r gentoo-zh
+```
+
+keyd 在 arm64 上只有测试关键字，接受整个 overlay 的 `~arm64`：
+
+```conf
+# /etc/portage/package.accept_keywords/gentoo-zh
+*/*::gentoo-zh ~arm64
+```
+
+### 9.2 Mac 键位（keyd）
+
+安装 keyd：
+
+```bash
+# emerge --ask app-misc/keyd
+```
+
+软件包自带 `/etc/keyd/default.conf`，用下面的 Mac 键位替换它：
+
+```conf
+# /etc/keyd/default.conf
+# Mac 式键位：Cmd 负责应用程序快捷键，Ctrl 保留原样给终端。
+
+[ids]
+*
+
+[main]
+leftmeta = layer(meta_mac)
+rightmeta = layer(meta_mac)
+leftalt = layer(alt_mac)
+rightalt = layer(alt_mac)
+
+# 短按送出左 Shift，让 Rime 切换中英文；按住 300 ms 才切换大写。
+capslock = timeout(macro(leftshift), 300, capslock)
+
+# Cmd 默认等同 Ctrl，以下为例外。
+[meta_mac:C]
+# 终端里 Ctrl+C 是中断程序，所以复制、粘贴、剪切改用 Insert 系列。
+c = C-insert
+v = S-insert
+x = S-delete
+
+# Cmd+Space 打开 KRunner，Cmd+` 在同一应用程序的窗口间切换。
+space = A-space
+` = A-`
+
+left = home
+right = end
+up = C-home
+down = C-end
+
+tab = swapm(app_switch_state, A-tab)
+
+[app_switch_state:A]
+tab = A-tab
+right = A-tab
+` = A-S-tab
+left = A-S-tab
+
+# Option 按单词移动、删除。
+[alt_mac:A]
+left = C-left
+right = C-right
+backspace = C-backspace
+```
+
+检查配置，启用并立即启动 keyd：
+
+```bash
+$ keyd check /etc/keyd/default.conf
+```
+
+```text
+Parsing /etc/keyd/default.conf
+
+No errors found.
+```
+
+```bash
+# systemctl enable --now keyd
+```
+
+{{< callout type="warning" >}}
+配置出错导致键盘失灵时，同时按 Backspace + Escape + Enter 强制结束 keyd。
+{{< /callout >}}
+
+| 按键 | 作用 |
+|---|---|
+| Cmd + 字母 | 同 Ctrl + 字母；C、V、X 见配置注释 |
+| Cmd+Tab | 切换窗口 |
+| Cmd+Space | 打开 KRunner |
+| Option+←/→、Option+Backspace | 按单词移动、删除 |
+| 短按 Caps Lock | 切换中英文 |
+| 按住 Caps Lock | 切换大写 |
+
+以后更新 keyd 时，`dispatch-conf` 会提示用软件包的 `default.conf` 覆盖，保留自己的版本。
+
+keyd 接管内置键盘后，按键改由 `keyd virtual keyboard` 送出，libinput 把它当作外接键盘，「键盘输入时禁用触摸板」随之失效。把它标记为内置键盘：
+
+```bash
+# mkdir -p /etc/libinput
+```
+
+```conf
+# /etc/libinput/local-overrides.quirks
+[Serial Keyboards]
+
+MatchUdevType=keyboard
+MatchName=keyd*keyboard
+AttrKeyboardIntegration=internal
+```
+
+在 `libinput list-devices` 的输出中找到 `keyd virtual keyboard`，它的 `Kernel:` 行是设备节点（本机为 `/dev/input/event4`）。节点编号因机器而异，重启后也可能改变。把下面命令中的节点换成它，再确认规则已匹配：
+
+```bash
+# libinput list-devices
+# libinput quirks list /dev/input/event4
+```
+
+```text
+AttrKeyboardIntegration=internal
+```
+
+再确认触摸板已与 keyd 配对。启动后输出中出现下面这行（节选）即可，按 Ctrl+C 结束：
+
+```bash
+# libinput debug-events --verbose
+```
+
+```text
+palm: dwt activated with Apple MTP multi-touch<->keyd virtual keyboard
+```
+
+KWin 只在启动时读取 quirks，重新登录后生效。
+
+### 9.3 触摸板设置
+
+在「系统设置 → 触摸板」取消勾选「轻触点击」，改为按下触摸板才算点击，与 macOS 默认相同；「滚动速度」调慢。设置保存在 `~/.config/kcminputrc`，本机的结果（节选，`ScrollFactor` 随滑块位置而变）：
+
+```bash
+$ cat ~/.config/kcminputrc
+```
+
+```text
+[Libinput][1452][849][Apple MTP multi-touch]
+ScrollFactor=0.3
+TapToClick=false
+```
+
+## 10. 系统维护 {#9-系统维护}
 
 定期更新：
 
@@ -1548,7 +1709,7 @@ m1n1 Stage 2 提供内核识别硬件所需的设备树；`sys-apps/asahi-script
 
 保留 macOS 以获取固件更新。
 
-## 10. 常见问题
+## 11. 常见问题 {#10-常见问题}
 
 **无法从 USB 启动**：U-Boot 的 USB 驱动较挑剔，尝试不同 USB、使用 USB 2.0 设备、或经过 USB Hub。
 
@@ -1573,9 +1734,9 @@ m1n1 Stage 2 提供内核识别硬件所需的设备树；`sys-apps/asahi-script
 # emerge --ask sys-apps/asahi-meta
 ```
 
-## 11. 进阶选项
+## 12. 进阶选项 {#11-进阶选项}
 
-### 11.1 显示刘海两侧
+### 12.1 显示刘海两侧
 
 默认画面避开刘海，顶部少一条显示区域。在 `GRUB_CMDLINE_LINUX` 末尾加入 `appledrm.show_notch=1`，让画面延伸到刘海两侧：
 
@@ -1603,7 +1764,7 @@ Y
 
 刘海会挡住顶端中间。KDE Plasma 可以把面板放在顶部，高度对齐刘海底部，让刘海落在面板里。
 
-### 11.2 自定义内核
+### 12.2 自定义内核
 
 用 `eselect kernel set` 选中刚安装的 `asahi-sources`，以当前运行内核的配置为基础再调整：
 
@@ -1624,7 +1785,7 @@ Y
 
 保留当前可启动的内核，新内核无法启动时可在 GRUB 选回旧版本。
 
-### 11.3 切换内核
+### 12.3 切换内核
 
 `update-m1n1` 从 `/usr/src/linux` 获取设备树（见 `/etc/default/update-m1n1`），所以要切换启动的内核，先把 `/usr/src/linux` 指向该版本：
 
