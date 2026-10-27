@@ -21,9 +21,9 @@ const styles = stylex.create({
   scale: (scale: number) => ({transform: `scale(${scale})`}),
 });
 
-type Group = 'builder' | 'mirrors' | 'services';
+type Group = 'builder' | 'mirrors' | 'services' | 'individuals';
 /** What each sponsor provides and where it is, by host; a sponsor missing here fails the build. */
-const ROLES: Record<string, {group: Group; region: 'us' | 'cn' | 'ca' | 'au'; note?: 'osuosl' | 'onepassword' | 'onidel'}> = {
+const ROLES: Record<string, {group: Group; region: 'us' | 'cn' | 'ca' | 'au'; note?: 'osuosl' | 'onepassword' | 'onidel' | 'zakk'}> = {
   'osuosl.org': {group: 'builder', region: 'us', note: 'osuosl'},
   'mirrors.cernet.edu.cn': {group: 'mirrors', region: 'cn'},
   'mirror.nju.edu.cn': {group: 'mirrors', region: 'cn'},
@@ -31,6 +31,7 @@ const ROLES: Record<string, {group: Group; region: 'us' | 'cn' | 'ca' | 'au'; no
   'mirrors.ha.edu.cn': {group: 'mirrors', region: 'cn'},
   '1password.com': {group: 'services', region: 'ca', note: 'onepassword'},
   'onidel.com': {group: 'services', region: 'au', note: 'onidel'},
+  'github.com': {group: 'individuals', region: 'au', note: 'zakk'},
 };
 
 const hostOf = (sponsor: Sponsor) => new URL(sponsor.href).hostname;
@@ -61,7 +62,8 @@ type Props = Omit<SectionPageProps, 'slots' | 'children'> & {body: string; spons
 export function ThanksPage({sponsors, ...page}: Props) {
   const t = useMessage();
   const group = (id: Group) => (
-    <Grid id={anchorId(page.locale, id)} columns={{minWidth: TEMPLATE.logoColumn}} gap={SPACE.block}>
+    // The distfiles page had no individuals group, and the English heading already carries that id.
+    <Grid id={id === 'individuals' ? undefined : anchorId(page.locale, id)} columns={{minWidth: TEMPLATE.logoColumn}} gap={SPACE.block}>
       {sponsors
         .filter(sponsor => roleOf(sponsor).group === id)
         .map(sponsor => {
@@ -90,5 +92,5 @@ export function ThanksPage({sponsors, ...page}: Props) {
         })}
     </Grid>
   );
-  return <SectionPage {...page} slots={{builder: group('builder'), mirrors: group('mirrors'), services: group('services')}} />;
+  return <SectionPage {...page} slots={{builder: group('builder'), mirrors: group('mirrors'), services: group('services'), individuals: group('individuals')}} />;
 }

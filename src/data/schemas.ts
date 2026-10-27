@@ -180,6 +180,7 @@ const sponsor = z
     img_dark: sitePath.optional(),
     wide: z.boolean().optional(),
     scale: z.number().positive().max(1).optional(),
+    individual: z.boolean().optional(),
     name: text,
     name_tw: text,
     name_en: text,
@@ -191,6 +192,7 @@ const sponsor = z
     logoDark: item.img_dark,
     wide: item.wide ?? false,
     scale: item.scale ?? 1,
+    individual: item.individual ?? false,
     name: localized(item.name, item.name_tw, item.name_en),
   }));
 

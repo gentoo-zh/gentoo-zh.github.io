@@ -1,5 +1,6 @@
 # 首页“致谢”一栏。scale 为显示高度的比例（默认 1），用来让各标志看起来一样大。
 # 顺序、名称与链接和致谢页（content/*/thanks/）保持一致，改一处要同步另一处。
+# individual: true 为个人：只列在致谢页，不进首页这一栏。
 - href: "https://osuosl.org/"
   # OSL 未公开矢量标志：由 osuosl/website 仓库的原 PNG（327×169）放大 10 倍后用 potrace 描成矢量，
   # 保留原画布与边距；原 PNG 在高分屏上发糊。
@@ -42,3 +43,10 @@
   name: "Onidel"
   name_tw: "Onidel"
   name_en: "Onidel"
+- href: "https://github.com/zakkaus"
+  # GitHub 头像（460×460 JPEG）转成 WebP
+  img: "/img/thanks/zakk.webp"
+  individual: true
+  name: "Zakk"
+  name_tw: "Zakk"
+  name_en: "Zakk"

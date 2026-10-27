@@ -26,6 +26,6 @@ export async function homeData(locale: Locale): Promise<HomePageProps> {
   if (images?.order !== homeImageOrder(contributors.map(person => person.avatar))) {
     throw new Error(`src/ui/home/home-images.json does not match the ${locale} contributor order; run pnpm gen:home-images`);
   }
-  const sponsors = (await loadData('sponsors') as {items: Sponsor[]}).items;
+  const sponsors = (await loadData('sponsors') as {items: Sponsor[]}).items.filter(sponsor => !sponsor.individual);
   return {locale, posts, contributors, contributorCount: everyone.length, commits: overlayStats.commits, days: daysRunning(), sponsors, images};
 }
