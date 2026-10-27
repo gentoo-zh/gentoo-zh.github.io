@@ -33,6 +33,10 @@ The rest of the guide is filled in from the same machine: Wi-Fi in the live syst
 
 The Chinese-only repost "Gentoo Linux with ZFS" is removed; its links redirect to the post list.
 
+## 2026-10 Overlay setup {#overlay-arch}
+
+[Overlay setup](/en/overlay/) gains an amd64/arm64 switch; the testing-keyword commands follow the chosen architecture with `~amd64` or `~arm64`.
+
 ## 2026-10 Site redesign {#redesign}
 
 The site moves from Hugo to Astro: pages are generated as static HTML at build time, the interface uses Meta's open-source Astryx component library (React and StyleX), and only a few components such as navigation, search and filters run in the browser. Pagefind provides site search, and the site is deployed on Cloudflare Workers. The download site's guide pages and the service status join the main site, sorted into five categories: Docs, Download, Community, Support and About. The date is set at launch.
