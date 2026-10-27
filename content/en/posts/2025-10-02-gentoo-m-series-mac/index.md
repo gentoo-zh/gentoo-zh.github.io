@@ -1294,7 +1294,9 @@ First boot order: U-Boot → GRUB (pick Gentoo) → (if encrypted) type the LUKS
 $ sudo nmtui
 ```
 
-### 8.2 Desktop Environment
+## 9. Desktop
+
+### 9.1 Desktop Environment {#82-desktop-environment}
 
 This guide uses KDE Plasma. Switch to the Plasma systemd profile, then update the system:
 
@@ -1311,13 +1313,7 @@ Install Plasma, then enable and start the SDDM login screen:
 # systemctl enable --now sddm
 ```
 
-`plasma-meta` pulls in BlueZ for Bluetooth but does not enable it:
-
-```bash
-# systemctl enable --now bluetooth
-```
-
-### 8.3 Fonts and Chinese Input
+### 9.2 Fonts and Chinese Input {#83-fonts-and-chinese-input}
 
 The desktop already brings Latin fonts: fontconfig depends on `virtual/ttf-fonts`, which installs `liberation-fonts`, and KDE adds `noto`. Chinese needs `noto-cjk`:
 
@@ -1383,7 +1379,7 @@ $ echo 'XMODIFIERS=@im=fcitx' > ~/.config/environment.d/fcitx.conf
 
 Press Ctrl+Space to switch to Rime; the first switch deploys its dictionaries. F4 changes the schema (Luna Pinyin, Bopomofo, Cangjie and others), Shift toggles Chinese and English.
 
-### 8.4 Audio
+### 9.3 Audio {#84-audio}
 
 `asahi-audio` was installed in section 6 along with `asahi-meta`.
 
@@ -1422,7 +1418,28 @@ Audio
  │      76. effect_output.j413-convolver                                 [Stream/Output/Audio]
 ```
 
-### 8.5 Sleep
+### 9.4 Bluetooth
+
+`plasma-meta` pulls in BlueZ for Bluetooth but does not enable it:
+
+```bash
+# systemctl enable --now bluetooth
+```
+
+Check that the controller is powered on (excerpt):
+
+```bash
+$ bluetoothctl show
+```
+
+```text
+Name: BlueZ 5.87
+Powered: yes
+```
+
+## 10. System
+
+### 10.1 Sleep {#85-sleep}
 
 On Linux, Apple Silicon supports only s2idle sleep, and no hibernation:
 
@@ -1450,7 +1467,7 @@ AllowSuspendThenHibernate=no
 
 Closing the lid suspends the machine; open it or press any key to wake it.
 
-### 8.6 Memory
+### 10.2 Memory
 
 This guide sets up no swap, so when memory runs out the kernel kills processes. zram compresses swapped-out pages in memory. `sys-apps/zram-generator` is still testing on arm64 (`KEYWORDS="amd64 ~arm64 ~ppc64 ~riscv"`), so accept the testing keyword first:
 
@@ -1524,11 +1541,11 @@ Memory Pressure Monitored CGroups:
 		Memory Pressure Limit: 50.00%
 ```
 
-## 9. Mac Keyboard and Touchpad
+## 11. Mac Keyboard and Touchpad
 
 Make the keyboard and touchpad behave closer to macOS: Cmd carries the shortcuts, Option moves by word, and a click needs a press.
 
-### 9.1 Enable gentoo-zh
+### 11.1 Enable gentoo-zh
 
 keyd comes from the [gentoo-zh overlay](/overlay/). Add and sync the overlay:
 
@@ -1545,7 +1562,7 @@ keyd carries only a testing keyword on arm64; accept `~arm64` for the whole over
 */*::gentoo-zh ~arm64
 ```
 
-### 9.2 Mac Keys with keyd
+### 11.2 Mac Keys with keyd
 
 Install keyd:
 
@@ -1624,7 +1641,8 @@ If a config error locks up the keyboard, press Backspace + Escape + Enter togeth
 
 | Keys | Action |
 |---|---|
-| Cmd + letter | Ctrl + the same letter; for C, V and X see the config comments |
+| Cmd+C, Cmd+V, Cmd+X | Copy, paste and cut, also in a terminal |
+| Cmd + any other letter | Ctrl + the same letter |
 | Cmd+Tab | Switch windows |
 | Cmd+Space | Open KRunner |
 | Option+←/→, Option+Backspace | Move or delete by word |
@@ -1671,7 +1689,7 @@ palm: dwt activated with Apple MTP multi-touch<->keyd virtual keyboard
 
 KWin reads quirks only at startup; log in again for this to apply.
 
-### 9.3 Touchpad Settings
+### 11.3 Touchpad Settings
 
 Under System Settings → Touchpad, untick Tap to click so a click needs a press, as on macOS by default, and lower the Scrolling speed. The settings land in `~/.config/kcminputrc`; on this machine (excerpt; `ScrollFactor` follows the slider):
 
@@ -1685,7 +1703,7 @@ ScrollFactor=0.3
 TapToClick=false
 ```
 
-## 10. System Maintenance {#9-system-maintenance}
+## 12. System Maintenance {#9-system-maintenance}
 
 Update regularly:
 
@@ -1709,7 +1727,7 @@ m1n1 Stage 2 supplies the kernel's hardware devicetrees. The `sys-apps/asahi-scr
 
 Keep macOS for firmware updates.
 
-## 11. Troubleshooting {#10-troubleshooting}
+## 13. Troubleshooting {#10-troubleshooting}
 
 **Can't boot from USB**: U-Boot's USB driver is picky. Try a different USB drive, a USB 2.0 device, or go through a USB hub.
 
@@ -1734,9 +1752,9 @@ In the chroot, check that the UUID in `GRUB_CMDLINE_LINUX` matches `blkid /dev/n
 # emerge --ask sys-apps/asahi-meta
 ```
 
-## 12. Advanced Options {#11-advanced-options}
+## 14. Advanced Options {#11-advanced-options}
 
-### 12.1 Use the Area Beside the Notch
+### 14.1 Use the Area Beside the Notch
 
 By default the display stops below the notch, leaving a strip at the top unused. Append `appledrm.show_notch=1` to `GRUB_CMDLINE_LINUX` to extend it beside the notch:
 
@@ -1764,7 +1782,7 @@ Y
 
 The notch then covers the middle of the top edge. In KDE Plasma, put a panel at the top, as tall as the notch, so the notch sits inside it.
 
-### 12.2 Custom Kernel
+### 14.2 Custom Kernel
 
 Select the newly installed `asahi-sources` with `eselect kernel set` and start from the running kernel's configuration:
 
@@ -1785,7 +1803,7 @@ Select the newly installed `asahi-sources` with `eselect kernel set` and start f
 
 Keep the current bootable kernel; if the new one fails to boot, pick the old one in GRUB.
 
-### 12.3 Switching Kernels
+### 14.3 Switching Kernels
 
 `update-m1n1` takes the devicetrees from `/usr/src/linux` (see `/etc/default/update-m1n1`), so to switch the kernel you boot, point `/usr/src/linux` at that version first:
 

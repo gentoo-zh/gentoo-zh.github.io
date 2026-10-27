@@ -1294,7 +1294,9 @@ stage3 不含 sudo。安装后让 `wheel` 组的用户通过 sudo 执行管理�
 $ sudo nmtui
 ```
 
-### 8.2 桌面环境
+## 9. 桌面
+
+### 9.1 桌面环境 {#82-桌面环境}
 
 以 KDE Plasma 为例。切换到 Plasma 的 systemd profile，再更新系统：
 
@@ -1311,13 +1313,7 @@ $ sudo nmtui
 # systemctl enable --now sddm
 ```
 
-`plasma-meta` 会带入蓝牙服务 BlueZ，但不会启用它：
-
-```bash
-# systemctl enable --now bluetooth
-```
-
-### 8.3 字体与中文输入
+### 9.2 字体与中文输入 {#83-字体与中文输入}
 
 桌面环境已经带入英文字体：fontconfig 依赖的 `virtual/ttf-fonts` 会安装 `liberation-fonts`，KDE 另外安装 `noto`。中文需要另外安装 `noto-cjk`：
 
@@ -1383,7 +1379,7 @@ $ echo 'XMODIFIERS=@im=fcitx' > ~/.config/environment.d/fcitx.conf
 
 按 Ctrl+Space 切换到 Rime，第一次切换会先部署词库。F4 切换方案（朙月拼音、注音、仓颉等），Shift 切换中英文。
 
-### 8.4 音频
+### 9.3 音频 {#84-音频}
 
 `asahi-audio` 已在第 6 节随 `asahi-meta` 安装。
 
@@ -1422,7 +1418,28 @@ Audio
  │      76. effect_output.j413-convolver                                 [Stream/Output/Audio]
 ```
 
-### 8.5 睡眠
+### 9.4 蓝牙
+
+`plasma-meta` 会带入蓝牙服务 BlueZ，但不会启用它：
+
+```bash
+# systemctl enable --now bluetooth
+```
+
+确认蓝牙控制器已开启（节选）：
+
+```bash
+$ bluetoothctl show
+```
+
+```text
+Name: BlueZ 5.87
+Powered: yes
+```
+
+## 10. 系统
+
+### 10.1 睡眠 {#85-睡眠}
 
 Apple Silicon 在 Linux 下只支持 s2idle 睡眠，不支持休眠：
 
@@ -1450,7 +1467,7 @@ AllowSuspendThenHibernate=no
 
 合上屏幕即进入睡眠，打开屏幕或按任意键唤醒。
 
-### 8.6 内存
+### 10.2 内存
 
 本教程没有建立 swap，内存用尽时内核会直接结束进程。用 zram 在内存中压缩换出的页面。`sys-apps/zram-generator` 在 arm64 上仍是测试版（`KEYWORDS="amd64 ~arm64 ~ppc64 ~riscv"`），要先接受测试关键字：
 
@@ -1524,11 +1541,11 @@ Memory Pressure Monitored CGroups:
 		Memory Pressure Limit: 50.00%
 ```
 
-## 9. Mac 键位与触摸板
+## 11. Mac 键位与触摸板
 
 让键盘和触摸板的用法接近 macOS：Cmd 负责快捷键，Option 按单词移动，按下触摸板才算点击。
 
-### 9.1 启用 gentoo-zh
+### 11.1 启用 gentoo-zh
 
 keyd 由 [gentoo-zh overlay](/overlay/) 提供。添加并同步 overlay：
 
@@ -1545,7 +1562,7 @@ keyd 在 arm64 上只有测试关键字，接受整个 overlay 的 `~arm64`：
 */*::gentoo-zh ~arm64
 ```
 
-### 9.2 Mac 键位（keyd）
+### 11.2 Mac 键位（keyd）
 
 安装 keyd：
 
@@ -1624,7 +1641,8 @@ No errors found.
 
 | 按键 | 作用 |
 |---|---|
-| Cmd + 字母 | 同 Ctrl + 字母；C、V、X 见配置注释 |
+| Cmd+C、Cmd+V、Cmd+X | 复制、粘贴、剪切，终端里也能用 |
+| Cmd + 其他字母 | 同 Ctrl + 该字母 |
 | Cmd+Tab | 切换窗口 |
 | Cmd+Space | 打开 KRunner |
 | Option+←/→、Option+Backspace | 按单词移动、删除 |
@@ -1671,7 +1689,7 @@ palm: dwt activated with Apple MTP multi-touch<->keyd virtual keyboard
 
 KWin 只在启动时读取 quirks，重新登录后生效。
 
-### 9.3 触摸板设置
+### 11.3 触摸板设置
 
 在「系统设置 → 触摸板」取消勾选「轻触点击」，改为按下触摸板才算点击，与 macOS 默认相同；「滚动速度」调慢。设置保存在 `~/.config/kcminputrc`，本机的结果（节选，`ScrollFactor` 随滑块位置而变）：
 
@@ -1685,7 +1703,7 @@ ScrollFactor=0.3
 TapToClick=false
 ```
 
-## 10. 系统维护 {#9-系统维护}
+## 12. 系统维护 {#9-系统维护}
 
 定期更新：
 
@@ -1709,7 +1727,7 @@ m1n1 Stage 2 提供内核识别硬件所需的设备树；`sys-apps/asahi-script
 
 保留 macOS 以获取固件更新。
 
-## 11. 常见问题 {#10-常见问题}
+## 13. 常见问题 {#10-常见问题}
 
 **无法从 USB 启动**：U-Boot 的 USB 驱动较挑剔，尝试不同 USB、使用 USB 2.0 设备、或经过 USB Hub。
 
@@ -1734,9 +1752,9 @@ m1n1 Stage 2 提供内核识别硬件所需的设备树；`sys-apps/asahi-script
 # emerge --ask sys-apps/asahi-meta
 ```
 
-## 12. 进阶选项 {#11-进阶选项}
+## 14. 进阶选项 {#11-进阶选项}
 
-### 12.1 显示刘海两侧
+### 14.1 显示刘海两侧
 
 默认画面避开刘海，顶部少一条显示区域。在 `GRUB_CMDLINE_LINUX` 末尾加入 `appledrm.show_notch=1`，让画面延伸到刘海两侧：
 
@@ -1764,7 +1782,7 @@ Y
 
 刘海会挡住顶端中间。KDE Plasma 可以把面板放在顶部，高度对齐刘海底部，让刘海落在面板里。
 
-### 12.2 自定义内核
+### 14.2 自定义内核
 
 用 `eselect kernel set` 选中刚安装的 `asahi-sources`，以当前运行内核的配置为基础再调整：
 
@@ -1785,7 +1803,7 @@ Y
 
 保留当前可启动的内核，新内核无法启动时可在 GRUB 选回旧版本。
 
-### 12.3 切换内核
+### 14.3 切换内核
 
 `update-m1n1` 从 `/usr/src/linux` 获取设备树（见 `/etc/default/update-m1n1`），所以要切换启动的内核，先把 `/usr/src/linux` 指向该版本：
 
