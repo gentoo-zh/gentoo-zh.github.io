@@ -48,6 +48,7 @@ function useFormat(locale: Locale) {
   });
   const price = (row: CostRow) => row.price === 'paid'
     ? t('gz.cost.price', {approx: String(row.approx), amount: String(row.amount), currency: row.currency, period: row.period})
+    : row.price === 'credit' ? t('gz.cost.credit', {amount: String(row.amount), currency: row.currency})
     : row.price === 'sponsored' ? t('gz.cost.sponsored') : t('gz.cost.free');
   const periods = (row: CostRow) => t('gz.cost.periods', {count: row.periods, period: row.period});
   return {t, usd, converted, price, periods};
@@ -107,14 +108,17 @@ export function CostsPage({report, summary, ...page}: Props) {
     if (!spec || spec === '—') return '';
     return row.expires == null ? spec : `${spec} · ${t('gz.cost.expiresOn', {date: row.expires})}`;
   };
-  const item: TableColumn<Row> = {key: 'key', header: t('gz.cost.column.item'), width: proportional(2), renderCell: row => <Text>{name(row)}</Text>};
+  const item: TableColumn<Row> = {
+    key: 'key', header: t('gz.cost.column.item'), width: proportional(2),
+    renderCell: row => row.price === 'credit' ? <VStack gap={TEMPLATE.zero}><Text>{name(row)}</Text><Text type="supporting" color="secondary">{row.spec[page.locale]}</Text></VStack> : <Text>{name(row)}</Text>,
+  };
   const specs: TableColumn<Row> = {
     ...item, header: t('gz.cost.column.spec'), width: proportional(2, {minWidth: COSTS.specWidth}),
     renderCell: row => <VStack gap={TEMPLATE.zero}><Text>{name(row)}</Text>{specLine(row) ? <Text type="supporting" color="secondary">{specLine(row)}</Text> : null}</VStack>,
   };
   const priceColumn: TableColumn<Row> = {key: 'price', header: t('gz.cost.column.price'), width: pixel(COSTS.priceWidth), renderCell: row => <Figure>{price(row)}</Figure>};
   const since: TableColumn<Row> = {key: 'start', header: t('gz.cost.column.since'), width: pixel(COSTS.dateWidth), renderCell: row => <Figure>{row.start}</Figure>};
-  const paid: TableColumn<Row> = {key: 'periods', header: t('gz.cost.column.paid'), width: pixel(COSTS.periodWidth), align: 'end', renderCell: row => <Figure>{periods(row)}</Figure>};
+  const paid: TableColumn<Row> = {key: 'periods', header: t('gz.cost.column.paid'), width: pixel(COSTS.periodWidth), align: 'end', renderCell: row => <Figure>{row.price === 'credit' ? t('gz.cost.creditLeft', {amount: usd(row.remaining ?? 0)}) : periods(row)}</Figure>};
   const total: TableColumn<Row> = {key: 'accumulated', header: t('gz.cost.column.accumulated'), width: pixel(COSTS.priceWidth), align: 'end', renderCell: row => <Figure>{usd(row.accumulated.USD, row.approx)}</Figure>};
   const conversion: TableColumn<Row> = {
     key: 'converted', header: t('gz.cost.column.converted'), width: pixel(COSTS.priceWidth), align: 'end',
@@ -151,7 +155,7 @@ export function CostsPage({report, summary, ...page}: Props) {
     <Text type="supporting">{periods(row)}</Text>
   </VStack>};
   const active = report.active as Row[];
-  const ledger = active.filter(row => row.price === 'paid');
+  const ledger = [...report.active.filter(row => row.price === 'paid'), ...report.credits] as Row[];
   const retired = report.retired as Row[];
   const slots = {
     tables: {

@@ -3,7 +3,7 @@ title: "基础设施开销"
 description: "gentoo-zh 各台服务器的配置、价格与累计支出，数字随站点构建更新。"
 ---
 
-标明 OSUOSL 的项目由 [OSUOSL](https://osuosl.org/) 赞助，其余由 [Zakk](/contributors/zakkaus/) 个人承担，社区没有经费。其他成员承担的几项列在文末。
+标明 OSUOSL 的项目由 [OSUOSL](https://osuosl.org/) 赞助，其余由 [Zakk](/contributors/zakkaus/) 个人承担，社区没有经费。[Onidel](https://onidel.com/) 的 Launch Pack 额度自 2026-10-27 起支付论坛与 Matrix 账单，已用部分从累计支出中扣除。其他成员承担的几项列在文末。
 
 <!-- slot:summary -->
 

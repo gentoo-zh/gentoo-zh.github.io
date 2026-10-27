@@ -9,6 +9,9 @@
 # end       停用日期；写了就只累计到这一天，也不计入月均
 # sponsored 由赞助方免费提供，价格一栏写赞助方而不是免费额度
 #
+# credits 赠送的额度：start 当天及之后开始的计费周期里，applies_to 各项的账单先从额度扣，
+#         扣完为止；已用部分从累计支出中减去，不影响月均。
+#
 # 汇率按 2026 年 7 月：EUR 1 = USD 1.1524
 # 汇率取自 distfiles 那笔年付的实际扣款：100 EUR = 115.24 USD = 777 CNY = 3713.80 TWD = 900 HKD
 rates:
@@ -205,3 +208,13 @@ items:
     start: 2026-06-01
     usd_month: 0
     note: "免费额度，不产生费用"
+
+credits:
+  - key: onidel
+    spec: "Launch Pack 计划，抵扣论坛与 Matrix 账单"
+    spec_tw: "Launch Pack 計畫，抵扣論壇與 Matrix 帳單"
+    spec_en: "Launch Pack program, applied to the forum and Matrix bills"
+    amount: 120
+    currency: USD
+    start: 2026-10-27
+    applies_to: [forum, forum_ipv4, forum_ipv6, matrix]

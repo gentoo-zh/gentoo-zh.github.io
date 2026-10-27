@@ -3,7 +3,7 @@ title: "Infrastructure costs"
 description: "The specification, price and running total for each server gentoo-zh runs; the numbers update with every site build."
 ---
 
-Items marked OSUOSL are sponsored by [OSUOSL](https://osuosl.org/); [Zakk](/contributors/zakkaus/) pays for the rest personally, and the community has no fund. Items paid for by other members are listed at the end.
+Items marked OSUOSL are sponsored by [OSUOSL](https://osuosl.org/); [Zakk](/contributors/zakkaus/) pays for the rest personally, and the community has no fund. From 2026-10-27, [Onidel](https://onidel.com/)’s Launch Pack credit pays the forum and Matrix bills, and the used part is deducted from the totals. Items paid for by other members are listed at the end.
 
 <!-- slot:summary -->
 

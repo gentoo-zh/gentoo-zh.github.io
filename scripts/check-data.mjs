@@ -127,6 +127,18 @@ if (costs != null) {
   same('prepaid EUR conversion', formatAmount(euro.accumulated.USD, 'USD', 'en'), '22.84');
 }
 
+// Credit: bills for periods begun from its start, capped at the credit and deducted from the totals.
+if (costs != null) {
+  const CREDIT = [['2026-10-26', '0.00'], ['2026-11-10', '33.38'], ['2030-01-01', '120.00']];
+  for (const [asOf, expected] of CREDIT) {
+    const report = costReport(costs, asOf);
+    const credit = report.credits.find(row => row.key === 'onidel');
+    same(`onidel credit used ${asOf}`, formatAmount(credit?.used ?? NaN, 'USD', 'en'), expected);
+    const billed = [...report.active, ...report.retired].reduce((sum, row) => sum + row.accumulated.USD, 0);
+    same(`onidel credit deducted ${asOf}`, formatAmount(report.totals.all.USD, 'USD', 'en'), formatAmount(billed - Number(expected), 'USD', 'en'));
+  }
+}
+
 // Mirror order: every mirror once, the language's default first, the origin last unless it is the default.
 const mirrors = data['data/gz_mirrors.yaml'];
 for (const set of mirrors == null ? [] : Object.keys(mirrors)) {
