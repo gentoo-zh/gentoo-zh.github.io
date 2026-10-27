@@ -29,6 +29,10 @@ description: "網站與社群服務的重要變更。"
 
 移除轉載文章〈Gentoo Linux with ZFS〉，原網址轉向文章列表。
 
+## 2026-10 Overlay 設定 {#overlay-arch}
+
+[Overlay 設定](/zh-tw/overlay/)的設定列加入 amd64／arm64 切換，接受測試關鍵字的指令隨所選架構改為 `~amd64` 或 `~arm64`。
+
 ## 2026-10 網站改版 {#redesign}
 
 網站從 Hugo 遷移至 Astro：頁面在建置時產生靜態 HTML，介面使用 Meta 開源的 Astryx 元件庫（React 與 StyleX），只有導覽、搜尋、篩選等少數元件在瀏覽器中執行。站內搜尋由 Pagefind 提供，網站部署在 Cloudflare Workers。下載站的說明頁面與服務狀態併入主站，依文件、下載、社群、支援、關於五類整理。日期於上線時確定。
