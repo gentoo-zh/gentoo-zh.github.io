@@ -30,7 +30,8 @@ const locale = path => new RegExp(`^(\\/zh-tw|\\/en)?${path}$`);
 // language picked from the menu (`chrome/languageChoice.ts`).
 // Every type rose with the top-nav Posts link (`chrome/SiteTopNav.tsx`, `chrome/sections.ts`, 2026-10-26).
 // Post, chapter and section pages rose again with the outline rail's auto-scroll (`section/OutlineSpy.astro`).
-// A paged post's overview adds its inline LegacyAnchors map of ids moved to section pages (950 B, Mac guide).
+// A paged post's overview adds its inline LegacyAnchors map of ids moved to section pages (950 B, Mac guide;
+// +100 B brotli when the guide gained its keyboard and touchpad chapter, 43 → 50 ids, 2026-10-27).
 export const PAGE_TYPES = [
   // The board and its history render from the status API; Recharts stays lazy. `beforeLoad` is the startup
   // closure plus the board's (React and the navigation chunk included); how much of it a browser requests
@@ -53,8 +54,8 @@ export const PAGE_TYPES = [
   // The cost explanation popovers.
   {name: 'costs', route: locale('/costs/'), sample: '/costs/', startup: 5_400, total: 153_800},
   // Posts need the copy delegate; a post with headings adds the outline spy (measured startup 4452 B,
-  // total up to 149229 B on a paged overview, 2026-10-26); one without headings loads no spy.
-  {name: 'post', route: locale('/posts/[^/]+/'), sample: '/posts/2013-02-05-gentoo-zh-community-has-been-founded/', startup: 4_500, total: 149_300},
+  // total up to 149357 B on a paged overview, 2026-10-27); one without headings loads no spy.
+  {name: 'post', route: locale('/posts/[^/]+/'), sample: '/posts/2013-02-05-gentoo-zh-community-has-been-founded/', startup: 4_500, total: 149_400},
   // Section pages of a paged post (front matter `paged`): the post's scripts with a static page list,
   // no island (measured startup 4452 B, total up to 148279 B, 2026-10-26).
   {name: 'chapter', route: locale('/posts/[^/]+/\\d+/'), sample: '/posts/2025-10-02-gentoo-m-series-mac/1/', startup: 4_500, total: 148_300},
