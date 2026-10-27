@@ -1,4 +1,4 @@
-// Remember mirror/channel/sudo choices across guides; keep manual/quick selection local to the page.
+// Remember mirror/channel/arch/sudo choices across guides; keep manual/quick selection local to the page.
 import {useEffect, useState} from 'react';
 import * as stylex from '@stylexjs/stylex';
 import {InternationalizationProvider} from '@astryxdesign/core/i18n';
@@ -12,7 +12,7 @@ import {useMessage} from '../../i18n/useMessage';
 import type {MessageKey} from '../../i18n/locales';
 import {SPACE} from '../../theme/scale';
 import {container} from '../../theme/layout.stylex';
-import {rewriteCode, STORAGE, type GuideChannel, type GuideChoice, type GuideKind, type GuideMirror} from './guideSetup';
+import {rewriteCode, STORAGE, type GuideArch, type GuideChannel, type GuideChoice, type GuideKind, type GuideMirror} from './guideSetup';
 
 export const GUIDE_SETUP_ID_PREFIX = 'gz-guide-';
 
@@ -34,6 +34,7 @@ export type GuidePane = 'manual' | 'quick';
 const PANES: GuidePane[] = ['manual', 'quick'];
 
 const CHANNELS: GuideChannel[] = ['stable', 'unstable'];
+const ARCHES: GuideArch[] = ['amd64', 'arm64'];
 
 const styles = stylex.create({
   setup: {containerType: 'inline-size', width: '100%', minWidth: 0},
@@ -58,7 +59,7 @@ const styles = stylex.create({
     maxWidth: '100%',
     minWidth: 0,
   },
-  channel: {flexShrink: 0},
+  segmented: {flexShrink: 0},
 });
 
 function read(key: string): string | null {
@@ -81,9 +82,11 @@ function write(key: string, value: string) {
 function stored(key: string, mirrors: ReadonlyArray<GuideMirror>, fallback: GuideChoice): GuideChoice {
   const mirror = read(key);
   const channel = read(STORAGE.channel);
+  const arch = read(STORAGE.arch);
   return {
     mirror: mirrors.find(item => item.id === mirror || item.uri === mirror)?.id ?? fallback.mirror,
     channel: channel === 'unstable' || channel === 'stable' ? channel : fallback.channel,
+    arch: arch === 'arm64' || arch === 'amd64' ? arch : fallback.arch,
     sudo: read(STORAGE.sudo) !== 'off',
   };
 }
@@ -140,7 +143,7 @@ function paneOfHash(): {pane: GuidePane; element: HTMLElement} | null {
 
 function Controls({kind, mirrors, initial, tabs = false, hint, protocolSources = true, sudo = true}: Omit<GuideSetupProps, 'languageTag' | 'messages'>) {
   const t = useMessage();
-  const [choice, setChoice] = useState<GuideChoice>({mirror: initial, channel: 'stable', sudo: true});
+  const [choice, setChoice] = useState<GuideChoice>({mirror: initial, channel: 'stable', arch: 'amd64', sudo: true});
   const mirrorKey = kind === 'official' ? 'official-mirror-source' : STORAGE.mirror;
   const selected = mirrors.find(mirror => mirror.id === choice.mirror) ?? mirrors[0]!;
   const [pane, setPane] = useState<GuidePane>('manual');
@@ -181,6 +184,7 @@ function Controls({kind, mirrors, initial, tabs = false, hint, protocolSources =
   const pick = (next: Partial<GuideChoice>) => {
     if (next.mirror != null) write(mirrorKey, next.mirror);
     if (next.channel != null) write(STORAGE.channel, next.channel);
+    if (next.arch != null) write(STORAGE.arch, next.arch);
     if (next.sudo != null) write(STORAGE.sudo, next.sudo ? 'on' : 'off');
     setChoice(current => ({...current, ...next}));
   };
@@ -189,8 +193,13 @@ function Controls({kind, mirrors, initial, tabs = false, hint, protocolSources =
   const controls = (
     <HStack gap={SPACE.inline} vAlign="center" wrap="wrap" hAlign={tabs ? undefined : 'start'} xstyle={tabs ? styles.controls : undefined}>
       {kind === 'binpkg' ? (
-        <SegmentedControl label={t('gz.guide.channel')} value={choice.channel} onChange={value => pick({channel: value as GuideChannel})} xstyle={styles.channel}>
+        <SegmentedControl label={t('gz.guide.channel')} value={choice.channel} onChange={value => pick({channel: value as GuideChannel})} xstyle={styles.segmented}>
           {CHANNELS.map(channel => <SegmentedControlItem key={channel} value={channel} label={channel} />)}
+        </SegmentedControl>
+      ) : null}
+      {kind === 'overlay' ? (
+        <SegmentedControl label={t('gz.guide.arch')} value={choice.arch} onChange={value => pick({arch: value as GuideArch})} xstyle={styles.segmented}>
+          {ARCHES.map(arch => <SegmentedControlItem key={arch} value={arch} label={arch} />)}
         </SegmentedControl>
       ) : null}
       <Selector

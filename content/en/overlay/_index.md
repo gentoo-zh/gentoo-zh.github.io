@@ -27,9 +27,9 @@ steps:
   - id: testing-keyword
     title: "Accept the testing keyword"
     body: |
-      gentoo-zh packages carry only the `~ARCH` (testing) keyword. Systems that already accept `~amd64` globally can skip this step; stable systems must accept `~amd64` first. See the [Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/portage/package.accept_keywords#.7EARCH_system-wide).
+      gentoo-zh packages carry only the `~ARCH` (testing) keyword, such as `~amd64` or `~arm64`. Systems that already accept `~ARCH` globally can skip this step; stable systems must accept `~ARCH` first. See the [Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/portage/package.accept_keywords#.7EARCH_system-wide).
 
-      Accept `~amd64` for the whole overlay. `::gentoo-zh` limits the rule to this overlay, so packages from the main repository are unaffected:
+      Accept `~ARCH` for the whole overlay. `::gentoo-zh` limits the rule to this overlay, so packages from the main repository are unaffected:
 
       ```sh
       # /etc/portage/package.accept_keywords/gentoo-zh
@@ -53,7 +53,7 @@ steps:
 ---
 
 {{< callout type="info" >}}
-Run these commands on an installed Gentoo system with Portage and sudo access. Choose the testing keyword that matches your architecture; the examples use amd64.
+Run these commands on an installed Gentoo system with Portage and sudo access. The testing keyword must match the system's architecture; switch it above.
 {{< /callout >}}
 
 [gentoo-zh](https://github.com/gentoo-zh/overlay) is an inclusive overlay for all Gentoo users, started in 2003 as gentoo-tw and gentoo-china. The [package list](/packages/) shows everything it carries.

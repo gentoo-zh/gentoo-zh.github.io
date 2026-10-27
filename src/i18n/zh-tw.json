@@ -291,6 +291,7 @@
   "gz.support.paste.open": "開啟 paste.gentoozh.org",
   "gz.support.paste.warning": "分享前，請刪除密碼、金鑰與 token。",
   "gz.start.steps": "設定步驟",
+  "gz.guide.arch": "架構",
   "gz.guide.channel": "頻道",
   "gz.guide.protocolSources": "Git: {git} · rsync: {rsync}",
   "gz.guide.mirror": "鏡像",
