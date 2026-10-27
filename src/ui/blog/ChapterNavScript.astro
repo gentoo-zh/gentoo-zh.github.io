@@ -3,28 +3,9 @@
 // keep the selected page in view. The chapters fold once the island mounts, on first use or when idle; a
 // plain click on a chapter header is held until then.
 import {islandSelector} from '../islands/kinds';
-
-const selector = islandSelector('chapters');
+import SidebarScrollScript from '../section/SidebarScrollScript.astro';
 ---
-<script is:inline data-owner="src/ui/blog/ChapterNavScript.astro" define:vars={{selector}}>
-  (function () {
-    // The sidebar's copy; the phone list starts closed, and the sidebar is hidden where it shows.
-    const root = Array.from(document.querySelectorAll(selector)).find(function (element) { return element.parentElement?.clientHeight; });
-    const scroll = root?.parentElement;
-    const selected = root?.querySelector('[aria-current="page"]');
-    if (!scroll || !selected) return;
-    // Run after HeaderOffset, before paint and hydration; scroll only the sidebar.
-    const key = 'gz-chapter-scroll';
-    try { scroll.scrollTop = Number(sessionStorage.getItem(key)) || 0; } catch {}
-    const bounds = scroll.getBoundingClientRect();
-    const item = selected.getBoundingClientRect();
-    if (item.top < bounds.top) scroll.scrollTop += item.top - bounds.top;
-    else if (item.bottom > bounds.bottom) scroll.scrollTop += item.bottom - bounds.bottom;
-    window.addEventListener('pagehide', function () {
-      try { sessionStorage.setItem(key, String(scroll.scrollTop)); } catch {}
-    });
-  })();
-</script>
+<SidebarScrollScript selector={islandSelector('chapters')} storageKey="gz-chapter-scroll" />
 <script>
   import {buttons, hydrated, links, marked} from '../islands/intent';
   import {islandSelector} from '../islands/kinds';

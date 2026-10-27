@@ -88,7 +88,7 @@ function useSectionInView(ids: readonly string[]): string | undefined {
   return shown;
 }
 
-/** Scrolls `scroller` the least that brings its selected row into view, as ChapterNavScript does on load. */
+/** Scrolls `scroller` the least that brings its selected row into view, as SidebarScrollScript does on load. */
 function keepSelectedInView(scroller: HTMLElement) {
   const selected = scroller.querySelector('[aria-current="page"]');
   if (!scroller.clientHeight || selected == null) return;
