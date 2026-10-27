@@ -5,6 +5,7 @@ export const GUIDE_LIVE_EVENT = 'gz-guide-live';
 
 export type GuideKind = 'overlay' | 'binpkg' | 'distfiles' | 'official';
 export type GuideChannel = 'stable' | 'unstable';
+export type GuideArch = 'amd64' | 'arm64';
 
 export interface GuideMirror {
   /** The mirror's source (`cernet`), `origin` for the distfiles server, `github` for the overlay origin. */
@@ -18,6 +19,7 @@ export interface GuideMirror {
 export interface GuideChoice {
   mirror: string;
   channel: GuideChannel;
+  arch: GuideArch;
   sudo: boolean;
 }
 
@@ -28,11 +30,11 @@ export const CHANNEL_PATH: Record<GuideChannel, string> = {
 };
 
 /** Preserve the download site's storage keys so existing choices remain valid. */
-export const STORAGE = {mirror: 'mirror-source', channel: 'mirror-channel', sudo: 'mirror-sudo'} as const;
+export const STORAGE = {mirror: 'mirror-source', channel: 'mirror-channel', arch: 'guide-arch', sudo: 'mirror-sudo'} as const;
 
 const escape = (text: string) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
-/** Rewrite mirror/channel URLs and sudo prefixes; preserve unrelated URLs and Distfiles fallbacks. */
+/** Rewrite mirror/channel URLs, the overlay's testing keyword and sudo prefixes; preserve unrelated URLs and Distfiles fallbacks. */
 export function rewriteCode(code: string, kind: GuideKind, mirrors: ReadonlyArray<GuideMirror>, choice: GuideChoice): string {
   const chosen = mirrors.find(mirror => mirror.id === choice.mirror) ?? mirrors[0]!;
   const any = `(?:${mirrors.map(mirror => escape(mirror.uri)).sort((a, b) => b.length - a.length).join('|')})`;
@@ -53,7 +55,7 @@ export function rewriteCode(code: string, kind: GuideKind, mirrors: ReadonlyArra
       return replace(line, mirrors.map(mirror => mirror.uri), chosen.uri);
     }).join('\n');
   }
-  if (kind === 'overlay') text = text.replace(new RegExp(any, 'g'), chosen.uri);
+  if (kind === 'overlay') text = text.replace(new RegExp(any, 'g'), chosen.uri).replace(/~amd64\b/g, `~${choice.arch}`);
   if (kind === 'binpkg') text = text.replace(new RegExp(`${any}(?:/unstable)?/binpkgs/x86-64`, 'g'), chosen.uri + CHANNEL_PATH[choice.channel]);
   if (kind === 'distfiles') {
     const ordered = [chosen, ...mirrors.filter(mirror => mirror !== chosen)].map(mirror => mirror.uri).join(' ');

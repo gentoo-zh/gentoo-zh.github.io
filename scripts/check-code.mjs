@@ -39,9 +39,15 @@ assert.deepEqual(tokens('$ literal\n# literal', 'text'), []);
 
 const mirrors = [{id: 'a', uri: 'https://a.example'}, {id: 'b', uri: 'https://b.example'}];
 const source = '$ sudo emaint sync -r gentoo-zh\n$ curl https://a.example/repo\n# Keep this comment';
-const rewritten = rewriteCode(source, 'overlay', mirrors, {mirror: 'b', channel: 'stable', sudo: false});
+const rewritten = rewriteCode(source, 'overlay', mirrors, {mirror: 'b', channel: 'stable', arch: 'amd64', sudo: false});
 assert.equal(rewritten, '# emaint sync -r gentoo-zh\n$ curl https://b.example/repo\n# Keep this comment');
-assert.equal(rewriteCode(source, 'overlay', mirrors, {mirror: 'a', channel: 'stable', sudo: true}), source);
+assert.equal(rewriteCode(source, 'overlay', mirrors, {mirror: 'a', channel: 'stable', arch: 'amd64', sudo: true}), source);
+// The architecture switch rewrites the overlay's testing keyword only.
+const keyword = '# /etc/portage/package.accept_keywords/gentoo-zh\n*/*::gentoo-zh ~amd64\nnet-im/tencent-qq ~amd64';
+const arm64 = {mirror: 'a', channel: 'stable', arch: 'arm64', sudo: true};
+assert.equal(rewriteCode(keyword, 'overlay', mirrors, arm64), keyword.replaceAll('~amd64', '~arm64'));
+assert.equal(rewriteCode(keyword, 'overlay', mirrors, {...arm64, arch: 'amd64'}), keyword);
+for (const kind of ['binpkg', 'distfiles']) assert.equal(rewriteCode(keyword, kind, mirrors, arm64), keyword, kind);
 
 // Astryx's default async threshold must not leave long static blocks without tokens.
 const long = 'const answer = 42;\n'.repeat(150);

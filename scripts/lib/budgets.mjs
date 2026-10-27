@@ -45,8 +45,9 @@ export const PAGE_TYPES = [
   {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_600, total: 235_900},
   // The listing renders from distfiles' `/_ls/`; `beforeLoad` is the startup closure plus the browser's.
   {name: 'files', route: locale('/files/'), sample: '/files/', startup: 6_100, beforeLoad: 162_100, total: 165_800},
-  // Setup guides add mirror/channel/sudo controls, pane switching and code rewriting.
-  {name: 'guide', route: locale('/(?:overlay|binpkg-setup|distfiles-setup|gentoo-(?:repo|distfiles|binpkg|prefix)-setup)/'), sample: '/overlay/', startup: 6_100, total: 171_800},
+  // Setup guides add mirror/channel/arch/sudo controls, pane switching and code rewriting; the overlay
+  // architecture switch raised it to 171862 B on /zh-tw/overlay/ (2026-10-27).
+  {name: 'guide', route: locale('/(?:overlay|binpkg-setup|distfiles-setup|gentoo-(?:repo|distfiles|binpkg|prefix)-setup)/'), sample: '/overlay/', startup: 6_100, total: 171_900},
   // Contributor lists hydrate filters and cards; profiles share this route family's budget.
   {name: 'contributors', route: locale('/contributors/(?:[^/]+/)?'), sample: '/contributors/', startup: 5_700, total: 164_800},
   // The cost explanation popovers.

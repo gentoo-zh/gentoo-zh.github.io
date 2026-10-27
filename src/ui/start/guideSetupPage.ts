@@ -36,7 +36,7 @@ export async function guideSetup(locale: Locale, kind: GuideKind, all: Mirrors, 
     mirrors = list.map(mirror => ({id: id(mirror), uri: mirror.uri}));
     initial = id(defaultMirror(all, set, locale));
   }
-  const rewrite = (markdown: string) => rewriteFences(markdown, code => rewriteCode(code, kind, mirrors, {mirror: initial, channel: 'stable', sudo: true}));
+  const rewrite = (markdown: string) => rewriteFences(markdown, code => rewriteCode(code, kind, mirrors, {mirror: initial, channel: 'stable', arch: 'amd64', sudo: true}));
   const languageTag = LANGUAGE_TAG[locale];
   const messages = Object.fromEntries(Object.entries(providerMessages(locale)[languageTag]!).filter(([key]) => /^gz\.(guide|mirror\.name)\.|^@astryx\.(selector|switch|layer|tabList|field|input|textInput|iconButton|button)\./.test(key)));
   const props: GuideSetupProps = {kind, languageTag, messages, mirrors, initial, tabs: panes != null, hint, ...controls};

@@ -29,9 +29,9 @@ steps:
   - id: testing-keyword
     title: "接受测试关键字"
     body: |
-      gentoo-zh 的软件包只有 `~ARCH`（测试）关键字。全局使用 `~amd64` 的系统跳过这一步；使用稳定关键字的系统要先接受 `~amd64`，说明见 [Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/portage/package.accept_keywords#.7EARCH_system-wide)。
+      gentoo-zh 的软件包只有 `~ARCH`（测试）关键字，例如 `~amd64` 或 `~arm64`。全局使用 `~ARCH` 的系统跳过这一步；使用稳定关键字的系统要先接受 `~ARCH`，说明见 [Gentoo Wiki](https://wiki.gentoo.org/wiki//etc/portage/package.accept_keywords#.7EARCH_system-wide)。
 
-      接受整个 overlay 的 `~amd64`。`::gentoo-zh` 把规则限定在本 overlay，主仓库的软件包不受影响：
+      接受整个 overlay 的 `~ARCH`。`::gentoo-zh` 把规则限定在本 overlay，主仓库的软件包不受影响：
 
       ```sh
       # /etc/portage/package.accept_keywords/gentoo-zh
@@ -55,7 +55,7 @@ steps:
 ---
 
 {{< callout type="info" >}}
-这些命令用于已安装 Portage 的 Gentoo 系统，需要 sudo 权限。测试关键字应与系统架构一致，示例使用 amd64。
+这些命令用于已安装 Portage 的 Gentoo 系统，需要 sudo 权限。测试关键字必须与系统架构一致，可在上方切换。
 {{< /callout >}}
 
 [gentoo-zh](https://github.com/gentoo-zh/overlay) 是一个包容的 overlay，面向所有 Gentoo 用户，前身是 2003 年的 gentoo-tw 与 gentoo-china。收录的全部软件包见[软件包列表](/packages/)。

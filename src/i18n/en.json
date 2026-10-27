@@ -291,6 +291,7 @@
   "gz.support.paste.open": "Open paste.gentoozh.org",
   "gz.support.paste.warning": "Remove passwords, keys and tokens before sharing.",
   "gz.start.steps": "Setup steps",
+  "gz.guide.arch": "Architecture",
   "gz.guide.channel": "Channel",
   "gz.guide.protocolSources": "Git: {git} · rsync: {rsync}",
   "gz.guide.mirror": "Mirror",
