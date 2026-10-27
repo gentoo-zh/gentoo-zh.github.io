@@ -24,7 +24,7 @@ import {sectionHref, sectionOf} from '../chrome/sections';
 import {LinkCard} from '../LinkCard';
 import {MobileOutline, OutlineRow} from '../section/PageOutline';
 import {AuthorByline} from './AuthorByline';
-import {MobileChapters, type PageListProps} from './PostChapters';
+import type {PageListProps} from './ChapterNavGroups';
 import {PostCover} from './PostCover';
 import css from '../../markdown/MarkdownBody.module.css';
 import {BUTTON, CHIP, GRID, ICON, SPACE, TEMPLATE} from '../../theme/scale';
@@ -165,11 +165,14 @@ export interface PagedArticleProps extends BlogArticleProps {
   groups?: ReadonlyArray<PageGroupSpec>;
   /** The page shown: 0 for the overview, otherwise a section number. */
   page: number;
+  /** The page list for phones, the `chapters` island (renderChapterNav). */
+  pageList: ReactNode;
 }
 
 /** The page list for a paged post's sidebar (Base's `sideNav`) and its phone header. */
 export function pageList({locale, post, split, groups, page}: Pick<PagedArticleProps, 'locale' | 'post' | 'split' | 'groups' | 'page'>): PageListProps {
-  return {locale, slug: post.slug, groups: pageGroups(split, groups), current: page};
+  const listed = pageGroups(split, groups).map(group => ({title: group.title, pages: group.pages.map(({number, title, sections, intro}) => ({number, title, sections, intro}))}));
+  return {locale, slug: post.slug, groups: listed, current: page};
 }
 
 /**
@@ -178,7 +181,7 @@ export function pageList({locale, post, split, groups, page}: Pick<PagedArticleP
  * pages go there. Every page keeps the outline rail, empty or not, so the article column stays put while
  * the reader moves between pages.
  */
-export function PagedArticle({locale, post, body, pages, newer = null, older = null, split, groups, page}: PagedArticleProps) {
+export function PagedArticle({locale, post, body, pages, newer = null, older = null, split, page, pageList: phonePages}: PagedArticleProps) {
   const t = useMessage();
   const href = (number: number) => chapterRoute(locale, post.slug, number);
   const at = split.pages.findIndex(entry => entry.number === page);
@@ -232,7 +235,7 @@ export function PagedArticle({locale, post, body, pages, newer = null, older = n
 
           {/* On phones the page list sits right above the sticky outline, which still spans the body. */}
           <VStack gap={SPACE.block}>
-            <MobileChapters {...pageList({locale, post, split, groups, page})} />
+            {phonePages}
             <VStack gap={SPACE.section}>
               {outline.length > 0 ? <MobileOutline items={outline} /> : null}
 

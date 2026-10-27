@@ -125,7 +125,7 @@ function compressedSize(code) {
 
 /** Controls are interactive only inside a root whose authenticated entry was loaded. */
 function outsideToggles(elements, scripts) {
-  const handlers = {section: 'SectionNavScript.astro_astro_type_script_index_0_lang', nav: 'NavScript.astro_astro_type_script_index_0_lang', contributors: 'ContributorsScript.astro_astro_type_script_index_0_lang', guide: 'GuideSetupScript.astro_astro_type_script_index_0_lang', costs: 'CostsSummaryScript.astro_astro_type_script_index_0_lang'};
+  const handlers = {section: 'SectionNavScript.astro_astro_type_script_index_0_lang', chapters: 'ChapterNavScript.astro_astro_type_script_index_0_lang', nav: 'NavScript.astro_astro_type_script_index_0_lang', contributors: 'ContributorsScript.astro_astro_type_script_index_0_lang', guide: 'GuideSetupScript.astro_astro_type_script_index_0_lang', costs: 'CostsSummaryScript.astro_astro_type_script_index_0_lang'};
   const entries = new Set([...scripts].filter(([url, {code}]) => moduleOwner(url, code)).map(([url]) => moduleName(url)));
   return elements.filter(element => {
     if (!element.attrs.has('aria-expanded')) return false;

@@ -7,7 +7,8 @@ import type {Locale} from '../../../../../i18n/locales';
 import {chapterRoute, localeParam, routes} from '../../../../../i18n/routes';
 import {outlineItems} from '../../../../../markdown/outline';
 import {PagedArticle, pageList} from '../../../../../ui/blog/BlogArticle';
-import {ChapterSideNav} from '../../../../../ui/blog/PostChapters';
+import {renderChapterNav} from '../../../../../ui/blog/renderChapterNav';
+import ChapterNavScript from '../../../../../ui/blog/ChapterNavScript.astro';
 import OutlineSpy from '../../../../../ui/section/OutlineSpy.astro';
 
 /**
@@ -37,7 +38,9 @@ const alternates = Object.fromEntries(locales.map(other => [other, chapterRoute(
 const section = split.pages.find(entry => entry.number === page)!;
 const props = {locale, post: summary, body: post.body ?? '', pages, newer, older, split, groups, page};
 const Spy = outlineItems(section.body).length > 0 ? OutlineSpy : Fragment;
+const nav = await renderChapterNav(pageList(props));
 ---
-<Base locale={locale} title={`${section.title} · ${summary.title}`} description={summary.description} path={chapterRoute(locale, slug, page)} alternates={alternates} article={{title: `${section.title} · ${summary.title}`, datePublished: post.data.date.toISOString(), dateModified: (post.data.lastmod ?? post.data.date).toISOString(), authors: summary.authors}} section="community" sideNav={createElement(ChapterSideNav, pageList(props))} page={createElement(PagedArticle, props)}>
+<Base locale={locale} title={`${section.title} · ${summary.title}`} description={summary.description} path={chapterRoute(locale, slug, page)} alternates={alternates} article={{title: `${section.title} · ${summary.title}`, datePublished: post.data.date.toISOString(), dateModified: (post.data.lastmod ?? post.data.date).toISOString(), authors: summary.authors}} section="community" sideNav={nav.sideNav} page={createElement(PagedArticle, {...props, pageList: nav.pageList})}>
   <Spy />
+  <ChapterNavScript />
 </Base>

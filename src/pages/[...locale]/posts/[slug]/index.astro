@@ -7,7 +7,8 @@ import {chapterRoute, localeParam, routes} from '../../../../i18n/routes';
 import {pagedPost} from '../../../../ui/blog/pagedPosts';
 import {outlineItems} from '../../../../markdown/outline';
 import {BlogArticle, PagedArticle, pageList} from '../../../../ui/blog/BlogArticle';
-import {ChapterSideNav} from '../../../../ui/blog/PostChapters';
+import {renderChapterNav} from '../../../../ui/blog/renderChapterNav';
+import ChapterNavScript from '../../../../ui/blog/ChapterNavScript.astro';
 import LegacyAnchors from '../../../../ui/LegacyAnchors.astro';
 import OutlineSpy from '../../../../ui/section/OutlineSpy.astro';
 
@@ -36,8 +37,11 @@ const moved = paged == null ? {} : Object.fromEntries([...paged.split.pageOf].fi
 // BlogArticle renders the outline from the same headings; posts without any load no spy.
 const Spy = outlineItems(paged?.split.pages[0].body ?? post.body ?? '').length > 0 ? OutlineSpy : Fragment;
 const Anchors = paged == null ? Fragment : LegacyAnchors;
+const nav = pagedProps == null ? null : await renderChapterNav(pageList(pagedProps));
+const NavScript = nav == null ? Fragment : ChapterNavScript;
 ---
-<Base locale={locale} title={summary.title} description={summary.description} path={routes.post(locale, slug)} alternates={alternates} article={{title: summary.title, datePublished: post.data.date.toISOString(), dateModified: (post.data.lastmod ?? post.data.date).toISOString(), authors: summary.authors}} section="community" sideNav={pagedProps == null ? undefined : createElement(ChapterSideNav, pageList(pagedProps))} page={pagedProps == null ? createElement(BlogArticle, props) : createElement(PagedArticle, pagedProps)}>
+<Base locale={locale} title={summary.title} description={summary.description} path={routes.post(locale, slug)} alternates={alternates} article={{title: summary.title, datePublished: post.data.date.toISOString(), dateModified: (post.data.lastmod ?? post.data.date).toISOString(), authors: summary.authors}} section="community" sideNav={nav?.sideNav} page={pagedProps == null || nav == null ? createElement(BlogArticle, props) : createElement(PagedArticle, {...pagedProps, pageList: nav.pageList})}>
   <Spy />
   <Anchors anchors={moved} />
+  <NavScript />
 </Base>
