@@ -90,6 +90,13 @@ try {
   assert.ok(chapterHtml.includes('href="/en/faq/"') || chapterHtml.includes('href="/faq/"'), 'root links stay root links');
   assert.ok(chapterHtml.includes('href="https://example.com/a.png"'), 'absolute URLs stay');
   assert.ok(['id="install-1"', 'id="install-2"', 'id="own-id"'].every(id => chapterHtml.includes(id)), 'headings carry the written ids');
+  // A section page renders its ### and deeper one level up under the page's h1; an unnumbered ## stays h2.
+  const sectionHtml = renderToStaticMarkup(createElement(SiteI18n, {locale: 'en'}, createElement(PostMarkdown, {locale: 'en', pages: new Set(), promoteHeadings: true}, split.pages[2].body + '\n\n#### Deeper')));
+  assert.match(sectionHtml, /<h2[^>]*id="install-2"/, 'a section page renders ### as h2');
+  assert.match(sectionHtml, /<h2[^>]*id="own-id"/, 'a promoted heading keeps its explicit id');
+  assert.match(sectionHtml, /<h3[^>]*id="deeper"/, 'a section page renders #### as h3');
+  assert.match(sectionHtml, /<h2[^>]*id="references"/, 'an unnumbered ## stays h2');
+  assert.match(render('en', split.pages[0].body), /<h3[^>]*id="install"/, 'without promoteHeadings, as on the overview, ### stays h3');
   // Without the options a body renders exactly as before.
   const plain = render('en', '![shot](shot.webp) [a](#x) [b](notes.txt)');
   assert.ok(plain.includes('src="shot.webp"') && plain.includes('href="#x"') && plain.includes('href="notes.txt"'));

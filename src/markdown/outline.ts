@@ -31,3 +31,11 @@ export function outlineItems(body: string): OutlineItem[] {
   }
   return items;
 }
+
+/**
+ * A heading's level on a section page of a paged post, whose `## N.` heading is the page title (h1): `###`
+ * and deeper move up one so the page's sections are its h2s; an unnumbered `##` left on the page stays h2.
+ */
+export function promotedLevel<Level extends number>(level: Level): Level {
+  return (level > 2 ? level - 1 : level) as Level;
+}

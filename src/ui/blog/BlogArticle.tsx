@@ -17,7 +17,7 @@ import {chapterRoute, routes} from '../../i18n/routes';
 import {tagKey} from '../../i18n/tags';
 import {useMessage} from '../../i18n/useMessage';
 import {pageGroups, pageHashResolver, type PageGroupSpec, type PostPages} from '../../markdown/chapters';
-import {outlineItems} from '../../markdown/outline';
+import {outlineItems, promotedLevel} from '../../markdown/outline';
 import {PostMarkdown} from '../../markdown/PostMarkdown';
 import {layout, media} from '../../theme/layout.stylex';
 import {sectionHref, sectionOf} from '../chrome/sections';
@@ -177,8 +177,8 @@ export function pageList({locale, post, split, groups, page}: Pick<PagedArticleP
 
 /**
  * One page of a paged post. The overview at the post's address carries the post's header and cover; a
- * section page's title is its `## N.` heading, which keeps its whole-post id. Links to headings on other
- * pages go there. Every page keeps the outline rail, empty or not, so the article column stays put while
+ * section page's title is its `## N.` heading, which keeps its whole-post id, and the page's `###` and
+ * deeper render one level up. Links to headings on other pages go there. Every page keeps the outline rail, empty or not, so the article column stays put while
  * the reader moves between pages.
  */
 export function PagedArticle({locale, post, body, pages, newer = null, older = null, split, page, pageList: phonePages}: PagedArticleProps) {
@@ -188,7 +188,8 @@ export function PagedArticle({locale, post, body, pages, newer = null, older = n
   const shown = split.pages[at];
   const section = shown?.id == null ? null : shown;
   const text = shown?.body ?? body;
-  const outline = outlineItems(text);
+  // The rail lists the same headings at the levels they render at.
+  const outline = section == null ? outlineItems(text) : outlineItems(text).map(item => ({...item, level: promotedLevel(item.level)}));
   const prev = split.pages[at - 1];
   const next = split.pages[at + 1];
   const pager = prev == null && next == null ? null : (
@@ -240,7 +241,7 @@ export function PagedArticle({locale, post, body, pages, newer = null, older = n
               {outline.length > 0 ? <MobileOutline items={outline} /> : null}
 
               <VStack className={css.body}>
-                <PostMarkdown locale={locale} pages={pages} resolveHash={pageHashResolver(split, page, href)} assetBase={href(0)}>
+                <PostMarkdown locale={locale} pages={pages} resolveHash={pageHashResolver(split, page, href)} assetBase={href(0)} promoteHeadings={section != null}>
                   {text}
                 </PostMarkdown>
               </VStack>
