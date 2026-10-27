@@ -23,7 +23,7 @@ description: "網站與社群服務的重要變更。"
 
 ## 2026-10 致謝與開銷 {#sponsors}
 
-[致謝](/zh-tw/thanks/)加入 Onidel：它透過 Launch Pack 計畫提供 120 USD 雲端額度，用於論壇與 Matrix 橋接；並新增「個人」一節。[基礎設施開銷](/zh-tw/costs/)的支出表加入這筆額度，已抵扣的部分從累計支出中扣除。
+[致謝](/zh-tw/thanks/)加入 Onidel：它透過 Launch Pack 計畫提供 120 USD 雲端額度，用於論壇與 Matrix 橋接。頁面另新增「個人」一節。[基礎設施開銷](/zh-tw/costs/)的支出表加入這筆額度，已抵扣的部分從累計支出中扣除。
 
 ## 2026-10 Apple Silicon Mac 安裝教學更新 {#apple-silicon-guide}
 
