@@ -43,22 +43,26 @@ export const PAGE_TYPES = [
   // Mirror health updates and legacy fragment resolution extend the section scripts.
   {name: 'mirrorlist', route: locale('/mirrorlist/'), sample: '/mirrorlist/', startup: 5_400, total: 150_400},
   // A sortable, filterable table with the dependency view and its search controls.
-  {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_600, total: 235_900},
+  // Sharing SideNav with the chapter island moved shared chunk bytes (236017 B, 2026-10-27).
+  {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_600, total: 236_100},
   // The listing renders from distfiles' `/_ls/`; `beforeLoad` is the startup closure plus the browser's.
   {name: 'files', route: locale('/files/'), sample: '/files/', startup: 6_100, beforeLoad: 162_100, total: 165_800},
   // Setup guides add mirror/channel/arch/sudo controls, pane switching and code rewriting; the overlay
   // architecture switch raised it to 171862 B on /zh-tw/overlay/ (2026-10-27).
   {name: 'guide', route: locale('/(?:overlay|binpkg-setup|distfiles-setup|gentoo-(?:repo|distfiles|binpkg|prefix)-setup)/'), sample: '/overlay/', startup: 6_100, total: 171_900},
   // Contributor lists hydrate filters and cards; profiles share this route family's budget.
-  {name: 'contributors', route: locale('/contributors/(?:[^/]+/)?'), sample: '/contributors/', startup: 5_700, total: 164_800},
+  // Sharing SideNav with the chapter island moved shared chunk bytes (164819 B, 2026-10-27).
+  {name: 'contributors', route: locale('/contributors/(?:[^/]+/)?'), sample: '/contributors/', startup: 5_700, total: 164_900},
   // The cost explanation popovers.
   {name: 'costs', route: locale('/costs/'), sample: '/costs/', startup: 5_400, total: 153_800},
   // Posts need the copy delegate; a post with headings adds the outline spy (measured startup 4452 B,
-  // total up to 149357 B on a paged overview, 2026-10-27); one without headings loads no spy.
-  {name: 'post', route: locale('/posts/[^/]+/'), sample: '/posts/2013-02-05-gentoo-zh-community-has-been-founded/', startup: 4_500, total: 149_400},
+  // total up to 149357 B on a paged overview, 2026-10-27); one without headings loads no spy. A paged
+  // overview also hydrates the folding page list (startup 4961 B, total 151826 B, 2026-10-27).
+  {name: 'post', route: locale('/posts/[^/]+/'), sample: '/posts/2013-02-05-gentoo-zh-community-has-been-founded/', startup: 5_000, total: 151_900},
   // Section pages of a paged post (front matter `paged`): the post's scripts with a static page list,
-  // no island (measured startup 4452 B, total up to 148279 B, 2026-10-26).
-  {name: 'chapter', route: locale('/posts/[^/]+/\\d+/'), sample: '/posts/2025-10-02-gentoo-m-series-mac/1/', startup: 4_500, total: 148_300},
+  // no island (measured startup 4452 B, total up to 148279 B, 2026-10-26); the list now folds like the
+  // docs sidebar, as an island (startup 4961 B, total 150734 B, 2026-10-27).
+  {name: 'chapter', route: locale('/posts/[^/]+/\\d+/'), sample: '/posts/2025-10-02-gentoo-m-series-mac/1/', startup: 5_000, total: 150_800},
   // Section pages and the rest: the sidebar boot, the outline spy and the copy delegate.
   {name: 'section', route: /.*/, sample: '/faq/', startup: 5_000, total: 149_800},
 ];

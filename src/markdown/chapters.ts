@@ -20,6 +20,8 @@ export interface PostPage {
   body: string;
   /** The page's top-level `###` headings in order, with their whole-post ids and outline labels. */
   sections: PageSection[];
+  /** Whether anything precedes the first section, so the page list links the page's own top. */
+  intro: boolean;
 }
 
 /** A `###` heading on a page, as the page list links it. */
@@ -121,7 +123,9 @@ export function splitPages(body: string): PostPages {
     const actual = (anchored(text).children as Block[]).flatMap(headingIds);
     if (actual.join('\n') !== expected.join('\n')) throw new Error(`splitPages: page ${number} heading ids differ from the whole post`);
     const sections = outline.filter(item => item.level === 3 && pageOf.get(item.id) === number).map(item => ({id: item.id, label: item.label}));
-    return {number, id, title, body: text, sections};
+    const firstSection = raw.findIndex((node, index) => index > first && index < to && node.type === 'heading' && node.depth === 3);
+    const intro = (firstSection < 0 ? to : firstSection) > first + 1;
+    return {number, id, title, body: text, sections, intro};
   });
   return {pages, pageOf};
 }

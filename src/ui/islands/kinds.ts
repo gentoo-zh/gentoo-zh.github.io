@@ -3,7 +3,7 @@
 
 export const ISLAND_ATTRIBUTE = 'data-gz-island';
 
-export type IslandKind = 'nav' | 'section' | 'guide' | 'contributors' | 'costs' | 'status' | 'files' | 'packages' | 'mirror-health';
+export type IslandKind = 'nav' | 'section' | 'chapters' | 'guide' | 'contributors' | 'costs' | 'status' | 'files' | 'packages' | 'mirror-health';
 
 /** Scripts the scheduler starts that update server markup in place and have no island container. */
 export type EnhancementKind = 'home-live' | 'home-status' | 'outline';

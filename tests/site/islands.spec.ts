@@ -54,6 +54,66 @@ test.describe('sidebar on /faq/', () => {
   }
 });
 
+test.describe('page list on a paged post', () => {
+  // Chapter 3 is shown and has an intro before its sections; chapter 2 has none.
+  const path = '/posts/2025-10-02-gentoo-m-series-mac/3/';
+  const header = (page: Page, chapter: number) => page.locator(`[data-gz-chapter="${chapter}"]:visible`);
+  const chevron = (page: Page, chapter: number) => page.locator(`[data-gz-chapter="${chapter}"]:visible + button`);
+  // Rows inside a folded chapter have no box, and the phone copy is hidden at this width.
+  const selected = (page: Page) => page.locator('[data-gz-island="chapters"] [aria-current="page"]:visible');
+
+  test('only the current chapter starts open, with its own page as the one selected row', async ({page}) => {
+    await page.goto(path);
+    await expect(chevron(page, 3)).toHaveAttribute('aria-expanded', 'true');
+    await expect(chevron(page, 2)).toHaveAttribute('aria-expanded', 'false');
+    await expect(selected(page)).toHaveCount(1);
+    await expect(selected(page)).toHaveAttribute('href', path);
+    await live(page, 'chapters');
+    await expect(selected(page)).toHaveCount(1);
+  });
+
+  test('a plain click on a folded chapter folds it open', async ({page}) => {
+    await page.goto(path);
+    await live(page, 'chapters');
+    await header(page, 2).click();
+    await expect(chevron(page, 2)).toHaveAttribute('aria-expanded', 'true');
+    expect(new URL(page.url()).pathname).toBe(path);
+    await expect(selected(page)).toHaveCount(1);
+  });
+
+  test('the section being read is the one selected row', async ({page}) => {
+    await page.goto(path);
+    await live(page, 'chapters');
+    const group = page.locator(`[id="${await chevron(page, 3).getAttribute('aria-controls')}"]`);
+    const second = group.locator('a[href^="#"]').nth(1);
+    const href = (await second.getAttribute('href'))!;
+    await page.evaluate(id => document.getElementById(id)!.scrollIntoView(), decodeURIComponent(href.slice(1)));
+    await expect(second).toHaveAttribute('aria-current', 'page');
+    await expect(selected(page)).toHaveCount(1);
+  });
+
+  test('a jump past a section still marks it', async ({page}) => {
+    // Chapter 5 has five sections; jump straight from the top to just past the third one.
+    await page.goto('/posts/2025-10-02-gentoo-m-series-mac/5/');
+    await live(page, 'chapters');
+    const group = page.locator(`[id="${await chevron(page, 5).getAttribute('aria-controls')}"]`);
+    const third = group.locator('a[href^="#"]').nth(2);
+    const id = decodeURIComponent((await third.getAttribute('href'))!.slice(1));
+    await page.evaluate(target => scrollTo(0, document.getElementById(target)!.getBoundingClientRect().top + scrollY + 80), id);
+    await expect(third).toHaveAttribute('aria-current', 'page');
+    await expect(selected(page)).toHaveCount(1);
+  });
+
+  test('a chapter without an intro lists no overview and selects its first section', async ({page}) => {
+    await page.goto('/posts/2025-10-02-gentoo-m-series-mac/2/');
+    await live(page, 'chapters');
+    const group = page.locator(`[id="${await chevron(page, 2).getAttribute('aria-controls')}"]`);
+    await expect(group.locator('a').first()).toHaveAttribute('href', /^#/);
+    await expect(selected(page)).toHaveCount(1);
+    await expect(selected(page)).toHaveAttribute('href', await group.locator('a').first().getAttribute('href') ?? '');
+  });
+});
+
 test('GuideSetup follows a hash change to the quick pane before it mounts', async ({page}) => {
   const held = await holdScript(page, 'guide-setup-client');
   await page.goto('/binpkg-setup/');
