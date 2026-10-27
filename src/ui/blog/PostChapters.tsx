@@ -16,7 +16,8 @@ import {SectionSideNav} from '../section/SectionSideNav';
 
 // Group headings and their indented items take SectionNavGroups' weights and spacing, so the list reads
 // like the FAQ sidebar. A SideNavItem with children always draws a collapse button, which needs an island,
-// so the items follow their heading and take the nested list's indent themselves.
+// so the items follow their heading and take the nested list's indent themselves; a page's `###` sections
+// follow it the same way, one indent step deeper.
 const styles = stylex.create({
   group: {paddingBlock: spacingVars['--spacing-2']},
   item: {paddingBlock: spacingVars['--spacing-0-5']},
@@ -26,6 +27,7 @@ const styles = stylex.create({
   // The indent SideNavItem gives nested items, measured on the FAQ sidebar; the item gives up the full
   // width it takes by default, so its end and its truncated label stay inside the sidebar.
   indent: {marginInlineStart: spacingVars['--spacing-6'], width: 'auto'},
+  indentTwice: {marginInlineStart: `calc(${spacingVars['--spacing-6']} * 2)`, width: 'auto'},
   // Shown where SectionSideNav hides the sidebar (media.mobile).
   mobilePages: {
     display: {default: 'none', [media.mobile]: 'block'},
@@ -55,7 +57,7 @@ function PageItems({locale, slug, groups, current}: PageListProps) {
         <SideNavItem size={BUTTON.sidebar} xstyle={header} label={t('gz.section.overview')} href={href(0)} isSelected={current === 0} />
       </SideNavSection>
       {groups.map(({title, pages}) => {
-        const items = pages.map((page, index) => (
+        const items = pages.flatMap((page, index) => [
           <SideNavItem
             key={page.number}
             size={BUTTON.sidebar}
@@ -63,8 +65,17 @@ function PageItems({locale, slug, groups, current}: PageListProps) {
             label={page.title ?? ''}
             href={href(page.number)}
             isSelected={page.number === current}
-          />
-        ));
+          />,
+          ...page.sections.map(section => (
+            <SideNavItem
+              key={`#${section.id}`}
+              size={BUTTON.sidebar}
+              xstyle={[styles.item, asXstyle(styles.child), title == null ? styles.indent : styles.indentTwice]}
+              label={section.label}
+              href={`${page.number === current ? '' : href(page.number)}#${section.id}`}
+            />
+          )),
+        ]);
         return (
           <SideNavSection key={pages[0].number} title={title ?? t('gz.post.chapters')} isHeaderHidden xstyle={styles.group}>
             {title == null ? null : <SideNavItem size={BUTTON.sidebar} xstyle={header} label={title} href={href(pages[0].number)} />}

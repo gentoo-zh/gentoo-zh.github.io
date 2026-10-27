@@ -18,6 +18,14 @@ export interface PostPage {
   title?: string;
   /** The page's Markdown without its own heading; every other heading carries its whole-post id as `{#id}`. */
   body: string;
+  /** The page's top-level `###` headings in order, with their whole-post ids and outline labels. */
+  sections: PageSection[];
+}
+
+/** A `###` heading on a page, as the page list links it. */
+export interface PageSection {
+  id: string;
+  label: string;
 }
 
 export interface PostPages {
@@ -66,7 +74,8 @@ function headingIds(node: Block): string[] {
 export function splitPages(body: string): PostPages {
   const raw = parseMarkdownAst(body).children as Block[];
   const ids = (anchored(body).children as Block[]).map(headingIds);
-  const titles = new Map(outlineItems(body).filter(item => item.level === 2).map(item => [item.id, item.label]));
+  const outline = outlineItems(body);
+  const titles = new Map(outline.filter(item => item.level === 2).map(item => [item.id, item.label]));
   const range = (index: number) => {
     const {start, end} = raw[index].position ?? {};
     if (start?.offset == null || end?.offset == null) throw new Error('splitPages: block without a source offset');
@@ -111,7 +120,8 @@ export function splitPages(body: string): PostPages {
     const expected = ids.slice(from, to).flat().filter(heading => heading !== id);
     const actual = (anchored(text).children as Block[]).flatMap(headingIds);
     if (actual.join('\n') !== expected.join('\n')) throw new Error(`splitPages: page ${number} heading ids differ from the whole post`);
-    return {number, id, title, body: text};
+    const sections = outline.filter(item => item.level === 3 && pageOf.get(item.id) === number).map(item => ({id: item.id, label: item.label}));
+    return {number, id, title, body: text, sections};
   });
   return {pages, pageOf};
 }

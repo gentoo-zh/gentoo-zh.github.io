@@ -68,6 +68,7 @@ try {
   assert.deepEqual(pageIds, fullIds);
   assert.deepEqual(fullIds, ['overview', 'install', '1-setup', 'install-1', '3-use-it', 'install-2', 'own-id', 'references']);
   assert.equal(split.pages[2].body.match(/\{#own-id\}/g)?.length, 1, 'an explicit id is not written twice');
+  assert.deepEqual(split.pages.map(page => page.sections), [[{id: 'install', label: 'Install'}], [{id: 'install-1', label: 'Install'}], [{id: 'install-2', label: 'Install'}, {id: 'own-id', label: 'Kept'}]], 'each page lists its own ### headings with their whole-post ids');
   assert.deepEqual([...split.pageOf], [['overview', 0], ['install', 0], ['1-setup', 1], ['install-1', 1], ['3-use-it', 3], ['install-2', 3], ['own-id', 3], ['references', 3]]);
   assert.throws(() => splitPages('## Unnumbered\n\nonly'), /numbered ## heading/);
   assert.throws(() => splitPages('## 2. Two\n\n## 1. One'), /rising section numbers/);
