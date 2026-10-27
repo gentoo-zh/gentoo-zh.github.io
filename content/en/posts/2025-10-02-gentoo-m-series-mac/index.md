@@ -1228,7 +1228,15 @@ Install NetworkManager and start it at boot:
 # systemctl enable NetworkManager
 ```
 
-### 7.3 Accounts and sudo
+### 7.3 Time Sync
+
+[Section 5.3](#53-sync-the-system-clock) only set the live USB's clock; enable systemd-timesyncd so the installed system keeps its own clock in sync:
+
+```bash
+# systemctl enable systemd-timesyncd
+```
+
+### 7.4 Accounts and sudo
 
 Set the root password:
 
@@ -1253,7 +1261,7 @@ The stage3 has no sudo. Install it and let members of `wheel` run administrative
 # visudo -c
 ```
 
-### 7.4 SSH (Optional)
+### 7.5 SSH (Optional)
 
 To log in over SSH from another computer after the reboot, add your public key and enable sshd. Gentoo's sshd refuses password logins by default, so a key is required; the host keys are generated on its first start:
 
@@ -1264,7 +1272,7 @@ To log in over SSH from another computer after the reboot, add your public key a
 # systemctl enable sshd
 ```
 
-### 7.5 Exit and Reboot
+### 7.6 Exit and Reboot
 
 Exit the chroot and reboot:
 
@@ -1301,6 +1309,12 @@ Install Plasma, then enable and start the SDDM login screen:
 ```bash
 # emerge --ask kde-plasma/plasma-meta kde-apps/kate kde-apps/dolphin
 # systemctl enable --now sddm
+```
+
+`plasma-meta` pulls in BlueZ for Bluetooth but does not enable it:
+
+```bash
+# systemctl enable --now bluetooth
 ```
 
 ### 8.3 Fonts and Chinese Input
@@ -1341,6 +1355,20 @@ After logging in to Plasma:
 
 1. Under System Settings → Keyboard → Virtual Keyboard, pick Fcitx 5.
 2. Under System Settings → Input Method, click Add Input Method and add Rime.
+
+The virtual keyboard already starts fcitx5, and `/etc/xdg/autostart/org.fcitx.Fcitx5.desktop` starts a second copy at login; hide it with a user override:
+
+```bash
+$ mkdir -p ~/.config/autostart
+```
+
+```conf
+# ~/.config/autostart/org.fcitx.Fcitx5.desktop
+[Desktop Entry]
+Type=Application
+Name=Fcitx 5
+Hidden=true
+```
 
 {{< callout type="warning" >}}
 Plasma 6.8 no longer supports X11.
@@ -1421,6 +1449,80 @@ AllowSuspendThenHibernate=no
 ```
 
 Closing the lid suspends the machine; open it or press any key to wake it.
+
+### 8.6 Memory
+
+This guide sets up no swap, so when memory runs out the kernel kills processes. zram compresses swapped-out pages in memory. `sys-apps/zram-generator` is still testing on arm64 (`KEYWORDS="amd64 ~arm64 ~ppc64 ~riscv"`), so accept the testing keyword first:
+
+```conf
+# /etc/portage/package.accept_keywords/zram-generator
+sys-apps/zram-generator ~arm64
+```
+
+```bash
+# emerge --ask sys-apps/zram-generator
+```
+
+Make zram as large as memory and compress it with zstd:
+
+```conf
+# /etc/systemd/zram-generator.conf
+[zram0]
+zram-size = ram
+compression-algorithm = zstd
+```
+
+This takes effect after the next reboot. Then confirm that zram is in use as swap:
+
+```bash
+$ swapon --show
+```
+
+```text
+NAME       TYPE       SIZE  USED PRIO
+/dev/zram0 partition 15.3G 12.4G  100
+```
+
+systemd-oomd kills processes early when memory pressure or swap use gets too high, before the system stalls in a kernel OOM. It only watches cgroups that set `ManagedOOM*`, and Gentoo ships no such settings, so add them:
+
+```bash
+# mkdir -p /etc/systemd/system/-.slice.d /etc/systemd/system/user@.service.d
+```
+
+```conf
+# /etc/systemd/system/-.slice.d/10-oomd-root-slice.conf
+[Slice]
+ManagedOOMSwap=kill
+```
+
+```conf
+# /etc/systemd/system/user@.service.d/10-oomd-user-service.conf
+[Service]
+ManagedOOMMemoryPressure=kill
+ManagedOOMMemoryPressureLimit=50%
+```
+
+Reload the systemd configuration, then enable and start oomd:
+
+```bash
+# systemctl daemon-reload
+# systemctl enable --now systemd-oomd
+```
+
+Check the rules (excerpt): oomd kills processes when swap use passes 90% or the user session's memory pressure passes 50%:
+
+```bash
+$ oomctl
+```
+
+```text
+Swap Used Limit: 90.00%
+Swap Monitored CGroups:
+	Path: /
+Memory Pressure Monitored CGroups:
+	Path: /user.slice/user-1000.slice/user@1000.service
+		Memory Pressure Limit: 50.00%
+```
 
 ## 9. System Maintenance
 

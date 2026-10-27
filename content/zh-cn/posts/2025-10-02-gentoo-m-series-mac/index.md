@@ -1228,7 +1228,15 @@ macbook
 # systemctl enable NetworkManager
 ```
 
-### 7.3 账户与 sudo
+### 7.3 时间同步
+
+[第 5.3 节](#53-同步系统时间)只校正了 Live USB 的时钟，新系统要启用 systemd-timesyncd 才会自动校时：
+
+```bash
+# systemctl enable systemd-timesyncd
+```
+
+### 7.4 账户与 sudo
 
 设置 root 密码：
 
@@ -1253,7 +1261,7 @@ stage3 不含 sudo。安装后让 `wheel` 组的用户通过 sudo 执行管理�
 # visudo -c
 ```
 
-### 7.4 SSH（可选）
+### 7.5 SSH（可选）
 
 重启后要从其他电脑通过 SSH 登录，先放入公钥并启用 sshd。Gentoo 的 sshd 默认不接受密码登录，所以只能用密钥；主机密钥会在 sshd 第一次启动时生成：
 
@@ -1264,7 +1272,7 @@ stage3 不含 sudo。安装后让 `wheel` 组的用户通过 sudo 执行管理�
 # systemctl enable sshd
 ```
 
-### 7.5 退出并重启
+### 7.6 退出并重启
 
 退出 chroot 并重启：
 
@@ -1301,6 +1309,12 @@ $ sudo nmtui
 ```bash
 # emerge --ask kde-plasma/plasma-meta kde-apps/kate kde-apps/dolphin
 # systemctl enable --now sddm
+```
+
+`plasma-meta` 会带入蓝牙服务 BlueZ，但不会启用它：
+
+```bash
+# systemctl enable --now bluetooth
 ```
 
 ### 8.3 字体与中文输入
@@ -1341,6 +1355,20 @@ app-i18n/fcitx-configtool kcm
 
 1. 「系统设置 → 键盘 → 虚拟键盘」选择 Fcitx 5。
 2. 「系统设置 → 输入法」点击「添加输入法」，加入 Rime。
+
+虚拟键盘已经启动 fcitx5，`/etc/xdg/autostart/org.fcitx.Fcitx5.desktop` 会在登录时重复启动一个，在用户目录覆盖并隐藏它：
+
+```bash
+$ mkdir -p ~/.config/autostart
+```
+
+```conf
+# ~/.config/autostart/org.fcitx.Fcitx5.desktop
+[Desktop Entry]
+Type=Application
+Name=Fcitx 5
+Hidden=true
+```
 
 {{< callout type="warning" >}}
 Plasma 6.8 起不再支持 X11。
@@ -1421,6 +1449,80 @@ AllowSuspendThenHibernate=no
 ```
 
 合上屏幕即进入睡眠，打开屏幕或按任意键唤醒。
+
+### 8.6 内存
+
+本教程没有建立 swap，内存用尽时内核会直接结束进程。用 zram 在内存中压缩换出的页面。`sys-apps/zram-generator` 在 arm64 上仍是测试版（`KEYWORDS="amd64 ~arm64 ~ppc64 ~riscv"`），要先接受测试关键字：
+
+```conf
+# /etc/portage/package.accept_keywords/zram-generator
+sys-apps/zram-generator ~arm64
+```
+
+```bash
+# emerge --ask sys-apps/zram-generator
+```
+
+zram 设为与内存同样大小，用 zstd 压缩：
+
+```conf
+# /etc/systemd/zram-generator.conf
+[zram0]
+zram-size = ram
+compression-algorithm = zstd
+```
+
+重启后生效。确认 zram 已作为 swap 使用：
+
+```bash
+$ swapon --show
+```
+
+```text
+NAME       TYPE       SIZE  USED PRIO
+/dev/zram0 partition 15.3G 12.4G  100
+```
+
+systemd-oomd 在内存压力或 swap 用量过高时提前结束进程，不必等系统卡在内核 OOM。它只监控设置了 `ManagedOOM*` 的 cgroup，Gentoo 不附带这些设置，要自己加入：
+
+```bash
+# mkdir -p /etc/systemd/system/-.slice.d /etc/systemd/system/user@.service.d
+```
+
+```conf
+# /etc/systemd/system/-.slice.d/10-oomd-root-slice.conf
+[Slice]
+ManagedOOMSwap=kill
+```
+
+```conf
+# /etc/systemd/system/user@.service.d/10-oomd-user-service.conf
+[Service]
+ManagedOOMMemoryPressure=kill
+ManagedOOMMemoryPressureLimit=50%
+```
+
+重新加载 systemd 配置，启用并立即启动 oomd：
+
+```bash
+# systemctl daemon-reload
+# systemctl enable --now systemd-oomd
+```
+
+确认监控规则（节选）：swap 用量超过 90%，或用户会话的内存压力超过 50%，oomd 就会结束进程：
+
+```bash
+$ oomctl
+```
+
+```text
+Swap Used Limit: 90.00%
+Swap Monitored CGroups:
+	Path: /
+Memory Pressure Monitored CGroups:
+	Path: /user.slice/user-1000.slice/user@1000.service
+		Memory Pressure Limit: 50.00%
+```
 
 ## 9. 系统维护
 
