@@ -337,6 +337,7 @@
   "gz.post.allPosts": "全部文章",
   "gz.post.pager": "文章导航",
   "gz.post.chapters": "章节",
+  "gz.post.chapterIntro": "本章前言",
   "gz.post.prevChapter": "上一章",
   "gz.post.nextChapter": "下一章",
   "gz.redirect.title": "正在跳转",
