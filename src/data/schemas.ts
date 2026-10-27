@@ -79,6 +79,28 @@ const costItem = z
     usdMonth: item.usd_month,
   }));
 
+/** Credit granted against the bills of `applies_to`, used from `start` on. */
+const costCredit = z
+  .object({
+    key: z.string().regex(/^[a-z0-9_]+$/),
+    spec: text,
+    spec_tw: text,
+    spec_en: text,
+    amount: z.number().positive(),
+    currency: z.enum(['USD', 'EUR']),
+    start: day,
+    applies_to: z.array(z.string()).min(1),
+  })
+  .strict()
+  .transform(credit => ({
+    key: credit.key,
+    spec: localized(credit.spec, credit.spec_tw, credit.spec_en),
+    amount: credit.amount,
+    currency: credit.currency,
+    start: credit.start,
+    appliesTo: credit.applies_to,
+  }));
+
 const rate = z.number().positive();
 
 /** `data/gz_costs.yaml`. Rates: USD per EUR, and CNY, TWD, HKD per USD. */
@@ -86,8 +108,18 @@ export const costsSchema = z
   .object({
     rates: z.object({eur_usd: rate, usd_cny: rate, usd_twd: rate, usd_hkd: rate}).strict(),
     items: z.array(costItem).min(1).superRefine(unique('cost key', item => item.key)),
+    credits: z.array(costCredit).default([]),
   })
-  .strict();
+  .strict()
+  .superRefine((costs, ctx) => {
+    unique<string>('credit key', key => key)(costs.credits.map(credit => credit.key), ctx);
+    const keys = new Set(costs.items.map(item => item.key));
+    for (const credit of costs.credits) {
+      // Credit keys share the gz.cost.item.* names and the ledger's row ids with the items.
+      if (keys.has(credit.key)) ctx.addIssue({code: 'custom', message: `credit key "${credit.key}" is also an item key`});
+      for (const key of credit.appliesTo.filter(key => !keys.has(key))) ctx.addIssue({code: 'custom', message: `credit "${credit.key}" applies to unknown item "${key}"`});
+    }
+  });
 
 const mirror = z
   .object({
@@ -201,6 +233,7 @@ export const sponsorsSchema = z.object({items: z.array(sponsor).min(1)}).strict(
 
 export type Costs = z.output<typeof costsSchema>;
 export type CostItem = Costs['items'][number];
+export type CostCredit = Costs['credits'][number];
 export type Rates = Costs['rates'];
 export type Mirrors = z.output<typeof mirrorsSchema>;
 export type MirrorSet = keyof Mirrors;
