@@ -143,7 +143,7 @@ export function ChapterNavGroups({locale, slug, groups, current, scroller}: Chap
         {page.intro ? <SideNavItem
           size={BUTTON.sidebar}
           xstyle={[styles.item, asXstyle(styles.child), styles.firstChild]}
-          label={t('gz.section.overview')}
+          label={t('gz.post.chapterIntro')}
           href={href(page.number)}
           isSelected={isShown && section == null}
         /> : null}

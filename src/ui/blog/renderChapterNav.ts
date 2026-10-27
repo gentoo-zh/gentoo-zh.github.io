@@ -9,7 +9,7 @@ import {ChapterSideNav, MobileChapters} from './PostChapters';
 /** A paged post's page list as two `chapters` islands: Base's `sideNav`, and PagedArticle's `pageList` for phones. */
 export async function renderChapterNav(list: PageListProps) {
   const languageTag = LANGUAGE_TAG[list.locale];
-  const messages = Object.fromEntries(Object.entries(providerMessages(list.locale)[languageTag]).filter(([key]) => /^gz\.section\.overview$|^gz\.post\.chapters$|^@astryx\.(sideNav|sideNavItem|popover|tooltip|layer)\./.test(key)));
+  const messages = Object.fromEntries(Object.entries(providerMessages(list.locale)[languageTag]).filter(([key]) => /^gz\.section\.overview$|^gz\.post\.(chapters|chapterIntro)$|^@astryx\.(sideNav|sideNavItem|popover|tooltip|layer)\./.test(key)));
   const island = async (place: ChapterNavPlace) => {
     const props: ChapterNavIslandProps = {...list, place, languageTag, messages};
     const html = await renderStatic(createElement(ChapterNavIsland, props), {identifierPrefix: chapterNavIdPrefix(place)});
