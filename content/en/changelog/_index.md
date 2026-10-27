@@ -31,6 +31,8 @@ The May–October 2026 changelog entries are no longer included after the site r
 
 The rest of the guide is filled in from the same machine: Wi-Fi in the live system with `net-setup`, fstab, crypttab, dracut and GRUB for the encrypted root with real output, and post-install setup on KDE covering Rime input, audio, sleep, the notch and custom kernels. The guide now reads one section per page, and old links land on the right page.
 
+Post-install setup is regrouped into a Desktop chapter (desktop environment, fonts and Chinese input, audio, Bluetooth) and a System chapter (sleep, memory) and gains what an audit of that machine found missing: time sync and Bluetooth enabled, zram and systemd-oomd, and no duplicate fcitx5 at login. A new Mac keyboard and touchpad chapter enables the gentoo-zh overlay, maps Mac keys with keyd, and keeps disable-while-typing working under keyd. The chapter list of a paged post now folds like the docs sidebar: it lists each chapter's sections, opens the current chapter by default, and marks the section being read.
+
 The Chinese-only repost "Gentoo Linux with ZFS" is removed; its links redirect to the post list.
 
 ## 2026-10 Overlay setup {#overlay-arch}
