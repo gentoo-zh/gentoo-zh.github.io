@@ -63,6 +63,7 @@ export const SCRIPT_OWNERS = [
   {source: 'src/ui/CopyCode.astro', modules: []},
   {source: 'src/ui/LegacyAnchors.astro', modules: []},
   {source: 'src/ui/section/OutlineSpy.astro', modules: ['OutlineSpy.astro_astro_type_script_index_0_lang']},
+  {source: 'src/ui/section/SidebarScrollScript.astro', modules: []},
   {source: 'src/ui/section/SectionNavScript.astro', modules: ['SectionNavScript.astro_astro_type_script_index_0_lang', 'sectionNavMarks']},
   {source: 'src/ui/blog/ChapterNavScript.astro', modules: ['ChapterNavScript.astro_astro_type_script_index_0_lang', 'chapterNavMarks', 'chapter-nav-client']},
   {source: 'src/ui/blog/BlogSearch.astro', modules: []},

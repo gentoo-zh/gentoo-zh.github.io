@@ -41,15 +41,18 @@ export const PAGE_TYPES = [
   // Home renders statically; the live counts and the status badge add their boot modules.
   {name: 'home', route: locale('/'), sample: '/', startup: 4_600, total: 148_000},
   // Mirror health updates and legacy fragment resolution extend the section scripts.
-  {name: 'mirrorlist', route: locale('/mirrorlist/'), sample: '/mirrorlist/', startup: 5_400, total: 150_400},
+  // The shared sidebar scroll script raised it to 150445 B on /zh-tw/mirrorlist/ (2026-10-27).
+  {name: 'mirrorlist', route: locale('/mirrorlist/'), sample: '/mirrorlist/', startup: 5_400, total: 150_500},
   // A sortable, filterable table with the dependency view and its search controls.
   // Sharing SideNav with the chapter island moved shared chunk bytes (236017 B, 2026-10-27).
   {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_600, total: 236_100},
   // The listing renders from distfiles' `/_ls/`; `beforeLoad` is the startup closure plus the browser's.
-  {name: 'files', route: locale('/files/'), sample: '/files/', startup: 6_100, beforeLoad: 162_100, total: 165_800},
+  // The shared sidebar scroll script raised the total to 165856 B on /zh-tw/files/ (2026-10-27).
+  {name: 'files', route: locale('/files/'), sample: '/files/', startup: 6_100, beforeLoad: 162_100, total: 165_900},
   // Setup guides add mirror/channel/arch/sudo controls, pane switching and code rewriting; the overlay
-  // architecture switch raised it to 171862 B on /zh-tw/overlay/ (2026-10-27).
-  {name: 'guide', route: locale('/(?:overlay|binpkg-setup|distfiles-setup|gentoo-(?:repo|distfiles|binpkg|prefix)-setup)/'), sample: '/overlay/', startup: 6_100, total: 171_900},
+  // architecture switch raised it to 171862 B on /zh-tw/overlay/, the shared sidebar scroll script to
+  // 171902 B (2026-10-27).
+  {name: 'guide', route: locale('/(?:overlay|binpkg-setup|distfiles-setup|gentoo-(?:repo|distfiles|binpkg|prefix)-setup)/'), sample: '/overlay/', startup: 6_100, total: 172_000},
   // Contributor lists hydrate filters and cards; profiles share this route family's budget.
   // Sharing SideNav with the chapter island moved shared chunk bytes (164819 B, 2026-10-27).
   {name: 'contributors', route: locale('/contributors/(?:[^/]+/)?'), sample: '/contributors/', startup: 5_700, total: 164_900},
@@ -63,8 +66,9 @@ export const PAGE_TYPES = [
   // no island (measured startup 4452 B, total up to 148279 B, 2026-10-26); the list now folds like the
   // docs sidebar, as an island (startup 4961 B, total 150734 B, 2026-10-27).
   {name: 'chapter', route: locale('/posts/[^/]+/\\d+/'), sample: '/posts/2025-10-02-gentoo-m-series-mac/1/', startup: 5_000, total: 150_800},
-  // Section pages and the rest: the sidebar boot, the outline spy and the copy delegate.
-  {name: 'section', route: /.*/, sample: '/faq/', startup: 5_000, total: 149_800},
+  // Section pages and the rest: the sidebar boot, the outline spy and the copy delegate. The shared sidebar
+  // scroll script raised it to 149836 B on /zh-tw/contributing/ (2026-10-27).
+  {name: 'section', route: /.*/, sample: '/faq/', startup: 5_000, total: 149_900},
 ];
 
 /** Redirect pages (Redirect.astro) have no site frame. */
