@@ -3,12 +3,12 @@ title: "Huang Rui"
 description: Huang Rui — Gentoo-zh Community gentoo-zh contributor
 tags: ['Overlay contributor']
 externalUrl: "https://github.com/vowstar"
-weight: 9681
+weight: 9666
 contributions:
-  total: 319
+  total: 334
   repos:
   - repo: overlay
-    commits: 319
+    commits: 334
 ---
 
-319 commits
+334 commits

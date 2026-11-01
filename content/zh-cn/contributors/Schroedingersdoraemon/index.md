@@ -3,12 +3,12 @@ title: "Schroedingersdoraemon"
 description: Schroedingersdoraemon — Gentoo 中文社区 gentoo-zh 贡献者
 tags: ['Overlay 贡献者']
 externalUrl: "https://github.com/Schroedingersdoraemon"
-weight: 9984
+weight: 9953
 contributions:
-  total: 16
+  total: 47
   repos:
   - repo: overlay
-    commits: 16
+    commits: 47
 ---
 
-16 次提交
+47 次提交

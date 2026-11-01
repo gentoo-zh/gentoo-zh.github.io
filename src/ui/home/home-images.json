@@ -1,58 +1,58 @@
 {
-  "input": "1a729c1f5ec53938",
+  "input": "9f91f4b55fe6f986",
   "locales": {
     "zh-cn": {
-      "order": "ae59684558113dd8",
+      "order": "c22f10493f4788f5",
       "wall": {
         "compact": {
           "media": "(width < 48em)",
           "avif": [
             [
-              "/home/wall-compact-1x.f2ca2a42be3d916f.avif",
+              "/home/wall-compact-1x.67121c82e1d0c0f3.avif",
               1
             ],
             [
-              "/home/wall-compact-2x.bc95e058757cdbb1.avif",
+              "/home/wall-compact-2x.a4d8d7cbaa9f8311.avif",
               2
             ],
             [
-              "/home/wall-compact-3x.54e229ff338e2973.avif",
+              "/home/wall-compact-3x.cfebff87550d60c7.avif",
               3
             ]
           ],
-          "webp": "/home/wall-compact-2x.a74c79821638a0a7.webp"
+          "webp": "/home/wall-compact-2x.acd526a1a02eb1fc.webp"
         },
         "tablet": {
           "media": "(48em <= width < 64em)",
           "avif": [
             [
-              "/home/wall-tablet-1x.107b79a65e8ac814.avif",
+              "/home/wall-tablet-1x.ae657318d420dae9.avif",
               1
             ],
             [
-              "/home/wall-tablet-2x.530697819e832938.avif",
+              "/home/wall-tablet-2x.9dd7ebd1ba3e04a6.avif",
               2
             ],
             [
-              "/home/wall-tablet-3x.8cfa67e5378ed4c9.avif",
+              "/home/wall-tablet-3x.ceee6c8087ecb099.avif",
               3
             ]
           ],
-          "webp": "/home/wall-tablet-2x.575b3bbf05d211d5.webp"
+          "webp": "/home/wall-tablet-2x.5b2812eb6fd7b2db.webp"
         },
         "desktop": {
           "media": "(width >= 64em)",
           "avif": [
             [
-              "/home/wall-desktop-1x.9a4e0afc88d130bf.avif",
+              "/home/wall-desktop-1x.de78004d6ac43507.avif",
               1
             ],
             [
-              "/home/wall-desktop-2x.6f81695d734466d2.avif",
+              "/home/wall-desktop-2x.90157cef43c4278c.avif",
               2
             ]
           ],
-          "webp": "/home/wall-desktop-2x.43457318b9ab5b64.webp"
+          "webp": "/home/wall-desktop-2x.dc4d9a1e60d82a9a.webp"
         }
       },
       "group": [
@@ -65,57 +65,57 @@
       ]
     },
     "zh-tw": {
-      "order": "3d5510578530314c",
+      "order": "02c8cb9b91a9c01e",
       "wall": {
         "compact": {
           "media": "(width < 48em)",
           "avif": [
             [
-              "/home/wall-compact-1x.f2ca2a42be3d916f.avif",
+              "/home/wall-compact-1x.67121c82e1d0c0f3.avif",
               1
             ],
             [
-              "/home/wall-compact-2x.bc95e058757cdbb1.avif",
+              "/home/wall-compact-2x.a4d8d7cbaa9f8311.avif",
               2
             ],
             [
-              "/home/wall-compact-3x.54e229ff338e2973.avif",
+              "/home/wall-compact-3x.cfebff87550d60c7.avif",
               3
             ]
           ],
-          "webp": "/home/wall-compact-2x.a74c79821638a0a7.webp"
+          "webp": "/home/wall-compact-2x.acd526a1a02eb1fc.webp"
         },
         "tablet": {
           "media": "(48em <= width < 64em)",
           "avif": [
             [
-              "/home/wall-tablet-1x.107b79a65e8ac814.avif",
+              "/home/wall-tablet-1x.ae657318d420dae9.avif",
               1
             ],
             [
-              "/home/wall-tablet-2x.530697819e832938.avif",
+              "/home/wall-tablet-2x.9dd7ebd1ba3e04a6.avif",
               2
             ],
             [
-              "/home/wall-tablet-3x.8cfa67e5378ed4c9.avif",
+              "/home/wall-tablet-3x.ceee6c8087ecb099.avif",
               3
             ]
           ],
-          "webp": "/home/wall-tablet-2x.575b3bbf05d211d5.webp"
+          "webp": "/home/wall-tablet-2x.5b2812eb6fd7b2db.webp"
         },
         "desktop": {
           "media": "(width >= 64em)",
           "avif": [
             [
-              "/home/wall-desktop-1x.9a4e0afc88d130bf.avif",
+              "/home/wall-desktop-1x.de78004d6ac43507.avif",
               1
             ],
             [
-              "/home/wall-desktop-2x.6f81695d734466d2.avif",
+              "/home/wall-desktop-2x.90157cef43c4278c.avif",
               2
             ]
           ],
-          "webp": "/home/wall-desktop-2x.43457318b9ab5b64.webp"
+          "webp": "/home/wall-desktop-2x.dc4d9a1e60d82a9a.webp"
         }
       },
       "group": [
@@ -128,57 +128,57 @@
       ]
     },
     "en": {
-      "order": "80610152236581e2",
+      "order": "2d01ddf0a7cb4495",
       "wall": {
         "compact": {
           "media": "(width < 48em)",
           "avif": [
             [
-              "/home/wall-compact-1x.f2ca2a42be3d916f.avif",
+              "/home/wall-compact-1x.67121c82e1d0c0f3.avif",
               1
             ],
             [
-              "/home/wall-compact-2x.bc95e058757cdbb1.avif",
+              "/home/wall-compact-2x.a4d8d7cbaa9f8311.avif",
               2
             ],
             [
-              "/home/wall-compact-3x.54e229ff338e2973.avif",
+              "/home/wall-compact-3x.cfebff87550d60c7.avif",
               3
             ]
           ],
-          "webp": "/home/wall-compact-2x.a74c79821638a0a7.webp"
+          "webp": "/home/wall-compact-2x.acd526a1a02eb1fc.webp"
         },
         "tablet": {
           "media": "(48em <= width < 64em)",
           "avif": [
             [
-              "/home/wall-tablet-1x.107b79a65e8ac814.avif",
+              "/home/wall-tablet-1x.ae657318d420dae9.avif",
               1
             ],
             [
-              "/home/wall-tablet-2x.530697819e832938.avif",
+              "/home/wall-tablet-2x.9dd7ebd1ba3e04a6.avif",
               2
             ],
             [
-              "/home/wall-tablet-3x.8cfa67e5378ed4c9.avif",
+              "/home/wall-tablet-3x.ceee6c8087ecb099.avif",
               3
             ]
           ],
-          "webp": "/home/wall-tablet-2x.575b3bbf05d211d5.webp"
+          "webp": "/home/wall-tablet-2x.5b2812eb6fd7b2db.webp"
         },
         "desktop": {
           "media": "(width >= 64em)",
           "avif": [
             [
-              "/home/wall-desktop-1x.9a4e0afc88d130bf.avif",
+              "/home/wall-desktop-1x.de78004d6ac43507.avif",
               1
             ],
             [
-              "/home/wall-desktop-2x.6f81695d734466d2.avif",
+              "/home/wall-desktop-2x.90157cef43c4278c.avif",
               2
             ]
           ],
-          "webp": "/home/wall-desktop-2x.43457318b9ab5b64.webp"
+          "webp": "/home/wall-desktop-2x.dc4d9a1e60d82a9a.webp"
         }
       },
       "group": [

@@ -6,22 +6,22 @@ externalUrl: "https://github.com/Zakkaus"
 links:
   - name: "blog"
     url: "https://zakk.au"
-weight: 7466
+weight: 6890
 contributions:
-  total: 2534
+  total: 3110
   repos:
   - repo: overlay
-    commits: 1640
+    commits: 2326
   - repo: binhost
-    commits: 442
-  - repo: gentoo-zh.github.io
-    commits: 193
+    commits: 458
   - repo: cjktty-patches
-    commits: 78
+    commits: 86
+  - repo: autobump-rb
+    commits: 68
   - repo: skills
     commits: 52
-  - repo: autobump-rb
-    commits: 51
+  - repo: gentoo-zh.github.io
+    commits: 39
   - repo: gzh
     commits: 36
   - repo: gentoozh-theme
@@ -29,13 +29,13 @@ contributions:
   - repo: .github
     commits: 8
   - repo: gentoo-deps
-    commits: 4
+    commits: 6
   - repo: discourse-chat-integration-telegram-link-preview
     commits: 3
+  - repo: gzpaste
+    commits: 2
   - repo: pubspec2ebuild
     commits: 2
-  - repo: gzpaste
-    commits: 1
 ---
 
 Site & Matrix server maintainer

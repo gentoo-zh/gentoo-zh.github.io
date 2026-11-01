@@ -8,16 +8,14 @@ links:
     url: "https://posts.jinqiang.online/"
   - name: "mastodon"
     url: "https://o3o.ca/@peeweep"
-weight: 8140
+weight: 8141
 contributions:
-  total: 1860
+  total: 1859
   repos:
   - repo: overlay
-    commits: 1825
+    commits: 1827
   - repo: gentoo-deps
     commits: 32
-  - repo: gentoo-zh.github.io
-    commits: 3
 ---
 
-1860 commits
+1859 commits

@@ -6,12 +6,12 @@ externalUrl: "https://github.com/gouwazi"
 links:
   - name: "blog"
     url: "https://blog.gouwazi.org"
-weight: 9017
+weight: 9015
 contributions:
-  total: 983
+  total: 985
   repos:
   - repo: overlay
-    commits: 983
+    commits: 985
 ---
 
-983 次提交
+985 次提交

@@ -3,14 +3,14 @@ title: "ston"
 description: ston — Gentoo-zh Community gentoo-zh contributor
 tags: ['Overlay contributor']
 externalUrl: "https://github.com/st0nie"
-weight: 9798
+weight: 9797
 contributions:
-  total: 202
+  total: 203
   repos:
   - repo: overlay
-    commits: 201
+    commits: 202
   - repo: gentoo-deps
     commits: 1
 ---
 
-202 commits
+203 commits

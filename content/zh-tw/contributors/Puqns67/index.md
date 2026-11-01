@@ -3,12 +3,12 @@ title: "Puqns67"
 description: Puqns67 — Gentoo 中文社群 gentoo-zh 貢獻者
 tags: ['Overlay 貢獻者']
 externalUrl: "https://github.com/Puqns67"
-weight: 9632
+weight: 9628
 contributions:
-  total: 368
+  total: 372
   repos:
   - repo: overlay
-    commits: 368
+    commits: 372
 ---
 
-368 次提交
+372 次提交
