@@ -162,6 +162,8 @@
   "gz.packages.col.package": "Package",
   "gz.packages.col.status": "Status",
   "gz.packages.col.why": "Reason",
+  "gz.packages.col.use": "USE",
+  "gz.packages.col.bindings": "Bound subslots",
   "gz.packages.noscript": "The package tables require JavaScript; without it, use the plain-text lists below.",
   "gz.packages.col.slot": "Slot",
   "gz.packages.col.version": "Version",

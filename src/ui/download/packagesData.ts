@@ -86,6 +86,7 @@ export const PACKAGE_COMPACT_COLUMNS: readonly ColumnLayout[] = [
 /**
  * Slot and version fit their longest value in the live index on one line, plus the cell padding and a
  * character to spare (`2.91-gtk4` 79px, `0.32h_pre20181117064816` 232px in 17px Figtree); the name takes the rest.
+ * A subslot follows its slot and wraps when long (`4/gcr-4.4-gck-2.2`), so it does not widen the column.
  */
 export const DEPS_COLUMNS: readonly ColumnLayout[] = [
   {key: 'cp', header: 'gz.packages.col.package', width: proportional(1, {minWidth: GRID.depsName})},

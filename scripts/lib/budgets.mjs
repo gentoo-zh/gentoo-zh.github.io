@@ -48,7 +48,9 @@ export const PAGE_TYPES = [
   {name: 'mirrorlist', route: locale('/mirrorlist/'), sample: '/mirrorlist/', startup: 5_400, total: 257_200},
   // A sortable, filterable table with the dependency view and its search controls.
   // Sharing SideNav with the chapter island moved shared chunk bytes (236017 B, 2026-10-27).
-  {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_800, total: 430_900},
+  // Showing each dependency build's subslot, bound subslots and USE flags raised it to 431433 B on
+  // /zh-tw/packages/ (2026-11-15).
+  {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_800, total: 431_500},
   // The listing renders from distfiles' `/_ls/`; `beforeLoad` is the startup closure plus the browser's.
   // The shared sidebar scroll script raised the total to 165856 B on /zh-tw/files/ (2026-10-27).
   {name: 'files', route: locale('/files/'), sample: '/files/', startup: 6_200, beforeLoad: 241_200, total: 282_400},

@@ -162,6 +162,8 @@
   "gz.packages.col.package": "软件包",
   "gz.packages.col.status": "状态",
   "gz.packages.col.why": "原因",
+  "gz.packages.col.use": "USE",
+  "gz.packages.col.bindings": "绑定的 subslot",
   "gz.packages.noscript": "软件包表格需要 JavaScript；未启用时请使用下方的纯文本列表。",
   "gz.packages.col.slot": "slot",
   "gz.packages.col.version": "版本",
