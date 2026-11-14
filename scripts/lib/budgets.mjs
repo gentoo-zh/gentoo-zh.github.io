@@ -28,6 +28,9 @@ const locale = path => new RegExp(`^(\\/zh-tw|\\/en)?${path}$`);
 // replayed by category (`islands/intent.ts`, `contributors/roles.ts`).
 // Startup rose 114 B on every type (`beforeLoad` +200 B) when the boot script began remembering a
 // language picked from the menu (`chrome/languageChoice.ts`).
+// Astryx 0.7.16 (2026-11-15): the navigation chunk (`chrome`) grew from 81 to 126 KB brotli and the phone menu's
+// bottom sheet and gesture code became separate chunks, so every `total` rose by about 105 KB, `startup` by up to
+// 120 B, and `beforeLoad` by 126 KB (status) and 79 KB (files). Figures are as measured on that build.
 // Every type rose with the top-nav Posts link (`chrome/SiteTopNav.tsx`, `chrome/sections.ts`, 2026-10-26).
 // Post, chapter and section pages rose again with the outline rail's auto-scroll (`section/OutlineSpy.astro`).
 // A paged post's overview adds its inline LegacyAnchors map of ids moved to section pages (950 B, Mac guide;
@@ -37,38 +40,38 @@ export const PAGE_TYPES = [
   // closure plus the board's (React and the navigation chunk included); how much of it a browser requests
   // before `load` varies from run to run (90-184 KB measured).
   // status, mirrorlist and packages: +100 B when `visible` began waiting for `load` (2026-10-18).
-  {name: 'status', route: locale('/status/'), sample: '/status/', startup: 6_000, beforeLoad: 185_900, total: 278_100},
+  {name: 'status', route: locale('/status/'), sample: '/status/', startup: 6_200, beforeLoad: 312_200, total: 428_000},
   // Home renders statically; the live counts and the status badge add their boot modules.
-  {name: 'home', route: locale('/'), sample: '/', startup: 4_600, total: 148_000},
+  {name: 'home', route: locale('/'), sample: '/', startup: 4_600, total: 254_800},
   // Mirror health updates and legacy fragment resolution extend the section scripts.
   // The shared sidebar scroll script raised it to 150445 B on /zh-tw/mirrorlist/ (2026-10-27).
-  {name: 'mirrorlist', route: locale('/mirrorlist/'), sample: '/mirrorlist/', startup: 5_400, total: 150_500},
+  {name: 'mirrorlist', route: locale('/mirrorlist/'), sample: '/mirrorlist/', startup: 5_400, total: 257_200},
   // A sortable, filterable table with the dependency view and its search controls.
   // Sharing SideNav with the chapter island moved shared chunk bytes (236017 B, 2026-10-27).
-  {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_600, total: 236_100},
+  {name: 'packages', route: locale('/packages/'), sample: '/packages/', startup: 5_800, total: 430_900},
   // The listing renders from distfiles' `/_ls/`; `beforeLoad` is the startup closure plus the browser's.
   // The shared sidebar scroll script raised the total to 165856 B on /zh-tw/files/ (2026-10-27).
-  {name: 'files', route: locale('/files/'), sample: '/files/', startup: 6_100, beforeLoad: 162_100, total: 165_900},
+  {name: 'files', route: locale('/files/'), sample: '/files/', startup: 6_200, beforeLoad: 241_200, total: 282_400},
   // Setup guides add mirror/channel/arch/sudo controls, pane switching and code rewriting; the overlay
   // architecture switch raised it to 171862 B on /zh-tw/overlay/, the shared sidebar scroll script to
   // 171902 B (2026-10-27).
-  {name: 'guide', route: locale('/(?:overlay|binpkg-setup|distfiles-setup|gentoo-(?:repo|distfiles|binpkg|prefix)-setup)/'), sample: '/overlay/', startup: 6_100, total: 172_000},
+  {name: 'guide', route: locale('/(?:overlay|binpkg-setup|distfiles-setup|gentoo-(?:repo|distfiles|binpkg|prefix)-setup)/'), sample: '/overlay/', startup: 6_300, total: 315_100},
   // Contributor lists hydrate filters and cards; profiles share this route family's budget.
   // Sharing SideNav with the chapter island moved shared chunk bytes (164819 B, 2026-10-27).
-  {name: 'contributors', route: locale('/contributors/(?:[^/]+/)?'), sample: '/contributors/', startup: 5_700, total: 164_900},
+  {name: 'contributors', route: locale('/contributors/(?:[^/]+/)?'), sample: '/contributors/', startup: 5_800, total: 295_000},
   // The cost explanation popovers.
-  {name: 'costs', route: locale('/costs/'), sample: '/costs/', startup: 5_400, total: 153_800},
+  {name: 'costs', route: locale('/costs/'), sample: '/costs/', startup: 5_500, total: 265_800},
   // Posts need the copy delegate; a post with headings adds the outline spy (measured startup 4452 B,
   // total up to 149357 B on a paged overview, 2026-10-27); one without headings loads no spy. A paged
   // overview also hydrates the folding page list (startup 4961 B, total 151826 B, 2026-10-27).
-  {name: 'post', route: locale('/posts/[^/]+/'), sample: '/posts/2013-02-05-gentoo-zh-community-has-been-founded/', startup: 5_000, total: 151_900},
+  {name: 'post', route: locale('/posts/[^/]+/'), sample: '/posts/2013-02-05-gentoo-zh-community-has-been-founded/', startup: 5_000, total: 258_500},
   // Section pages of a paged post (front matter `paged`): the post's scripts with a static page list,
   // no island (measured startup 4452 B, total up to 148279 B, 2026-10-26); the list now folds like the
   // docs sidebar, as an island (startup 4961 B, total 150734 B, 2026-10-27).
-  {name: 'chapter', route: locale('/posts/[^/]+/\\d+/'), sample: '/posts/2025-10-02-gentoo-m-series-mac/1/', startup: 5_000, total: 150_800},
+  {name: 'chapter', route: locale('/posts/[^/]+/\\d+/'), sample: '/posts/2025-10-02-gentoo-m-series-mac/1/', startup: 5_000, total: 257_500},
   // Section pages and the rest: the sidebar boot, the outline spy and the copy delegate. The shared sidebar
   // scroll script raised it to 149836 B on /zh-tw/contributing/ (2026-10-27).
-  {name: 'section', route: /.*/, sample: '/faq/', startup: 5_000, total: 149_900},
+  {name: 'section', route: /.*/, sample: '/faq/', startup: 5_000, total: 256_600},
 ];
 
 /** Redirect pages (Redirect.astro) have no site frame. */

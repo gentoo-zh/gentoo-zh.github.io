@@ -19,7 +19,7 @@ import {useMessage} from '../../i18n/useMessage';
 import {media} from '../../theme/layout.stylex';
 import {BUTTON, CODE, GRID, SPACE, STACK} from '../../theme/scale';
 import {ArrowRight} from '../chrome/icons';
-import {codeTokenizer} from '../../markdown/codeTokenizer';
+import {codeLanguage} from '../../markdown/codeTokenizer';
 import {articleTable} from '../data/stickyHeader';
 import {islandProps} from '../islands/kinds';
 
@@ -84,7 +84,7 @@ function Address({title, uri}: {title: string; uri?: string}) {
   return (
     <VStack gap={SPACE.code}>
       <Text type="supporting">{title}</Text>
-      <CodeBlock code={uri} highlightMode="spans" tokenizer={codeTokenizer} size={CODE.cell} container="section" width="100%" hasLanguageLabel={false} hasCopyButton isWrapped isCollapsible={false} />
+      <CodeBlock code={uri} language={codeLanguage()} highlightMode="spans" size={CODE.cell} container="section" width="100%" hasLanguageLabel={false} hasCopyButton isWrapped isCollapsible={false} />
     </VStack>
   );
 }
@@ -160,7 +160,7 @@ export function MirrorTable({locale, mirrors}: {locale: Locale; mirrors: Mirrors
       </VStack>
       <Table<MirrorRow> data={rows} columns={columns} idKey="id" density="balanced" dividers="rows" hasHover plugins={{wideOnly: WIDE_ONLY, inArticle: articleTable<MirrorRow>()}} />
       <VStack xstyle={styles.narrow}>
-        <List hasDividers edgeCompensation="inline">
+        <List hasDividers edge="outset">
           {rows.map(item => (
             <ListItem
               key={item.id}

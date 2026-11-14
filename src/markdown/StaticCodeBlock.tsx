@@ -5,7 +5,7 @@ import {VStack} from '@astryxdesign/core/Layout';
 import {Text} from '@astryxdesign/core/Text';
 import {SPACE} from '../theme/scale';
 import {codeTitle} from './codeTitle';
-import {codeTokenizer} from './codeTokenizer';
+import {codeLanguage} from './codeTokenizer';
 
 // Adapted from the Astryx docsite's components/docs/CodeBlock.tsx (MIT, Meta Platforms, Inc.).
 // Static HTML needs the syntax background normally injected on the client.
@@ -20,9 +20,8 @@ export function StaticCodeBlock({code, language, title}: {code: string; language
     <CodeBlock
       code={snippet.code}
       title={snippet.title}
-      language={language}
+      language={codeLanguage(language)}
       highlightMode="spans"
-      tokenizer={codeTokenizer}
       hasLanguageLabel={snippet.title == null}
       width="100%"
       hasCopyButton

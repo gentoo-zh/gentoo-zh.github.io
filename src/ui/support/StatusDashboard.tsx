@@ -181,7 +181,7 @@ function MirrorsSection({data, languageTag, loading, skeleton}: {data: StatusDat
         <Table aria-label={t('gz.status.mirrors.title')} data={mirrors.list.map(mirror => ({...mirror}))} idKey="key" hasHover textOverflow="wrap" verticalAlign="top"
           plugins={{rowStatus, wideOnly: WIDE_ONLY, stickyHeader: stickyHeader<MirrorRow>()}} columns={mirrorColumns} />
         <VStack xstyle={styles.narrow}>
-          <List hasDividers edgeCompensation="inline">{mirrors.list.map(mirror => <ListItem key={mirror.key} label={mirrorName(mirror)}
+          <List hasDividers edge="outset">{mirrors.list.map(mirror => <ListItem key={mirror.key} label={mirrorName(mirror)}
             description={<VStack gap={SPACE.hairline}>
               <Text type="supporting" color="secondary" xstyle={styles.detail}>{mirror.host}</Text>
               <Text type="supporting" color="secondary" hasTabularNumbers>{t('gz.status.responseHeading')} · {mirror.ms == null ? '—' : new Intl.NumberFormat(languageTag).format(mirror.ms)}</Text>
@@ -211,7 +211,7 @@ function FeedCard({title, count, children}: {title: string; count: number | null
 
 /** Placeholder rows drawn with the live List, so loading and loaded rows share one height. */
 function FeedSkeleton({rows}: {rows: number}) {
-  return <List hasDividers edgeCompensation="inline">{Array.from({length: rows}, (_, row) => <ListItem key={row}
+  return <List hasDividers edge="outset">{Array.from({length: rows}, (_, row) => <ListItem key={row}
     label={<Skeleton width={GRID.statusName} height={HOST_SKELETON} radius={1} index={row} />}
     endContent={<Skeleton width={GRID.statusCell} height={TOKEN_SKELETON} radius={1} index={row + 1} />} />)}</List>;
 }
@@ -228,7 +228,7 @@ function AlertsFeed({data, loading}: {data: StatusData | null; loading: boolean}
         <StatusDot variant={statusVariant(clear)} label={t(`gz.status.level.${clear}`)} />
         <Text type="label">{unknown ? t('gz.status.alerts.unknown') : t('gz.status.alerts.clear')}</Text>
       </HStack>
-      : <List hasDividers edgeCompensation="inline">{alerts.map(site => <ListItem key={site.key} label={name(site)}
+      : <List hasDividers edge="outset">{alerts.map(site => <ListItem key={site.key} label={name(site)}
         startContent={<StatusDot variant="error" label={t('gz.status.level.down')} />}
         endContent={<Token size={CHIP.small} color="red" label={t('gz.status.level.down')} />} />)}</List>}
   </FeedCard>;
@@ -243,7 +243,7 @@ function EventsFeed({data, loading}: {data: StatusData | null; loading: boolean}
   return <FeedCard title={t('gz.status.events.title')} count={data?.events == null ? null : events.length}>
     {loading ? <FeedSkeleton rows={6} />
       : events.length === 0 ? <Text type="body" color="secondary">{data?.events == null ? t('gz.status.events.unknown') : t('gz.status.events.empty')}</Text>
-      : <List hasDividers edgeCompensation="inline">{recent.map((event, index) => <ListItem key={`${event.time}-${event.service}-${index}`}
+      : <List hasDividers edge="outset">{recent.map((event, index) => <ListItem key={`${event.time}-${event.service}-${index}`}
         label={name({key: event.service, name: event.name})}
         startContent={<StatusDot variant={statusVariant(event.status)} label={t(`gz.status.level.${event.status}`)} />}
         endContent={<HStack gap={SPACE.inline} vAlign="center">

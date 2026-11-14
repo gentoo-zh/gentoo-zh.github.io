@@ -84,7 +84,7 @@ export function FaqPage({locale, title, description, body = '', pages, questions
       pages={pages}
       slots={{
         topics: (
-          <List header={t('gz.support.faq.topics')} hasDividers density="compact" data-pagefind-ignore edgeCompensation="inline">
+          <List header={t('gz.support.faq.topics')} hasDividers density="compact" data-pagefind-ignore edge="outset">
             {questions.map(question => (
               <ListItem key={question.href} href={localizeHref(locale, question.href, () => true)} label={<Text>{question.title}</Text>} />
             ))}

@@ -31,7 +31,7 @@ const LINKS: Row[] = [
 function Rows({id, rows}: {id: string; rows: Row[]}) {
   const t = useMessage();
   return (
-    <List density="compact" hasDividers edgeCompensation="inline">
+    <List density="compact" hasDividers edge="outset">
       {rows.map(row => {
         // Download-site files read as part of this site.
         const isExternal = row.href.startsWith('https:') && !distfilesLink(row.href);

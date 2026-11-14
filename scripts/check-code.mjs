@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {createElement} from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {CodeBlock} from '@astryxdesign/core/CodeBlock';
-import {codeTokenizer} from '../src/markdown/codeTokenizer.ts';
+import {codeLanguage, codeTokenizer} from '../src/markdown/codeTokenizer.ts';
 import {rewriteCode} from '../src/ui/start/guideSetup.ts';
 import {crumbsOf, dirPath, directoryOf, fileUrl, formatSize, listingUrl, parentOf} from '../src/ui/download/filesData.ts';
 import {distfilesLink} from '../src/i18n/distfilesLink.ts';
@@ -51,9 +51,9 @@ for (const kind of ['binpkg', 'distfiles']) assert.equal(rewriteCode(keyword, ki
 
 // Astryx's default async threshold must not leave long static blocks without tokens.
 const long = 'const answer = 42;\n'.repeat(150);
-const html = renderToStaticMarkup(createElement(CodeBlock, {code: long, language: 'js', highlightMode: 'spans', tokenizer: codeTokenizer}));
+const html = renderToStaticMarkup(createElement(CodeBlock, {code: long, language: codeLanguage('js'), highlightMode: 'spans'}));
 assert.equal((html.match(/class="astryx-token-keyword /g) ?? []).length, 150);
-assert.ok(renderToStaticMarkup(createElement(CodeBlock, {code: '$ echo <script>', language: 'bash', highlightMode: 'spans', tokenizer: codeTokenizer})).includes('&lt;'));
+assert.ok(renderToStaticMarkup(createElement(CodeBlock, {code: '$ echo <script>', language: codeLanguage('bash'), highlightMode: 'spans'})).includes('&lt;'));
 // /files/ maps the address bar 1:1 to distfiles directories, always with a trailing slash.
 assert.equal(directoryOf('/files/', '/files/'), '');
 assert.equal(directoryOf('/files', '/files/'), '');

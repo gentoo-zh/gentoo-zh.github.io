@@ -1,4 +1,4 @@
-import {tokenize, type SyntaxToken} from '@astryxdesign/core/CodeBlock';
+import {createCodeLanguage, tokenize, type CodeLanguage, type SyntaxToken} from '@astryxdesign/core/CodeBlock';
 
 const SHELL = new Set(['bash', 'sh', 'zsh', 'shell', 'console']);
 // A hash before prose or a filename remains a comment, even in a shell fence.
@@ -80,4 +80,16 @@ export function codeTokenizer(code: string, language: string): SyntaxToken[] {
     offset += line.length + 1;
   });
   return tokens;
+}
+
+const languages = new Map<string, CodeLanguage>();
+
+/** The fence's language as a custom Astryx language that runs codeTokenizer, one value per name. */
+export function codeLanguage(name = 'plaintext'): CodeLanguage {
+  let language = languages.get(name);
+  if (language == null) {
+    language = createCodeLanguage({name, identifiers: [name], tokenize: code => codeTokenizer(code, name)});
+    languages.set(name, language);
+  }
+  return language;
 }

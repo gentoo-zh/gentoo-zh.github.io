@@ -36,7 +36,7 @@ export function TagsPage({locale, tags}: TagsPageProps) {
     <Section maxWidth={layout.proseMaxWidth} padding={SPACE.page} xstyle={collectionStyles.section}>
       <VStack gap={SPACE.section}>
         <TitleBlock title={t('gz.tags.title')} sub={t('gz.tags.description')} />
-        <List hasDividers density="spacious" edgeCompensation="inline" aria-label={t('gz.tags.title')}>
+        <List hasDividers density="spacious" edge="outset" aria-label={t('gz.tags.title')}>
           {tags.map(({tag, count}) => (
             <ListItem key={tag} label={t(tagKey(tag))} href={routes.tag(locale, tag)} endContent={<Badge label={count} aria-label={t('gz.tags.count', {count})} />} />
           ))}

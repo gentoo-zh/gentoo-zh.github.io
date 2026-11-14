@@ -71,11 +71,16 @@ export const SCRIPT_OWNERS = [
   {source: 'src/ui/chrome/HeaderOffset.astro', modules: []},
   {
     source: 'src/ui/chrome/NavScript.astro',
-    modules: ['NavScript.astro_astro_type_script_index_0_lang', 'schedule', 'intent', 'kinds', 'chrome', 'react', 'preload-helper', 'rolldown-runtime', 'ItemSwipeLayer'],
+    modules: [
+      'NavScript.astro_astro_type_script_index_0_lang', 'schedule', 'intent', 'kinds', 'chrome', 'react', 'preload-helper', 'rolldown-runtime', 'ItemSwipeLayer',
+      // Astryx 0.7.16 loads the phone menu's bottom sheet and its gesture code as separate chunks.
+      'BottomSheet', 'MenuBottomSheet', 'MenuBottomSheetActionList', 'useGestureRecognizer', 'animator', 'useScrollableArea', 'useScrollRegionProps', 'scrollGeometry',
+      'VelocityTracker', 'rubberBand', 'boxHold', 'presentation', 'useAttachment', 'bottomSheetEscape', 'reducedMotion.stylex', 'textEntryTraits', 'ComponentIcon', 'LayoutHeader', 'LayoutFooter',
+    ],
   },
   {source: 'src/ui/support/StatusScript.astro', modules: []},
   {source: 'src/ui/support/StatusCompactScript.astro', modules: ['StatusCompactScript.astro_astro_type_script_index_0_lang', 'statusApi', 'status-client']},
-  {source: 'src/ui/support/StatusDashboardScript.astro', modules: ['StatusDashboardScript.astro_astro_type_script_index_0_lang', 'statusStart', 'status-dashboard-client', 'StatusCharts', 'TimestampHoverCard', 'IconButton']},
+  {source: 'src/ui/support/StatusDashboardScript.astro', modules: ['StatusDashboardScript.astro_astro_type_script_index_0_lang', 'statusStart', 'status-dashboard-client', 'StatusCharts', 'TimestampHoverCard', 'IconButton', 'TokenizerBottomSheet', 'progress']},
   {source: 'src/ui/home/HomeStatus.astro', modules: ['HomeStatus.astro_astro_type_script_index_0_lang']},
   {source: 'src/ui/home/HomeLive.astro', modules: ['HomeLive.astro_astro_type_script_index_0_lang']},
   {source: 'src/ui/download/MirrorHealth.astro', modules: ['MirrorHealth.astro_astro_type_script_index_0_lang', 'mirrorHealth']},
@@ -85,5 +90,5 @@ export const SCRIPT_OWNERS = [
   {source: 'src/ui/start/GuideSetupScript.astro', modules: ['GuideSetupScript.astro_astro_type_script_index_0_lang', 'guideSetup', 'guide-setup-client', 'SegmentedControlItem', 'Tab']},
   {source: 'src/ui/contributors/ContributorsScript.astro', modules: ['ContributorsScript.astro_astro_type_script_index_0_lang', 'roles', 'contributors-client']},
   {source: 'src/ui/search/SearchButton.tsx', modules: ['SearchDialog', 'pagefind', 'LayoutContent', 'hooks', 'stackItem.stylex'], onDemand: true},
-  {source: 'src/ui/contributors/ContributorsLibrary.tsx', modules: ['Grid', 'OverflowList', 'fieldParts']},
+  {source: 'src/ui/contributors/ContributorsLibrary.tsx', modules: ['Grid', 'OverflowList', 'FieldStatus']},
 ];
