@@ -56,17 +56,21 @@ jobs:
       - name: Rebuild home images
         run: pnpm gen:home-images
 
+      # check:contributors and check:urls compare against this record; a month of commit counts and pruned accounts moves both.
+      - name: Refresh contributor baseline
+        run: node --experimental-strip-types scripts/baseline-contributors.mjs --content
+
       - name: Check for changes
         id: check_changes
         run: |
           # Untracked files are new contributors.
-          if [ -z "$(git status --porcelain content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/ public/home/ src/ui/home/home-images.json)" ]; then
+          if [ -z "$(git status --porcelain content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/ public/home/ src/ui/home/home-images.json scripts/baseline/p3-contributors.json)" ]; then
             echo "has_changes=false" >> "$GITHUB_OUTPUT"
             echo "No contributor changes"
           else
             echo "has_changes=true" >> "$GITHUB_OUTPUT"
             echo "Changes:"
-            git status --short content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/ public/home/ src/ui/home/home-images.json | head -50
+            git status --short content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/ public/home/ src/ui/home/home-images.json scripts/baseline/p3-contributors.json | head -50
           fi
 
       - name: Commit and push changes
@@ -75,7 +79,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
 
-          git add content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/ public/home/ src/ui/home/home-images.json
+          git add content/zh-cn/contributors/ content/zh-tw/contributors/ content/en/contributors/ public/home/ src/ui/home/home-images.json scripts/baseline/p3-contributors.json
 
           changed=$(git diff --cached --name-only | wc -l | tr -d ' ')
           git commit -m "contributors: Update from GitHub (${changed} files)"
