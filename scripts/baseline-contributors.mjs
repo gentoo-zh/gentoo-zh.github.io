@@ -1,8 +1,10 @@
 // Records the contributor addresses and list order into scripts/baseline/p3-contributors.json.
 // Usage: node scripts/baseline-contributors.mjs <hugo-output-dir> <master-sha>
 //        node scripts/baseline-contributors.mjs --content
-// The first form reads a Hugo build of master. `--content` keeps the recorded addresses, adds
-// those of every bundle in content/<locale>/contributors/, and takes the order from those files.
+// The first form reads a Hugo build of master. `--content` keeps the recorded addresses that are not
+// profiles, replaces the profile addresses with those of every bundle in content/<locale>/contributors/,
+// and takes the order from those files. update-contributors.py prunes accounts that left the organisation
+// on purpose, so a bundle that is gone retires its address instead of failing check:urls forever.
 import {readFileSync, readdirSync, writeFileSync} from 'node:fs';
 import {join} from 'node:path';
 import {parseFrontmatter} from 'astro/markdown';
@@ -46,8 +48,9 @@ function fromHugo() {
 
 function fromContent() {
   const snapshot = JSON.parse(readFileSync(MANIFEST, 'utf8'));
-  const pages = new Set(snapshot.pages);
-  const files = new Set(snapshot.files);
+  const profile = (prefix, url) => new RegExp(`^${prefix}/contributors/[^/]+/`).test(url);
+  const pages = new Set(snapshot.pages.filter(url => !Object.values(PREFIXES).some(prefix => profile(prefix, url))));
+  const files = new Set(snapshot.files.filter(url => !Object.values(PREFIXES).some(prefix => profile(prefix, url))));
   for (const [locale, prefix] of Object.entries(PREFIXES)) {
     const base = join('content', locale, 'contributors');
     const entries = readdirSync(base, {withFileTypes: true})
