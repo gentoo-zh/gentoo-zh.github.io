@@ -53,7 +53,7 @@ const download = <Icon icon={DownloadGlyph} />;
 function MirrorList({sites}: {sites: Site[]}) {
   const t = useMessage();
   return (
-    <List density="compact" hasDividers edgeCompensation="inline">
+    <List density="compact" hasDividers edge="outset">
       {sites.map(mirror => (
         <ListItem
           key={mirror.id}
@@ -75,7 +75,7 @@ function MirrorList({sites}: {sites: Site[]}) {
 function OfficialList() {
   const t = useMessage();
   return (
-    <List hasDividers edgeCompensation="inline">
+    <List hasDividers edge="outset">
       {OFFICIAL.map(media => (
         <ListItem
           key={media.id}

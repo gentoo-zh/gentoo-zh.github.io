@@ -10,7 +10,7 @@ export function ChangelogPage({body, ...page}: Props) {
   for (let index = 1; index < parts.length; index += 4) entries.push({date: parts[index], title: parts[index + 1], id: parts[index + 2], text: parts[index + 3].trim()});
   if (entries.length === 0) throw new Error(`${page.title}: no "## <date> <title> {#id}" entries`);
   const list = (
-    <List density="compact" hasDividers edgeCompensation="inline">
+    <List density="compact" hasDividers edge="outset">
       {entries.map(entry => (
         <ListItem
           key={entry.id}

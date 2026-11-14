@@ -83,7 +83,7 @@ function ChannelTable({channels, locale}: {channels: Channel[]; locale: Locale})
         <Table<Channel> data={channels} columns={columns} idKey="id" hasHover plugins={{staticScroll: STATIC_SCROLL}} />
       </div>
       <div {...stylex.props(styles.narrow)}>
-        <List density="compact" hasDividers edgeCompensation="inline">
+        <List density="compact" hasDividers edge="outset">
           {channels.map(channel => <StackedChannel key={channel.id} channel={channel} locale={locale} />)}
         </List>
       </div>
@@ -131,7 +131,7 @@ export function ChannelsPage(page: Omit<SectionPageProps, 'slots' | 'children'> 
     groups: <ChannelTable channels={CHANNELS.groups} locale={page.locale} />,
     feeds: <ChannelTable channels={CHANNELS.feeds} locale={page.locale} />,
     other: (
-      <List density="compact" hasDividers edgeCompensation="inline">
+      <List density="compact" hasDividers edge="outset">
         {CHANNELS.other.map(channel => <OtherChannel key={channel.id} channel={channel} locale={page.locale} />)}
       </List>
     ),
