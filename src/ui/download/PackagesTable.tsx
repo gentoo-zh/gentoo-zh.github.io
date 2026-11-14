@@ -2,7 +2,7 @@
 // Rows open their details as in the Astryx table-collapsible template (useTableRowExpansion).
 // The header (tabs, toolbar, results line) is PackagesFrame, shared with the server's loading frame.
 import * as stylex from '@stylexjs/stylex';
-import {memo, useCallback, useDeferredValue, useMemo, useState, type ReactNode} from 'react';
+import {Fragment, memo, useCallback, useDeferredValue, useMemo, useState, type ReactNode} from 'react';
 import {HStack, VStack} from '@astryxdesign/core/Layout';
 import {Text} from '@astryxdesign/core/Text';
 import {Token} from '@astryxdesign/core/Token';
@@ -59,6 +59,8 @@ export interface PackageEntry {
   /** Schema 5: the published version and its binary package size in bytes. */
   ver?: string;
   size?: number;
+  /** The published build's IUSE flags as emerge -pv shows them: `flag` on, `-flag` off. */
+  use?: string[];
 }
 
 /** One entry of `deps` in `packages.json`: a `::gentoo` dependency the binhost publishes. */
@@ -66,6 +68,12 @@ export interface DepEntry extends Record<string, unknown> {
   cp: string;
   ver: string;
   slot: string;
+  /** Present when it differs from the slot. */
+  subslot?: string;
+  /** As in PackageEntry. */
+  use?: string[];
+  /** Only on builds sharing name, slot and version: the bound dependency subslots that tell them apart. */
+  bindings?: string[];
 }
 
 export interface PackageIndex {
@@ -102,6 +110,7 @@ interface PackageRow extends Record<string, unknown> {
   binMark: Mark;
   distMark: Mark;
   distfiles: string[];
+  use: string[];
   ver: string;
   /** Bytes; -1 when the index carries no size (schema 4). */
   size: number;
@@ -179,6 +188,7 @@ function toRows(index: PackageIndex, t: ReturnType<typeof useMessage>): PackageR
       binMark: markOf(published),
       distMark: markOf(entry.dist.length > 0),
       distfiles: entry.dist,
+      use: entry.use ?? [],
       ver: entry.ver ?? '',
       size: entry.size ?? -1,
       words,
@@ -196,7 +206,7 @@ function shareRows(rows: PackageRow[], base: readonly PackageRow[]): PackageRow[
     const other = byName.get(row.cp);
     if (other == null) return row;
     const same = (Object.keys(row) as (keyof PackageRow)[]).every(key =>
-      key === 'distfiles' ? row.distfiles.join('\n') === other.distfiles.join('\n') : row[key] === other[key],
+      key === 'distfiles' || key === 'use' ? row[key].join('\n') === other[key].join('\n') : row[key] === other[key],
     );
     return same ? other : row;
   });
@@ -210,10 +220,13 @@ function shareRows(rows: PackageRow[], base: readonly PackageRow[]): PackageRow[
  */
 const OPEN = 'open:';
 const OPEN_KEYS = {has: (key: string) => key.startsWith(OPEN)} as unknown as Set<string>;
-const expansionKey = (row: PackageRow) => (row.isOpen ? `${OPEN}${row.cp}` : row.cp);
-const OPENED = new WeakMap<PackageRow, PackageRow>();
-function opened(row: PackageRow): PackageRow {
-  let copy = OPENED.get(row);
+const expansionKeyOf =
+  <T extends {isOpen?: true}>(keyOf: (row: T) => string) =>
+  (row: T) =>
+    row.isOpen ? `${OPEN}${keyOf(row)}` : keyOf(row);
+const OPENED = new WeakMap<object, object>();
+function opened<T extends object>(row: T): T {
+  let copy = OPENED.get(row) as T | undefined;
   if (copy == null) {
     copy = {...row, isOpen: true};
     OPENED.set(row, copy);
@@ -221,8 +234,34 @@ function opened(row: PackageRow): PackageRow {
   return copy;
 }
 
+/** Expansion state for one table: a toggle takes either form of a row's key. */
+function useExpanded() {
+  const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => new Set());
+  const onToggle = useCallback(
+    (key: string) =>
+      setExpanded(previous => {
+        const id = key.startsWith(OPEN) ? key.slice(OPEN.length) : key;
+        const next = new Set(previous);
+        if (!next.delete(id)) next.add(id);
+        return next;
+      }),
+    [],
+  );
+  return [expanded, onToggle] as const;
+}
+
+/**
+ * The plugin also gives every body cell a context menu with one entry, expand or collapse. Each menu
+ * mounts a layer that reads computed styles, which made mounting 520 rows several times slower, and
+ * it took the browser's own menu off the package links. The chevron stays the way to open a row.
+ */
+function withoutRowMenu<T extends Record<string, unknown>>(plugin: TablePlugin<T>): TablePlugin<T> {
+  return {...plugin, transformBodyCell: (props, ...rest) => ({...plugin.transformBodyCell!(props, ...rest), contextMenuActions: props.contextMenuActions})};
+}
+
 /** One collator per order: comparing through `localeCompare` builds a collator on every call. */
 const NAME_ORDER = new Intl.Collator();
+const PACKAGE_KEY = expansionKeyOf<PackageRow>(row => row.cp);
 const VERSION_ORDER = new Intl.Collator(undefined, {numeric: true});
 
 const styles = stylex.create({
@@ -235,6 +274,8 @@ const styles = stylex.create({
   // A plain block, so the other view's native `hidden` (display: none) applies. The content-visibility
   // rule used before never reached the page, so both views painted, one under the other.
   view: {minWidth: 0},
+  // USE flags and bound subslots wrap between words; a long word breaks rather than widening the row.
+  words: {overflowWrap: 'anywhere'},
   // The template's reload bar: drawn over the top edge of the rows already on screen, no layout shift.
   progress: {position: 'absolute', insetBlockStart: 0, insetInline: 0, zIndex: 5},
 });
@@ -249,7 +290,21 @@ function MarkIcon({isYes}: {isYes: boolean}) {
   );
 }
 
-/** The row's details: status, policy, reason, both marks and the distfile names. */
+/** USE flags in emerge -pv form: enabled flags in the text colour, disabled (`-flag`) ones muted. */
+function UseFlags({flags, type}: {flags: readonly string[]; type?: 'supporting'}) {
+  return (
+    <Text type={type} color="primary" xstyle={styles.words}>
+      {flags.map((flag, index) => (
+        <Fragment key={flag}>
+          {index === 0 ? null : ' '}
+          <Text type="inherit" color={flag.startsWith('-') ? 'secondary' : 'inherit'}>{flag}</Text>
+        </Fragment>
+      ))}
+    </Text>
+  );
+}
+
+/** The row's details: status, policy, reason, both marks, USE and the distfile names. */
 function PackageDetails({row, languageTag}: {row: PackageRow; languageTag: string}) {
   const t = useMessage();
   return (
@@ -273,6 +328,7 @@ function PackageDetails({row, languageTag}: {row: PackageRow; languageTag: strin
           {row.size < 0 ? null : <Text color="secondary" hasTabularNumbers>{formatSize(row.size, languageTag)}</Text>}
         </HStack>
       </MetadataListItem>
+      {row.use.length === 0 ? null : <MetadataListItem label={t('gz.packages.col.use')}><UseFlags flags={row.use} /></MetadataListItem>}
       <MetadataListItem label={t('gz.packages.col.dist')}>
         {row.hasDist ? (
           <VStack gap={TEMPLATE.zero} xstyle={styles.distfiles} tabIndex={0} role="region" aria-label={`${t('gz.packages.col.dist')}: ${row.cp}`}>
@@ -339,29 +395,10 @@ export function PackagesTable({languageTag, stable, unstable, statusHref}: Packa
   const {config, applyFilters} = usePowerSearchConfig(searchFields, t('gz.packages.col.package'));
   const filterPlugin = useTableFiltering<PackageRow>({filters: columnFilters, onFilterChange, searchConfig: config, variant: 'popover'});
 
-  const [expanded, setExpanded] = useState<ReadonlySet<string>>(() => new Set());
-  const onToggle = useCallback(
-    (key: string) =>
-      setExpanded(previous => {
-        const cp = key.startsWith(OPEN) ? key.slice(OPEN.length) : key;
-        const next = new Set(previous);
-        if (!next.delete(cp)) next.add(cp);
-        return next;
-      }),
-    [],
-  );
+  const [expanded, onToggle] = useExpanded();
   const renderExpanded = useCallback((row: PackageRow) => <PackageDetails row={row} languageTag={languageTag} />, [languageTag]);
-  const rowExpansion = useTableRowExpansion<PackageRow>({expandedKeys: OPEN_KEYS, onToggle, getRowKey: expansionKey, renderExpanded});
-  // The plugin also gives every body cell a context menu with one entry, expand or collapse. Each menu
-  // mounts a layer that reads computed styles, which made mounting 520 rows several times slower, and
-  // it took the browser's own menu off the package links. The chevron stays the way to open a row.
-  const expansionPlugin = useMemo(
-    (): TablePlugin<PackageRow> => ({
-      ...rowExpansion,
-      transformBodyCell: (props, ...rest) => ({...rowExpansion.transformBodyCell!(props, ...rest), contextMenuActions: props.contextMenuActions}),
-    }),
-    [rowExpansion],
-  );
+  const rowExpansion = useTableRowExpansion<PackageRow>({expandedKeys: OPEN_KEYS, onToggle, getRowKey: PACKAGE_KEY, renderExpanded});
+  const expansionPlugin = useMemo(() => withoutRowMenu(rowExpansion), [rowExpansion]);
 
   const columns: TableColumn<PackageRow>[] = useMemo(() => {
     const name = (row: PackageRow) => (
@@ -438,6 +475,7 @@ export function PackagesTable({languageTag, stable, unstable, statusHref}: Packa
     return term === '' ? matched : matched.filter(row => row.cp.toLowerCase().includes(term) || row.words.includes(term));
   }, [applyFilters, shownFilters, columns, config, rows, term]);
   const deps = useMemo(() => (index.deps == null ? null : toDepRows(index.deps)), [index]);
+  const depsHaveUse = useMemo(() => deps != null && deps.some(hasUse), [deps]);
   const visibleDeps = useMemo(
     () => (deps == null || term === '' ? deps : deps.filter(row => [row.cp, row.slot, row.ver].some(value => value.toLowerCase().includes(term)))),
     [deps, term],
@@ -516,7 +554,7 @@ export function PackagesTable({languageTag, stable, unstable, statusHref}: Packa
             ) : visibleDeps.length === 0 ? (
               empty(clearDeps)
             ) : (
-              <DepsTable rows={visibleDeps} />
+              <DepsTable rows={visibleDeps} hasUseColumn={depsHaveUse} />
             )}
             {visibleDeps != null && visibleDeps.length > 0 && searchCount > 0 ? filteredBanner(visibleDeps.length, clearDeps) : null}
           </VStack>
@@ -556,9 +594,15 @@ const PackageRows = memo(function PackageRows({data, columns, plugins, isCompact
   );
 });
 
-/** A dependency row with a unique key: the index can list the same package, slot and version twice. */
+/**
+ * A dependency row with a unique key. Builds sharing name, slot and version are told apart in the row by
+ * their subslot, their `bindings` and `useDiff`, the USE flags not common to all of them.
+ */
 interface DepRow extends DepEntry {
   key: string;
+  useDiff: string[];
+  /** Set only on the copy an open row renders from; see OPEN_KEYS. */
+  isOpen?: true;
 }
 
 /** The facts above the tables, for one channel. */
@@ -573,31 +617,99 @@ function factsOf(index: PackageIndex) {
   };
 }
 
+
+const slotOf = (dep: DepEntry) => (dep.subslot == null ? dep.slot : `${dep.slot}/${dep.subslot}`);
+
 function toDepRows(deps: readonly DepEntry[]): DepRow[] {
+  const builds = new Map<string, DepEntry[]>();
+  for (const dep of deps) {
+    const id = `${dep.cp}:${dep.slot}:${dep.ver}`;
+    builds.set(id, [...(builds.get(id) ?? []), dep]);
+  }
   const seen = new Map<string, number>();
   return [...deps]
     .sort((a, b) => a.cp.localeCompare(b.cp) || a.slot.localeCompare(b.slot))
     .map(dep => {
-      const id = `${dep.cp}:${dep.slot}:${dep.ver}`;
+      const group = builds.get(`${dep.cp}:${dep.slot}:${dep.ver}`) ?? [];
+      const useDiff = group.length < 2 ? [] : (dep.use ?? []).filter(flag => !group.every(other => other.use?.includes(flag)));
+      const id = [dep.cp, slotOf(dep), dep.ver, ...(dep.bindings ?? [])].join(':');
       const count = seen.get(id) ?? 0;
       seen.set(id, count + 1);
-      return {...dep, key: count === 0 ? id : `${id}#${count}`};
+      return {...dep, key: count === 0 ? id : `${id}#${count}`, useDiff};
     });
 }
 
-/** The `::gentoo` dependencies of the selected channel that match the search, sorted by name and slot. */
-const DEPS_PLUGINS = {stickyHeader: stickyHeader<DepRow>()};
+/**
+ * Slot, then the subslot muted, so `4.1/0` reads as one value. A slot alone fits its column on one line;
+ * a long subslot (`4/gcr-4.4-gck-2.2`) may wrap.
+ */
+function SlotText({row, type}: {row: DepRow; type?: 'supporting'}) {
+  return (
+    <Text type={type} hasTabularNumbers textWrap={row.subslot == null ? 'nowrap' : undefined} xstyle={styles.words}>
+      {row.slot}
+      {row.subslot == null ? null : <Text type="inherit" color="secondary">/{row.subslot}</Text>}
+    </Text>
+  );
+}
 
-const DepsTable = memo(function DepsTable({rows}: {rows: DepRow[]}) {
+/** What tells a build apart from others of the same name, slot and version; nothing for the rest. */
+function DepBuildFacts({row}: {row: DepRow}) {
+  const t = useMessage();
+  const bindings = row.bindings ?? [];
+  if (bindings.length === 0 && row.useDiff.length === 0) return null;
+  return (
+    <HStack gap={SPACE.inline} vAlign="center" wrap="wrap">
+      {bindings.length === 0 ? null : (
+        <HStack gap={SPACE.hairline} vAlign="center" wrap="wrap">
+          <Text type="supporting" color="secondary">{t('gz.packages.col.bindings')}</Text>
+          <Text type="supporting" color="primary" hasTabularNumbers xstyle={styles.words}>{bindings.join(' ')}</Text>
+        </HStack>
+      )}
+      {row.useDiff.length === 0 ? null : (
+        <HStack gap={SPACE.hairline} vAlign="center" wrap="wrap">
+          <Text type="supporting" color="secondary">{t('gz.packages.col.use')}</Text>
+          <UseFlags flags={row.useDiff} type="supporting" />
+        </HStack>
+      )}
+    </HStack>
+  );
+}
+
+const DEP_KEY = expansionKeyOf<DepRow>(row => row.key);
+const hasUse = (row: DepRow) => (row.use?.length ?? 0) > 0;
+
+const DEPS_STICKY = stickyHeader<DepRow>();
+
+/**
+ * The `::gentoo` dependencies of the selected channel that match the search, sorted by name and slot.
+ * A row with USE flags opens to list them; an index without any (before USE was recorded) gets
+ * no chevron column. That is decided on the whole index, so a search does not add or remove the column.
+ */
+const DepsTable = memo(function DepsTable({rows, hasUseColumn}: {rows: DepRow[]; hasUseColumn: boolean}) {
   const t = useMessage();
   const isCompact = useMediaQuery(TEMPLATE.compactTable);
+  const [expanded, onToggle] = useExpanded();
+  const renderExpanded = useCallback(
+    (row: DepRow) => (
+      <MetadataList>
+        <MetadataListItem label={t('gz.packages.col.use')}><UseFlags flags={row.use ?? []} /></MetadataListItem>
+      </MetadataList>
+    ),
+    [t],
+  );
+  const rowExpansion = useTableRowExpansion<DepRow>({expandedKeys: OPEN_KEYS, onToggle, getRowKey: DEP_KEY, renderExpanded, getIsItemExpandable: hasUse});
+  const plugins = useMemo(
+    (): Record<string, TablePlugin<DepRow>> => (hasUseColumn ? {expansion: withoutRowMenu(rowExpansion), stickyHeader: DEPS_STICKY} : {stickyHeader: DEPS_STICKY}),
+    [hasUseColumn, rowExpansion],
+  );
+  const data = useMemo(() => (expanded.size === 0 ? rows : rows.map(row => (expanded.has(row.key) ? opened(row) : row))), [rows, expanded]);
   const columns: TableColumn<DepRow>[] = useMemo(() => {
     const headers: Record<string, string> = {cp: t('gz.packages.col.package'), slot: t('gz.packages.col.slot'), ver: t('gz.packages.col.version')};
     if (isCompact) {
-      const labelled = (key: 'slot' | 'ver', row: DepRow) => (
+      const labelled = (key: 'slot' | 'ver', value: ReactNode) => (
         <HStack gap={SPACE.hairline} vAlign="center">
           <Text type="supporting" color="secondary">{headers[key]}</Text>
-          <Text type="supporting" hasTabularNumbers textWrap="nowrap">{row[key]}</Text>
+          {value}
         </HStack>
       );
       return [
@@ -607,23 +719,32 @@ const DepsTable = memo(function DepsTable({rows}: {rows: DepRow[]}) {
           renderCell: (row: DepRow) => (
             <VStack gap={SPACE.hairline}>
               <Text hasTabularNumbers>{row.cp}</Text>
-              <HStack gap={SPACE.inline} vAlign="center" wrap="wrap">{labelled('slot', row)}{labelled('ver', row)}</HStack>
+              <HStack gap={SPACE.inline} vAlign="center" wrap="wrap">
+                {labelled('slot', <SlotText row={row} type="supporting" />)}
+                {labelled('ver', <Text type="supporting" hasTabularNumbers textWrap="nowrap">{row.ver}</Text>)}
+              </HStack>
+              <DepBuildFacts row={row} />
             </VStack>
           ),
         },
       ];
     }
-    return DEPS_COLUMNS.map(layout => ({
-      key: layout.key,
-      header: headers[layout.key] ?? t(layout.header),
-      width: layout.width,
-      // Slots and versions are single tokens, and their columns fit the longest one in the index.
-      renderCell: (row: DepRow) => <Text hasTabularNumbers textWrap={layout.key === 'cp' ? undefined : 'nowrap'}>{String(row[layout.key] ?? '')}</Text>,
-    }));
+    const cells: Record<string, (row: DepRow) => ReactNode> = {
+      cp: row => (
+        <VStack gap={SPACE.hairline}>
+          <Text hasTabularNumbers>{row.cp}</Text>
+          <DepBuildFacts row={row} />
+        </VStack>
+      ),
+      slot: row => <SlotText row={row} />,
+      // Versions are single tokens, and their column fits the longest one in the index.
+      ver: row => <Text hasTabularNumbers textWrap="nowrap">{row.ver}</Text>,
+    };
+    return DEPS_COLUMNS.map(layout => ({key: layout.key, header: headers[layout.key] ?? t(layout.header), width: layout.width, renderCell: cells[layout.key]}));
   }, [t, isCompact]);
   return (
     <Table<DepRow>
-      data={rows}
+      data={data}
       columns={columns}
       idKey="key"
       density="balanced"
@@ -631,7 +752,7 @@ const DepsTable = memo(function DepsTable({rows}: {rows: DepRow[]}) {
       hasHover
       textOverflow="wrap"
       verticalAlign="top"
-      plugins={DEPS_PLUGINS}
+      plugins={plugins}
     />
   );
 });
